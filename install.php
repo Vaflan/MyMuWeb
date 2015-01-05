@@ -1,0 +1,193 @@
+﻿<?php include('config.php'); $pg = intval($_GET['pg']);?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>MyMuWeb <?php echo $mmw['version'];?> Install by Vaflan</title>
+</head>
+<body style="background: #FFFFFF;">
+<center>
+<?php
+if($_SERVER['REMOTE_ADDR']!='127.0.0.1' && $_SERVER['REMOTE_ADDR']!=$_SERVER['SERVER_ADDR']) {
+ die($mmw['die']['start'].'Install only For IP: 127.0.0.1 or LocalHost<br><a href="http://127.0.0.1/install.php">Go To Normal Install</a>'.$mmw['die']['end']);
+}
+
+// START PAGE
+if($pg < 2) {
+ echo $mmw['die']['start'].'<small>Install Page 1</small> <br> <b>Welcome To Installer MMW '.$mmw['version'].'!</b> <Br> Next Page You Install Table\'s and Column\'s<br> <a href="?pg=2">Next -></a>'.$mmw['die']['end'];
+ $install_data = fopen("includes/installed.php",'w');
+ fputs($install_data, "<?php \n // MyMuWeb Installed Date \n \$mmw['installed'] = '".time()."'; \n?>");
+ fclose($install_data);
+}
+
+
+
+// NEXT PAGE
+elseif($pg==2) {
+ $md5_select[$mmw['md5']] = ' selected';
+ $md5_check = '<select name="md5" title="Set MD5 Option" style="margin:0px;padding:0px;"><option value="true"'.$md5_select[true].'>Yes</option><option value="false"'.$md5_select[false].'>No</option></select>';
+ $memb__pwd = @current(@mssql_fetch_row(@mssql_query("SELECT data_type FROM information_schema.columns WHERE table_name='MEMB_INFO' AND column_name='memb__pwd'")));
+ if($memb__pwd=='varbinary') {$md5_info = '<span style="color:red;"><b>DataBase use MD5 Column!</b></span><br>Please Choose MD5 - Yes.';}
+ else {$md5_info = '<span style="color:red;"><b>DataBase don\'t support MD5!</b></span><br>Please Choose MD5 - No.';}
+ echo $mmw['die']['start'].'<small>Install Page 2</small> <br> <form name="set_md5" method="post" action="?pg=3">In "config.php" Now MD5: '.$md5_check.'</form>'.$md5_info.'<br> <a href="javascript://" onclick="document.set_md5.submit();">Next -></a>'.$mmw['die']['end'];
+}
+
+
+
+// NEXT PAGE
+elseif($pg==3) {
+ if($_POST['md5']!=$mmw['md5']) {
+  $cfg_file = 'config.php';
+  $cfg_open = fopen($cfg_file, "r");
+  $cfg_db = fread($cfg_open, filesize($cfg_file));
+  fclose($cfg_open);
+
+  $cfg_db = str_replace("\$mmw['md5'] = ".$mmw['md5'].";", "\$mmw['md5'] = ".$_POST['md5'].";", $cfg_db);
+  $mmw['md5'] = $_POST['md5'];
+
+  $cfg_write = fopen($cfg_file, "w");
+  fwrite($cfg_write, stripslashes($cfg_db));
+  fclose($cfg_write);
+ }
+
+ echo $mmw['die']['start'].'<small>Install Page 3</small> <br> <b>Table\'s and Column\'s Install End!</b> [<a href="javascript://" onclick="document.getElementById(\'install_log\').style.display=\'\'">Show</a>] <Br> Next Page You Create Admin <br> <a href="?pg=4">Next -></a>'.$mmw['die']['end'];
+
+ echo '<div style="display:none;" id="install_log" align="center"><textarea style="width: 300px; height: 120px;">';
+
+ //// CREAT TABLES
+ $load_db_mmw = @implode('', @file('includes/db_mmw.sql'));
+
+ //// DECODE DATABASE
+ $decode_database = "ALTER DATABASE ".$mmw['sql']['database']." COLLATE SQL_Latin1_General_CP1251_CI_AS";
+
+ //// INSERT INTO TABLES
+ $add_news = "INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_row_1,news_row_2,news_id) VALUES ('MyMuWeb ".$mmw['version']." by Vaflan','Vaflan','NEWS','".time()."','[color=red]This Is MyMuWeb ".$mmw['version']." By Vaflan.[/color][br]If you see news, Your site works.[br][i]Thanks For the Use of MyMuWeb![/i]','[color=green]Этот MyMuWeb ".$mmw['version']." От Vaflan.[/color][br]Если ты видишь новость, Твой Сайт Работает.[br][i]Спасибо За Использование MyMuWeb![/i]','MyMuWeb')";
+ $add_server = "INSERT INTO MMW_servers(name,experience,drops,gsport,ip,display_order,version,type,maxplayer) VALUES ('Server 1','500x','75%','55901','127.0.0.1','1','1.02k','PVP','100')";
+ $add_link = "INSERT INTO MMW_links(l_name,l_address,l_description,l_id,l_size,l_date) VALUES ('MuOnline Media Main','media/main.mp3','This Is Test Link','MyMuWeb','1,13 MB','".time()."')";
+
+ //// PROFILE ADD COLUMNS
+ $add_profile = array(
+  "ALTER TABLE memb_info add memb__pwd2 varchar(10)",
+  "ALTER TABLE memb_info add country int not null default 0",
+  "ALTER TABLE memb_info add gender varchar(10)",
+  "ALTER TABLE memb_info add age int not null default 0",
+  "ALTER TABLE memb_info add y varchar(100)",
+  "ALTER TABLE memb_info add msn varchar(100)",
+  "ALTER TABLE memb_info add icq varchar(100)",
+  "ALTER TABLE memb_info add skype varchar(100)",
+  "ALTER TABLE memb_info add avatar varchar(100)",
+  "ALTER TABLE memb_info add hide_profile int not null default 0",
+  "ALTER TABLE memb_info add ref_acc varchar(10)",
+  "ALTER TABLE memb_info add ref_check int not null default 0",
+  "ALTER TABLE memb_info add block_date int not null default 0",
+  "ALTER TABLE memb_info add blocked_by varchar(100)",
+  "ALTER TABLE memb_info add unblock_time int not null default 0",
+  "ALTER TABLE memb_info add block_reason nvarchar(100)",
+  "ALTER TABLE memb_info add ip nvarchar(15)",
+  "ALTER TABLE memb_info add mmw_status int not null default 0",
+  "ALTER TABLE memb_info add mmw_coin int not null default 0",
+  "ALTER TABLE warehouse add extMoney bigint not null default 0",
+  "ALTER TABLE Guild add G_union int not null default 0",
+  "ALTER TABLE GuildMember add G_status int not null default 0",
+  "ALTER TABLE Character add leadership int not null default 0",
+  "ALTER TABLE Character add Reset int not null default 0"
+ );
+
+ //// CHANGE COLUMN DATA TYPE
+ $change_column = array(
+  "ALTER TABLE memb_info ALTER COLUMN memb_name varchar(20)",
+  "ALTER TABLE memb_info ALTER COLUMN gender varchar(10)",
+  "ALTER TABLE warehouse ALTER COLUMN extMoney bigint not null"
+ );
+
+
+ //Install DataBase
+ if(@mssql_query("Use ".$mmw['sql']['database'])){echo "use_".$mmw['sql']['database']." - Done! \n";} else {echo "use_".$mmw['sql']['database']." - Error! \n";}
+ if(@mssql_query($decode_database)){echo "decode_database - Done! \n";} else {echo "decode_database - Error! \n";}
+ echo " ----- \n";
+ if(@mssql_query($load_db_mmw)){echo "load_db_mmw - Done! \n";} else {echo "load_db_mmw - Error! \n";}
+ echo " ----- \n";
+ if(@mssql_query($add_news)){echo "add_news - Done! \n";} else {echo "add_news - Error! \n";}
+ if(@mssql_query($add_server)){echo "add_server - Done! \n";} else {echo "add_server - Error! \n";}
+ if(@mssql_query($add_link)){echo "add_link - Done! \n";} else {echo "add_link - Error! \n";}
+ echo " ----- \n";
+ for($i=0; $i<count($add_profile); ++$i) {
+  if(@mssql_query($add_profile[$i])){echo "add_profile_$i - Done! \n";} else {echo "add_profile_$i - Error! \n";}
+ }
+ echo " ----- \n";
+ for($i=0; $i<count($change_column); ++$i) {
+  if(@mssql_query($change_column[$i])){echo "change_column - Done! \n";} else {echo "change_column - Error! \n";}
+ }
+
+
+ if($mmw['md5'] > 0) {
+  echo " ----- \n";
+  $exec_md5_dll = "exec sp_addextendedproc 'XP_MD5_EncodeKeyVal', 'WZ_MD5_MOD.dll'";
+  $md5_encrypt_create = "CREATE FUNCTION [dbo].[fn_md5] (@data VARCHAR(10), @data2 VARCHAR(10))
+  RETURNS BINARY(16) AS
+  BEGIN
+  DECLARE @hash BINARY(16)
+  EXEC master.dbo.XP_MD5_EncodeKeyVal @data, @data2, @hash OUT
+  RETURN @hash
+  END";
+
+  if(@mssql_query($md5_encrypt_create)){echo "md5_encrypt_create - Done! \n";} else {echo "md5_encrypt_create - Error! \n";}
+  if(@mssql_query("Use master")){echo "use_master - Done! \n";} else {echo "use_master - Error! \n";}
+  if(@mssql_query($exec_md5_dll)){echo "exec_md5_dll - Done! \n";} else {echo "exec_md5_dll - Error! \n";}
+  echo " ----- \n";
+  if(@mssql_query("Use ".$mmw['sql']['database'])){echo "use_".$mmw['sql']['database']." - Done! \n";} else {echo "use_".$mmw['sql']['database']." - Error! \n";}
+ }
+
+ echo '</textarea><br>[<a href="javascript://" onclick="document.getElementById(\'install_log\').style.display=\'none\'">Close</a>]</div>';
+}
+
+
+
+// NEXT PAGE
+elseif($pg==4) {
+ $sql = mssql_query("Select memb___id FROM mEMB_INFO");
+ $users = '<option value="register">Need Register</option>';
+
+ for($i=0; $i < mssql_num_rows($sql); ++$i) {
+  $row = mssql_fetch_row($sql);
+  $users .= '<option value="'.$row[0].'">'.$row[0].'</option>';
+ }
+ echo $mmw['die']['start'].'<small>Install Page 4</small> <br> <b>Select User For Admin!</b> <br> <form name="admin" method="post" action="?pg=5"><select name="user"><option value="">Please Select</option>'.$users.'</select> <input type="submit" value="Okey"></form>'.$mmw['die']['end'];
+}
+
+
+
+// NEXT PAGE
+elseif($pg==5) {
+ $login = $_POST['user'];
+ $password = $_POST['pass'];
+
+ if(empty($login)) {
+  echo $mmw['die']['start'].'<small>Install Page 5</small> <br> <b>No Selected!</b> <br> If you need Admin, go Back <br> <a href="?pg=4">Back</a>'.$mmw['die']['end'];
+ }
+ elseif($login!='register') {
+  if($mmw['md5'] > 0 && isset($password)) {
+	mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login',[dbo].[fn_md5]('$password','$login'),'Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','WhoYouAre','admin','0','male','0','0')");
+  }
+  elseif(isset($password)) {
+	mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login','$password','Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','WhoYouAre','admin','0','male','0','0')");
+	mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$login','$login',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
+  }
+  mssql_query("UPDATE MEMB_INFO SET [mmw_status]='10' WHERE memb___id='$login'");
+  echo $mmw['die']['start'].'<small>Install Page 5</small> <br> <b>Admin Created!</b> <br> Now '.$login.' is Admin in MyMuWeb <br> <a href=".">Go To WebSite</a>'.$mmw['die']['end'];
+ }
+ else {
+  echo $mmw['die']['start'].'<small>Install Page 5</small> <br> <form name="admin" method="post" action=""><input name="user" type="text" size="10" maxlength="10" value="Account"> <input name="pass" type="text" size="10" maxlength="10" value="Password"> '.$rowbr.' <input type="submit" value="New Account"> </form>'.$mmw['die']['end'];
+ }
+}
+
+
+
+// ERROR
+else {
+ echo $mmw['die']['start'].'Total ErroR!'.$mmw['die']['end'];
+}
+?>
+</center>
+</body>
+</html>

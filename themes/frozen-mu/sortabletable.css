@@ -1,0 +1,33 @@
+.sort-table {
+	font:		Icon;
+	border:		1px solid #271c12;*/
+	background:	#271c12;
+	color:		#ffffff;
+}
+
+.sort-table thead {
+    font-size : 12px;
+	background:	#271c12;
+}
+
+.sort-table td {
+        font-size : 12px;
+	padding:	3px 5px;
+}
+
+.sort-table thead td {
+	border:			1px solid #000000;
+	border-color:	#000000;
+	cursor:			default;
+}
+
+.sort-table thead td:active {
+	border-color:	#000000;
+	padding:		3px 4px 1px 6px;
+}
+
+.sort-table thead td[_sortType=None]:active {
+	border-color:	#000000;
+	padding:		3px 5px;
+}
+

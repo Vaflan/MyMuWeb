@@ -1,0 +1,17 @@
+<!-- 
+* MyMuWeb ADS/Banners Body
+* By Vaflan
+* Use All HTML Teg. 
+-->
+
+
+<center>
+<a href="http://top.mymuweb.ru/">Top.MyMuWeb.Ru</a><br>
+<a href="http://www.mymuweb.ru/">MyMuWeb Support</a><br>
+<a href="http://www.red-angel.ru/">RedAngel MuOnline</a><br>
+<a href="http://www.podriv.ru/">Podriv Project</a><br>
+</center>
+
+
+<!-- Main Statistics -->
+<div id="main" style="position: fixed; right: 4px; top: 4px;"><?statisitcs('main');?></div>
