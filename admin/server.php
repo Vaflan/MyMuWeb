@@ -1,7 +1,7 @@
 <?PHP
 if(isset($_POST["server_name_delete"])){delete_server($_POST["server_name_delete"]);}
-if(isset($_POST["new_server"])){add_new_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['server_type']);}
-if(isset($_POST["do_edit_server"])){edit_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['server_type'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['old_name_server']);}
+if(isset($_POST["new_server"])){add_new_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['maxplayer'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['servertype']);}
+if(isset($_POST["do_edit_server"])){edit_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['maxplayer'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['old_name_server'],$_POST['servertype']);}
 ?>
 
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
@@ -12,7 +12,7 @@ if(isset($_POST["do_edit_server"])){edit_server($_POST['name'],$_POST['version']
 <?
 if(isset($_POST["server_name_edit"])) {
 $srv_edit= stripslashes($_POST['server_name_edit']);
-$result_edit_server = mssql_query("SELECT Name,experience,drops,gsport,ip,version,display_order,type from MMW_servers where name='$srv_edit'");
+$result_edit_server = mssql_query("SELECT Name,experience,drops,gsport,ip,version,display_order,type,maxplayer from MMW_servers where name='$srv_edit'");
 $edit_server = mssql_fetch_row($result_edit_server);
 ?>
 		<legend>Edit Server</legend>
@@ -36,7 +36,11 @@ $edit_server = mssql_fetch_row($result_edit_server);
 			  </tr>
 			  <tr>
 			    <td align="right">Type</td>
-			    <td><select name="server_type"  class="select" id="server_type"><option value="PVP">PVP</option><option value="NON PVP">NON PVP</option></select> <small>Curent: <?echo $edit_server[7];?></small></td>
+			    <td><select name="servertype" class="select" id="servertype"><option value="PVP">PVP</option><option value="Non-PVP">Non-PVP</option></select> <small>Curent: <?echo $edit_server[7];?></small></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Max Players</td>
+			    <td><input name="maxplayer" type="text" id="maxplayer" value="<?echo $edit_server[8];?>"></td>
 			  </tr>
 			  <tr>
 			    <td align="right">Gs Port</td>
@@ -77,7 +81,11 @@ $edit_server = mssql_fetch_row($result_edit_server);
 			  </tr>
 			  <tr>
 			    <td align="right">Type</td>
-			    <td><select name="server_type" class="select" id="server_type"><option value="PVP">PVP</option><option value="NON PVP">NON PVP</option></select></td>
+			    <td><select name="servertype" class="select" id="servertype"><option value="PVP">PVP</option><option value="Non-PVP">Non-PVP</option></select></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Max Players</td>
+			    <td><input name="maxplayer" type="text" id="maxplayer"></td>
 			  </tr>
 			  <tr>
 			    <td align="right">Gs Port</td>

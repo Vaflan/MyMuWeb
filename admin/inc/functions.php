@@ -74,13 +74,13 @@ function clear_logs($name)
    // END LOGIN
 
 
-function add_new_server($post_name,$post_version,$post_experience,$post_drops,$post_gsport,$post_serverip,$post_order,$post_type)
+function add_new_server($post_name,$post_version,$post_experience,$post_drops,$post_maxplayer,$post_gsport,$post_serverip,$post_order,$post_type)
 {     require("config.php");
-      if (empty($post_name) ||  empty($post_version) || empty($post_experience) || empty($post_drops) || empty($post_gsport) || empty($post_serverip) || empty($post_order) ||  empty($post_type)){
+      if (empty($post_name) ||  empty($post_version) || empty($post_experience) || empty($post_drops) || empty($post_gsport) || empty($post_serverip) || empty($post_order) ||  empty($post_type) ||  empty($post_maxplayer)){
 	         echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                  elseif (ereg('[^0-9]', $post_order)){echo "$warning_red Error: Please Use Only Numbers At Displaying Order!  <br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
                else{
-                      mssql_query("INSERT INTO MMW_servers(name,experience,drops,gsport,ip,display_order,version,type) VALUES ('$post_name','$post_experience','$post_drops','$post_gsport','$post_serverip','$post_order','$post_version','$post_type')");
+                      mssql_query("INSERT INTO MMW_servers(name,experience,drops,gsport,ip,display_order,version,type,maxplayer) VALUES ('$post_name','$post_experience','$post_drops','$post_gsport','$post_serverip','$post_order','$post_version','$post_type','$post_maxplayer')");
                       echo "$warning_green $post_name Server SuccessFully Added!";
 
                       $log_dat = "New Server Named: $_POST[name] Has Been <font color=#FF0000>Added</font>";
@@ -90,12 +90,12 @@ function add_new_server($post_name,$post_version,$post_experience,$post_drops,$p
 
 
 
-function edit_server($name,$version,$experience,$drops,$server_type,$gsport,$serverip,$order,$old_name)
+function edit_server($name,$version,$experience,$drops,$maxplayer,$gsport,$serverip,$order,$old_name,$server_type)
 {         require("config.php");
-          if(empty($name) || empty($version) || empty($experience) || empty($drops) || empty($server_type) || empty($gsport) || empty($serverip) || empty($order) || empty($old_name)){
+          if(empty($name) || empty($version) || empty($experience) || empty($drops) || empty($server_type) || empty($gsport) || empty($serverip) || empty($order) || empty($old_name) || empty($maxplayer)){
                    echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                        else{
-                                mssql_query("Update MMW_servers set [name]='$name',[experience]='$experience',[drops]='$drops',[gsport]='$gsport',[ip]='$serverip',[display_order]='$order',[version]='$version',[type]='$server_type' where [name]='$old_name'");
+                                mssql_query("Update MMW_servers set [name]='$name',[experience]='$experience',[drops]='$drops',[gsport]='$gsport',[ip]='$serverip',[display_order]='$order',[version]='$version',[type]='$server_type',[maxplayer]='$maxplayer' where [name]='$old_name'");
                                 echo "$warning_green $old_name Server SuccessFully Edited!";
 
                                 $log_dat = "Server Named: $_POST[name] Has Been <font color=#FF0000>Edited</font>";
@@ -122,16 +122,17 @@ function delete_server($post_server_name_delete)
 
 
 
-function add_new_news($news_title,$news_category,$news_eng,$news_rus,$news_autor)
+function add_new_news($news_title,$news_category,$news_row_1,$news_row_2,$news_row_3,$news_autor)
 {
            require("config.php");
            $date = time();
-           $news_eng = bugsend($news_eng);
-           $news_rus = bugsend($news_rus);
+           $news_row_1 = bugsend($news_row_1);
+           $news_row_2 = bugsend($news_row_2);
+           $news_row_3 = bugsend($news_row_3);
                if (empty($news_title) || empty($news_category)){
                       echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                            else{
-                                  mssql_query("INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_eng,news_rus,news_id) VALUES ('$_POST[news_title]','$_SESSION[a_admin_login]','$_POST[category]','$date','$news_eng','$news_rus','$mmw[rand_id]')");
+                                  mssql_query("INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_row_1,news_row_2,news_row_3,news_id) VALUES ('$_POST[news_title]','$_SESSION[a_admin_login]','$_POST[category]','$date','$news_row_1','$news_row_2','$news_row_3','$mmw[rand_id]')");
                                   echo "$warning_green News SuccessFully Added!";
 
                                   $log_dat = "News: $_POST[news_title] Has Been <font color=#FF0000>Added</font> Author: $_SESSION[a_admin_login]";
@@ -159,16 +160,17 @@ function delete_news($news_id)
 
 
 
-function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_eng,$news_rus)
+function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_row_1,$news_row_2,$news_row_3)
 {
         require("config.php");
         $date = date('d-m-Y H:i');
-        $news_eng = bugsend($news_eng);
-        $news_rus = bugsend($news_rus);
+        $news_row_1 = bugsend($news_row_1);
+        $news_row_2 = bugsend($news_row_2);
+        $news_row_3 = bugsend($news_row_3);
           if (empty($news_title) ||  empty($news_autor) || empty($news_cateogry) ||  empty($news_id)){
 	          echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                     else{
-                          mssql_query("Update MMW_news set [news_title]='$_POST[edit_news_title]',[news_autor]='$_POST[edit_news_autor]',[news_category]='$_POST[category]',[news_eng]='$news_eng',[news_rus]='$news_rus' where [news_id]='$_POST[news_id]'");
+                          mssql_query("Update MMW_news set [news_title]='$_POST[edit_news_title]',[news_autor]='$_POST[edit_news_autor]',[news_category]='$_POST[category]',[news_row_1]='$news_row_1',[news_row_2]='$news_row_2',[news_row_3]='$news_row_3' where [news_id]='$_POST[news_id]'");
                           echo "$warning_green News SuccessFully Edited!";
 
                           $log_dat = "News: $_POST[edit_news_title] Has Been <font color=#FF0000>Edited</font> Author: $_POST[edit_news_autor]";
@@ -426,47 +428,5 @@ function delete_vote($id_vote)
 		$log_dat = "Id Vote: $id_vote Has Been <font color=#FF0000>Deleted</font>";
 		writelog("vote",$log_dat);
 	}
-}
-
-
-
-
-
-
-function rename_char($name_char,$rename_char)
-{        require("config.php");
-         $date = date('d-m-Y H:i');
-         $name_check = mssql_query("SELECT Name FROM Character WHERE name='$rename_char'"); 
-         $check_char = mssql_num_rows($name_check);
-         if (empty($name_char) ||  empty($rename_char)){echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
-             elseif ($check_char > 0){echo "$warning_red Character Is Already In Use, Please Choose Another!";}
-                  else{
-                         mssql_query("Update Character set [Name]='$rename_char' WHERE [Name]='$name_char'");
-                         mssql_query("Update OptionData set [Name]='$rename_char' WHERE [Name]='$name_char'");
-                         mssql_query("Update Guild set [G_Master]='$rename_char' WHERE [G_Master]='$name_char'");
-                         mssql_query("Update GuildMember set [Name]='$rename_char' WHERE [Name]='$name_char'");
-                         mssql_query("Update AccountCharacter set [GameID1]='$rename_char' WHERE [GameID1]='$name_char'");
-                         mssql_query("Update AccountCharacter set [GameID2]='$rename_char' WHERE [GameID2]='$name_char'");
-                         mssql_query("Update AccountCharacter set [GameID3]='$rename_char' WHERE [GameID3]='$name_char'");
-                         mssql_query("Update AccountCharacter set [GameID4]='$rename_char' WHERE [GameID4]='$name_char'");
-                         mssql_query("Update AccountCharacter set [GameID5]='$rename_char' WHERE [GameID5]='$name_char'");
-
-                         mssql_query("Update MMW_comment set [c_char]='$rename_char' WHERE [c_char]='$name_char'");
-                         mssql_query("Update MMW_forum set [f_char]='$rename_char' WHERE [f_char]='$name_char'");
-                         mssql_query("Update MMW_forum set [f_lostchar]='$rename_char' WHERE [f_lostchar]='$name_char'");
-                         mssql_query("Update MMW_market set [item_char]='$rename_char' WHERE [item_char]='$name_char'");
-
-                         mssql_query("Update T_CGuid set [Name]='$rename_char' WHERE [Name]='$name_char'");
-                         mssql_query("Update T_FriendList set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
-                         mssql_query("Update T_FriendMail set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
-                         mssql_query("Update T_FriendMain set [Name]='$rename_char' WHERE [Name]='$name_char'");
-                         mssql_query("Update T_WaitFriend set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
-                         mssql_query("Update WEB_ZS set [NAME]='$rename_char' WHERE [NAME]='$name_char'");
-                         mssql_query("Update MEMB_INFO set [char_set]='$rename_char' WHERE [char_set]='$name_char'");
-
-                             echo "$warning_green $name_char Rename to $rename_char SuccessFully Edited!";
-
-                             writelog("rename_char","<font color=#FF0000>$name_char</font> Renamed to <b>$rename_char</b>");
-                      }
 }
 ?>

@@ -80,7 +80,7 @@ elseif($all_money < $mmw['move_zen']) {$move = mmw_lang_need.' '.zen_format($mmw
 else {$move="<form action='' method='post' name='move'>".mmw_lang_price.': '.zen_format($mmw['move_zen'])." Zen!<br><input name='move_char' type='hidden' value='$char_set'>$locations<br><input type='submit' name='Submit' value='".mmw_lang_move."'></form>";}
 
 
-if($mmw[switch_change_class] == 'yes') {
+if($mmw[change_class] == 'yes') {
 	include("class.php");
 	$change_class_form = '<select name="class" style="width:76px" size="1"><option value="class">'.mmw_lang_select_class.'</option>';
 	for($i=0; $i < count($class_list); ++$i) {
@@ -159,15 +159,19 @@ if($mmw[switch_change_class] == 'yes') {
 	</td>
 	<td valign="top" align="center">
 		<?echo char_class($info[1],img);?><br><br>
+		<?if($mmw[reset] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_1')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_reset;?></div>
-		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $reset;?></div>
+		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $reset;?></div><?}?>
+		<?if($mmw[add_point] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_2')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_add_point;?></div>
-		<div id="menu_2" style="display:none;padding-bottom:4px;"><?echo $addpoint;?></div>
+		<div id="menu_2" style="display:none;padding-bottom:4px;"><?echo $addpoint;?></div><?}?>
+		<?if($mmw[pk_clear] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_3')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_pk_clear;?></div>
-		<div id="menu_3" style="display:none;padding-bottom:4px;"><?echo $pkclear;?></div>
+		<div id="menu_3" style="display:none;padding-bottom:4px;"><?echo $pkclear;?></div><?}?>
+		<?if($mmw[move] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_4')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_move;?></div>
-		<div id="menu_4" style="display:none;padding-bottom:4px;"><?echo $move;?></div>
-		<?if($mmw[switch_change_class] == 'yes') {?>
+		<div id="menu_4" style="display:none;padding-bottom:4px;"><?echo $move;?></div><?}?>
+		<?if($mmw[change_class] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_5')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_change_class;?></div>
 		<div id="menu_5" style="display:none;padding-bottom:4px;"><?echo $change_class;?></div><?}?>
 	</td>

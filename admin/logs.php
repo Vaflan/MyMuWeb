@@ -199,6 +199,14 @@ if(isset($_POST["log_name"])) {clear_logs($_POST["log_name"]);}
 				</form><?}?>
 			    </td>
 			  </tr>
+			  <tr>
+			    <td><a href="logs.php?log=look_after_all" target="_blank">Look After All Logs</a></td>
+			    <td align="right">
+				<?if($_SESSION[a_admin_level] > 6){?><form action="" method="post" name="clear31" id="clear31">
+					<input name="log_name" type="hidden" id="log_name" value="look_after_all"> <input type="submit" name="Submit" value="Clear">
+				</form><?}?>
+			    </td>
+			  </tr>
 			</table>
 		</fieldset>
 		</td>

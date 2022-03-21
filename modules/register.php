@@ -52,6 +52,7 @@ return false;
 }
 //return false;
 document.register_from.submit();
+return false;
 }
 </script>
 

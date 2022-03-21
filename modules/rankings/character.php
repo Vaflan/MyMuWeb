@@ -1,7 +1,7 @@
 <?PHP
 // PHP Script By Vaflan
 // For MyMuWeb
-// Ver. 1.7
+// Ver. 1.8
 
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 $race = clean_var(stripslashes($_POST['sort']));
@@ -10,15 +10,15 @@ if(!isset($_POST['top_rank'])){$top_rank = '100';}
 if(!isset($_POST['sort'])){$race = 'all';}
 
 if($mmw['gm']=='no'){$no_gm_in_top = "and ctlcode!='32' and ctlcode!='8'";}
-$query[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' $no_gm_in_top order by reset desc, clevel desc";
-$query[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='2' $no_gm_in_top order by reset desc, clevel desc";
-$query[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='18' $no_gm_in_top order by reset desc, clevel desc";
-$query[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='34' $no_gm_in_top order by reset desc, clevel desc";
-$query[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='50' $no_gm_in_top order by reset desc, clevel desc";
-$query[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='66' $no_gm_in_top order by reset desc, clevel desc";
-$query[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='82' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='2' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='18' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='34' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='50' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='66' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='82' $no_gm_in_top order by reset desc, clevel desc";
 
-$result = mssql_query($query[$race]);
+$result = mssql_query($query_race[$race]);
 $row_num = mssql_num_rows($result);
 
 echo "<br>".mmw_lang_top." $top_rank ".mmw_lang_characters."<br>&nbsp;</br>

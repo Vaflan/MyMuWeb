@@ -68,7 +68,7 @@ $comm_num = mssql_num_rows($result);
   if($c_add_close == 'yes') {
 	echo '<div align="center">'.mmw_lang_comment_close.'</div>';
   }
-  elseif(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ') {
+  elseif(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {
 ?>
 	<form action="" method="post" name="comment">
 <table border="0" width="100%" cellspacing="0" cellpadding="0" class="aBlock">
@@ -103,7 +103,7 @@ $comm_num = mssql_num_rows($result);
 <?
    }
   elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {
-      echo $die_start . mmw_lang_cant_add_comment_no_char . $die_end;
+      echo $die_start . mmw_lang_cant_add_no_char . $die_end;
    }
   else {
       echo '<div align="center">'.mmw_lang_guest_must_be_logged_on.'<br />[ <a href="?op=register">'.mmw_lang_register.'</a> | <a href="?op=login">'.mmw_lang_login.'</a> ]</div>';

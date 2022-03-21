@@ -5,6 +5,7 @@
 
 session_start();
 header("Cache-control: private");
+header("Cache-control: max-age=3600");
 include("config.php");
 include("admin/inc/query.php");
 include("includes/sql_check.php");
@@ -99,7 +100,7 @@ document.admin_form.submit();
     <td><form action='' method='post' name='admin_form' id='admin_form'>
       <table width='292' border='0' align='center' cellpadding='0' cellspacing='4'>
         <tr>
-          <td width='126'><div align='right'>Admin Username</div></td>
+          <td width='126' align='right'>Admin Username</td>
           <td width='144'><input name='adminusername' type='text' size='15' maxlength='10'></td>
         </tr>
         <tr>

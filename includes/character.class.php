@@ -19,6 +19,7 @@ function register() {
        $fullname = stripslashes($_POST['fullname']);
        $referral = stripslashes($_SESSION['referral']);
        $date = date('m/d/Y H:i:s', time());
+       $ip = $_SERVER['REMOTE_ADDR'];
 
                       require("config.php");
                       include("includes/validate.class.php");
@@ -29,13 +30,16 @@ function register() {
                       $email_check = mssql_query("SELECT mail_addr FROM MEMB_INFO WHERE mail_addr='$email'"); 
                       $email_verify = mssql_num_rows($email_check);
 
+                      $ip_check = mssql_query("SELECT ip FROM MEMB_INFO WHERE ip='$ip'"); 
+                      $ip_verify = mssql_num_rows($ip_check);
+
                       $elems[] = array('name'=>'account','label'=>$die_start. mmw_lang_invalid_account .$die_end, 'type'=>'text', 'uname'=>'true', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
                       $elems[] = array('name'=>'email', 'label'=>$die_start. mmw_lang_invalid_email .$die_end, 'type'=>'text', 'required'=>true, 'len_max'=>50, 'cont'=>'email');
                       $elems[] = array('name'=>'password', 'label'=>$die_start. mmw_lang_invalid_password .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4,'len_max'=>10, 'cont'=>'alpha');
 	              $elems[] = array('name'=>'repassword', 'label'=>$die_start. mmw_lang_invalid_repassword .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha', 'equal'=> array('password'));
-	              $elems[] = array('name'=>'question', 'label'=>$die_start. mmw_lang_invalid_question .$die_end, 'type'=>'text', 'required'=>true, 'len_max'=>'10', 'cont'=>'alpha');
-	              $elems[] = array('name'=>'answer', 'label'=>$die_start. mmw_lang_invalid_answer .$die_end, 'type'=>'text', 'required'=>true, 'len_max'=>'10', 'cont'=>'alpha');
-                      $elems[] = array('name'=>'fullname','label'=>$die_start. mmw_lang_invalid_fullname .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>2, 'len_max'=>10, 'cont'=>'alpha');
+	              $elems[] = array('name'=>'question', 'label'=>$die_start. mmw_lang_invalid_question .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
+	              $elems[] = array('name'=>'answer', 'label'=>$die_start. mmw_lang_invalid_answer .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
+                      $elems[] = array('name'=>'fullname','label'=>$die_start. mmw_lang_invalid_fullname .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
 
 
                  $f = new FormValidator($elems);
@@ -52,7 +56,7 @@ function register() {
 			             }
 		             }
                           } else {
-                               if($_SESSION['image_random_value'] != md5($verifyinput)) {
+                               if($_SESSION[image_random_value] != md5($verifyinput)) {
                                          $error= 1;
                                          echo $die_start . mmw_lang_correctly_code . $die_end; 
                                                                                          }
@@ -68,17 +72,23 @@ function register() {
                                          $error= 1;
                                          echo $die_start . mmw_lang_invalid_country . $die_end;
                                                      }
+                               if($ip_verify >= $mmw[max_ip_acc] && $mmw[max_ip_acc] != 0) {
+                                         $error= 1;
+					 $result_max_ip_acc = str_replace("{NUMBER}",$mmw[max_ip_acc],mmw_lang_max_acc_one_ip);
+                                         echo $die_start . $result_max_ip_acc . $die_end;
+                                                     }
 
                                if($error!=1) {     
-                                          if($mmw['md5'] == yes) {
-                                                mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral')");
-                                                                }
-                                          elseif($mmw['md5'] == no) {
-                                                mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$account','$password','$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral')");
-                                                mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
-                                                                    }
-                                          mssql_query("INSERT INTO warehouse (AccountID,Items,EndUseDate,DbVersion,extMoney) VALUES ('$account',CONVERT(varbinary(1920), null),'$date','2','$mmw[zen_for_acc]')");                    
-                                          echo $okey_start . mmw_lang_account_created . $okey_end;
+				if($mmw['md5'] == yes) {
+				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
+				}
+				elseif($mmw['md5'] == no) {
+				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account','$password','$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
+				 mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
+				}
+				 $warehouse_items = '0x'.free_hex($mmw[free_hex],120);
+				 mssql_query("INSERT INTO warehouse (AccountID,Items,EndUseDate,DbVersion,extMoney) VALUES ('$account',$warehouse_items,'$date','2','$mmw[zen_for_acc]')");                    
+				 echo $okey_start . mmw_lang_account_created . $okey_end;
                                }
                        }
         }
@@ -89,30 +99,29 @@ function register() {
 
 
 function reset($charactername) {
-          if ((isset($_SESSION['pass'])) && (isset($_SESSION['user']))); 
-                     {
-                           require("config.php");
-                           $login = clean_var(stripslashes($_SESSION[user]));
-                           $charactername = stripslashes($charactername);
+          if((isset($_SESSION['pass'])) && (isset($_SESSION['user']))); {
+		require("config.php");
+		$login = clean_var(stripslashes($_SESSION[user]));
+		$charactername = stripslashes($charactername);
 
-                           $online_check_result = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$login'");
-                           $online_check = mssql_fetch_row($online_check_result);
-                           $wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
-                           $wh_row = mssql_fetch_row($wh_result); if($wh_row[1]=="" || $wh_row[1]==" ") {$wh_row[1]="0";}
+		$online_check_result = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$login'");
+		$online_check = mssql_fetch_row($online_check_result);
+		$wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
+		$wh_row = mssql_fetch_row($wh_result); if($wh_row[1]=="" || $wh_row[1]==" ") {$wh_row[1]="0";}
 
-                           $result = mssql_query("SELECT Clevel,Reset,Money,LevelUpPoint,class FROM Character WHERE Name='$charactername' AND AccountID='$login'");
-                           $character_check = mssql_num_rows($result);
-                           $row = mssql_fetch_row($result);
+		$result = mssql_query("SELECT Clevel,Reset,Money,LevelUpPoint,class FROM Character WHERE Name='$charactername' AND AccountID='$login'");
+		$character_check = mssql_num_rows($result);
+		$row = mssql_fetch_row($result);
 
-				if($row[4] >= 0 && $row[4] <= 2) {$reset_level = $mmw[reset_level_dw];}
-				if($row[4] >= 16 && $row[4] <= 18) {$reset_level = $mmw[reset_level_dk];}
-				if($row[4] >= 32 && $row[4] <= 34) {$reset_level = $mmw[reset_level_elf];}
-				if($row[4] >= 48 && $row[4] <= 50) {$reset_level = $mmw[reset_level_mg];}
-				if($row[4] >= 64 && $row[4] <= 66) {$reset_level = $mmw[reset_level_dl];}
-				if($row[4] >= 80 && $row[4] <= 82) {$reset_level = $mmw[reset_level_sum];}
+			if($row[4] >= 0 && $row[4] <= 2) {$reset_level = $mmw[reset_level_dw];}
+			if($row[4] >= 16 && $row[4] <= 18) {$reset_level = $mmw[reset_level_dk];}
+			if($row[4] >= 32 && $row[4] <= 34) {$reset_level = $mmw[reset_level_elf];}
+			if($row[4] >= 48 && $row[4] <= 50) {$reset_level = $mmw[reset_level_mg];}
+			if($row[4] >= 64 && $row[4] <= 66) {$reset_level = $mmw[reset_level_dl];}
+			if($row[4] >= 80 && $row[4] <= 82) {$reset_level = $mmw[reset_level_sum];}
 
-                           $reset_up = $row[1] + (1);
-                           $char_money = $row[2];
+		$reset_up = $row[1] + (1);
+		$char_money = $row[2];
 			//CastleSiege Member % Price
                            if($mmw[mix_cs_memb_reset]=="yes") {
 				$guildm_results = mssql_query("Select G_name from GuildMember where name='$charactername'");
@@ -365,27 +374,26 @@ function lostpassword() {
               require("config.php");
               require("includes/validate.class.php");
               $login = clean_var(stripslashes($_POST['username']));
-              $squestion = clean_var(stripslashes($_POST['squestion']));
-              $sanswer = clean_var(stripslashes($_POST['sanswer']));
+              $quest = clean_var(stripslashes($_POST['quest']));
+              $answer = clean_var(stripslashes($_POST['answer']));
               $email = clean_var(stripslashes($_POST['email']));	
 
-              $username_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE memb___id='$login'"); 
-              $username_check_ = mssql_num_rows($username_check); 
-
-              $sql_mail_check = mssql_query("SELECT mail_addr FROM MEMB_INFO WHERE mail_addr='$email' and memb___id='$login'"); 
-              $sql_pw_check = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE fpas_ques='$squestion' and memb___id='$login' and fpas_answ='$sanswer'");
+              $sql_user_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE memb___id='$login'");
+              $sql_mail_check = mssql_query("SELECT memb___id,mail_addr FROM MEMB_INFO WHERE memb___id='$login' and mail_addr='$email'"); 
+              $sql_qa_check = mssql_query("SELECT memb___id,fpas_ques,fpas_answ FROM MEMB_INFO WHERE memb___id='$login' and fpas_ques='$quest' and fpas_answ='$answer'");
   
                     if($mmw['md5'] == yes) {$sql_pw_get = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
                     elseif($mmw['md5'] == no) {$sql_pw_get = mssql_query("SELECT memb__pwd,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
 
-                    $pw_check = mssql_num_rows($sql_pw_check);
-                    $pw_retrieval = mssql_fetch_row($sql_pw_get);
-                    $mail_check = mssql_num_rows($sql_mail_check);
+		$user_check = mssql_num_rows($sql_user_check);
+		$mail_check = mssql_num_rows($sql_mail_check);
+		$qa_check = mssql_num_rows($sql_qa_check);
+		$pw_retrieval = mssql_fetch_row($sql_pw_get);
 
 	          $elems[] = array('name'=>'username', 'label'=>$die_start. mmw_lang_invalid_account .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
 	          $elems[] = array('name'=>'email', 'label'=>$die_start. mmw_lang_invalid_email .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>50, 'cont' =>'email');
-	          $elems[] = array('name'=>'squestion', 'label'=>$die_start. mmw_lang_invalid_question .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
-	          $elems[] = array('name'=>'sanswer', 'label'=>$die_start. mmw_lang_invalid_answer .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
+	          $elems[] = array('name'=>'quest', 'label'=>$die_start. mmw_lang_invalid_question .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
+	          $elems[] = array('name'=>'answer', 'label'=>$die_start. mmw_lang_invalid_answer .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
 
                   $f = new FormValidator($elems);
 	             $err = $f->validate($_POST);
@@ -402,13 +410,13 @@ function lostpassword() {
 		             }
                                } else {
 
-                        if ($username_check <= 0 || $mail_check <= 0) {$error = 1; 
+                        if($user_check <= 0 || $mail_check <= 0) {$error = 1; 
                                       echo $die_start . mmw_lang_account_or_email_address_is_incorrect . $die_end; 
 	                }
-                        if ($pw_check <= 0) {$error = 1; 
+                        if($qa_check <= 0) {$error = 1; 
                                       echo $die_start . mmw_lang_question_or_answer_incorrect . $die_end; 
 	                }
-                        if($error!=1) {	
+                        if($error != 1) {	
 	                              echo $okey_start . mmw_lang_your_password . " $pw_retrieval[0] $okey_end";
 	                }
     }
@@ -468,7 +476,7 @@ function move($name) {
 		}
 		else { 
 		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
-		   mssql_query("UPDATE character DET [mapnumber]='$mapnumber',[mapposx]='$x',[mapposy]='$y',[money]='$char_money' where name='$name'");
+		   mssql_query("UPDATE character SET [mapnumber]='$mapnumber',[mapposx]='$x',[mapposy]='$y',[money]='$char_money' where name='$name'");
 		   echo $okey_start . mmw_lang_character_moved . $okey_end;
 		   writelog("move","Char <font color=red>$name</font> Has Been Moved To: $mapnumber, $x-$y|Char: $char_money Zen|Acc: $wh_money Zen");
 		}      
@@ -513,7 +521,7 @@ function change_class($name) {
 		}
 		else { 
 		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
-		   mssql_query("UPDATE character SET [class]='$class',[money]='$char_money' where name='$name'");
+		   mssql_query("UPDATE character SET [class]='$class',[money]='$char_money',[MagicList]=0xFF,[Quest]=0xFF, where name='$name'");
 		   echo $okey_start . mmw_lang_character_changed . $okey_end;
 		   writelog("change_class","Char <font color=red>$name</font> Has Been Changed Class To: $class|Char: $char_money Zen|Acc: $wh_money Zen");
 		}      
@@ -889,7 +897,6 @@ function send_zen($char,$zen) {
 			writelog("send_zen","Char: <b>$char_set</b> Has Been <font color=#FF0000>Send Zen</font>: $zen, To: $char (Start:$from[0],End:$from_end | Start:$acc_to_row[0],End:$to_end)");
 			}
 }
-
 
 
 

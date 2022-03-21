@@ -1,12 +1,13 @@
 ﻿<?PHP
-// This Language For MMW
+// This is Language For MMW
 // Russian Language By Vaflan
 
+define('mmw_lang_theme',"Темы");
 define('mmw_lang_language',"Язык");
 define('mmw_lang_home_page',"Домашняя Страница");
 
 //Left Block
-define('mmw_lang_account_panel',"Панель Пользователя");
+define('mmw_lang_account_menu',"Меню Пользователя");
 define('mmw_lang_menu',"Меню");
 define('mmw_lang_statistic',"Статистика");
 define('mmw_lang_server_time',"Время Сервера");
@@ -15,6 +16,7 @@ define('mmw_lang_top_list',"Топ список");
 define('mmw_lang_last_in_forum',"Последнее в Форуме");
 define('mmw_lang_who_is_on_web',"Кто на сайте");
 define('mmw_lang_ads_banners',"Реклама / Баннеры");
+define('mmw_lang_donate',"Пожертвования");
 
 //Body in Block
 define('mmw_lang_account',"Пользователь");
@@ -24,6 +26,7 @@ define('mmw_lang_lost_pass',"Забыл Пароль");
 define('mmw_lang_hello',"Привет");
 define('mmw_lang_character_panel',"Панель Персонажа");
 define('mmw_lang_mail',"Почта");
+define('mmw_lang_account_panel',"Панель Пользователя");
 define('mmw_lang_ware_house',"Банк (Vault Keeper)");
 define('mmw_lang_gm_options',"ГМ Опции");
 define('mmw_lang_logout',"Выход");
@@ -79,10 +82,12 @@ define('mmw_lang_age',"Возраст");
 define('mmw_lang_avatar',"Аватар");
 define('mmw_lang_country',"Страна");
 define('mmw_lang_gender',"Пол");
-define('mmw_lang_cant_add_comment_no_char',"Извините, вы не имеете Персонажа!");
+define('mmw_lang_cant_add_no_char',"Извините, вы не имеете Персонажа!");
 define('mmw_lang_guest_must_be_logged_on',"Гость, Вы должны зарегистрироваться!");
 define('mmw_lang_week_mon',"Пон");
 define('mmw_lang_week_tue',"Вто");
+define('mmw_lang_week_wed',"Сре");
+define('mmw_lang_week_thu',"Чет");
 define('mmw_lang_week_fri',"Пят");
 define('mmw_lang_week_sat',"Суб");
 define('mmw_lang_week_sun',"Вос");
@@ -96,7 +101,7 @@ define('mmw_lang_new_topic',"Новая Тема");
 define('mmw_lang_no_topics_in_forum',"Нет Тем В Форуме.");
 define('mmw_lang_topic_name',"Имя Темы");
 define('mmw_lang_comments',"Комментарии");
-define('mmw_lang_lost_message',"Последнее");
+define('mmw_lang_last_message',"Последнее");
 define('mmw_lang_total_topic',"Всего Тем");
 define('mmw_lang_topic_title',"Название Темы");
 define('mmw_lang_topic_text',"Текст Темы");
@@ -193,11 +198,11 @@ define('mmw_lang_notice',"Заметка");
 //Ranking
 define('mmw_lang_top',"Топ");
 define('mmw_lang_select_sort',"Сортировать");
-define('mmw_lang_all_characters',"Все Персонажы");
+define('mmw_lang_all_characters',"Все Персонажи");
 define('mmw_lang_all_killers',"Все Убийцы");
 define('mmw_lang_all_guilds',"Все Гильдии");
 define('mmw_lang_only',"Только");
-define('mmw_lang_online_characters',"Онлайн Персонажы");
+define('mmw_lang_online_characters',"Онлайн Персонажи");
 define('mmw_lang_no_characters',"Нету Персонажей");
 define('mmw_lang_characters',"Персонажей");
 define('mmw_lang_killers',"Убийц");
@@ -211,7 +216,7 @@ define('mmw_lang_guild_member',"Член Гильдии");
 define('mmw_lang_battle_master',"Боевой Мастер");
 define('mmw_lang_assistant_guild_master',"Помощник Мастера Гильдии");
 define('mmw_lang_guild_master',"Мастер Гильдии");
-define('mmw_lang_all_characters_is_offline',"Все персонажы Оффлайн");
+define('mmw_lang_all_characters_is_offline',"Все персонажи Оффлайн");
 
 //Gallery
 define('mmw_lang_image',"Изображения");
@@ -274,6 +279,7 @@ define('mmw_lang_no_message',"Нет Сообщений!");
 
 //Account
 define('mmw_lang_register_date',"Дата Регистра");
+define('mmw_lang_referral',"Реферал");
 define('mmw_lang_about_referral',"О Рефералах");
 define('mmw_lang_one_referral_with_reset',"Один Реферал с Ресетом");
 define('mmw_lang_referral_link',"Ссылка Реферала");
@@ -318,6 +324,7 @@ define('mmw_lang_correctly_code',"Пожалуйста, напишите Про�
 define('mmw_lang_account_in_use',"Такой Пользователь уже есть, Выберите другое!");
 define('mmw_lang_email_in_use',"Такой Е-майл уже есть, Выберите другое!");
 define('mmw_lang_invalid_country',"Пожалуйста, Выберите Страну Корректно!");
+define('mmw_lang_max_acc_one_ip',"На ваш IP Address уже зарегистрировано {NUMBER} Пользователя");
 define('mmw_lang_account_created',"Пользователь Успешно Создан!");
 define('mmw_lang_character_does_not_exist',"Персонаж не Существует!");
 define('mmw_lang_for_reset_need',"Для Ресет Надо");

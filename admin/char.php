@@ -54,7 +54,12 @@ if($get_acc_chr[0]==$character_edit && $oc_row[0]=='1'){$character_status = "<fo
 			  </tr>
 			  <tr>
 			    <td align="right">Class</td>
-			    <td><select name="class" size="1" id="class"><option value=0 <?echo $class[0];?>>DW</option><option value=1 <?echo $class[1];?>>SM</option><option value=16 <?echo $class[16];?>>DK</option><option value=17 <?echo $class[17];?>>BK</option><option value=32 <?echo $class[32];?>>ELF</option><option value=33 <?echo $class[33];?>>ME</option><option value=48 <?echo $class[48];?>>MG</option><option value=64 <?echo $class[64];?>>DL</option></select></td>
+			    <td>
+				<select name="class" size="1" id="class">
+					<option value=0 <?echo $class[0];?>>DW</option><option value=1 <?echo $class[1];?>>SM</option><option value=2 <?echo $class[2];?>>GrM</option><option value=16 <?echo $class[16];?>>DK</option><option value=17 <?echo $class[17];?>>BK</option><option value=18 <?echo $class[18];?>>BM</option><option value=32 <?echo $class[32];?>>ELF</option><option value=33 <?echo $class[33];?>>ME</option>
+					<option value=34 <?echo $class[34];?>>HE</option><option value=48 <?echo $class[48];?>>MG</option><option value=49 <?echo $class[49];?>>DM</option><option value=64 <?echo $class[64];?>>DL</option><option value=65 <?echo $class[65];?>>LE</option><option value=80 <?echo $class[80];?>>Sum</option><option value=81 <?echo $class[81];?>>Bsum</option><option value=82 <?echo $class[82];?>>Dim</option>
+				</select>
+			    </td>
 			  </tr>
 			  <tr>
 			    <td align="right">Mode</td>

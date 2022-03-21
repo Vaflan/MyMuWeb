@@ -19,7 +19,8 @@
 <table width="100%" cellspacing="0" cellpadding="0" style="background: #FFFFFF; border: 1px solid #000000;">
    <tr>
       <td align="center" id="pop-text">
-<?include('popunder.txt');?>
+<?if(is_file('popunder.txt')){include('popunder.txt');}else {echo 'Please, create popunder.txt!';}?>
+
       </td>
    </tr>
 </table>
@@ -27,3 +28,4 @@
    </tr>
 </table>
 <?echo hex2str('3c2f6469763e');?>
+<script>document.getElementById("showmmwimage").style.left = screen.width / 2 - (document.getElementById("pop-text").offsetWidth / 2);</script>

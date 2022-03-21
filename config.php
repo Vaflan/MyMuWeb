@@ -1,22 +1,15 @@
 <?PHP
-// Config For MyMuWeb 0.5
+// Config For MyMuWeb 0.6
 // Copyright by Vaflan
 // Please Safe All (c)Vaflan
 
 
 // MSSQL settings
-$mmw[sqlhost] = 'IP Address';			// Ip SQL Server
-$mmw[sqluser] = 'Login';			// Login SQL
-$mmw[sqlpass] = 'Password';			// Pass SQL
-$mmw[database] = 'DataBase';			// DataBase SQL
-$mmw[md5] = 'no';				// Server MD5 yes or no
-
-
-// MSSQL CONNECT
-$sql_die_start = '<table border="0" width="350" height="200" align="center" style="background:url(images/sql_die.png);" cellpadding="25"><tr><td valign="top"><b>MMW Result:</b><br>';$sql_die_end = '</td></tr></table>';
-if($mmw[sqlpass]=='Password' || $mmw[sqluser]=='Login' || $mmw[database]=='DataBase' || $mmw[sqlhost]=='IP Address') {die("$sql_die_start Please Check config.php! $sql_die_end");}
-$mssql_connect = @mssql_connect($mmw[sqlhost],$mmw[sqluser],$mmw[sqlpass]) or die("$sql_die_start MSSQL server is offline OR I can't Access to it! $sql_die_end");
-@mssql_select_db($mmw[database], $mssql_connect) or die("$sql_die_start Database don't exists OR I can't Access to it! $sql_die_end");
+$mmw[sqlhost] = 'IP Address';		// Ip SQL Server
+$mmw[sqluser] = 'Login';		// Login SQL
+$mmw[sqlpass] = 'Password';		// Pass SQL
+$mmw[database] = 'DataBase';		// DataBase SQL
+$mmw[md5] = 'no';			// Server MD5 yes or no
 
 
 // MyMuWeb Config
@@ -26,29 +19,46 @@ $mmw[webtitle] = 'Name MuOnline Server';		// Web Title
 $mmw[servername] = 'Name MuOnline';			// Server Name
 $mmw[serverwebsite] = 'http://localhost/';		// WebSite
 $mmw[max_stats] = '32767';				// Max Stats In Game
-$mmw[free_hex] = '32';					// 20(Season 0~2) or 32(Season 3~4) or Other(WareHouse.Items.Length / 120 * 2)
-$mmw[pkmoney] = '10000000';				// Zen for Pk Clean (Min 1kk)
-$mmw[move_zen] = '10000000';				// Zen for move (Min 1kk)
-$mmw[switch_change_class] = 'yes';			// yes(All Can Change Class) no(Options Off).
-$mmw[gm] = 'no';					// no(Not Show in TOP) or yes(Show in TOP)
+$mmw[free_hex] = '20';					// 20(Season 0~2) or 32(Season 3~4) or Other(WareHouse.Items.Length / 120 * 2)
+$mmw[max_ip_acc] = '0';					// Max Account With one IP Address (if 0 no max)
+$mmw[pkmoney] = '1000000';				// Zen for Pk Clean (Min 1kk)
+$mmw[move_zen] = '1000000';				// Zen for move (Min 1kk)
+$mmw[gm] = 'yes';					// no(Not Show in TOP) or yes(Show in TOP)
 $mmw[gm_guild] = 'GM Guild';				// GM guild name (Don't Show)
-$mmw[max_post_news] = '6';				// Max News in 1 Page
-$mmw[long_news_txt] = '160';				// Long News Text, if 0 this options off
 $mmw[last_in_forum] = '5';				// Max Topic in Block "Last in Forum"
 $mmw[max_post_forum] = '100';				// Max Topic in Forum
-$mmw[comment_time_out] = '60';				// Comment Time Out
+$mmw[comment_time_out] = '15';				// Comment Time Out
 $mmw[min_send_zen] = '1000000';				// Minimum Zen for Send to Char (Can 0)
 $mmw[service_send_zen] = '1000000';			// Service fee Zen for Send to Char (Can 0)
 $mmw[zen_for_acc] = '50000000';				// Zen For New Account (Can 0)
 $mmw[switch_ref] = 'yes';				// no(NO Referral) or yes(Referral)
-$mmw[zen_for_ref] = '750000000';			// Zen For Referral (Min 1kk)
+$mmw[zen_for_ref] = '1000000000';			// Zen For Referral (Min 1kk)
 $mmw[max_char_wh_zen] = '2000000000';			// Max Zen in Character and WareHouse
 $mmw[max_private_message] = '50';			// Max Private Message
 $mmw[max_length_private_message] = '300';		// How many Simbol in Private Message
-$mmw[votes_check] = 'ip';				// ip(Only Different IP) or acc(Only Different Account)
+$mmw[votes_check] = 'acc';				// ip(Only Different IP) or acc(Only Different Account)
 $mmw[mp3_player] = 'yes';				// no(Not Show) or yes(Show) Mp3 Player
 $mmw[popunder] = 'yes';					// no(Not Show) or yes(Show) PopUnder in MyMuWeb
 $mmw[popunder_check] = 'yes';				// If 'yes' and Account Logined, PoUnder OFF.
+$mmw[show_all_error] = 'yes';				// Turn On or Off all Error's
+$mmw[look_after_all] = 'no';				// To look after all, Who where be.
+
+
+// Switch Character Options
+$mmw[reset] = 'yes';					// yes(All Can Reset) no(Options Off).
+$mmw[add_point] = 'yes';				// yes(All Can Add Point) no(Options Off).
+$mmw[pk_clear] = 'yes';					// yes(All Can PK Clear) no(Options Off).
+$mmw[move] = 'yes';					// yes(All Can Move) no(Options Off).
+$mmw[change_class] = 'yes';				// yes(All Can Change Class) no(Options Off).
+
+
+// News
+$mmw[max_post_news] = '5';				// Max News in 1 Page
+$mmw[long_news_txt] = '220';				// Long News Text, if 0 this options off
+$mmw[news_row_1] = '<div><b>English:</b></div>';	// News Row 1
+$mmw[news_row_2] = '<div><b>Russian:</b></div>';	// News Row 2
+$mmw[news_row_3] = '<div><b>Latvian:</b></div>';	// News Row 3
+$mmw[news_row_end] = '';				// This is All Row End
 
 
 // Reset System
@@ -92,19 +102,28 @@ $mmw[forum_can_status] = '3';				// Topic Can Close with this level
 $mmw[image_can_delete] = '3';				// Image Can Delete with this level
 
 
+
+
+
+
+// Config of site made off. Thank You!
 // Engine MyMuWeb. Don't Edit Please!
-$mmw[version] = '0.5';
-if(isset($_SESSION[theme]))
-	{$mmw[theme] = $_SESSION[theme];}
+// All this engine by Vaflan!
+$mmw[version] = '0.6';
+if($mmw[show_all_error] == 'no') {error_reporting(0);}
+$sql_die_start = '<table border="0" width="350" height="200" align="center" style="background:url(images/sql_die.png);" cellpadding="25"><tr><td valign="top"><b>MMW Result:</b><br>';$sql_die_end = '</td></tr></table>';
+if($mmw[sqlpass]=='Password' || $mmw[sqluser]=='Login' || $mmw[database]=='DataBase' || $mmw[sqlhost]=='IP Address') {die("$sql_die_start Please Check config.php! $sql_die_end");}
+$mssql_connect = @mssql_connect($mmw[sqlhost],$mmw[sqluser],$mmw[sqlpass]) or die("$sql_die_start MSSQL server is offline OR I can't Access to it! $sql_die_end");
+@mssql_select_db($mmw[database], $mssql_connect) or die("$sql_die_start Database don't exists OR I can't Access to it! $sql_die_end");
+if(isset($_GET[theme])) {$_SESSION[theme] = $_GET[theme];}
+if(isset($_POST[set_theme])) {$_SESSION[theme] = $_POST[set_theme];}
+if(isset($_SESSION[theme])) {$mmw[theme] = $_SESSION[theme];}
 if(is_file("themes/$mmw[theme]/info.php")) {
-	$mmw[theme_dir] = "themes/$mmw[theme]";
-	$mmw[theme_img] = "themes/$mmw[theme]/img";
-	include("$mmw[theme_dir]/info.php");
-}
-else {
-	unset($_SESSION[theme]);
-	die("$sql_die_start ErroR Theme!<br>Cant find <b>$mmw[theme]/info.php</b> in <b>themes/</b>! $sql_die_end");
-}
+$mmw[theme_dir] = "themes/$mmw[theme]";
+$mmw[theme_img] = "themes/$mmw[theme]/img";
+include("$mmw[theme_dir]/info.php");}
+elseif($mmw[theme_switch] == NULL) {unset($_SESSION[theme]);
+die("$sql_die_start ErroR Theme!<br>Cant find <b>$mmw[theme]/info.php</b> in <b>themes/</b>! $sql_die_end");}
 $alpha_num = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 $mmw[rand_id] = substr(str_shuffle($alpha_num), 0, 8);
 ?>

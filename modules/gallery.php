@@ -15,7 +15,7 @@ if(isset($_GET[w]) && isset($_SESSION['char_set'])) {
   else {
 	$file_name = basename($_FILES['image']['name']);
 	$file_size = $_FILES['image']['size'];
-	$file_format = substr($file_name, -3);
+	$file_format = strtolower(substr($file_name, -3));
 	$file_maxsize = "2000000";
 	$target = $dir.$mmw[rand_id].".$file_format";
 
@@ -81,7 +81,7 @@ if(isset($_POST['id_delete'])) {
    $file_name = $_POST['id_delete'];
    if(is_file($dir.$file_name.'.dat')) {
 	include($dir.$file_name.'.dat');
-	if($_SESSION['admin'] >= $mmw[image_can_delete] || $_SESSION['char_set'] == $author) {
+	if($_SESSION['mmw_status'] >= $mmw[image_can_delete] || $_SESSION['char_set'] == $author) {
 		unlink($dir.$file_name.'.'.$format);
 		unlink($dir.$file_name.".dat");
 		echo $okey_start . mmw_lang_image_deleted . $okey_end;
@@ -122,7 +122,7 @@ if($dh = opendir($dir)) {
 		   $char_info[$author] = mssql_fetch_row($result_char);
 		}
 
-		if($_SESSION['admin'] >= $mmw[image_can_delete] || $_SESSION['char_set'] == $author)
+		if($_SESSION['mmw_status'] >= $mmw[image_can_delete] || $_SESSION['char_set'] == $author)
 		{$edit = "<form action='' method='post' name='delete_$file_name'><input name='id_delete' type='hidden' value='$file_name'><a href='javascript://' title='".mmw_lang_delete."'><img src='images/delete.png' border='0' onclick='delete_$file_name.submit()'></a></form>";}
 		else {$edit = '';}
 
@@ -136,12 +136,13 @@ if($dh = opendir($dir)) {
      closedir($dh);
 
    if(!isset($_GET[w])) {
-	if(isset($_SESSION['char_set']) && isset($_SESSION['pass']) && isset($_SESSION['user'])) {$upload_acc_check = "<a href='?op=gallery&w=add'>".mmw_lang_upload_image."</a>";}
+	if(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {$upload_acc_check = "<a href='?op=gallery&w=add'>".mmw_lang_upload_image."</a>";}
+	elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$upload_acc_check = mmw_lang_cant_add_no_char;}
 	else {$upload_acc_check = mmw_lang_guest_must_be_logged_on;}
 
      echo "
 	<table border='0' cellpadding='0' cellspacing='0' width='100%'><tr>
-	<td width='60%'>".mmw_lang_total_image.": <b>$num</b></td>
+	<td width='50%'>".mmw_lang_total_image.": <b>$num</b></td>
 	<td align='right'>[ $upload_acc_check ]</td>
 	</tr><table>
 	";

@@ -19,7 +19,7 @@ $menu = array(
  array(mmw_lang_blocked,'?op=blocked'),
  array(mmw_lang_search,'?op=search'),
  array(mmw_lang_forum,'?op=forum'),
- array(mmw_lang_online,'?op=rankings&sort=3d_online')
+ array(mmw_lang_online,'?op=rankings&sort=3d_online'),
 
 );
 ?>

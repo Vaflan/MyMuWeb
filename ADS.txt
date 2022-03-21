@@ -8,8 +8,7 @@
 <center>
 <a href="http://mmw.clan.su">MyMuWeb Support</a><br>
 <a href="http://redangel.put.lv">RedAngel MuOnline</a><br>
-<a href="http://podriv.net">Padriv E-Radio</a><br>
 </center>
 
 
-<br><small>This Text Can Edit in ads.txt</small>
+<div id="main" style="position: absolute; left: 520px; top: 24px;"><?statisitcs('main');?></div>

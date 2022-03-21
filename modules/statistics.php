@@ -62,12 +62,12 @@ $result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type from 
 $serv_num = mssql_num_rows($result);
 for($i=0;$i < $serv_num;++$i) {
  $row = mssql_fetch_row($result);
- if($i < $serv_num - 1) {$other_serv = ', ';} else {$other_serv = '';}
+ if($i < $serv_num - 1) {$other_serv = ',';} else {$other_serv = '';}
  if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.3)) 
   {fclose($check); $status_done = "<span class='online'><b>".mmw_lang_online."</b></span>";}
  else
   {$status_done = "<span class='offline'><b>".mmw_lang_offline."</b></span>";} 
- echo " <span class=\"helpLink\" title=\"<b>".mmw_lang_version.":</b> $row[5]<br><b>".mmw_lang_experience.":</b> $row[1]<br><b>".mmw_lang_drops.":</b> $row[2]<br><b>".mmw_lang_type.":</b> $row[6]\">$row[0]</span>: $status_done " . $other_serv;
+ echo " <span class=\"helpLink\" title=\"<b>".mmw_lang_version.":</b> $row[5]<br><b>".mmw_lang_experience.":</b> $row[1]<br><b>".mmw_lang_drops.":</b> $row[2]<br><b>".mmw_lang_type.":</b> $row[6]\">$row[0]</span>: $status_done" . $other_serv;
 }
 ?>
       </td>
@@ -86,7 +86,7 @@ for($i=0;$i < $serv_num;++$i) {
           <tr>
             <td align="right"><?echo mmw_lang_total_characters;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=all'>$total_characters[0])</a></font>";?>
+<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=all'>$total_characters[0]</a>)</font>";?>
             </td>
           </tr>
           <tr>

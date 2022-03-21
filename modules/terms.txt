@@ -1,4 +1,4 @@
-1. 
+﻿1. 
 Exploiting bugs
 Exploiting any bugs in the game or website to gain an advantage or put others  at a disadvantage
 E.g. Duplicating items

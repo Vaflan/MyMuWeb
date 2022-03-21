@@ -28,7 +28,7 @@ $total_post = mssql_num_rows($result);
 		<td><b><?echo mmw_lang_topic_name;?></b></td>
 		<td align="center" width="60"><b><?echo mmw_lang_comments;?></b></td>
 		<td align="center" width="100"><b><?echo mmw_lang_author;?></b></td>
-		<td align="center" width="100"><b><?echo mmw_lang_lost_message;?></b></td>
+		<td align="center" width="100"><b><?echo mmw_lang_last_message;?></b></td>
 	</tr>
 <?
   if($total_post == 0) {

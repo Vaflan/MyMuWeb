@@ -29,7 +29,8 @@ $guild_end = "<a class='helpLink' href='javascript://' title='<img src=decode.ph
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
 
-if(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen="<form action='' method='post' name='send_zen'><input name='zen_to_char' type='hidden' value='$character_get'> <input name='zen' type='text' size='8' maxlength='10'> <input type='submit' name='Submit' value='".mmw_lang_send."'><br>".mmw_lang_service_fee.': '.zen_format($mmw[service_send_zen]).' Zen</form>';}
+if(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {$send_zen = "<form action='' method='post' name='send_zen'><input name='zen_to_char' type='hidden' value='$character_get'> <input name='zen' type='text' size='8' maxlength='10'> <input type='submit' name='Submit' value='".mmw_lang_send."'><br>".mmw_lang_service_fee.': '.zen_format($mmw[service_send_zen]).' Zen</form>';}
+elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen = mmw_lang_cant_add_no_char;}
 else {$send_zen = mmw_lang_guest_must_be_logged_on;}
 ?>
 

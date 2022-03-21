@@ -1,7 +1,7 @@
 <?PHP
 // PHP Script By Vaflan
 // For MyMuWeb
-// Ver. 1.2
+// Ver. 1.5
 
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 
@@ -24,9 +24,13 @@ for($i=0;$i < $row_num;++$i) {
 
 	$mmwflashbody = $mmwflashbody . "%3Ca href=%27%3Fop=character%26character=$char[0]%27 %62%79=%27%76%61%66%6C%61%6E%27 style=%27font-size: ".$rand."pt;%27%3E$char[0] [$char[2]/$char[3]]%3C/a%3E ";
 }
+
+if(!isset($flash_body_size)) {
+	$flash_body_size = "500";
+}
 ?>
 
-<div id="wpcumuluscontent">
+<div id="mmwtagcloudflash">
 <p style="display:none;">
 <?echo $mmwflashbody;?>
 </p>
@@ -34,13 +38,16 @@ for($i=0;$i < $row_num;++$i) {
 </div>
 <script type="text/javascript" src="scripts/swfobject.js"></script>
 <script type="text/javascript">
-var mmwonline = new SWFObject("media/tagcloud.swf", "tagcloudflash", "500", "500", "10", "#<?echo $back_color;?>");
+var mmwonline = new SWFObject("media/tagcloud.swf", "mmwtagcloudflash", "<?echo $flash_body_size;?>", "<?echo $flash_body_size;?>", "10");
+mmwonline.addParam("wmode", "transparent");
+mmwonline.addParam("bgcolor", "#<?echo $bg_color;?>");
 mmwonline.addParam("allowScriptAccess", "always");
 mmwonline.addVariable("tcolor", "0x<?echo $text_color;?>");
 mmwonline.addVariable("tspeed", "100");
 mmwonline.addVariable("distr", "true");
 mmwonline.addVariable("mode", "tags");
+mmwonline.addVariable("minFontSize", "6");
+mmwonline.addVariable("maxFontSize", "10");
 mmwonline.addVariable("tagcloud", "%3Ctags%3E<?echo $mmwflashbody;?>%3C/tags%3E");
-mmwonline.write("wpcumuluscontent");
+mmwonline.write("mmwtagcloudflash");
 </script>
-</center>

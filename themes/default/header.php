@@ -8,6 +8,7 @@
 	<script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
 	<script type="text/javascript" src="scripts/textfader.js">//script_by_vaflan</script>
 	<script type="text/javascript" src="scripts/jquery.js">//script_by_vaflan</script>
+	<link href="images/main/style.css" rel="stylesheet" type="text/css" media="all">
 	<link href="<?echo $mmw[theme_dir];?>/style.css" rel="stylesheet" type="text/css" media="all">
 	<link href="<?echo $mmw[theme_dir];?>/favicon.ico" rel="shortcut icon">
 </head>
@@ -25,7 +26,7 @@
 	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
 	   <tr style="cursor:pointer" onclick="expandit('block_1')">
 	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_1.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_account_panel;?></td>
+	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_account_menu;?></td>
 	   </tr>
 	   <tr id="block_1">
 	      <td colspan="2" valign="top" class="block_bg">
@@ -151,7 +152,7 @@
 	   <tr style="cursor:pointer" onclick="expandit('block_body')">
 	      <td width="28" height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);" align="center"><img src="<?echo $mmw[theme_img];?>/mu.png" border="0" height="26"></td>
 	      <td style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-left:4px;"> <a href="<?echo $mmw[serverwebsite];?>"><?echo mmw_lang_home_page;?></a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?> </td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_language;?>: <?language($mmw[language]);?></td>
+	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_theme;?>: <?theme();?> <?echo mmw_lang_language;?>: <?language($mmw[language]);?></td>
 	   </tr>
 	   <tr id="block_body">
 	      <td colspan="3" valign="top" class="block_bg">

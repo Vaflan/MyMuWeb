@@ -30,6 +30,8 @@ $get_acc_wh_num = mssql_num_rows($get_wh);
 if($get_acc_wh[1]==""){$get_acc_wh[1] = 0;}
 if($get_acc_wh[2]==""){$get_acc_wh[2] = 0;}
 
+if($get_account_done[5]=='male'){$gender = 'Male';} else{$gender = 'Female';}
+
 if($get_account_done[14] >= 0){$admin_level[$get_account_done[14]] = "selected";} else{$admin_level[0] = "selected";}
 
 $online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$account_edit'");
@@ -118,7 +120,7 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
 			  </tr>
 			  <tr>
 			    <td align="right">Gender</td>
-			    <td><?echo gender($get_account_done[5]);?></td>
+			    <td><?echo $gender;?></td>
 			  </tr>
 			<?if($_SESSION[a_admin_level] > 6){?>
 			  <tr>
@@ -134,10 +136,10 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
 		</fieldset>
 		</td>
 	</tr>
-<?if($get_acc_wh_num > 0 && $_SESSION[a_admin_level] > 3) {?>
 	<tr>
 		<td align="center">
 		<fieldset>
+<?if($get_acc_wh_num > 0 && $_SESSION[a_admin_level] > 3) {?>
 		<legend>Ware House <?echo $get_account_done[0];?></legend>
 			<form action="" method="post" name="edit_acc_wh_form" id="edit_acc_wh_form">
 			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
@@ -157,10 +159,10 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
 		</fieldset>
 		</td>
 	</tr>
-<?} //end wh ?>
 	<tr>
 		<td align="center">
 		<fieldset>
+<?} //end wh ?>
 		<legend>Character's <?echo $get_account_done[0];?></legend>
 			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
 			  <tr>
@@ -181,10 +183,10 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
 		</fieldset>
 		</td>
 	</tr>
-<?} //end acc ?>
 	<tr>
 		<td align="center">
 		<fieldset>
+<?} //end acc ?>
 		<legend>Search Account</legend>
 			<form action="" method="post" name="search_account" id="search_account">
 			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">

@@ -1,12 +1,13 @@
 ﻿<?PHP
-// This Language For MMW
+// This is Language For MMW
 // Default English Language By Vaflan
 
+define('mmw_lang_theme',"Theme");
 define('mmw_lang_language',"Language");
 define('mmw_lang_home_page',"Home Page");
 
 //Left Block
-define('mmw_lang_account_panel',"Account Panel");
+define('mmw_lang_account_menu',"Account Menu");
 define('mmw_lang_menu',"Menu");
 define('mmw_lang_statistic',"Statistic");
 define('mmw_lang_server_time',"Server Time");
@@ -15,6 +16,7 @@ define('mmw_lang_top_list',"Top List");
 define('mmw_lang_last_in_forum',"Last in Forum");
 define('mmw_lang_who_is_on_web',"Who is on Web");
 define('mmw_lang_ads_banners',"ADS / Banners");
+define('mmw_lang_donate',"Donate");
 
 //Body in Block
 define('mmw_lang_account',"Account");
@@ -24,6 +26,7 @@ define('mmw_lang_lost_pass',"Lost Password");
 define('mmw_lang_hello',"Hello");
 define('mmw_lang_character_panel',"Character Panel");
 define('mmw_lang_mail',"Mail");
+define('mmw_lang_account_panel',"Account Panel");
 define('mmw_lang_ware_house',"Bank (Vault Keeper)");
 define('mmw_lang_gm_options',"GM Options");
 define('mmw_lang_logout',"Logout");
@@ -79,10 +82,12 @@ define('mmw_lang_age',"Age");
 define('mmw_lang_avatar',"Avatar");
 define('mmw_lang_country',"Country");
 define('mmw_lang_gender',"Gender");
-define('mmw_lang_cant_add_comment_no_char',"Sorry, you have not Character!");
+define('mmw_lang_cant_add_no_char',"Sorry, you have not Character!");
 define('mmw_lang_guest_must_be_logged_on',"Guest, Must Be Logged On!");
 define('mmw_lang_week_mon',"Mon");
 define('mmw_lang_week_tue',"Tue");
+define('mmw_lang_week_wed',"Wed");
+define('mmw_lang_week_thu',"Thu");
 define('mmw_lang_week_fri',"Fri");
 define('mmw_lang_week_sat',"Sat");
 define('mmw_lang_week_sun',"Sun");
@@ -96,7 +101,7 @@ define('mmw_lang_new_topic',"New Topic");
 define('mmw_lang_no_topics_in_forum',"No Topics In Forum.");
 define('mmw_lang_topic_name',"Topic Name");
 define('mmw_lang_comments',"Comments");
-define('mmw_lang_lost_message',"Lost Message");
+define('mmw_lang_last_message',"Lost Message");
 define('mmw_lang_total_topic',"Total Topic");
 define('mmw_lang_topic_title',"Topic Title");
 define('mmw_lang_topic_text',"Topic Text");
@@ -211,7 +216,7 @@ define('mmw_lang_guild_member',"Guild Member");
 define('mmw_lang_battle_master',"Battle Master");
 define('mmw_lang_assistant_guild_master',"Assistant Guild Master");
 define('mmw_lang_guild_master',"Guild Master");
-define('mmw_lang_all_characters_is_offline',"All Character is Offline");
+define('mmw_lang_all_characters_is_offline',"All Character are Offline");
 
 //Gallery
 define('mmw_lang_image',"Image");
@@ -274,6 +279,7 @@ define('mmw_lang_no_message',"No Message");
 
 //Account
 define('mmw_lang_register_date',"Register Date");
+define('mmw_lang_referral',"Referral");
 define('mmw_lang_about_referral',"About Referral");
 define('mmw_lang_referral_link',"Referral Link");
 define('mmw_lang_your_referrals',"Your Referrals");
@@ -318,6 +324,7 @@ define('mmw_lang_correctly_code',"Please Write Code Correctly!");
 define('mmw_lang_account_in_use',"Account Is Already In Use, Please Choose Another!");
 define('mmw_lang_email_in_use',"E-Mail Is Already In Use, Please Choose Another!");
 define('mmw_lang_invalid_country',"Please Select Country Correctly!");
+define('mmw_lang_max_acc_one_ip',"On your IP Address {NUMBER} is already registered User");
 define('mmw_lang_account_created',"Your Account Has Been SuccesFully Created!");
 define('mmw_lang_character_does_not_exist',"Character Does Not Exist!");
 define('mmw_lang_for_reset_need',"For Reset Need");

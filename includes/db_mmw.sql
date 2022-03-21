@@ -51,8 +51,9 @@ CREATE TABLE [dbo].[MMW_news] (
 	[news_id] [nvarchar] (100) NULL ,
 	[news_title] [nvarchar] (100) NULL ,
 	[news_category] [nvarchar] (100) NULL ,
-	[news_eng] [text] NULL ,
-	[news_rus] [text] NULL ,
+	[news_row_1] [text] NULL ,
+	[news_row_2] [text] NULL ,
+	[news_row_3] [text] NULL ,
 	[news_autor] [nvarchar] (100) NULL ,
 	[news_date] [nvarchar] (100) NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
@@ -63,14 +64,15 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_server
 drop table [dbo].[MMW_servers]
 
 CREATE TABLE [dbo].[MMW_servers] (
-	[name] [nvarchar] (100) NULL ,
-	[experience] [nvarchar] (100) NULL ,
-	[drops] [nvarchar] (100) NULL ,
-	[gsport] [nvarchar] (100) NULL ,
-	[ip] [nvarchar] (100) NULL ,
-	[display_order] [nvarchar] (100) NULL ,
-	[version] [nvarchar] (100) NULL ,
-	[type] [nvarchar] (50) NULL 
+	[name] [nvarchar] (50) NULL ,
+	[version] [nvarchar] (50) NULL ,
+	[experience] [nvarchar] (50) NULL ,
+	[drops] [nvarchar] (50) NULL , 
+	[maxplayer] [nvarchar] (50) NULL ,
+	[gsport] [nvarchar] (50) NULL ,
+	[ip] [nvarchar] (50) NULL ,
+	[type] [nvarchar] (50) NULL, 
+	[display_order] [nvarchar] (50) NULL 
 ) ON [PRIMARY]
 
 
