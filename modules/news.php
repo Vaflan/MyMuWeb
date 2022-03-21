@@ -16,25 +16,26 @@ $get_news = mssql_query("SELECT TOP $now_total news_title,news_autor,news_catego
 for($i=0; $i < $now_total; ++$i) {
   $row = mssql_fetch_row($get_news);
   if($i >= $from) {
-    if($row[5]!=' ' && $row[5]!=NULL && $mmw[long_news_txt]!=0) {$news_row_1 = $mmw[news_row_1].bbcode(substr($row[5],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";}
-    elseif($row[5]!=' ' && $row[5]!=NULL && $mmw[long_news_txt]==0) {$news_row_1 = $mmw[news_row_1].bbcode($row[5]);}
+    if($row[5]!=' ' && $row[5]!=NULL && $mmw[long_news_txt]!=0) {$news_row_1 = $mmw[news_row_1].substr($row[5],0,$mmw[long_news_txt])." <a href='?news=$row[4]'>...</a>";}
+    elseif($row[5]!=' ' && $row[5]!=NULL && $mmw[long_news_txt]==0) {$news_row_1 = $mmw[news_row_1].$row[5];}
     else {$news_row_1 = '';}
-    if($row[6]!=' ' && $row[6]!=NULL && $mmw[long_news_txt]!=0) {$news_row_2 = $mmw[news_row_2].bbcode(substr($row[6],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";}
-    elseif($row[6]!=' ' && $row[6]!=NULL && $mmw[long_news_txt]==0) {$news_row_2 = $mmw[news_row_2].bbcode($row[6]);}
+    if($row[6]!=' ' && $row[6]!=NULL && $mmw[long_news_txt]!=0) {$news_row_2 = $mmw[news_row_2].substr($row[6],0,$mmw[long_news_txt])." <a href='?news=$row[4]'>...</a>";}
+    elseif($row[6]!=' ' && $row[6]!=NULL && $mmw[long_news_txt]==0) {$news_row_2 = $mmw[news_row_2].$row[6];}
     else {$news_row_2 = '';}
-    if($row[7]!=' ' && $row[7]!=NULL && $mmw[long_news_txt]!=0) {$news_row_3 = $mmw[news_row_3].bbcode(substr($row[7],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";}
-    elseif($row[7]!=' ' && $row[7]!=NULL && $mmw[long_news_txt]==0) {$news_row_3 = $mmw[news_row_3].bbcode($row[7]);}
+    if($row[7]!=' ' && $row[7]!=NULL && $mmw[long_news_txt]!=0) {$news_row_3 = $mmw[news_row_3].substr($row[7],0,$mmw[long_news_txt])." <a href='?news=$row[4]'>...</a>";}
+    elseif($row[7]!=' ' && $row[7]!=NULL && $mmw[long_news_txt]==0) {$news_row_3 = $mmw[news_row_3].$row[7];}
     else {$news_row_3 = '';}
     $comm_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_id_blog='1' AND c_id_code='$row[4]'");
     $comm_num = mssql_num_rows($comm_result);
     $date = date("d.m.Y", $row[3]);
+    $time = date("H:i:s", $row[3]);
 
     echo '
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
 	<tr><td>
 	<div class="eTitle"><a href="?news='.$row[4].'" class="eTitleLink">'.$row[0].'</a></div>
-	<div class="eMessage">'.$news_row_1.$news_row_2.$news_row_3.'</div>
-        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | '.mmw_lang_date.': <span title="'.$date.'">'.$date.'</span> | '.mmw_lang_total_comment.': <a href="?news='.$row[4].'">'.$comm_num.'</a></div>
+	<div class="eMessage">'.bbcode($news_row_1.$news_row_2.$news_row_3).'</div>
+        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': '.$row[1].' | '.mmw_lang_date.': <span title="'.$time.'">'.$date.'</span> | '.mmw_lang_total_comment.': <a href="?news='.$row[4].'">'.$comm_num.'</a></div>
         </td></tr></table>';
     if($i < $now_total - 1) {echo $rowbr;}
   }

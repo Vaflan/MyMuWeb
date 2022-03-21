@@ -8,7 +8,7 @@ if(isset($_POST["clearpk_char"])) {require("includes/character.class.php");optio
 if(isset($_POST["move_char"])) {require("includes/character.class.php");option::move($char_set); echo $rowbr;}
 if(isset($_POST["change_class_char"])) {require("includes/character.class.php");option::change_class($char_set); echo $rowbr;}
 
-$char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,experience FROM Character WHERE Name='$char_set'"); 
+$char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,experience,ctlcode FROM Character WHERE Name='$char_set'"); 
 $info = mssql_fetch_row($char_results);
 
 $wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
@@ -17,12 +17,12 @@ $all_money = $info[14] + $wh_row[1];
 
 $guildm_results = mssql_query("Select G_name from GuildMember where name='$char_set'");
 $guildm = mssql_fetch_row($guildm_results);
-if($guildm[0]==NULL || $guildm[0]==" "){$guild_end = mmw_lang_no_guild;}
+if($guildm[0]==NULL || $guildm[0]==" ") {$guild_end = mmw_lang_no_guild;}
 else {
-$guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
-$guild_row = mssql_fetch_row($guild_results);
-$logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<img src='decode.php?decode=$logo' height='10' width='10' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
+ $guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
+ $guild_row = mssql_fetch_row($guild_results);
+ $logo = urlencode(bin2hex($guild_row[1]));
+ $guild_end = "<img src='decode.php?decode=$logo' height='10' width='10' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
 	if($mmw[mix_cs_memb_reset]=="yes") {
 	$cs_query = mssql_query("SELECT owner_guild,money FROM MuCastle_DATA");
 	$cs_row = mssql_fetch_row($cs_query);
@@ -44,7 +44,7 @@ if($info[1] >= 80 && $info[1] <= 95) {$reset_level = $mmw[reset_level_sum];}
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
 
 
-include("move.php");
+include("includes/move.php");
 $locations = '<select name="map" style="width:76px" size="1"><option value="maps">'.mmw_lang_select_map.'</option>';
 for($i=0; $i < count($move); ++$i) {
 	$locations .= "<option value='$i'>".map($move[$i][0])."</option>\n";
@@ -81,7 +81,7 @@ else {$move="<form action='' method='post' name='move'>".mmw_lang_price.': '.zen
 
 
 if($mmw[change_class] == 'yes') {
-	include("class.php");
+	include("includes/change_class.php");
 	$change_class_form = '<select name="class" style="width:76px" size="1"><option value="class">'.mmw_lang_select_class.'</option>';
 	for($i=0; $i < count($class_list); ++$i) {
 		$change_class_form .= "<option value='$i'>".char_class($class_list[$i][0])." - ".zen_format($class_list[$i][1])." Zen</option>\n";
@@ -91,13 +91,17 @@ if($mmw[change_class] == 'yes') {
 }
 ?>
 
-      <table width="380" border="0" cellpadding="0" cellspacing="0" align="center">
+      <table border="0" cellpadding="0" cellspacing="0" align="center">
        <tr>
 	<td valign="top">
 	<table width="240" class="sort-table" cellpadding="0" cellspacing="0">
           <tr>
             <td align="right"><?echo mmw_lang_character;?>:</td>
-            <td><span class="level<?echo $_SESSION['char_ctlcode'];?>"><?echo $char_set;?></span></td>
+            <td><span class="level<?echo $info[17];?>"><?echo $char_set;?></span></td>
+          </tr>
+          <tr>
+            <td align="right"><?echo mmw_lang_status;?>:</td>
+            <td><?echo ctlcode($info[17]);?></td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_class;?>:</td>
@@ -125,23 +129,23 @@ if($mmw[change_class] == 'yes') {
           </tr>
           <tr>
             <td align="right">Strength:</td>
-            <td><?echo $info[2];?></td>
+            <td><?echo point_format($info[2]);?></td>
           </tr>
           <tr>
             <td align="right">Agility:</td>
-            <td><?echo $info[3];?></td>
+            <td><?echo point_format($info[3]);?></td>
           </tr>
           <tr>
             <td align="right">Vitality:</td>
-            <td><?echo $info[4];?></td>
+            <td><?echo point_format($info[4]);?></td>
           </tr>
           <tr>
             <td align="right">Energy:</td>
-            <td><?echo $info[5];?></td>
+            <td><?echo point_format($info[5]);?></td>
           </tr>
           <?if($info[15]>0){?><tr>
             <td align="right">Command:</td>
-            <td><?echo $info[15];?></td>
+            <td><?echo point_format($info[15]);?></td>
           </tr><?}?>
           <tr>
             <td align="right">Zen:</td>
@@ -157,7 +161,7 @@ if($mmw[change_class] == 'yes') {
           </tr>
 	</table>
 	</td>
-	<td valign="top" align="center">
+	<td valign="top" align="center" style="padding-left:2px;">
 		<?echo "<img src='".default_img(char_class($info[1],img))."' title='".char_class($info[1],full)."'>";?><br><br>
 		<?if($mmw[reset] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_1')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_reset;?></div>

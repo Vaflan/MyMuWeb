@@ -1,5 +1,4 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
 
 // ADS and PopUnder in Web
 $ads_file = 'ads.txt';
@@ -39,7 +38,6 @@ if($ads_size > 0) {
  @fclose($ads_open);
 }
 ?>
-
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
 	<tr>
 		<td align="center">

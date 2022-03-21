@@ -1,75 +1,84 @@
 /* Global */
-body,table,td,th {font-size: 12px; color: #000000; font-family: Trebuchet MS;}
+body,table,td,th {font-family:Verdana,Arial,Helvetica,Impact; font-size:11px; color: #CCCCCC;}
 
-a:link {font-size: 12px; color: #666666; text-decoration: none;}
-a:visited {font-size: 12px; color: #666666; text-decoration: none;}
-a:active {font-size: 12px; color: #000000; text-decoration: none;}
-a:hover {font-size: 12px; color: #000000; text-decoration: none;}
+a:link {color: #EEDDCC; text-decoration: none;}
+a:visited {color: #EEDDCC; text-decoration: none;}
+a:active {color: #FFCC33; text-decoration: none;}
+a:hover {color: #FFCC33; text-decoration: none;}
 
-.online {font-size: 12px; color: #00ff00;}
-.offline {font-size: 12px; color: #ff0000;}
+.online {color: #00ff00;}
+.offline {color: #ff0000;}
 
-.block_bg {background:#FFFFFF; padding:6px;}
-.hr-online-acc {border-top: 1px solid #000000;}
+.hr-online-acc {border: 0px; border-bottom: 1px solid #555555;}
 .sizedforum {max-width:480px; width:expression(this.scrollWidth > 480? "480px" : "auto" ); overflow:auto; overflow-y:hidden;}
 .sizedcomment {max-width:370px; width:expression(this.scrollWidth > 370? "370px" : "auto" ); overflow:auto; overflow-y:hidden;}
-.info-table {background: #999999; color: #FFFFFF; text-align: center;}
-.info-td {background: #FFFFFF; color: #000000; text-align: center;}
-.div-menu-out {cursor:pointer; color:#666666; font-weight: bold;}
-.div-menu-over {cursor:pointer; color:#000000; font-weight: bold;}
+.info-table {background: #999999; color: #000000; text-align: center;}
+.info-td {background: url(img/background.png); color: #FFFFFF; text-align: center;}
+.div-menu-out {cursor:pointer; color: #EEDDCC; font-weight: bold;}
+.div-menu-over {cursor:pointer; color: #FFCC33; font-weight: bold;}
 
-.helpLink {color: #000000; text-decoration: underline; cursor: help; font-size: 12px;}
-.helpLink:hover {color: #666666; text-decoration: underline; cursor: help; font-size: 12px;}
+.helpLink {color: #FFCC33; text-decoration: underline; cursor: help;}
+.helpLink:hover {color: #EEDDCC; text-decoration: underline; cursor: help;}
 #tooltip {position: absolute; border: 1px solid #000000; background-color: #FEFEFE; color: #000000; padding: 3px; max-width: 468px; -moz-opacity: 0.85; filter: alpha(opacity=85); z-index: 0;}
 #tooltip h3, #tooltip div {margin: 0; font: 11px 'Trebuchet MS';}
 
-input,textarea,select,option,button {border: 1px solid #000000; background: #FFFFFF; font-size:11px; color: #000000; padding: 0px; vertical-align: middle;}
-select.selections {font-family: "Arial"; font-size: 12px; line-height: 14px; color: #f2e5cd; text-decoration: none; background-color: #494949;}
+input,textarea,option,button {border: 1px solid #000000; font-size: 11px; background: url(img/background.png); color: #FFFFFF; padding: 0px; padding-left: 2px; padding-right: 2px;}
+select {border: 1px solid #000000; background: #000000; font-size: 11px; color: #FFFFFF; padding: 0px; padding-left: 2px; padding-right: 2px;}
+select.selections {color: #f2e5cd; text-decoration: none; background-color: #494949;}
 form,img {display: inline; padding: 0; margin: 0; border: 0;}
 label {cursor: hand;}
 
-.aBlock {padding: 0px; border: 1px solid #1c1c1c; background: #F8F8F8;}
-.aRight {padding:0px; padding-left:4px; color:#FFFFFF; font-size:8px; background:url(img/comment.png); height:16px; width:110px;}
+.aBlock {padding: 0px; border: 1px solid #555555;}
+.aRight {padding: 0px; padding-left: 4px; color: #FFFFFF; font-size: 8px; background:url(img/comment.png); height:16px; width:110px;}
 /* --------------- */
 
 /* Tables */
-.sort-table {border: 1px solid #000000; background: #FFFFFF;}
-.sort-table thead td {border: 1px solid #FFFFFF; background: #CCCCCC; padding: 2px 5px;}
-.sort-table tbody td {border: 1px solid #FFFFFF; background: #EEEEEE; padding: 2px 5px;}
+.sort-table {border-collapse: collapse;}
+.sort-table thead td {border: 1px solid #555555; padding: 2px 5px;}
+.sort-table tbody td {border: 1px solid #555555; padding: 2px 5px;}
 /* --------------- */
 
 /* News */
 .eBlock {border: 0px dashed #000000;}
-.eTitle {background: url('img/news.gif') no-repeat 0 1px; padding-left: 18px; font-size: 14px; font-weight: bold;}
+.eTitle {background: url('img/news.gif') no-repeat 0 1px; padding-left: 18px; font-size: 14px; font-weight: bold; color: #FFCC33;}
 a.eTitleLink:link,a.eTitleLink:visited,a.eTitleLink:hover,a.eTitleLink:active {font-size: 14px; font-weight: bold;}
 .eMessage {border-top: 1px solid #555555; text-align: justify; padding: 2px;}
-.eDetails {background: #EEEEEE; padding-left: 2px; text-align: left; color: #000000; font-size: 7pt;}
-.eDetails a {text-decoration: none; color: #000000; font-size: 7pt;}
+.eDetails {background: none; padding-left: 2px; text-align: left; color: #9F9F9F; font-size: 7pt;}
+.eDetails a {text-decoration: none; color: #9F9F9F; font-size: 7pt;}
 .eDetails a:hover {text-decoration: none; color: #666666; font-size: 7pt;}
 /* --------------- */
 
 /* User Level Marks */
 .level0 {text-decoration: none; color: #3399FF;}
 a.level0:link,a.level0:visited {text-decoration: none; color: #3399FF;}
-a.level0:hover,a.level0:active {text-decoration: none; color: #000000;}
+a.level0:hover,a.level0:active {text-decoration: none; color: #FFCC33;}
 .level32 {text-decoration: none; color: #FF0000; font-weight: bold;}
 a.level32:link,a.level32:visited {text-decoration: none; color: #FF0000; font-weight: bold;}
 a.level32:hover,a.level32:active {text-decoration: none; color: #CF0F0F; font-weight: bold;}
 /* ---------------- */
 
 /* Items BackGround and size */
-.item-table {border: 1px solid #000000; background: #FFFFFF;}
-.item-td-ancient {border: 1px solid #FFFFFF; background: #660099; cursor: help;}
-.item-td-exc {border: 1px solid #FFFFFF; background: #448800; cursor: help;}
-.item-td-other {border: 1px solid #FFFFFF; background: #EEEEEE; cursor: help;}
-.item-slot {border: 1px solid #FFFFFF; background: #EEEEEE; width: 35px; height: 35px;}
-.item-sell {border: 1px solid #FFFFFF; background: #EEEEEE; width: 80%; padding: 4px;}
+.item-table {border-collapse: collapse;}
+.item-td-ancient {border: 1px solid #555555; background: #660099; cursor: help;}
+.item-td-exc {border: 1px solid #555555; background: #448800; cursor: help;}
+.item-td-other {border: 1px solid #555555; cursor: help;}
+.item-slot {border: 1px solid #555555; width: 35px; height: 35px;}
+.item-sell {border: 1px solid #555555; width: 80%; padding: 4px;}
 .item-ancient {color: #660099;}
 .item-exc {color: #448800;}
-.item-other {color: #000000;}
+.item-other {color: #CCCCCC;}
 /* ---------------- */
 
 /* Okey and Die */
-.okey {border: 2px solid #009600; background: #CCFFCC; padding: 2px; color: #009600;}
-.die {border: 2px solid #DC0000; background: #FFCCCC; padding: 2px; color: #DC0000;}
+.okey {border: 2px solid #009600; padding: 2px; color: #009600;}
+.die {border: 2px solid #DC0000; padding: 2px; color: #DC0000;}
+/* ---------------- */
+
+/* Okey and Die */
+.block-table {background:url(img/block/background.png); width: 100%; border: 0px;}
+.block-title {text-align: right; border-bottom: 1px solid #555555; padding-bottom: 4px; margin-bottom: 5px; font-weight: bold;}
+.block-left {background:url(img/block/left.png) repeat-y left top; padding: 0px; width: 2px;}
+.block-up {background:url(img/block/up.png); padding: 0px; height: 3px;}
+.block-right {background:url(img/block/right.png) repeat-y right top; padding: 0px; width: 2px;}
+.block-down {background:url(img/block/down.png); padding: 0px; height: 2px;}
 /* ---------------- */

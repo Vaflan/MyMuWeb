@@ -13,7 +13,7 @@ $comm_num = mssql_num_rows($result);
 	<td align="right" height="25">[ <a href="#sign">'.mmw_lang_add_comment.'</a> ]</td></tr>
 	<tr><td colspan="2">
            ';
-  for($i = 0; $i < $comm_num; $i++) {
+  for($i=0; $i<$comm_num; $i++) {
       $num = $i+1;
       $row = mssql_fetch_row($result);
       $time_c = date('H:i:s', $row[3]);
@@ -42,9 +42,11 @@ $comm_num = mssql_num_rows($result);
 	$c_num_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_char='$row[1]'");
 	$comment_c_num = mssql_num_rows($c_num_result);
 
-	if($_SESSION['mmw_status'] >= $mmw[comment_can_delete] || $_SESSION['char_set']==$row[1])
+	if( $mmw[status_rules][$_SESSION[mmw_status]][comment_delete]==1 || $_SESSION['char_set']==$row[1])
 	{$edit = "<form action='' method='post' name='delete$num'><input name='c_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='".default_img('delete.png')."' border='0' onclick='delete$num.submit()'></a></form>";}
 	else {$edit = '';}
+
+      if($num==$comm_num) {echo '<a name="last_comment"></a>';}
 
       echo '
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="aBlock">
@@ -58,14 +60,14 @@ $comm_num = mssql_num_rows($result);
 	</table><br />
            ';
   }
-      echo '</td></tr>
-	<tr><td colspan="2"><a name="sign"></a></td></tr>
-	</table>
-           ';
-
-
+?>
+  </td>
+ </tr>
+ <tr><td colspan="2"><a name="sign"></a></td></tr>
+</table>
+<?
   if($c_add_close == 'yes') {
-      echo '<div align="center">'.mmw_lang_comment_close.'</div>';
+      echo $die_start . mmw_lang_comment_close . $die_end;
   }
   elseif(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {
 ?>
@@ -77,21 +79,21 @@ $comm_num = mssql_num_rows($result);
   <script language=JavaScript>var ico;function smile(ico) {document.comment.c_message.value=document.comment.c_message.value+ico;}</script>
   <table border="0" cellpadding="3" class="smiles">
   <tr>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' >( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/angry.gif" title="angry"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' :D ');"><img style="margin:0;padding:0;border:0;" src="images/smile/biggrin.gif" title="biggrin"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' B) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/cool.gif" title="cool"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' >( ');"><img src="images/smile/angry.gif" title="angry"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :D ');"><img src="images/smile/biggrin.gif" title="biggrin"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' B) ');"><img src="images/smile/cool.gif" title="cool"></a></td>
   </tr><tr>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' ;( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/cry.gif" title="cry"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' <_< ');"><img style="margin:0;padding:0;border:0;" src="images/smile/dry.gif" title="dry"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' ^_^ ');"><img style="margin:0;padding:0;border:0;" src="images/smile/happy.gif" title="happy"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ;( ');"><img src="images/smile/cry.gif" title="cry"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' <_< ');"><img src="images/smile/dry.gif" title="dry"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ^_^ ');"><img src="images/smile/happy.gif" title="happy"></a></td>
   </tr><tr>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' :( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/sad.gif" title="sad"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' :) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/smile.gif" title="smile"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' :o ');"><img style="margin:0;padding:0;border:0;" src="images/smile/surprised.gif" title="surprised"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :( ');"><img src="images/smile/sad.gif" title="sad"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :) ');"><img src="images/smile/smile.gif" title="smile"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :o ');"><img src="images/smile/surprised.gif" title="surprised"></a></td>
   </tr><tr>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' :p ');"><img style="margin:0;padding:0;border:0;" src="images/smile/tongue.gif" title="tongue"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' %) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/wacko.gif" title="wacko"></a></td>
-  <td class="sml1" align="center"><a href="JavaScript: smile(' ;) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/wink.gif" title="wink"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :p ');"><img src="images/smile/tongue.gif" title="tongue"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' %) ');"><img src="images/smile/wacko.gif" title="wacko"></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ;) ');"><img src="images/smile/wink.gif" title="wink"></a></td>
   </tr></table>
  </td></tr>
  </table>

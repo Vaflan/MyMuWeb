@@ -32,9 +32,9 @@ for($i=0;$i < $row_num;++$i) {
 
 echo "<tbody><tr> 
             <td>$rank</td>
-            <td><a href=index.php?op=guild&guild=$row[0]>$row[0]</a></td>
+            <td><a href=?op=guild&guild=$row[0]>$row[0]</a></td>
             <td>$row[2]</td>
-            <td><a href=index.php?op=character&character=$row[3]>$row[3]</a></td>
+            <td><a href=?op=character&character=$row[3]>$row[3]</a></td>
             <td>$row2[0]</td>
             <td align='center'><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=10 width=10 broder=0></a></td>
             </tr></tbody>";    

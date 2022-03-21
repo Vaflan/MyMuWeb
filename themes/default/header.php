@@ -6,140 +6,140 @@
 	<meta http-equiv="Content-Style-Type" content="text/css">
 	<meta http-equiv="content-type" content="text/html;charset=utf-8">
 	<script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
-	<script type="text/javascript" src="scripts/textfader.js">//script_by_vaflan</script>
 	<script type="text/javascript" src="scripts/jquery.js">//script_by_vaflan</script>
 	<link href="<?echo $mmw[theme_dir];?>/style.css" rel="stylesheet" type="text/css" media="all">
 	<link href="<?echo $mmw[theme_dir];?>/favicon.ico" rel="shortcut icon">
 </head>
-<body style="background: #5f1100 url(<?echo $mmw[theme_img];?>/background.png) repeat-x; margin:20px; padding:0px;">
-
+<body style="background: #000000 url('<?echo $mmw[theme_img];?>/bg.png'); margin:20px; padding:0px;">
 <div align="center">
   <a href="<?echo $mmw[serverwebsite];?>" title="<?echo mmw_lang_home_page ." $mmw[servername]";?>"><img src="<?echo $mmw[theme_img];?>/logo.png" border="0"></a>
 </div>
 
-<table width="800" border="0" align="center" cellpadding="0" cellspacing="0" style="background:url(<?echo $mmw[theme_img];?>/bg_body.png) repeat; border: 1px solid #000000;">
-   <tr>
-      <td width="160" valign="top" style="padding:4px;">
+<table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+ <tr height="90">
+  <td width="114" style="background:url('<?echo $mmw[theme_img];?>/up_left.png') no-repeat left;" align="right" valign="bottom"> <?language();?> </td>
+  <td style="background:url('<?echo $mmw[theme_img];?>/up_center.png'); padding-top: 14px; color: #9F9F9F;" align="center" valign="top"><b>Welcome to Web <?echo $mmw[servername];?>! Online Game MMORPG!</b></td>
+  <td width="114" style="background:url('<?echo $mmw[theme_img];?>/up_right.png') no-repeat right;" align="left" valign="bottom"> <?theme();?> </td>
+ </tr>
+</table>
+<table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
+ <tr>
+  <td width="15" style="background:url('<?echo $mmw[theme_img];?>/center_left.png') left top repeat-y;"></td>
+  <td style="background:url('<?echo $mmw[theme_img];?>/background.png');" align="center">
+
+   <table width="100%" border="0" align="center">
+    <tr>
+      <td width="164" valign="top" style="padding:4px;">
  <!-- Block -->
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_1')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_1.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_account_menu;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_1">
-	      <td colspan="2" valign="top" class="block_bg">
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_account_menu;?></div>
 		<?login_form();?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_2')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_2.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_menu;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_2">
-	      <td colspan="2" valign="top" class="block_bg">
-		<?menu("<a href='$1'><img src='$mmw[theme_img]/right.png'> $2</a><br/>");?>
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_menu;?></div>
+		<?menu("<a href='%url%' onmouseover=\"document.getElementById('menu%id%').src='$mmw[theme_img]/link.gif';\" onmouseout=\"document.getElementById('menu%id%').src='$mmw[theme_img]/link.png';\"><img src='$mmw[theme_img]/link.png' id='menu%id%'> <b>%name%</b></a><br/>");?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_3')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_3.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_statistic;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_3">
-	      <td colspan="2" valign="top" class="block_bg">
-		<script type="text/javascript">
-		function throbFade() {
-		  fade(2, Math.floor(throbStep / 2), (throbStep % 2) ? false : true);
-		  setTimeout("throbFade();", (throbStep % 2) ? 100 : 4000);
-		  if (++throbStep > fader[2].message.length * 2 - 1) throbStep = 0;
-		}
-		fader[2] = new fadeObj(2, 'statistics', '<?echo $back_color;?>', '<?echo $text_color;?>', 30, 30, false); <?statisitcs('blink');?> 
-		var throbStep = 0;
-		setTimeout("throbFade();", 1000);
-		</script>
-		<div id="statistics"></div>
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_statistic;?></div>
+		<?statisitcs('fullblink');?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_4')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_4.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_server_time;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_4">
-	      <td colspan="2" valign="top" class="block_bg">
-		<?include('includes/times.php');?>
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_voting;?></div>
+		<?voting();?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_5')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_5.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_last_in_forum;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_5">
-	      <td colspan="2" valign="top" class="block_bg">
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_last_in_forum;?></div>
 		<?last_in_forum($mmw[last_in_forum]);?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_6')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_6.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_who_is_on_web;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_6">
-	      <td colspan="2" valign="top" class="block_bg">
-		<?echo $who_online;?>
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_who_is_on_web;?></div>
+		<?who_online();?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
       <?echo $rowbr;?>
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_7')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_7.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_voting;?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_7">
-	      <td colspan="2" valign="top" class="block_bg">
-		<?echo $voting;?>
-	      </td>
-	   </tr>
-	</table>
-
-      <?echo $rowbr;?>
-
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_8')">
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);"><img src="<?echo $mmw[theme_img];?>/anime_8.gif" border="0" height="26"></td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_ads_banners;?></td>
-	   </tr>
-	   <tr id="block_8">
-	      <td colspan="2" valign="top" class="block_bg">
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;" align="left">
+		<div class="block-title"><?echo mmw_lang_ads_banners;?></div>
 		<?include('ads.txt');?>
 	      </td>
+	      <td class="block-right"></td>
 	   </tr>
+	   <tr><td colspan="3" class="block-down"></td></tr>
 	</table>
 
  <!-- /Block -->
@@ -147,11 +147,10 @@
       <td valign="top" style="padding-right:4px; padding-top:4px; padding-bottom:4px;">
  <!-- Body -->
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
-	   <tr style="cursor:pointer" onclick="expandit('block_body')">
-	      <td width="28" height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png);" align="center"><img src="<?echo $mmw[theme_img];?>/mu.png" border="0" height="26"></td>
-	      <td style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-left:4px;"> <a href="<?echo $mmw[serverwebsite];?>"><?echo mmw_lang_home_page;?></a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?> </td>
-	      <td height="26" style="background:url(<?echo $mmw[theme_img];?>/block.png); padding-right:4px;" align="right"><?echo mmw_lang_theme;?>: <?theme();?> <?echo mmw_lang_language;?>: <?language($mmw[language]);?></td>
+	<table cellpadding="0" cellspacing="0" class="block-table">
+	   <tr>
+	      <td class="block-left"></td><td class="block-up"></td><td class="block-right"></td>
 	   </tr>
-	   <tr id="block_body">
-	      <td colspan="3" valign="top" class="block_bg">
+	   <tr>
+	      <td class="block-left"></td><td style="padding: 5px;">
+		<div class="block-title" style="text-align: left;"><a href="<?echo $mmw[serverwebsite];?>"><?echo mmw_lang_home_page;?></a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?></div>

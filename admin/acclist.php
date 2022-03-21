@@ -1,6 +1,26 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
-if(isset($_POST["delete_acc"])) {delete_acc($_POST['delete_acc']);}
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
+
+// Account List + Delete not connected...
+if(isset($_POST["delete_acc"])) {
+ $account = $_POST["delete_acc"];
+ if(empty($account)) {
+  echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+ else {
+  $sql_online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$account'");
+  $check_connect = mssql_num_rows($sql_online_check);
+  if($check_connect==0) {
+   mssql_query("Delete from MEMB_INFO where memb___id='$account'");
+   mssql_query("Delete from VI_CURR_INFO where memb___id='$account'");
+   mssql_query("Delete from warehouse where AccountID='$account'");
+
+   echo "$warning_green Account $account SuccessFully Deleted!";
+   writelog("a_del_acc","Account $account Has Been <font color=#FF0000>Deleted</font>");
+  }
+  else {
+   echo "$warning_red Account Has Been connected!";
+  }
+ }
+}
 ?>
 
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
@@ -10,20 +30,18 @@ if(isset($_POST["delete_acc"])) {delete_acc($_POST['delete_acc']);}
 		<legend>Account List</legend>
 
 <table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
-<thead><tr>
-<td align="center">#</td>
-<td align="left">Account</td>
-<td align="left">Mode</td>
-<td align="left">Reg Date</td>
-<td align="left">Login Date</td>
-<td align="left">Char</td>
-<td align="center">Status</td>
-<td align="center">Delete</td>
-</tr></thead>
-
+ <thead><tr>
+  <td align="center">#</td>
+  <td align="left">Account</td>
+  <td align="left">Mode</td>
+  <td align="left">Reg Date</td>
+  <td align="left">Login Date</td>
+  <td align="left">Char</td>
+  <td align="center">Status</td>
+  <td align="center">Delete</td>
+ </tr></thead>
 <?
 $result = mssql_query("SELECT memb___id,bloc_code,appl_days from MEMB_INFO ORDER BY appl_days ASC");
-
 for($i=0;$i < mssql_num_rows($result);++$i) {
  $row = mssql_fetch_row($result);
  $status_reults = mssql_query("Select ConnectStat,ConnectTM from MEMB_STAT where memb___id='$row[0]'");
@@ -43,19 +61,18 @@ for($i=0;$i < mssql_num_rows($result);++$i) {
  $char_numb = mssql_num_rows($acctinfo);
 
  $table_delete = "<form action='' method='post' name='delete_acc' id='delete_acc'><input name='Delete' type='submit' id='Delete' value='Delete'><input name='delete_acc' type='hidden' id='delete_acc' value='$row[0]'></form>";
-
-echo "<tr>
-<td align='center'>$rank</td>
-<td align='left'><a href=?op=acc&acc=$row[0]>$row[0]</a></td>
-<td align='left'>$row[1]</td>
-<td align='left'>".time_format($row[2],"d.m.Y H:i")."</td>
-<td align='left'>".time_format($status[1],"d.m.Y H:i")."</td>
-<td align='left'>$char_numb</td>
-<td align='center'>$status[0]</td>
-<td align='center'>$table_delete</td>
-</tr>";
-}
 ?>
+ <tr>
+  <td align='center'><?echo $rank;?>.</td>
+  <td align='left'><a href=?op=acc&acc=<?echo $row[0];?>><?echo $row[0];?></a></td>
+  <td align='left'><?echo $row[1];?></td>
+  <td align='left'><?echo time_format($row[2],"d.m.Y H:i");?></td>
+  <td align='left'><?echo time_format($status[1],"d.m.Y H:i");?></td>
+  <td align='left'><?echo $char_numb;?></td>
+  <td align='center'><?echo $status[0];?></td>
+  <td align='center'><?echo $table_delete;?></td>
+ </tr>
+<?}?>
 </table>
 
 		</fieldset>

@@ -35,7 +35,7 @@ for($i=0;$i < $row_num;++$i) {
 
  echo "<tbody><tr>
             <td>$rank</td>
-            <td><a href=index.php?op=character&character=$row[0]>$row[0]</a></td>
+            <td><a href=?op=character&character=$row[0]>$row[0]</a></td>
             <td>$row[2]</td>
             <td>$row[3]</td>
             <td>".char_class($row[1],off)."</td>

@@ -20,12 +20,12 @@ if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$sel
                         <option value="all"<?echo $select_sort['all'];?>><?echo mmw_lang_all_characters;?></option>
                         <option value="pk"<?echo $select_sort['pk'];?>><?echo mmw_lang_all_killers;?></option>
                         <option value="guild"<?echo $select_sort['guilds'];?>><?echo mmw_lang_all_guilds;?></option>
-                        <option value="dw"<?echo $select_sort['dw'];?>><?echo mmw_lang_only;?> DW's-GrM's</option>
-                        <option value="dk"<?echo $select_sort['dk'];?>><?echo mmw_lang_only;?> DK's-BM's</option>
-                        <option value="elf"<?echo $select_sort['elf'];?>><?echo mmw_lang_only;?> ELF's-HE's</option>
-                        <option value="mg"<?echo $select_sort['mg'];?>><?echo mmw_lang_only;?> MG's-DM's</option>
-                        <option value="dl"<?echo $select_sort['dl'];?>><?echo mmw_lang_only;?> DL's-LE's</option>
-                        <option value="sum"<?echo $select_sort['sum'];?>><?echo mmw_lang_only;?> Sum's-Dim's</option>
+                        <?if(substr_count($mmw[statistics_char],'0,1')>0){?><option value="dw"<?echo $select_sort['dw'];?>><?echo mmw_lang_only;?> DW's-GrM's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'16,17')>0){?><option value="dk"<?echo $select_sort['dk'];?>><?echo mmw_lang_only;?> DK's-BM's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'32,33')>0){?><option value="elf"<?echo $select_sort['elf'];?>><?echo mmw_lang_only;?> ELF's-HE's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'48')>0){?><option value="mg"<?echo $select_sort['mg'];?>><?echo mmw_lang_only;?> MG's-DM's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'64')>0){?><option value="dl"<?echo $select_sort['dl'];?>><?echo mmw_lang_only;?> DL's-LE's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'80,81')>0){?><option value="sum"<?echo $select_sort['sum'];?>><?echo mmw_lang_only;?> Sum's-Dim's</option><?}?>
                         <option value="online"<?echo $select_sort['online'];?>><?echo mmw_lang_online_characters;?></option>
                         <option value="3d_online"<?echo $select_sort['3d_online'];?>>3D <?echo mmw_lang_online_characters;?></option>
                       </select> 

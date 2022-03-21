@@ -1,5 +1,5 @@
 ﻿<?PHP
-// This is Language For MMW 0.7
+// This is Language For MMW 0.8
 // Russian Language By Vaflan modify by S-Yura
 
 define('mmw_lang_theme',"Темы");
@@ -45,6 +45,7 @@ define('mmw_lang_blocked',"Заблокированные");
 define('mmw_lang_search',"Поиск");
 define('mmw_lang_forum',"Форум");
 define('mmw_lang_maps',"Карты");
+define('mmw_lang_chat',"Чат");
 
 //Statistic
 define('mmw_lang_total_accounts',"Пользователей");
@@ -106,14 +107,31 @@ define('mmw_lang_map_name',"Имя карты");
 define('mmw_lang_no_set',"Не указано");
 define('mmw_lang_to',"Для");
 
+//Chat
+define('mmw_lang_today',"Сегодня");
+define('mmw_lang_yesterday',"Вчера");
+define('mmw_lang_smiles',"Смайлы");
+define('mmw_lang_request_delete',"Вы хотите удалить пост?");
+define('mmw_lang_antiflood',"Анти Флуд, надо ждать");
+define('mmw_lang_empty_message',"Пустое сообщение, надо ввести сообщение!");
+
 //Forum
+define('mmw_lang_new_message',"Новые сообщения");
+define('mmw_lang_topics',"Темы");
+define('mmw_lang_answers',"Ответы");
+define('mmw_lang_views',"Просмотры");
+define('mmw_lang_updates',"Обновления");
+define('mmw_lang_topic',"Тема");
+define('mmw_lang_no_message',"Нет сообщений");
+define('mmw_lang_message_from',"Сообщение от");
+define('mmw_lang_author_topic',"Автор темы");
+define('mmw_lang_forum_catalog',"Раздел темы");
 define('mmw_lang_new_topic',"Новая тема");
-define('mmw_lang_no_topics_in_forum',"Нет тем в форуме.");
+define('mmw_lang_no_topics_in_forum',"В данном форуме нет ни одной темы");
 define('mmw_lang_topic_name',"Название темы");
 define('mmw_lang_comments',"Комментарии");
-define('mmw_lang_last_message',"Последнее");
+define('mmw_lang_last_message',"Последнее сообщение");
 define('mmw_lang_total_topic',"Всего тем");
-define('mmw_lang_topic_title',"Название темы");
 define('mmw_lang_topic_text',"Текст темы");
 define('mmw_lang_add_topic',"Добавить тему");
 define('mmw_lang_bb_code',"BB коды");
@@ -193,6 +211,7 @@ define('mmw_lang_search_type',"Тип поиска");
 define('mmw_lang_character',"Персонаж");
 define('mmw_lang_guild',"Гильдия");
 define('mmw_lang_search_character_results',"Результат поиска персонажа");
+define('mmw_lang_search_account_results',"Результат поиска пользователей");
 define('mmw_lang_reset',"Ресет");
 define('mmw_lang_level',"Уровень");
 define('mmw_lang_class',"Класс");
@@ -286,6 +305,7 @@ define('mmw_lang_text',"Текст");
 define('mmw_lang_view',"Смотреть");
 define('mmw_lang_delete',"Удалить");
 define('mmw_lang_no_message',"Нет сообщений!");
+define('mmw_lang_error_mail_table',"Почта не работает. Старая База Данных!");
 
 //Account
 define('mmw_lang_register_date',"Дата регистра");
@@ -384,5 +404,4 @@ define('mmw_lang_no_zen_for_send_zen',"Невозможно послать Zen, 
 define('mmw_lang_zen_sent',"Zen персонажу успешно послан!");
 define('mmw_lang_change_class_need',"Для изменения класса нужно");
 define('mmw_lang_character_changed',"Персонажа класс успешно изменён!");
-
 ?>

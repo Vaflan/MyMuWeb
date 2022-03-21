@@ -12,7 +12,7 @@ header("Cache-control: private");
 <body style="background: #dddddd; font-family: Arial;">
 <pre>
 <?
-if(!isset($_SESSION["a_admin_login"],$_SESSION["a_admin_pass"],$_SESSION['a_admin_security']))
+if(!isset($_SESSION[a_admin_login],$_SESSION[a_admin_password],$_SESSION[a_admin_security]))
 {die("<font color='red'><u>/!\</u></font> Access Denied!");}
 
 if(is_file("logs/$_GET[log].php")){

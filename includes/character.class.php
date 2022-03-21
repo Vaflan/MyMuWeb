@@ -38,7 +38,7 @@ function register() {
 	              $elems[] = array('name'=>'repassword', 'label'=>$die_start. mmw_lang_invalid_repassword .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha', 'equal'=> array('password'));
 	              $elems[] = array('name'=>'question', 'label'=>$die_start. mmw_lang_invalid_question .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
 	              $elems[] = array('name'=>'answer', 'label'=>$die_start. mmw_lang_invalid_answer .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
-                      $elems[] = array('name'=>'fullname','label'=>$die_start. mmw_lang_invalid_fullname .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont'=>'alpha');
+                      $elems[] = array('name'=>'fullname','label'=>$die_start. mmw_lang_invalid_fullname .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>2, 'len_max'=>10, 'cont'=>'alpha');
 
 
                  $f = new FormValidator($elems);
@@ -180,10 +180,10 @@ function reset($charactername) {
 				if($mmw['level_up_mode']=='normal') {$LevelUpPoint = "$resetpt";} else {$LevelUpPoint = "$resetpt1";}
 				if($mmw['reset_mode']=='reset') {$reset_stats = "[strength]='25',[dexterity]='25',[vitality]='25',[energy]='25',";}
 				if($mmw['reset_command']=='yes' && $row[4] >= 64 && $row[4] <= 79) {$reset_command = "[Leadership]='25',";}
-				if($mmw['clean_inventory']=='yes') {$clean_inventory = "[inventory]=CONVERT(varbinary(1080), null),";}
-				if($mmw['clean_skills']=='yes') {$clean_skills = "[magiclist]=CONVERT(varbinary(180), null),";}
+				if($mmw['clean_inventory']=='yes') {$clean_inventory = "[inventory]=0x".free_hex($mmw[free_hex],108).",";}
+				if($mmw['clean_skills']=='yes') {$clean_skills = "[magiclist]=".free_hex(20,18).",";}
 
-				$sql_reset_script = "UPDATE character Set $clean_inventory $clean_skills $reset_stats $reset_command [clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$LevelUpPoint',[reset]='$reset_up' Where name='$charactername'";
+				$sql_reset_script = "UPDATE character Set $clean_inventory $clean_skills $reset_stats $reset_command [clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$LevelUpPoint',[reset]='$reset_up' WHERE name='$charactername'";
 				mssql_query($sql_reset_script);
 				mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
 
@@ -438,7 +438,7 @@ function profile($account) {
 
 
 function move($name) {
-	include("move.php");
+	include("includes/move.php");
         require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
         $map = clean_var(stripslashes($_POST['map']));
@@ -477,8 +477,8 @@ function move($name) {
 
 
 function change_class($name) {
-	include("class.php");
         require("config.php");
+	include("includes/change_class.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
         $change_class = clean_var(stripslashes($_POST['class']));
         $name = stripslashes($name);
@@ -508,12 +508,12 @@ function change_class($name) {
 		elseif($char_money < 0) {
 		   echo $die_start . mmw_lang_change_class_need .' '.zen_format($price)." Zen! $die_end";
 		}
-		else { 
+		else {
 		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
-		   mssql_query("UPDATE character SET [class]='$class',[money]='$char_money',[MagicList]=0xFF,[Quest]=0xFF, where name='$name'");
+		   mssql_query("UPDATE character SET [class]='$class',[money]='$char_money',[MagicList]=0xFF,[Quest]=0xFF WHERE name='$name'");
 		   echo $okey_start . mmw_lang_character_changed . $okey_end;
 		   writelog("change_class","Char <font color=red>$name</font> Has Been Changed Class To: $class|Char: $char_money Zen|Acc: $wh_money Zen");
-		}      
+		}
 }
 
 
@@ -521,8 +521,7 @@ function change_class($name) {
 
 
 
-function warehouse($from,$to,$zen)
-{
+function warehouse($from,$to,$zen) {
         require("config.php");
 	require("includes/validate.class.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
@@ -601,10 +600,9 @@ function comment_send($c_id_blog,$c_id_code) {
 	$date = time();
 	$needtime = $timeout - $date;
 
-	if($timeout>$date) {
-		echo $die_start . mmw_lang_cant_sent_comment_need_wait . " $needtime sec. $die_end";
-	}
-	elseif($_POST['c_message']!="") {
+	if($timeout>$date) {echo $die_start . mmw_lang_cant_sent_comment_need_wait . " $needtime sec. $die_end";}
+	elseif(empty($c_char)) {echo $die_start . mmw_lang_cant_add_no_char . $die_end;}
+	elseif(!empty($_POST['c_message'])) {
 		$bug_send = bugsend(stripslashes($_POST['c_message']));
 		mssql_query("INSERT INTO MMW_comment(c_id_blog,c_id_code,c_char,c_text,c_date) VALUES ('$c_id_blog','$c_id_code','$c_char','$bug_send','$date')");
 		echo $okey_start . mmw_lang_comment_sent . $okey_end;
@@ -627,7 +625,7 @@ function comment_delete($c_id) {
 	if(empty($c_id)) {
 		echo "$die_start Error: Some Fields Were Left Blank! $die_end";
 	}
-	elseif($row[0]==$char_set || $_SESSION['mmw_status'] >= $mmw[comment_can_delete]) {
+	elseif($row[0]==$char_set || $mmw[status_rules][$_SESSION[mmw_status]][comment_delete]==1) {
                 mssql_query("Delete from MMW_comment where c_id='$c_id'");
                 echo $okey_start . mmw_lang_comment_deleted . $okey_end;
 	}
@@ -642,18 +640,19 @@ function comment_delete($c_id) {
 
 
 
-function forum_send($title,$text) {
+function forum_send($title,$text,$catalog) {
         require("config.php");
 	$char_set = stripslashes($_SESSION['char_set']);
 	$date = time();
 
-	if($title=="" || $text=="") {
+	if(empty($title) || empty($text) || empty($catalog)) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	}
-	elseif($title!="" && $text!="") {
+	elseif(!empty($title) && !empty($text) && !empty($catalog)) {
 		$text = bugsend(stripslashes($text));
 		$title = bugsend(stripslashes($title));
-		mssql_query("INSERT INTO MMW_forum ([f_id],[f_char],[f_title],[f_text],[f_date]) VALUES ('$mmw[rand_id]','$char_set','$title','$text','$date')");
+		$catalog = bugsend(stripslashes($catalog));
+		mssql_query("INSERT INTO MMW_forum ([f_id],[f_char],[f_title],[f_text],[f_created],[f_catalog],[f_date],[f_lastchar]) VALUES ('$mmw[rand_id]','$char_set','$title','$text','$date','$catalog','$date','$char_set')");
 		echo $okey_start . mmw_lang_topic_sent . $okey_end;
 	}
 	else {
@@ -677,7 +676,7 @@ function forum_delete($f_id) {
 	if(empty($f_id)) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	}
-	elseif($row[0]==$char_set || $_SESSION['mmw_status'] >= $mmw[forum_can_delete]) {
+	elseif($row[0]==$char_set || $mmw[status_rules][$_SESSION[mmw_status]][forum_delete]==1) {
                 mssql_query("Delete from MMW_forum where f_id='$f_id'");
                 mssql_query("Delete from MMW_comment where c_id_code='$f_id'");
                 echo $okey_start . mmw_lang_topic_deleted . $okey_end;
@@ -701,7 +700,7 @@ function forum_status($f_id,$f_status) {
 	if(empty($f_id) || $f_status=='') {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	}
-	elseif($_SESSION['mmw_status'] >= $mmw['forum_can_status']) {
+	elseif($mmw[status_rules][$_SESSION[mmw_status]][forum_status]==1) {
                 mssql_query("UPDATE MMW_forum SET f_status='$f_status' where f_id='$f_id'");
                 echo $okey_start . mmw_lang_topic_status . $okey_end;
 	}
@@ -718,14 +717,18 @@ function forum_status($f_id,$f_status) {
 
 function request($login) {
 	require("config.php");
-
 	if(empty($_POST['subject']) || empty($_POST['msg'])) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	}
 	else {
 		$title = bugsend(stripslashes($_POST['subject']));
-		$msg = bugsend(stripslashes($_POST['msg']));
-		writelog("requests","Acc: <b>$login</b> New Request <u>Title</u>: $title <u>Message</u>: <font color=#FF0000>$msg</font>");
+		$msg = str_replace("[br]", "<br>", bugsend(stripslashes($_POST['msg'])) );
+        	$ip = $_SERVER['REMOTE_ADDR'];
+        	$date = date('d.m.Y H:i:s');
+        	$text = "Acc: <b>$login</b>, New Request Title: <u>$title</u><br><font color=#FF0000>$msg</font><br>All Those On <i>$date</i> By <u>$ip</u><hr>\n";
+        	$fp = fopen("admin/request.htm","a");
+        	fputs($fp, $text);
+        	fclose($fp);
 		echo $okey_start . mmw_lang_request_sent . $okey_end;
 	}
 }
@@ -809,17 +812,20 @@ function edit_warehouse($hex_wh) {
 	require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
 	$hex_wh = clean_var(stripslashes($hex_wh));
+	$money = clean_var(stripslashes($_POST[Money]));
+	$extmoney = clean_var(stripslashes($_POST[extMoney]));
 
       if(empty($hex_wh) || empty($login)) {echo $die_start . mmw_lang_left_blank . $die_end;}
-        elseif($_SESSION['mmw_status'] < $mmw[hex_wh_can]) {echo "$die_start You Can't Use HEX WareHouse! $die_end";}
-          else {
-		$hex_query = "UPDATE warehouse SET [Items]=0x$hex_wh WHERE AccountID='$login'";
-		if(mssql_query($hex_query)) {
+       elseif($mmw[status_rules][$_SESSION[mmw_status]][hex_wh]!=1) {echo "$die_start You Can't Use HEX WareHouse! $die_end";}
+        elseif(!preg_match("/^\d*$/", $money) || !preg_match("/^\d*$/", $extmoney)) {echo "$die_start Money must be a positive number! $die_end";}
+         else {
+		$query = "UPDATE warehouse SET [Items]=0x$hex_wh,[Money]=$money,[extMoney]=$extmoney WHERE AccountID='$login'";
+		if(@mssql_query($query)) {
 			echo "$okey_start $login WareHouse SuccessFully Edited! $okey_end";}
 		else {
-			echo "$die_start HEX ErroR blja! :( $die_end";
+			echo "$die_start HEX ErroR bljat'! :( $die_end";
 		}
-                writelog("hex_wh","Acc: <b>$login</b> Has Been <font color=#FF0000>edit wh</font>: $hex_wh");
+                writelog("hex_wh","Acc: <b>$login</b> Has Been <font color=#FF0000>edit wh</font>: $hex_wh | [Money]=$money, [extMoney]=$extmoney");
 	}
 }
 
@@ -837,7 +843,7 @@ function gm_msg($text) {
 	include("includes/shout_msg.php");
 
       if(empty($text)) {echo $die_start . mmw_lang_left_blank . $die_end;}
-        elseif($_SESSION['mmw_status'] < $mmw['gm_msg_send']) {echo "$die_start You Can't Send GM Message! $die_end";}
+        elseif($mmw[status_rules][$_SESSION[mmw_status]][gm_msg]!=1) {echo "$die_start You Can't Send GM Message! $die_end";}
           else {
 		if( send_gm_msg("127.0.0.1", $mmw[joinserver_port], $text) == "yes") {
 			echo "$okey_start GM Msg SuccessFully Send! $okey_end";}
@@ -846,6 +852,44 @@ function gm_msg($text) {
 		}
                 writelog("gm_msg","Char: <b>$char</b> Has Been <font color=#FF0000>Send Msg</font>: $text");
 	}
+}
+
+
+
+
+
+
+
+
+
+function gm_block($acc_mode) {
+	require("config.php");
+	$acc_mode = clean_var(stripslashes($acc_mode));
+	$account = clean_var(stripslashes($_POST[account]));
+	$account_unblock = clean_var(stripslashes($_POST[account_unblock]));
+	$unblock_time = clean_var(stripslashes($_POST[unblock_time]));
+	$block_date = clean_var(stripslashes($_POST[block_date]));
+	$block_reason = clean_var(stripslashes($_POST[block_reason]));
+
+      if($acc_mode==0 && empty($account_unblock) || $acc_mode==1 && empty($account)) {echo $die_start . mmw_lang_left_blank . $die_end;}
+        elseif($mmw[status_rules][$_SESSION[mmw_status]][gm_block]!=1) {echo "$die_start You Can't Send GM Message! $die_end";}
+          else {
+		if($acc_mode == '0') {
+		 mssql_query("UPDATE memb_info SET [bloc_code]='0',[block_date]='0',[unblock_time]='0' WHERE memb___id='$account_unblock'");
+		 echo "$okey_start Account $account_unblock is Unblocked! $okey_end $rowbr";
+		}
+		else {
+		 if($block_date!="no") {
+		  if($block_date=='yes') {$block_date = time();}
+		  else {$block_date = '0';}
+		  $block_menu = "[block_date]='$block_date',";
+		 }
+		 $block_menu .= "[unblock_time]='$account_unblock',[block_reason]='$block_reason',[blocked_by]='$_SESSION[char_set]',";
+		 mssql_query("UPDATE memb_info SET $block_menu [bloc_code]='1' WHERE memb___id='$account'");
+		 echo "$okey_start Account $account is Blocked! $okey_end $rowbr";
+		}
+                writelog("gm_block","Account: <b>$account$account_unblock</b> Has Been <font color=#FF0000>block mode</font>: $acc_mode by $_SESSION[char_set]");
+          }
 }
 
 

@@ -1,5 +1,5 @@
 ﻿<?PHP
-// This is Language For MMW 0.7
+// This is Language For MMW 0.8
 // Default English Language By Vaflan
 
 define('mmw_lang_theme',"Theme");
@@ -45,6 +45,7 @@ define('mmw_lang_blocked',"Blocked");
 define('mmw_lang_search',"Search");
 define('mmw_lang_forum',"Forum");
 define('mmw_lang_maps',"Maps");
+define('mmw_lang_chat',"Chat");
 
 //Statistic
 define('mmw_lang_total_accounts',"Total Accounts");
@@ -106,20 +107,37 @@ define('mmw_lang_map_name',"Map Name");
 define('mmw_lang_no_set',"No Set");
 define('mmw_lang_to',"To");
 
+//Chat
+define('mmw_lang_today',"Today");
+define('mmw_lang_yesterday',"Yesterday");
+define('mmw_lang_smiles',"Smiles");
+define('mmw_lang_request_delete',"You want delete post?");
+define('mmw_lang_antiflood',"Anti flood, need wait");
+define('mmw_lang_empty_message',"Empty message, need enter message!");
+
 //Forum
+define('mmw_lang_new_message',"New Posts");
+define('mmw_lang_topics',"Topics");
+define('mmw_lang_answers',"Answers");
+define('mmw_lang_views',"Views");
+define('mmw_lang_updates',"Updates");
+define('mmw_lang_topic',"Topic");
+define('mmw_lang_no_message',"No Posts");
+define('mmw_lang_message_from',"Post from");
+define('mmw_lang_author_topic',"Author topic");
+define('mmw_lang_forum_catalog',"Section topics");
 define('mmw_lang_new_topic',"New Topic");
-define('mmw_lang_no_topics_in_forum',"No Topics In Forum.");
+define('mmw_lang_no_topics_in_forum',"In this forum there is no topics");
 define('mmw_lang_topic_name',"Topic Name");
 define('mmw_lang_comments',"Comments");
-define('mmw_lang_last_message',"Lost Message");
-define('mmw_lang_total_topic',"Total Topic");
-define('mmw_lang_topic_title',"Topic Title");
-define('mmw_lang_topic_text',"Topic Text");
-define('mmw_lang_add_topic',"Add Topic");
-define('mmw_lang_bb_code',"BB Code");
+define('mmw_lang_last_message',"Last post");
+define('mmw_lang_total_topic',"Total Topics");
+define('mmw_lang_topic_text',"Text topic");
+define('mmw_lang_add_topic',"Add topic");
+define('mmw_lang_bb_code',"BBCode");
 define('mmw_lang_close',"Close");
 define('mmw_lang_open',"Open");
-define('mmw_lang_comment_close',"Comment its Anymore Impossible Here!");
+define('mmw_lang_comment_close',"Comment can not!");
 
 //Download
 define('mmw_lang_description',"Description");
@@ -193,6 +211,7 @@ define('mmw_lang_search_type',"Search Type");
 define('mmw_lang_character',"Character");
 define('mmw_lang_guild',"Guild");
 define('mmw_lang_search_character_results',"Search Character Results");
+define('mmw_lang_search_account_results',"Search Account Results");
 define('mmw_lang_reset',"Reset");
 define('mmw_lang_level',"Level");
 define('mmw_lang_class',"Class");
@@ -286,6 +305,7 @@ define('mmw_lang_text',"Text");
 define('mmw_lang_view',"View");
 define('mmw_lang_delete',"Delete");
 define('mmw_lang_no_message',"No Message");
+define('mmw_lang_error_mail_table',"Mail don't Work. Old DataBase!");
 
 //Account
 define('mmw_lang_register_date',"Register Date");
@@ -303,7 +323,7 @@ define('mmw_lang_not_joined',"Not Joined");
 define('mmw_lang_avatar_url',"Avatar url");
 define('mmw_lang_hide_profile',"Hide Profile");
 define('mmw_lang_profile',"Profile");
-define('mmw_lang_cant_change_online',"You Want Change? Account Is Online!");
+define('mmw_lang_cant_change_online',"You want change? Account Is Online!");
 define('mmw_lang_save_profile',"Save Profile");
 define('mmw_lang_one_referral_with_reset',"One Referral With Reset");
 define('mmw_lang_no',"No");
@@ -384,5 +404,4 @@ define('mmw_lang_no_zen_for_send_zen',"Can't Send Zen, you haven't zen for Servi
 define('mmw_lang_zen_sent',"Zen To Character SuccessFully Sent!");
 define('mmw_lang_change_class_need',"To Change Class Need");
 define('mmw_lang_character_changed',"Character Class SuccessFully Changed");
-
 ?>

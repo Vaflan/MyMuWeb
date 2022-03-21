@@ -38,7 +38,7 @@ if(empty($profile_info[3]) || $profile_info[3] == ' ') {$profile_info[3] = defau
 	</tr>
 	<tr>
           <td><?echo mmw_lang_level;?>:</td>
-          <td><?echo mmw_status($profile_info[11]);?></td>
+          <td><?echo $mmw[status_rules][$profile_info[11]][name];?></td>
 	</tr>
 	<tr>
           <td><?echo mmw_lang_register_date;?>:</td>

@@ -40,15 +40,16 @@ check_inject();
 // Clean Var Edited by Vaflan
 
 function clean_var($var) {
-$var = stripslashes($var);
-$rules = '/[^a-zA-Z0-9-\_\=\@\.\,\:\/\^\+\!\~\[\]\*\{\}\(\)\|\\\ ]/';
-if(@preg_match($rules,$var) || $var==NULL) { } //If isset ErroR
-$newvar = @preg_replace($rules,'',$var);
-$newvar = str_replace(" ","",$newvar);
-$newvar = str_replace("\n","",$newvar);
-$newvar = str_replace("\0","",$newvar);
-$newvar = str_replace("'","&apos;",$newvar);
-return $newvar;
+ $var = stripslashes($var);
+ $newvar = str_replace("\n","",$var);
+ //$newvar = str_replace(";","&#59;",$newvar);
+ //$newvar = str_replace("%","&#37;",$newvar);
+ $newvar = str_replace("'","&#39;",$newvar);
+ $newvar = str_replace(",","&#44;",$newvar);
+ $newvar = str_replace(".","&#46;",$newvar);
+ //$newvar = str_replace(":","&#58;",$newvar);
+ $newvar = str_replace("`","&#96;",$newvar);
+ return $newvar;
 }
 
 

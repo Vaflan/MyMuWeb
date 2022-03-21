@@ -1,11 +1,10 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
 
-// Test
+// SQL Query Analyzer by Vaflan
 $sqlquery_query = "UPDATE table SET [column]=? WHERE [column]=?\n\nSELECT * FROM table WHERE [column]=?\n\ndeclare @hex varbinary(1920); set @hex=(SELECT Items FROM warehouse where AccountId='?'); print @hex;";
 
 if(isset($_POST[sql_query_true])) {
- $sqlquery_query = str_replace("\'",'',$_POST[sqlquery_query]);
+ $sqlquery_query = str_replace('\"','"', str_replace("\'","",$_POST[sqlquery_query]) );
  $sqlquery_result = @mssql_query($sqlquery_query);
  if($sqlquery_result) {
   $query_result = "$warning_green Query done!";

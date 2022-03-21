@@ -6,10 +6,11 @@
 
 
 <center>
+<a href="http://top.mymuweb.ru/">Top.MyMuWeb.Ru</a><br>
 <a href="http://www.mymuweb.ru/">MyMuWeb Support</a><br>
 <a href="http://www.red-angel.ru/">RedAngel MuOnline</a><br>
 <a href="http://www.podriv.ru/">Podriv Project</a><br>
 </center>
 
 
-<div id="main" style="position: absolute; left: 520px; top: 24px;"><?statisitcs('main');?></div>
+<div id="main" style="position: absolute; left: 520px; top: 32px;"><?statisitcs('main');?></div>

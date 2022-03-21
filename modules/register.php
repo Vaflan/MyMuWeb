@@ -91,7 +91,7 @@ echo '<form action="" method="post" name="register_from">
                         <td><input name="verifyinput" type="text" size="6" maxlength="8"> <img src="image_verify.php" align="center" id="secImg"> <img src="'.default_img('refresh.gif').'" align="center" onclick="document.getElementById(\'secImg\').src=\'image_verify.php?refresh=\'+Math.random();" title="'.mmw_lang_renew.'"></td>
                       </tr>
                       <tr>
-                        <td colspan="2" align="center"><input type="submit" name="Submit" value="'.mmw_lang_new_account.'" onclick="return check_register_form()"> <input name="registration" type="hidden" value="registration"> <input type="reset" value="'.mmw_lang_renew.'"></td>
+                        <td colspan="2" align="center"><input type="submit" name="Submit" value="'.mmw_lang_new_account.'" onclick="return check_register_form();"> <input name="registration" type="hidden" value="registration"> <input type="reset" value="'.mmw_lang_renew.'"></td>
                       </tr>
                     </table>
                   </form>';

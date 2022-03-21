@@ -8,15 +8,15 @@ $get_news = mssql_query("SELECT news_title,news_autor,news_category,news_date,ne
 for($i=0; $i < mssql_num_rows($get_news); $i++) {
   $row = mssql_fetch_row($get_news);
   $date = date("H:i:s d.m.Y", $row[3]);
-  if($row[4] != ' ' && $row[4] != NULL) {$news_row_1 = $mmw[news_row_1].bbcode($row[4]).$mmw[news_row_end];}
-  if($row[5] != ' ' && $row[5] != NULL) {$news_row_2 = $mmw[news_row_2].bbcode($row[5]).$mmw[news_row_end];}
-  if($row[6] != ' ' && $row[6] != NULL) {$news_row_3 = $mmw[news_row_3].bbcode($row[6]).$mmw[news_row_end];}
+  if($row[4] != ' ' && $row[4] != NULL) {$news_row_1 = $mmw[news_row_1].$row[4].$mmw[news_row_end];}
+  if($row[5] != ' ' && $row[5] != NULL) {$news_row_2 = $mmw[news_row_2].$row[5].$mmw[news_row_end];}
+  if($row[6] != ' ' && $row[6] != NULL) {$news_row_3 = $mmw[news_row_3].$row[6].$mmw[news_row_end];}
 
 echo    '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
         <tr><td style="padding:0px;">
         <div class="eTitle">'.$row[0].'</div>
-        <div class="eMessage">'.$news_row_1.$news_row_2.$news_row_3.'</div>
-        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | '.mmw_lang_date.': <span title="'.$date.'">'.$date.'</span>
+        <div class="eMessage">'.bbcode($news_row_1.$news_row_2.$news_row_3).'</div>
+        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': '.$row[1].' | '.mmw_lang_date.': <span title="'.$date.'">'.$date.'</span>
         </div>
         </td></tr></table>';
 }

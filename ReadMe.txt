@@ -25,18 +25,20 @@ http://127.0.0.1/install.php
 !-------------------------------------------------------------------!
 To Create Admin Need:
 Register in web, and in MEMB_INFO table with your name, 
-change 'mmw_stats' Colums - '0' to '9'.
-Level (3 - GM, 6 - Mini Admin, 9 - Admin)
+change 'mmw_stats' Colums - '0' to '10'. (0: Member, 5: GM, 10: Admin)
 Admin Username = Your Login in Reg WebSite
 Admin Password = Your Password in Reg WebSite
 Admin SecurityCode = '4321'
 
+How to add Functions?
+add functions.php to 'includes/func/' folder.
+
 How to add Mp3 to Player?
-add all need mp3 to 'media' folder.
+add all need mp3 to 'media/' folder.
 
 How to add Language?
-add language_name.php to 'lang' folder.
+add language_name.php to 'lang/' folder.
 
 How to add Theme?
-add folder to 'themes', and change in config.php $mmw[theme].
+add folder to 'themes/', and change in config.php $mmw[theme].
 !--------------------------------------------------------------------!

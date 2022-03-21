@@ -1,10 +1,47 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
-if(isset($_POST["edit_news_done"])) {edit_news($_POST['edit_news_title'],$_POST['edit_news_autor'],$_POST['category'],$_POST['news_id'],$_POST['edit_news_row_1'],$_POST['edit_news_row_2'],$_POST['edit_news_row_3']);}
-if(isset($_POST["delete_news"])) {delete_news($_POST['delete_news']);}
-if(isset($_POST["add_new_news"])) {add_new_news($_POST['news_title'],$_POST['category'],$_POST['news_row_1'],$_POST['news_row_2'],$_POST['news_row_3'],$_SESSION['a_admin_login']);}					  
-?>
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
 
+// For News module MMW
+if(isset($_POST["add_new_news"])) {
+ $news_title = $_POST['news_title'];
+ $news_category = $_POST['category'];
+ $news_row_1 = bugsend($_POST['news_row_1']);
+ $news_row_2 = bugsend($_POST['news_row_2']);
+ $news_row_3 = bugsend($_POST['news_row_3']);
+ $news_autor = $_SESSION['a_admin_login'];
+ $time = time();
+ if(empty($news_title) || empty($news_category)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+ else {
+  mssql_query("INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_row_1,news_row_2,news_row_3,news_id) VALUES ('$_POST[news_title]','$_SESSION[a_admin_login]','$_POST[category]','$time','$news_row_1','$news_row_2','$news_row_3','$mmw[rand_id]')");
+  echo "$warning_green News SuccessFully Added!";
+  writelog("a_news","News: $_POST[news_title] Has Been <font color=#FF0000>Added</font> Author: $_SESSION[a_admin_login]");
+ }
+}
+if(isset($_POST["edit_news_done"])) {
+ $news_title = $_POST['edit_news_title'];
+ $news_autor = $_POST['edit_news_autor'];
+ $news_cateogry = $_POST['category'];
+ $news_id = $_POST['news_id'];
+ $news_row_1 = bugsend($_POST['edit_news_row_1']);
+ $news_row_2 = bugsend($_POST['edit_news_row_2']);
+ $news_row_3 = bugsend($_POST['edit_news_row_3']);
+ if(empty($news_title) || empty($news_autor) || empty($news_cateogry) ||  empty($news_id)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+ else {
+  mssql_query("UPDATE MMW_news SET [news_title]='$_POST[edit_news_title]',[news_autor]='$_POST[edit_news_autor]',[news_category]='$_POST[category]',[news_row_1]='$news_row_1',[news_row_2]='$news_row_2',[news_row_3]='$news_row_3' WHERE [news_id]='$_POST[news_id]'");
+  echo "$warning_green News SuccessFully Edited!";
+  writelog("a_news","News: $_POST[edit_news_title] Has Been <font color=#FF0000>Edited</font> Author: $_POST[edit_news_autor]");
+ }
+}
+if(isset($_POST["delete_news"])) {
+ $news_id = $_POST['delete_news'];
+ if(empty($news_id)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
+ else {
+  mssql_query("DELETE FROM MMW_news WHERE news_id='$news_id'");
+  mssql_query("DELETE FROM MMW_comment WHERE c_id_code='$news_id'");
+  echo "$warning_green News SuccessFully Deleted!";
+  writelog("a_news","News: $_POST[news_title] Has Been <font color=#FF0000>Deleted</font>");
+ }
+}
+?>
 <table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
 	<tr>
 		<td align="center">
@@ -84,7 +121,40 @@ $news_row_3 = str_replace("[br]","\n",$get_edit_news_[5]);
 		<td align="center">
 		<fieldset>
 		<legend>News List</legend>
-			<?include_once("admin/inc/news_list.php");?>
+
+<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
+ <thead><tr>
+  <td align="center">#</td>
+  <td align="left">Title</td>
+  <td align="left">Author</td>
+  <td align="left">Category</td>
+  <td align="left">Date</td>
+  <td align="center">Edit</td>
+  <td align="center">Delete</td>
+ </tr></thead>
+<?
+$result = mssql_query("SELECT news_title,news_autor,news_category,news_date,news_id from MMW_news order by news_date desc");
+for($i=0;$i < mssql_num_rows($result);++$i) {
+ $row = mssql_fetch_row($result);
+ $rank = $i+1;
+ $news_table_edit = "<form action='' method='post'><input name='edit_news' type='hidden' value='$row[4]'><input type='submit' value='Edit'></form>";
+ $news_table_delete = "<form action='' method='post'><input name='delete_news' type='hidden' value='$row[4]'><input  type='submit' value='Delete'></form>";
+
+ $row[0] = substr($row[0],0,15);
+ $row[3] = date("H:i, d.m.Y",$row[3]);
+?>
+ <tr>
+  <td align='center'><?echo $rank;?>.</td>
+  <td align='left'><?echo $row[0];?>...</td>
+  <td align='left'><?echo $row[1];?></td>
+  <td align='left'><?echo $row[2];?></td>
+  <td align='left'><?echo $row[3];?></td>
+  <td align='center'><?echo $news_table_edit;?></td>
+  <td align='center'><?echo $news_table_delete;?></td>
+ </tr>
+<?}?>
+</table>
+
 		</fieldset>
 		</td>
 	</tr>

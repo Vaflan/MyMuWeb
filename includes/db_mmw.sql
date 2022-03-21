@@ -1,13 +1,25 @@
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_chatbox]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[MMW_chatbox]
+
+CREATE TABLE [dbo].[MMW_chatbox] (
+	[f_id] [int] IDENTITY (1, 1) NOT NULL,
+	[f_char] [varchar] (10) NOT NULL,
+	[f_message] [text] NULL,
+	[f_date] [int] NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+
 if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_comment]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
 drop table [dbo].[MMW_comment]
 
 CREATE TABLE [dbo].[MMW_comment] (
-	[c_id] [int] IDENTITY (1, 1) NOT NULL ,
-	[c_id_blog] [nvarchar] (50) NULL ,
-	[c_id_code] [nvarchar] (50) NULL ,
-	[c_char] [nvarchar] (50) NULL ,
-	[c_text] [text] NULL ,
-	[c_date] [nvarchar] (50) NULL 
+	[c_id] [int] IDENTITY (1, 1) NOT NULL,
+	[c_id_blog] [varchar] (50) NULL,
+	[c_id_code] [varchar] (50) NULL,
+	[c_char] [varchar] (10) NULL,
+	[c_text] [text] NULL,
+	[c_date] [int] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 
@@ -16,13 +28,17 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_forum]
 drop table [dbo].[MMW_forum]
 
 CREATE TABLE [dbo].[MMW_forum] (
-	[f_id] [nvarchar] (50) NULL ,
-	[f_char] [nvarchar] (50) NULL ,
-	[f_title] [nvarchar] (50) NULL ,
-	[f_text] [text] NULL ,
-	[f_date] [int] NULL ,
-	[f_lostchar] [nvarchar] (50) NULL ,
-	[f_status] [int] NULL 
+	[f_id] [varchar] (50) NULL,
+	[f_char] [varchar] (10) NULL,
+	[f_catalog] [int] NULL,
+	[f_title] [varchar] (50) NULL,
+	[f_text] [text] NULL,
+	[f_created] [int] NULL,
+	[f_date] [int] NULL,
+	[f_lastchar] [varchar] (10) NULL,
+	[f_status] [int] NULL,
+	[f_comments] [int] NULL,
+	[f_views] [int] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 
@@ -31,12 +47,12 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_links]
 drop table [dbo].[MMW_links]
 
 CREATE TABLE [dbo].[MMW_links] (
-	[link_name] [varchar] (100) NULL ,
-	[link_address] [text] NULL ,
-	[link_description] [text] NULL ,
-	[link_size] [varchar] (100) NULL ,
-	[link_id] [varchar] (100) NULL ,
-	[link_date] [varchar] (100) NULL 
+	[l_name] [varchar] (100) NULL,
+	[l_address] [text] NULL,
+	[l_description] [text] NULL,
+	[l_size] [varchar] (100) NULL,
+	[l_id] [varchar] (100) NULL,
+	[l_date] [int] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 
@@ -45,13 +61,14 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_market
 drop table [dbo].[MMW_market]
 
 CREATE TABLE [dbo].[MMW_market] (
-	[item_id] [int] IDENTITY (1, 1) NOT NULL ,
-	[item_char] [nvarchar] (10) NULL ,
-	[item_category] [int] NULL ,
-	[item_group] [int] NULL ,
-	[item_style] [int] NULL ,
-	[item_zen] [nvarchar] (100) NULL ,
-	[item_hex] [nvarchar] (50) NULL ,
+	[item_id] [int] IDENTITY (1, 1) NOT NULL,
+	[item_char] [varchar] (50) NULL,
+	[item_category] [int] NULL,
+	[item_group] [int] NULL,
+	[item_style] [int] NULL,
+	[item_zen] [bigint] NULL,
+	[item_coin] [bigint] NULL,
+	[item_hex] [varchar] (50) NULL,
 	[item_date] [int] NULL 
 ) ON [PRIMARY]
 
@@ -61,14 +78,14 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_news]'
 drop table [dbo].[MMW_news]
 
 CREATE TABLE [dbo].[MMW_news] (
-	[news_id] [nvarchar] (100) NULL ,
-	[news_title] [nvarchar] (100) NULL ,
-	[news_category] [nvarchar] (100) NULL ,
-	[news_row_1] [text] NULL ,
-	[news_row_2] [text] NULL ,
-	[news_row_3] [text] NULL ,
-	[news_autor] [nvarchar] (100) NULL ,
-	[news_date] [nvarchar] (100) NULL 
+	[news_id] [varchar] (100) NULL,
+	[news_title] [varchar] (100) NULL,
+	[news_category] [varchar] (100) NULL,
+	[news_row_1] [text] NULL,
+	[news_row_2] [text] NULL,
+	[news_row_3] [text] NULL,
+	[news_autor] [varchar] (10) NULL,
+	[news_date] [int] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 
@@ -77,10 +94,10 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_online
 drop table [dbo].[MMW_online]
 
 CREATE TABLE [dbo].[MMW_online] (
-	[online_ip] [nvarchar] (15) NULL ,
-	[online_date] [nvarchar] (11) NULL ,
-	[online_url] [text] NULL ,
-	[online_char] [nvarchar] (10) NULL ,
+	[online_ip] [varchar] (50) NULL,
+	[online_date] [int] NULL,
+	[online_url] [text] NULL,
+	[online_char] [varchar] (50) NULL,
 	[online_agent] [text] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
@@ -90,15 +107,15 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_server
 drop table [dbo].[MMW_servers]
 
 CREATE TABLE [dbo].[MMW_servers] (
-	[name] [nvarchar] (50) NULL ,
-	[version] [nvarchar] (50) NULL ,
-	[experience] [nvarchar] (50) NULL ,
-	[drops] [nvarchar] (50) NULL , 
-	[maxplayer] [nvarchar] (50) NULL ,
-	[gsport] [nvarchar] (50) NULL ,
-	[ip] [nvarchar] (50) NULL ,
-	[type] [nvarchar] (50) NULL, 
-	[display_order] [nvarchar] (50) NULL 
+	[name] [varchar] (50) NULL,
+	[version] [varchar] (10) NULL,
+	[experience] [varchar] (10) NULL,
+	[drops] [varchar] (10) NULL,
+	[maxplayer] [int] NULL,
+	[gsport] [int] NULL,
+	[ip] [varchar] (15) NULL,
+	[type] [varchar] (10) NULL,
+	[display_order] [int] NULL 
 ) ON [PRIMARY]
 
 
@@ -107,15 +124,15 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_votema
 drop table [dbo].[MMW_votemain]
 
 CREATE TABLE [dbo].[MMW_votemain] (
-	[ID] [int] IDENTITY (1, 1) NOT NULL ,
-	[question] [nvarchar] (100) NULL ,
-	[answer1] [nvarchar] (50) NULL ,
-	[answer2] [nvarchar] (50) NULL ,
-	[answer3] [nvarchar] (50) NULL ,
-	[answer4] [nvarchar] (50) NULL ,
-	[answer5] [nvarchar] (50) NULL ,
-	[answer6] [nvarchar] (50) NULL ,
-	[add_date] [nvarchar] (11) NULL 
+	[ID] [int] IDENTITY (1, 1) NOT NULL,
+	[question] [varchar] (100) NULL,
+	[answer1] [varchar] (50) NULL,
+	[answer2] [varchar] (50) NULL,
+	[answer3] [varchar] (50) NULL,
+	[answer4] [varchar] (50) NULL,
+	[answer5] [varchar] (50) NULL,
+	[answer6] [varchar] (50) NULL,
+	[add_date] [int] NULL 
 ) ON [PRIMARY]
 
 
@@ -123,9 +140,8 @@ CREATE TABLE [dbo].[MMW_votemain] (
 if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_voterow]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
 drop table [dbo].[MMW_voterow]
 
-
 CREATE TABLE [dbo].[MMW_voterow] (
-	[ID_vote] [int] NULL ,
-	[who] [nvarchar] (15) NULL ,
+	[ID_vote] [int] NULL,
+	[who] [varchar] (15) NULL,
 	[answer] [int] NULL 
 ) ON [PRIMARY]

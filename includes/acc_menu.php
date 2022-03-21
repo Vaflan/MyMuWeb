@@ -18,7 +18,7 @@ echo "<a href='?op=user&u=acc'><b>".mmw_lang_account_panel."</b></a><br>";
 
 echo "<a href='?op=user&u=wh'><b>".mmw_lang_ware_house."</b></a><br>";
 
-if($_SESSION['mmw_status'] >= $mmw['gm_option_open']) {
+if($mmw[status_rules][$_SESSION[mmw_status]][gm_option] == 1) {
 
  echo "<a href='?op=user&u=gm'><b>".mmw_lang_gm_options."</b></a><br>";
 

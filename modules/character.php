@@ -34,13 +34,17 @@ elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen = mmw_la
 else {$send_zen = mmw_lang_guest_must_be_logged_on;}
 ?>
 
-      <table width="400" border="0" cellpadding="0" cellspacing="0" align="center">
+      <table border="0" cellpadding="0" cellspacing="0" align="center">
        <tr>
 	<td valign="top">
 	<table class="sort-table" cellpadding="0" cellspacing="0">
           <tr>
             <td align="right"><?echo mmw_lang_character;?>:</td>
             <td><span class="level<?echo $info[16];?>"><?echo $info[0];?></span></td>
+          </tr>
+          <tr>
+            <td align="right"><?echo mmw_lang_status;?>:</td>
+            <td><?echo ctlcode($info[16]);?></td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_class;?>:</td>
@@ -60,23 +64,23 @@ else {$send_zen = mmw_lang_guest_must_be_logged_on;}
           </tr>
           <tr>
             <td align="right">Strength:</td>
-            <td><?echo $info[2];?></td>
+            <td><?echo point_format($info[2]);?></td>
           </tr>
           <tr>
             <td align="right">Agility:</td>
-            <td><?echo $info[3];?></td>
+            <td><?echo point_format($info[3]);?></td>
           </tr>
           <tr>
             <td align="right">Vitality:</td>
-            <td><?echo $info[4];?></td>
+            <td><?echo point_format($info[4]);?></td>
           </tr>
           <tr>
             <td align="right">Energy:</td>
-            <td><?echo $info[5];?></td>
+            <td><?echo point_format($info[5]);?></td>
           </tr>
           <?if($info[15]>0){?><tr>
             <td align="right">Command:</td>
-            <td><?echo $info[15];?></td>
+            <td><?echo point_format($info[15]);?></td>
           </tr><?}?>
           <tr>
             <td align="right"><?echo mmw_lang_kills;?>:</td>
@@ -96,7 +100,7 @@ else {$send_zen = mmw_lang_guest_must_be_logged_on;}
           </tr>
 	</table>
 	</td>
-	<td valign="top" align="center">
+	<td valign="top" align="center" style="padding-left:2px;">
 		<?echo "<img src='".default_img(char_class($info[1],img))."' title='".char_class($info[1],full)."'>";?><br><br>
 		<a href='?op=user&u=mail&to=<?echo $info[0];?>'><b><?echo mmw_lang_send_message;?></b></a><br/>
 		<?echo $profile;?>

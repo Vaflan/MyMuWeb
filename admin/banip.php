@@ -1,6 +1,6 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
 
+// Ban Sistem by Vaflan
 $banip_file = 'includes/banip.dat';
 
 if(isset($_POST['base'])) {
@@ -8,9 +8,7 @@ if(isset($_POST['base'])) {
  fwrite($fd, stripslashes($_POST['base']));
  fclose($fd);
  echo "$warning_green Ban IP list SuccessFully Edited!";
-
- $log_dat = "Ban IP Has Been <font color=#FF0000>Edited</font> Author: $_SESSION[a_admin_login]";
- writelog("a_banip",$log_dat);
+ writelog("a_banip","Ban IP Has Been <font color=#FF0000>Edited</font> Author: $_SESSION[a_admin_login]");
 }
 
 $banip_open = @fopen($banip_file,'r');

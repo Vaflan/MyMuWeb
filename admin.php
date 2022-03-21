@@ -7,33 +7,38 @@ session_start();
 header("Cache-control: private");
 header("Cache-control: max-age=3600");
 include("config.php");
+include("includes/banned.php");
 include("includes/sql_check.php");
 include("includes/xss_check.php");
+include("includes/mmw-func.php");
 include("includes/format.php");
-include("admin/inc/functions.php");
+include("admin/engine.php");
 
 // Check Admin Panel
-$mmw[admin_check] = $_SESSION['a_admin_level'];
-writelog("a_check_admin_panel","<b>Admin Panel: ".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
+if($mmw[check_admin_panel] == 'yes') {
+ writelog("a_check_admin_panel","Admin Panel: <b>".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
+}
+
+if(is_file("themes/$mmw[theme]/admin.css")) {$css = "themes/$mmw[theme]/admin.css";}
+else {$css = "images/admin.css";}
 ?>
 <html>
 <head>
 	<title>MyMuWeb Administrator</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<link href="images/admin.css" rel="stylesheet" type="text/css">
-	<script language="javascript">var mmw_version = '<?echo $mmw[version];?>';</script>
+	<link href="<?echo $css;?>" rel="stylesheet" type="text/css">
+	<script>var mmw_version = '<?echo $mmw[version];?>';</script>
 </head>
 <body>
 <div align="center">
 
-<?if(isset($_SESSION['a_admin_login'],$_SESSION['a_admin_pass'],$_SESSION['a_admin_security'],$_SESSION['a_admin_level'])){?>
-
+<?if(isset($_SESSION['a_admin_login'],$_SESSION['a_admin_password'],$_SESSION['a_admin_security'],$_SESSION['a_admin_level'])){?>
   <table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
       <td align="center" height="50">
 <div class="login_stats">
 <form action='' method='post' name='admin_logout' id='admin_logout'>
-<?echo $warning_red;?> You are loged in <b><?echo "$_SESSION[a_admin_login] ".mmw_status($_SESSION[a_admin_level])." (Level: $_SESSION[a_admin_level])";?></b> 
+<?echo $warning_red;?> You are loged in <b><?echo "$_SESSION[a_admin_login] ".$mmw[status_rules][$_SESSION[a_admin_level]][name]." (Level: $_SESSION[a_admin_level])";?></b> 
 <input name='admin_logout' type='hidden' id='admin_logout' value='admin_logout'> 
 <input name='Logout' type='submit' id='Logout' title='Logout' value='Logout'>
 </form>
@@ -43,16 +48,16 @@ writelog("a_check_admin_panel","<b>Admin Panel: ".urldecode('http://'.$_SERVER["
     <tr>
       <td align="center" height="20">
 <a href="?op=home">Home</a> | 
-<?if($_SESSION[a_admin_level] > 6){?>
 <a href="?op=sqlquery">SQL Query</a> | 
+<a href="?op=backup">Back Up</a> | 
 <a href="?op=server">Server</a> | 
-<?}if($_SESSION[a_admin_level] > 3){?>
 <a href="?op=news">News</a> | 
 <a href="?op=downloads">Downloads</a> | 
 <a href="?op=votes">Votes</a> | 
+<a href="?op=forum">Forum</a> | 
 <a href="?op=ads">ADS</a> | 
-<a href="?op=rename">Rename Character</a>
-<?}?><br>
+<a href="?op=request">Request</a><br>
+<a href="?op=rename">Rename Character</a> | 
 <a href="?op=char">Search Character</a> | 
 <a href="?op=acc">Search Account</a> | 
 <a href="?op=acclist">Account List</a> | 
@@ -65,14 +70,13 @@ writelog("a_check_admin_panel","<b>Admin Panel: ".urldecode('http://'.$_SERVER["
 	<br>
 <?
 if(is_file("admin/$_GET[op].php")) {include("admin/$_GET[op].php");}
+elseif(is_file("admin/$_GET[op].mmw")) {mmw("admin/$_GET[op].mmw");}
 else {include("admin/home.php");}
 ?>
       </td>
     </tr>
   </table>
-
 <?}else{?>
-
 <script language='Javascript'>
 function check_admin_form() {
  if(document.admin_form.adminusername.value == '') {
@@ -101,12 +105,12 @@ function check_admin_form() {
     <td><form action='' method='post' name='admin_form' id='admin_form'>
       <table width='292' border='0' align='center' cellpadding='0' cellspacing='4'>
         <tr>
-          <td width='126' align='right'>Admin Username</td>
-          <td width='144'><input name='adminusername' type='text' size='15' maxlength='10'></td>
+          <td width='126' align='right'>Admin Account</td>
+          <td width='144'><input name='account' type='text' size='15' maxlength='10'></td>
         </tr>
         <tr>
           <td align='right'>Admin Password</td>
-          <td><input name='adminpassword' type='password' size='15' maxlength='10'></td>
+          <td><input name='password' type='password' size='15' maxlength='10'></td>
         </tr>
         <tr>
           <td align='right'>Admin SecurityCode</td>
@@ -120,7 +124,6 @@ function check_admin_form() {
     </form></td>
   </tr>
 </table>
-
 <?}?>
 
 <br><span class="copyright">MyMuWeb <?echo $mmw[version];?>. Design and PHP+SQL by Vaflan.</span>

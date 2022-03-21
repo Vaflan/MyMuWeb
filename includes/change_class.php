@@ -1,5 +1,5 @@
 <?PHP
-// Class List For MyMuWeb
+// Change Class List For MyMuWeb
 // By Vaflan
 // How Add New Location?
 // Copy new string: array('NUMBER_CLASS','PRICE'),

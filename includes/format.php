@@ -97,23 +97,27 @@ function date_formats($stime, $etime, $format='short') {
 /////// Start BBCode Formats ///////
 function bbcode($text) {
  $bbcode = array(
- "/\[br\]/is" => "<br>",
- "/\[hr\]/is" => "<hr>",
- "/\[b\](.*?)\[\/b\]/is" => "<b>$1</b>",
- "/\[i\](.*?)\[\/i\]/is" => "<i>$1</i>",
- "/\[u\](.*?)\[\/u\]/is" => "<u>$1</u>",
- "/\[s\](.*?)\[\/s\]/is" => "<s>$1</s>",
- "/\[o\](.*?)\[\/o\]/is" => "<span style=\"text-decoration: overline;\">$1</span>",
- "/\[c\](.*?)\[\/c\]/is" => "<div align=\"center\">$1</div>",
- "/\[l\](.*?)\[\/l\]/is" => "<div align=\"left\">$1</div>",
- "/\[r\](.*?)\[\/r\]/is" => "<div align=\"right\">$1</div>",
- "/\[sup\](.*?)\[\/sup\]/is" => "<sup>$1</sup>",
- "/\[sub\](.*?)\[\/sub\]/is" => "<sub>$1</sub>",
- "/\[img\](.*?)\[\/img\]/is" => "<img src=\"$1\" border=\"0\">",
- "/\[color\=(.*?)\](.*?)\[\/color\]/is" => "<font color=\"$1\">$2</font>",
- "/\[font\=(.*?)\](.*?)\[\/font\]/is" => "<font face=\"$1\">$2</font>",
- "/\[size\=(.*?)\](.*?)\[\/size\]/is" => "<font size=\"$1\">$2</font>",
- "/\[url\=(.*?)\](.*?)\[\/url\]/is" => "<a target=\"_blank\" href=\"$1\">$2</a>"
+  "/\[br\]/is" => "<br>",
+  "/\[hr\]/is" => "<hr>",
+  "/\[b\](.*?)\[\/b\]/is" => "<b>$1</b>",
+  "/\[i\](.*?)\[\/i\]/is" => "<i>$1</i>",
+  "/\[u\](.*?)\[\/u\]/is" => "<u>$1</u>",
+  "/\[s\](.*?)\[\/s\]/is" => "<s>$1</s>",
+  "/\[o\](.*?)\[\/o\]/is" => "<span style=\"text-decoration: overline;\">$1</span>",
+  "/\[c\](.*?)\[\/c\]/is" => "<div align=\"center\">$1</div>",
+  "/\[l\](.*?)\[\/l\]/is" => "<div align=\"left\">$1</div>",
+  "/\[r\](.*?)\[\/r\]/is" => "<div align=\"right\">$1</div>",
+  "/\[center\](.*?)\[\/center\]/is" => "<div align=\"center\">$1</div>",
+  "/\[left\](.*?)\[\/left\]/is" => "<div align=\"left\">$1</div>",
+  "/\[right\](.*?)\[\/right\]/is" => "<div align=\"right\">$1</div>",
+  "/\[sup\](.*?)\[\/sup\]/is" => "<sup>$1</sup>",
+  "/\[sub\](.*?)\[\/sub\]/is" => "<sub>$1</sub>",
+  "/\[img\](.*?)\[\/img\]/is" => "<img src=\"$1\" border=\"0\">",
+  "/\[color\=(.*?)\](.*?)\[\/color\]/is" => "<font color=\"$1\">$2</font>",
+  "/\[font\=(.*?)\](.*?)\[\/font\]/is" => "<font face=\"$1\">$2</font>",
+  "/\[size\=(.*?)\](.*?)\[\/size\]/is" => "<span style=\"font-size: $1 pt;\">$2</span>",
+  "/\[url\=(.*?)\](.*?)\[\/url\]/is" => "<a target=\"_blank\" href=\"$1\">$2</a>",
+  "/\[video\]http:\/\/www.youtube.com\/watch\?v=(.*?)\[\/video\]/is" => "<embed src=\"http://www.youtube.com/v/$1&hl=ru_RU&fs=1\" type=\"application/x-shockwave-flash\" allowfullscreen=\"true\" width=\"480\" height=\"385\"></embed>",
  );
  $text = preg_replace(array_keys($bbcode), array_values($bbcode), $text);
  return $text;
@@ -152,15 +156,20 @@ function smile($smile) {
 function bugsend($bug) {
  $bug = str_replace("<","&lt;",$bug);
  $bug = str_replace(">","&gt;",$bug);
- $bug = str_replace("!","&#033;",$bug);
- $bug = str_replace("%","&#037;",$bug);
- $bug = str_replace("'","&#039;",$bug);
+ //$bug = str_replace("&","&amp;",$bug);
  $bug = str_replace('"',"&quot;",$bug);
- $bug = str_replace(" +$"," ",$bug);
- $bug = str_replace("^ +"," ",$bug);
- $bug = str_replace("\r"," ",$bug);
+ //$bug = str_replace("/","&#47;",$bug);
+ $bug = str_replace("?","&#63;",$bug);
+ $bug = str_replace("—","&mdash;",$bug);
+ $bug = str_replace("'","&apos;",$bug);
+ $bug = str_replace("!","&#33;",$bug);
+ $bug = str_replace("$","&#36;",$bug);
+ $bug = str_replace("%","&#37;",$bug);
+ $bug = str_replace("*","&#42;",$bug);
+ $bug = str_replace("+","&#43;",$bug);
  $bug = str_replace("\n","[br]",$bug);
- $bug = str_replace('\\\"',"&quot;",$bug);
+ $bug = str_replace("\r","&nbsp;",$bug);
+ $bug = str_replace(chr(hexdec('5c')),"&#92;",$bug);
  return $bug;
 }
 /////// END BugText Formats ///////
@@ -195,6 +204,17 @@ function zen_format($money,$format=NULL) {
  return $money;
 }
 /////// END Zen Formats ///////
+
+
+
+
+
+/////// Start Points Formats ///////
+function point_format($str=NULL) {
+ if($str < 0) {$str = 32767 + (32768 + $str);}
+ return $str;
+}
+/////// END Points Formats ///////
 
 
 
@@ -420,24 +440,6 @@ function map($map) {
 
 
 
-
-/////// Start MMW Status Level Formats ///////
-function mmw_status($a_level) {
- if($a_level == 0){$a_level = 'Member';}
- elseif($a_level == 3){$a_level = 'Game Master';}
- elseif($a_level == 6){$a_level = 'Admin Assistant';}
- elseif($a_level == 9){$a_level = 'Administrator';}
- else{$a_level = 'Unknow';}
- return $a_level;
-}
-/////// END MMW Status Level Formats ///////
-
-
-
-
-
-
-
 /////// Start PK Status Formats ///////
 function pkstatus($pkstatus) {
  if($pkstatus == 1){$pkstatus = 'Hero';}
@@ -472,6 +474,21 @@ if($num == 0){$num = mmw_lang_guild_member;}
 
 
 
+/////// Start CtlCode Formats ///////
+function CtlCode($num) {
+ if($num == 0) {$result = 'Member';}
+ elseif($num == 1) {$result = 'Blocked';}
+ elseif($num == 8 || $num == 32) {$result = 'Game Master';}
+ else {$result = 'Unknow';}
+ return $result;
+}
+/////// END CtlCode Formats ///////
+
+
+
+
+
+
 /////// Start Gender Formats ///////
 function gender($gender) {
  if($gender == 'male'){$gender = mmw_lang_male.' <img src="images/male.gif">';}
@@ -493,20 +510,20 @@ function char_class($class,$style=NULL) {
 
  if($class == 0){$class_row1 = array('off'=>'DW','full'=>'Dark Wizard');}
  elseif($class == 1){$class_row1 = array('off'=>'SM','full'=>'Soul Master');}
- elseif($class == 2){$class_row1 = array('off'=>'GrM','full'=>'Grand Master');}
+ elseif($class == 2 || $class == 3){$class_row1 = array('off'=>'GrM','full'=>'Grand Master');}
  elseif($class == 16){$class_row1 = array('off'=>'DK','full'=>'Dark Knight');}
  elseif($class == 17){$class_row1 = array('off'=>'BK','full'=>'Blade Knight');}
- elseif($class == 18){$class_row1 = array('off'=>'BM','full'=>'Blade Master');}
+ elseif($class == 18 || $class == 19){$class_row1 = array('off'=>'BM','full'=>'Blade Master');}
  elseif($class == 32){$class_row1 = array('off'=>'Elf','full'=>'Fairy Elf');}
  elseif($class == 33){$class_row1 = array('off'=>'ME','full'=>'Muse Elf');}
- elseif($class == 34){$class_row1 = array('off'=>'HE','full'=>'High Elf');}
+ elseif($class == 34 || $class == 35){$class_row1 = array('off'=>'HE','full'=>'High Elf');}
  elseif($class == 48){$class_row1 = array('off'=>'MG','full'=>'Magic Gladiator');}
- elseif($class == 49 || $class == 50){$class_row = array('off'=>'DM','full'=>'Duel Master');}
+ elseif($class == 49 || $class == 50){$class_row1 = array('off'=>'DM','full'=>'Duel Master');}
  elseif($class == 64){$class_row1 = array('off'=>'DL','full'=>'Dark Lord');}
  elseif($class == 65 || $class == 66){$class_row1 = array('off'=>'LE','full'=>'Lord Emperor');}
  elseif($class == 80){$class_row1 = array('off'=>'Sum','full'=>'Summoner');}
  elseif($class == 81){$class_row1 = array('off'=>'Bsum','full'=>'Bloody Summoner');}
- elseif($class == 82){$class_row1 = array('off'=>'Dim','full'=>'Dimension Master');}
+ elseif($class == 82 || $class == 83){$class_row1 = array('off'=>'Dim','full'=>'Dimension Master');}
  else{$class_row1 = array('off'=>'Unknow','full'=>'Unknow');}
 
  if($class >= 0 && $class <= 15){$class_row2 = array('img'=>'char/dw.gif','photo'=>'0x00FFFFFFFFFF000000F80000F0FFFFFF');}
@@ -529,6 +546,7 @@ function char_class($class,$style=NULL) {
 
 /////// Start Win to UTF Formats ///////
 function win_to_utf($s) {
+ $s = str_replace('¸','å',$s);
  for($i=0, $m=strlen($s); $i<$m; $i++) {
 	$c=ord($s[$i]);
 	if($c<=127) {$t.=chr($c); continue;}
@@ -550,18 +568,21 @@ function win_to_utf($s) {
 
 /////// Start UTF to Win Formats ///////
 function utf_to_win($str) {
- $str=strtr($str,array("Ð°"=>"à","Ð±"=>"á","Ð²"=>"â","Ð³"=>"ã","Ð´"=>"ä","Ðµ"=>"å","Ñ‘"=>"¸",
- "Ð¶"=>"æ","Ð·"=>"ç",
- "Ð¸"=>"è","Ð¹"=>"é","Ðº"=>"ê","Ð»"=>"ë","Ð¼"=>"ì","Ð½"=>"í","Ð¾"=>"î","Ð¿"=>"ï",
- "Ñ€"=>"ð","Ñ"=>"ñ","Ñ‚"=>"ò","Ñƒ"=>"ó","Ñ„"=>"ô","Ñ…"=>"õ","Ñ†"=>"ö",
- "Ñ‡"=>"÷","Ñˆ"=>"ø","Ñ‰"=>"ù","ÑŠ"=>"ú","Ñ‹"=>"û","ÑŒ"=>"ü",
- "Ñ"=>"ý","ÑŽ"=>"þ","Ñ"=>"ÿ",
- "Ð"=>"À","Ð‘"=>"Á","Ð’"=>"Â","Ð“"=>"Ã","Ð”"=>"Ä",
- "Ð•"=>"Å","Ð"=>"¨","Ð–"=>"Æ","Ð—"=>"Ç","Ð?"=>"È","Ð™"=>"É","Ðš"=>"Ê","Ð›"=>"Ë",
- "Ðœ"=>"Ì","Ð"=>"Í","Ðž"=>"Î","ÐŸ"=>"Ï","Ð "=>"Ð",
- "Ð¡"=>"Ñ","Ð¢"=>"Ò","Ð£"=>"Ó","Ð¤"=>"Ô","Ð¥"=>"Õ",
- "Ð¦"=>"Ö","Ð§"=>"×","Ð¨"=>"Ø","Ð©"=>"Ù","Ðª"=>"Ú","Ð«"=>"Û",
- "Ð¬"=>"Ü","Ð "=>"Ý","Ð®"=>"Þ","Ð¯"=>"ß"));
+ $str_array = array(win_to_utf('a')=>'à',win_to_utf('á')=>'á',win_to_utf('â')=>'â',win_to_utf('ã')=>'ã',
+ win_to_utf('ä')=>'ä',win_to_utf('å')=>'å',win_to_utf('¸')=>'¸',win_to_utf('æ')=>'æ',win_to_utf('ç')=>'ç',
+ win_to_utf('è')=>'è',win_to_utf('é')=>'é',win_to_utf('ê')=>'ê',win_to_utf('ë')=>'ë',win_to_utf('ì')=>'ì',
+ win_to_utf('í')=>'í',win_to_utf('î')=>'î',win_to_utf('ï')=>'ï',win_to_utf('ð')=>'ð',win_to_utf('ñ')=>'ñ',
+ win_to_utf('ò')=>'ò',win_to_utf('ó')=>'ó',win_to_utf('ô')=>'ô',win_to_utf('õ')=>'õ',win_to_utf('ö')=>'ö',
+ win_to_utf('÷')=>'÷',win_to_utf('ø')=>'ø',win_to_utf('ù')=>'ù',win_to_utf('ú')=>'ú',win_to_utf('û')=>'û',
+ win_to_utf('ü')=>'ü',win_to_utf('ý')=>'ý',win_to_utf('þ')=>'þ',win_to_utf('ÿ')=>'ÿ',
+ win_to_utf('À')=>'À',win_to_utf('Á')=>'Á',win_to_utf('Â')=>'Â',win_to_utf('Ã')=>'Ã',win_to_utf('Ä')=>'Ä',
+ win_to_utf('Å')=>'Å',win_to_utf('¨')=>'¨',win_to_utf('Æ')=>'Æ',win_to_utf('Ç')=>'Ç',win_to_utf('È')=>'È',
+ win_to_utf('É')=>'É',win_to_utf('Ê')=>'Ê',win_to_utf('Ë')=>'Ë',win_to_utf('Ì')=>'Ì',win_to_utf('Í')=>'Í',
+ win_to_utf('Î')=>'Î',win_to_utf('Ï')=>'Ï',win_to_utf('Ð')=>'Ð',win_to_utf('Ñ')=>'Ñ',win_to_utf('Ò')=>'Ò',
+ win_to_utf('Ó')=>'Ó',win_to_utf('Ô')=>'Ô',win_to_utf('Õ')=>'Õ',win_to_utf('Ö')=>'Ö',win_to_utf('×')=>'×',
+ win_to_utf('Ø')=>'Ø',win_to_utf('Ù')=>'Ù',win_to_utf('Ú')=>'Ú',win_to_utf('Û')=>'Û',win_to_utf('Ü')=>'Ü',
+ win_to_utf('Ý')=>'Ý',win_to_utf('Þ')=>'Þ',win_to_utf('ß')=>'ß');
+ $str = strtr($str,$str_array);
  return $str;
 }
 /////// END UTF to Win Formats ///////

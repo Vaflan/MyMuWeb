@@ -31,11 +31,8 @@ for($i=0;$i < $row_num;++$i) {
 	$idc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$row[0]'");
 	$idc = mssql_fetch_row($idc_reults);
 
-	if(empty($_SESSION['char_'.$idc[0]])) {
-	 $char_reults = mssql_query("Select Name,Class,Reset,cLevel,AccountID from Character where name='$idc[0]'");
-	 $_SESSION['char_'.$idc[0]] = mssql_fetch_row($char_reults);
-	}
-	$char = $_SESSION['char_'.$idc[0]];
+	$char_reults = mssql_query("Select Name,Class,Reset,cLevel,AccountID from Character where name='$idc[0]'");
+	$char = mssql_fetch_row($char_reults);
 
 echo 	"<tbody><tr>
             <td>$rank</td>

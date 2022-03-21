@@ -11,12 +11,12 @@ if(empty($_POST['sort'])){$race = 'all';}
 
 if($mmw['gm']=='no'){$no_gm_in_top = "and ctlcode!='32' and ctlcode!='8'";}
 $query_race[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='2' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='18' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='34' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='50' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='66' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='82' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='15' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='31' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='47' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='63' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='79' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='95' $no_gm_in_top order by reset desc, clevel desc";
 
 $result = @mssql_query($query_race[$race]);
 $row_num = @mssql_num_rows($result);

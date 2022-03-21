@@ -1,6 +1,9 @@
-<?PHP
-if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
-if(isset($_POST["log_name"])) {clear_logs($_POST["log_name"]);}
+<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
+
+if(isset($_POST["log_name"])) {
+ clearlog($_POST["log_name"]);
+ echo "$warning_green Log $logfile SuccessFully Deleted!";
+}
 
 if($dh = opendir('logs')) {
      while (($file = readdir($dh)) !== false) {
@@ -8,9 +11,7 @@ if($dh = opendir('logs')) {
 	  if($format == 'php') {
 		$num = $num + 1;
 		$file_name = substr($file, 0, -4);
-		if($_SESSION[a_admin_level] > 6)
-		 {$clear_log = '<form action="" method="post" name="clear11" id="clear11"><input name="log_name" type="hidden" id="log_name" value="'.$file_name.'"> <input type="submit" name="Submit" value="Clear"></form>';}
-
+		$clear_log = '<form action="" method="post"><input name="log_name" type="hidden" value="'.$file_name.'"><input type="submit" name="Submit" value="Clear"></form>';
 		if(substr($file_name,0,2)=='a_') {
 		 $admin_logs .= '<tr><td width="50%"><a href="logs.php?log='.$file_name.'" target="_blank">'.$file_name.'</a> ['.filesize("logs/$file").' byte]</td><td align="right">'.$clear_log.'</td></tr>';
 		}

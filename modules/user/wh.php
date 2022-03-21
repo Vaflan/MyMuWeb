@@ -1,53 +1,48 @@
-<?if($acc_online_check=="0"){
+<?if($acc_online_check=="0") {
 
 if(isset($_POST["zen"])){require("includes/character.class.php");option::warehouse($_POST["from_wh"],$_POST["to_wh"],$_POST["zen"]); echo $rowbr;}
 if(isset($_GET[item]) && isset($_POST[item_pirce])){require("includes/character.class.php");option::item_sell($_GET[item],$_POST[item_pirce]); echo $rowbr;}
 
-$result = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$login'");
-$row = mssql_fetch_row($result);
+$result = @mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$login'");
 
-if($row[0]!="" && $row[0]!=" ") {
-
-// Money
-if($row[1]=="" || $row[1]==" ") {$row[1]="0";}
-if($row[2]=="" || $row[2]==" ") {$row[2]="0";}
-echo "
+if(@mssql_num_rows($result) > 0) {
+ $row = mssql_fetch_row($result);
+ if(empty($row[1]) || $row[1]==" ") {$row[1]="0";}
+ if(empty($row[2]) || $row[2]==" ") {$row[2]="0";}
+?>
 <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'>
    <thead>
 	<tr>
-          <td>".mmw_lang_where."</td>
+          <td><?echo mmw_lang_where;?></td>
           <td>Zen</td>
           <td width='50'>Max Zen</td>
 	</tr>
    </thead>
 	<tr>
-            <td>".mmw_lang_extra_ware_house."</td>
-            <td>".number_format($row[2])."</td>
+            <td><?echo mmw_lang_extra_ware_house;?></td>
+            <td><?echo number_format($row[2]);?></td>
             <td>~</td>
 	</tr>
 	<tr>
-            <td>".mmw_lang_ware_house."</td>
-            <td>".number_format($row[1])."</td>
-            <td>".zen_format($mmw[max_char_wh_zen])."</td>
+            <td><?echo mmw_lang_ware_house;?></td>
+            <td><?echo number_format($row[1]);?></td>
+            <td><?echo zen_format($mmw[max_char_wh_zen],'small');?></td>
 	</tr>
-	";
+<?
+ $select_form = "<option value='ewh'>".mmw_lang_extra_ware_house."</option><option value='wh0'>".mmw_lang_ware_house."</option>";
 
-	$select_form = "<option value='ewh'>".mmw_lang_extra_ware_house."</option><option value='wh0'>".mmw_lang_ware_house."</option>";
-
-$result = mssql_query("SELECT AccountID,Name,Money FROM character WHERE accountid='$login'");
-for($i=0;$i < mssql_num_rows($result);++$i)
-  {
-	$row = mssql_fetch_row($result);
-echo "
+ $result = mssql_query("SELECT AccountID,Name,Money FROM character WHERE accountid='$login'");
+ for($i=0;$i < mssql_num_rows($result);++$i) {
+  $row = mssql_fetch_row($result);
+?>
 	<tr>
-            <td>$row[1]</td>
-            <td>".number_format($row[2])."</td>
-            <td>".zen_format($mmw[max_char_wh_zen])."</td>
+            <td><?echo $row[1];?></td>
+            <td><?echo number_format($row[2]);?></td>
+            <td><?echo zen_format($mmw[max_char_wh_zen],'small');?></td>
 	</tr>
-";
-
-	$select_form = $select_form . "<option value='ch$row[1]'>$row[1]</option>";
-  }
+<?
+  $select_form = $select_form . "<option value='ch$row[1]'>$row[1]</option>";
+ }
 ?>
 </table>
 
