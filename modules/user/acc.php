@@ -91,7 +91,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
     </tr>
     <tr>
       <td align="right"><?echo mmw_lang_login_status;?>:</td>
-      <td align="left"><span class="online"><?echo mmw_lang_online;?></span></td>
+      <td align="left"><span class="online"><?echo mmw_lang_acc_online;?></span></td>
     </tr>
     <tr>
       <td align="right"><?echo mmw_lang_time_in_playing;?>:</td>
@@ -104,7 +104,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
     </tr>
     <tr>
       <td align="right"><?echo mmw_lang_login_status;?>:</td>
-      <td align="left"><span class="offline"><?echo mmw_lang_offline;?> [<?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),time());?>]</span></td>
+      <td align="left"><span class="offline"><?echo mmw_lang_acc_offline;?> [<?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),time());?>]</span></td>
     </tr>
     <tr>
       <td align="right"><?echo mmw_lang_last_play_time;?>:</td>

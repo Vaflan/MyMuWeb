@@ -1,4 +1,5 @@
 <?PHP
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["server_name_delete"])){delete_server($_POST["server_name_delete"]);}
 if(isset($_POST["new_server"])){add_new_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['maxplayer'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['servertype']);}
 if(isset($_POST["do_edit_server"])){edit_server($_POST['name'],$_POST['version'],$_POST['experience'],$_POST['drops'],$_POST['maxplayer'],$_POST['gsport'],$_POST['serverip'],$_POST['order'],$_POST['old_name_server'],$_POST['servertype']);}

@@ -10,7 +10,7 @@ $total_guilds = mssql_fetch_row( mssql_query("SELECT count(*) FROM Guild WHERE G
 $total_banneds = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO WHERE bloc_code = '1'") );
 $users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1'") );
 
-if(is_file("$mmw[theme_img]/bar.jpg")) {$size = getimagesize("$mmw[theme_img]/bar.jpg");}
+if(is_file(default_img("bar.jpg"))) {$size = getimagesize(default_img("bar.jpg"));}
 else {$size = '3';}
 
 function s_characters_done($type,$class) {
@@ -63,10 +63,10 @@ $serv_num = mssql_num_rows($result);
 for($i=0;$i < $serv_num;++$i) {
  $row = mssql_fetch_row($result);
  if($i < $serv_num - 1) {$other_serv = ',';} else {$other_serv = '';}
- if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.3)) 
-  {fclose($check); $status_done = "<span class='online'><b>".mmw_lang_online."</b></span>";}
+ if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.8)) 
+  {fclose($check); $status_done = "<span class='online'><b>".mmw_lang_serv_online."</b></span>";}
  else
-  {$status_done = "<span class='offline'><b>".mmw_lang_offline."</b></span>";} 
+  {$status_done = "<span class='offline'><b>".mmw_lang_serv_offline."</b></span>";} 
  echo " <span class=\"helpLink\" title=\"<b>".mmw_lang_version.":</b> $row[5]<br><b>".mmw_lang_experience.":</b> $row[1]<br><b>".mmw_lang_drops.":</b> $row[2]<br><b>".mmw_lang_type.":</b> $row[6]\">$row[0]</span>: $status_done" . $other_serv;
 }
 ?>
@@ -80,49 +80,49 @@ for($i=0;$i < $serv_num;++$i) {
           <tr>
             <td align="right" width="110"><?echo mmw_lang_total_accounts;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% ($total_accounts[0])</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% ($total_accounts[0])</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_characters;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=all'>$total_characters[0]</a>)</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=all'>$total_characters[0]</a>)</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_banneds;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". $total_banneds_results * 2 . "'><font size='1'> $total_banneds_results% ($total_banneds[0])</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". $total_banneds_results * 2 . "'><font size='1'> $total_banneds_results% ($total_banneds[0])</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_guilds;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=guild'>$total_guilds[0]</a>)</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". 100 * 2 . "'><font size='1'> 100% (<a href='?op=rankings&sort=guild'>$total_guilds[0]</a>)</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_in_guilds;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". $total_in_guilds_results * 2 . "'><font size='1'> $total_in_guilds_results% ($total_in_guilds[0])</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". $total_in_guilds_results * 2 . "'><font size='1'> $total_in_guilds_results% ($total_in_guilds[0])</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_users_online;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". $users_connected_results * 2 . "'><font size='1'> $users_connected_results% (<a href='?op=rankings&sort=online'>$users_connected[0]</a>)</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". $users_connected_results * 2 . "'><font size='1'> $users_connected_results% (<a href='?op=rankings&sort=online'>$users_connected[0]</a>)</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_male_users;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". $male_results * 2 . "'><font size='1'> $male_results% ($male_done[0])</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". $male_results * 2 . "'><font size='1'> $male_results% ($male_done[0])</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo mmw_lang_total_female_users;?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". $female_results * 2 . "'><font size='1'> $female_results% ($female_done[0])</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". $female_results * 2 . "'><font size='1'> $female_results% ($female_done[0])</font>";?>
             </td>
           </tr>
 </table>
@@ -133,97 +133,97 @@ for($i=0;$i < $serv_num;++$i) {
           <tr>
             <td align="right" width="110"><?echo char_class(0,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,0) * 2 . "'><font size=\"1\"> ".s_characters_done(0,0)."% (".s_characters_done(1,0).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,0) * 2 . "'><font size=\"1\"> ".s_characters_done(0,0)."% (".s_characters_done(1,0).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(1,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,1) * 2 . "'><font size=\"1\"> ".s_characters_done(0,1)."% (".s_characters_done(1,1).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,1) * 2 . "'><font size=\"1\"> ".s_characters_done(0,1)."% (".s_characters_done(1,1).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(2,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,2) * 2 . "'><font size=\"1\"> ".s_characters_done(0,2)."% (".s_characters_done(1,2).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,2) * 2 . "'><font size=\"1\"> ".s_characters_done(0,2)."% (".s_characters_done(1,2).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(16,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,16) * 2 . "'><font size=\"1\"> ".s_characters_done(0,16)."% (".s_characters_done(1,16).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,16) * 2 . "'><font size=\"1\"> ".s_characters_done(0,16)."% (".s_characters_done(1,16).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(17,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,17) * 2 . "'><font size=\"1\"> ".s_characters_done(0,17)."% (".s_characters_done(1,17).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,17) * 2 . "'><font size=\"1\"> ".s_characters_done(0,17)."% (".s_characters_done(1,17).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(18,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,18) * 2 . "'><font size=\"1\"> ".s_characters_done(0,18)."% (".s_characters_done(1,18).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,18) * 2 . "'><font size=\"1\"> ".s_characters_done(0,18)."% (".s_characters_done(1,18).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(32,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,32) * 2 . "'><font size=\"1\"> ".s_characters_done(0,32)."% (".s_characters_done(1,32).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,32) * 2 . "'><font size=\"1\"> ".s_characters_done(0,32)."% (".s_characters_done(1,32).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(33,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,33) * 2 . "'><font size=\"1\"> ".s_characters_done(0,33)."% (".s_characters_done(1,33).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,33) * 2 . "'><font size=\"1\"> ".s_characters_done(0,33)."% (".s_characters_done(1,33).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(34,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,34) * 2 . "'><font size=\"1\"> ".s_characters_done(0,34)."% (".s_characters_done(1,34).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,34) * 2 . "'><font size=\"1\"> ".s_characters_done(0,34)."% (".s_characters_done(1,34).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(48,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,48) * 2 . "'><font size=\"1\"> ".s_characters_done(0,48)."% (".s_characters_done(1,48).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,48) * 2 . "'><font size=\"1\"> ".s_characters_done(0,48)."% (".s_characters_done(1,48).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(50,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,50) * 2 . "'><font size=\"1\"> ".s_characters_done(0,50)."% (".s_characters_done(1,50).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,50) * 2 . "'><font size=\"1\"> ".s_characters_done(0,50)."% (".s_characters_done(1,50).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(64,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,64) * 2 . "'><font size=\"1\"> ".s_characters_done(0,64)."% (".s_characters_done(1,64).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,64) * 2 . "'><font size=\"1\"> ".s_characters_done(0,64)."% (".s_characters_done(1,64).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(66,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,66) * 2 . "'><font size=\"1\"> ".s_characters_done(0,66)."% (".s_characters_done(1,66).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,66) * 2 . "'><font size=\"1\"> ".s_characters_done(0,66)."% (".s_characters_done(1,66).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(80,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,80) * 2 . "'><font size=\"1\"> ".s_characters_done(0,80)."% (".s_characters_done(1,80).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,80) * 2 . "'><font size=\"1\"> ".s_characters_done(0,80)."% (".s_characters_done(1,80).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(81,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,81) * 2 . "'><font size=\"1\"> ".s_characters_done(0,81)."% (".s_characters_done(1,81).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,81) * 2 . "'><font size=\"1\"> ".s_characters_done(0,81)."% (".s_characters_done(1,81).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo char_class(82,full);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_characters_done(0,82) * 2 . "'><font size=\"1\"> ".s_characters_done(0,82)."% (".s_characters_done(1,82).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_characters_done(0,82) * 2 . "'><font size=\"1\"> ".s_characters_done(0,82)."% (".s_characters_done(1,82).")</font>";?>
             </td>
           </tr>
 </table>
@@ -234,109 +234,109 @@ for($i=0;$i < $serv_num;++$i) {
           <tr>
             <td align="right" width="110"><?echo map(0);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,0) * 2 . "'><font size=\"1\"> ".s_map_done(0,0)."% (".s_map_done(1,0).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,0) * 2 . "'><font size=\"1\"> ".s_map_done(0,0)."% (".s_map_done(1,0).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(1);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,1) * 2 . "'><font size=\"1\"> ".s_map_done(0,1)."% (".s_map_done(1,1).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,1) * 2 . "'><font size=\"1\"> ".s_map_done(0,1)."% (".s_map_done(1,1).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(2);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,2) * 2 . "'><font size=\"1\"> ".s_map_done(0,2)."% (".s_map_done(1,2).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,2) * 2 . "'><font size=\"1\"> ".s_map_done(0,2)."% (".s_map_done(1,2).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(3);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,3) * 2 . "'><font size=\"1\"> ".s_map_done(0,3)."% (".s_map_done(1,3).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,3) * 2 . "'><font size=\"1\"> ".s_map_done(0,3)."% (".s_map_done(1,3).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(4);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,4)  * 2 . "'><font size=\"1\"> ".s_map_done(0,4)."% (".s_map_done(1,4).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,4)  * 2 . "'><font size=\"1\"> ".s_map_done(0,4)."% (".s_map_done(1,4).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(6);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,6) * 2 . "'><font size=\"1\"> ".s_map_done(0,6)."% (".s_map_done(1,6).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,6) * 2 . "'><font size=\"1\"> ".s_map_done(0,6)."% (".s_map_done(1,6).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(7);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,7) * 2 . "'><font size=\"1\"> ".s_map_done(0,7)."% (".s_map_done(1,7).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,7) * 2 . "'><font size=\"1\"> ".s_map_done(0,7)."% (".s_map_done(1,7).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(8);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,8) * 2 . "'><font size=\"1\"> ".s_map_done(0,8)."% (".s_map_done(1,8).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,8) * 2 . "'><font size=\"1\"> ".s_map_done(0,8)."% (".s_map_done(1,8).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(10);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,10) * 2 . "'><font size=\"1\"> ".s_map_done(0,10)."% (".s_map_done(1,10).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,10) * 2 . "'><font size=\"1\"> ".s_map_done(0,10)."% (".s_map_done(1,10).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(30);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,30) * 2 . "'><font size=\"1\"> ".s_map_done(0,30)."% (".s_map_done(1,30).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,30) * 2 . "'><font size=\"1\"> ".s_map_done(0,30)."% (".s_map_done(1,30).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(31);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,31) * 2 . "'><font size=\"1\"> ".s_map_done(0,31)."% (".s_map_done(1,31).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,31) * 2 . "'><font size=\"1\"> ".s_map_done(0,31)."% (".s_map_done(1,31).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(33);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,33) * 2 . "'><font size=\"1\"> ".s_map_done(0,33)."% (".s_map_done(1,33).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,33) * 2 . "'><font size=\"1\"> ".s_map_done(0,33)."% (".s_map_done(1,33).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(34);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,34) * 2 . "'><font size=\"1\"> ".s_map_done(0,34)."% (".s_map_done(1,34).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,34) * 2 . "'><font size=\"1\"> ".s_map_done(0,34)."% (".s_map_done(1,34).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(41);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,41) * 2 . "'><font size=\"1\"> ".s_map_done(0,41)."% (".s_map_done(1,41).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,41) * 2 . "'><font size=\"1\"> ".s_map_done(0,41)."% (".s_map_done(1,41).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(42);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,42) * 2 . "'><font size=\"1\"> ".s_map_done(0,42)."% (".s_map_done(1,42).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,42) * 2 . "'><font size=\"1\"> ".s_map_done(0,42)."% (".s_map_done(1,42).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(51);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,51) * 2 . "'><font size=\"1\"> ".s_map_done(0,51)."% (".s_map_done(1,51).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,51) * 2 . "'><font size=\"1\"> ".s_map_done(0,51)."% (".s_map_done(1,51).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(56);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,56) * 2 . "'><font size=\"1\"> ".s_map_done(0,56)."% (".s_map_done(1,56).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,56) * 2 . "'><font size=\"1\"> ".s_map_done(0,56)."% (".s_map_done(1,56).")</font>";?>
             </td>
           </tr>
           <tr>
             <td align="right"><?echo map(57);?></td>
             <td align="left">
-<?echo "<img src='$mmw[theme_img]/bar.jpg' height='$size[1]' width='". s_map_done(0,57) * 2 . "'><font size=\"1\"> ".s_map_done(0,57)."% (".s_map_done(1,57).")</font>";?>
+<?echo "<img src='".default_img("bar.jpg")."' height='$size[1]' width='". s_map_done(0,57) * 2 . "'><font size=\"1\"> ".s_map_done(0,57)."% (".s_map_done(1,57).")</font>";?>
             </td>
           </tr>
 </table>

@@ -115,8 +115,8 @@ $msg_table_delete ="
 <input name='delete_msg_inbox' type='hidden' value='$select_msg[0]'>
 </form>";
 
-if($select_msg[4]=='0') {$img_msg ='<img src=images/msg_unread.gif>';}
-if($select_msg[4]=='1') {$img_msg ='<img src=images/msg_read.gif>';}
+if($select_msg[4]=='0') {$img_msg ='<img src='.default_img('msg_unread.gif').'>';}
+if($select_msg[4]=='1') {$img_msg ='<img src='.default_img('msg_read.gif').'>';}
 
 echo "<tbody><tr>
 <td><a href='?op=character&character=$select_msg[1]'>$select_msg[1]</a></td>

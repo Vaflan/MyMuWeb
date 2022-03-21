@@ -1,4 +1,5 @@
 <?PHP
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["edit_character_done"])) {edit_character();}
 ?>
 
@@ -41,8 +42,8 @@ if($get_acc_chr[0]==$character_edit && $oc_row[0]=='1'){$character_status = "<fo
 			    <td><input name="level" type="text" id="level" value="<?echo $get_character_done[1];?>" maxlength="3" size="3"></td>
 			  </tr>
 			  <tr>
-			    <td align="right">Resets</td>
-			    <td><input name="resets" type="text" id="resets" value="<?echo $get_character_done[2];?>" maxlength="3" size="3"></td>
+			    <td align="right">Reset</td>
+			    <td><input name="reset" type="text" id="reset" value="<?echo $get_character_done[2];?>" maxlength="3" size="3"></td>
 			  </tr>
 			  <tr>
 			    <td align="right">Level Up Point</td>

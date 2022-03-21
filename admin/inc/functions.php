@@ -1,19 +1,23 @@
-<?
-function writelog($logfile,$text){
+<?PHP
+// Admin Panel Function
+// For MyMuWeb
+
+function writelog($logfile,$text) {
         $ip = $_SERVER['REMOTE_ADDR'];
         $date = date('d.m.Y H:i:s');
         $text = $text . ", All Those On <i>$date</i> By <u>$ip</u> \n";
         $fp = fopen("logs/$logfile.php","a");
         fputs($fp, $text);
-        fclose($fp);}
+        fclose($fp);
+}
 
 
-function clear_logs($name)
-{  require("config.php");
-   $new_data = "";
-   $fp = fopen("logs/$name.php","w");
-   fwrite ($fp, $new_data);
-	echo "$warning_green Log $name SuccessFully Deleted!";
+function clear_logs($name) {
+   require("config.php");
+   //$fp = fopen("logs/$name.php","w");
+   //fwrite ($fp, "");
+   unlink("logs/$name.php");
+   echo "$warning_green Log $name SuccessFully Deleted!";
 }
 
    // START LOGIN
@@ -30,30 +34,25 @@ function clear_logs($name)
 
 		if(($login_row[0] != $account) || ($mmw[admin_securitycode] != $securitycode)) {
 			echo '<script language="Javascript">alert("Ups! '.$_SERVER["REMOTE_ADDR"].' Username or Password or SecurityCode Invalid!"); window.location=".";</script>';
-			}
+		}
 		if($login_row[0] == $account && $login_row[1] < $mmw[min_level_to_ap]) {
 			echo '<script language="Javascript">alert("Ups! '.$login_row[0].' You Can\'t Enter in Here!"); window.location="'.$mmw[serverwebsite].'";</script>';
-			}
+		}
 		if(($login_row[0] = $account) && ($mmw[admin_securitycode] = $securitycode) && ($password != '') && $login_row[1] >= $mmw[min_level_to_ap]) {
-			$date = time();
-			mssql_query("UPDATE MEMB_INFO SET [date_online]='$date' WHERE memb___id='$login_row[0]'");
 			$_SESSION['a_admin_login'] = $login_row[0];
 			$_SESSION['a_admin_pass'] = $password;
 			$_SESSION['a_admin_security'] = $securitycode;
 			$_SESSION['a_admin_level'] = $login_row[1];
 			echo '<script language="Javascript">alert("Welcome '.$login_row[0].', Press Ok To Enter The Admin Control Panel!"); window.location="admin.php";</script>';
-			}
 		}
+	}
 	// Logout
 		if(isset($_POST["admin_logout"])) { 
-			unset($_SESSION['a_admin_login']);
-			unset($_SESSION['a_admin_pass']);
-			unset($_SESSION['a_admin_security']);
-			unset($_SESSION['a_admin_level']);
+			session_destroy();
 			echo '<script language="Javascript">alert("You Have Logged Out From Your Admin Control Panel, Press Ok To Go To The Main WebSite!"); window.location="'.$mmw[serverwebsite].'";</script>';
-			}
+		}
 	// CHECK LOGIN
-		if (isset($_SESSION['a_admin_security'],$_SESSION['a_admin_pass'],$_SESSION['a_admin_login'],$_SESSION['a_admin_level'])){
+		if(isset($_SESSION['a_admin_security'],$_SESSION['a_admin_pass'],$_SESSION['a_admin_login'],$_SESSION['a_admin_level'])){
 			$admin = clean_var(stripslashes($_SESSION['a_admin_login']));
 			$pass = clean_var(stripslashes($_SESSION['a_admin_pass']));
 			$code = clean_var(stripslashes($_SESSION['a_admin_security']));
@@ -64,13 +63,10 @@ function clear_logs($name)
 			$check_row = mssql_fetch_row($check_sql);
 
 			if($mmw[admin_securitycode] != $code || $admin != $check_row[0] || $level != $check_row[1] || $level < $mmw[min_level_to_ap]) {
-				unset($_SESSION["a_admin_login"]);
-				unset($_SESSION["a_admin_pass"]);
-				unset($_SESSION["a_admin_security"]);
-				unset($_SESSION["a_admin_level"]);
+				session_destroy();
 				echo '<script language="Javascript">alert("Dear '.$_SERVER["REMOTE_ADDR"].', Don\'t Try Fuckin Things!");window.location="'.$mmw[serverwebsite].'";</script>';
-				}
 			}
+		}
    // END LOGIN
 
 
@@ -84,7 +80,7 @@ function add_new_server($post_name,$post_version,$post_experience,$post_drops,$p
                       echo "$warning_green $post_name Server SuccessFully Added!";
 
                       $log_dat = "New Server Named: $_POST[name] Has Been <font color=#FF0000>Added</font>";
-                      writelog("server",$log_dat);
+                      writelog("a_server",$log_dat);
                    }
 }
 
@@ -99,7 +95,7 @@ function edit_server($name,$version,$experience,$drops,$maxplayer,$gsport,$serve
                                 echo "$warning_green $old_name Server SuccessFully Edited!";
 
                                 $log_dat = "Server Named: $_POST[name] Has Been <font color=#FF0000>Edited</font>";
-                                writelog("server",$log_dat);
+                                writelog("a_server",$log_dat);
                            }
 }
 
@@ -114,7 +110,7 @@ function delete_server($post_server_name_delete)
                         echo "$warning_green $post_server_name_delete Server SuccessFully Deleted!";
 
                         $log_dat = "Server Named: $_POST[server_name_delete] Has Been <font color=#FF0000>Deleted</font>";
-                        writelog("server",$log_dat);
+                        writelog("a_server",$log_dat);
                     }
 }
 
@@ -123,8 +119,7 @@ function delete_server($post_server_name_delete)
 
 
 function add_new_news($news_title,$news_category,$news_row_1,$news_row_2,$news_row_3,$news_autor)
-{
-           require("config.php");
+{          require("config.php");
            $date = time();
            $news_row_1 = bugsend($news_row_1);
            $news_row_2 = bugsend($news_row_2);
@@ -136,7 +131,7 @@ function add_new_news($news_title,$news_category,$news_row_1,$news_row_2,$news_r
                                   echo "$warning_green News SuccessFully Added!";
 
                                   $log_dat = "News: $_POST[news_title] Has Been <font color=#FF0000>Added</font> Author: $_SESSION[a_admin_login]";
-                                  writelog("news",$log_dat);
+                                  writelog("a_news",$log_dat);
                                }
 }
 
@@ -144,8 +139,7 @@ function add_new_news($news_title,$news_category,$news_row_1,$news_row_2,$news_r
 
 
 function delete_news($news_id)
-{
-        require("config.php");
+{       require("config.php");
            if (empty($news_id)){echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
                 else{
                        mssql_query("Delete from MMW_news where news_id='$news_id'");
@@ -153,7 +147,7 @@ function delete_news($news_id)
                        echo "$warning_green News SuccessFully Deleted!";
 
                        $log_dat = "News: $_POST[news_title] Has Been <font color=#FF0000>Deleted</font>";
-                       writelog("news",$log_dat);
+                       writelog("a_news",$log_dat);
                      }
 }
 
@@ -161,8 +155,7 @@ function delete_news($news_id)
 
 
 function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_row_1,$news_row_2,$news_row_3)
-{
-        require("config.php");
+{       require("config.php");
         $date = date('d-m-Y H:i');
         $news_row_1 = bugsend($news_row_1);
         $news_row_2 = bugsend($news_row_2);
@@ -174,7 +167,7 @@ function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_row_1,$
                           echo "$warning_green News SuccessFully Edited!";
 
                           $log_dat = "News: $_POST[edit_news_title] Has Been <font color=#FF0000>Edited</font> Author: $_POST[edit_news_autor]";
-                          writelog("news",$log_dat);
+                          writelog("a_news",$log_dat);
                         }
 }
 
@@ -182,8 +175,7 @@ function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_row_1,$
 
 
 function new_link($link_name,$link_address,$link_description,$link_size)
-{
-          require("config.php");
+{         require("config.php");
           $date = date('d-m-Y H:i');
                if (empty($link_name) ||  empty($link_address) || empty($link_description) || empty($link_size)){
 	              echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
@@ -192,7 +184,7 @@ function new_link($link_name,$link_address,$link_description,$link_size)
                                    echo "$warning_green Link SuccessFully Added!";
 
                                    $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Added</font>";
-                                   writelog("link",$log_dat);
+                                   writelog("a_link",$log_dat);
                                 }
 }
 
@@ -208,7 +200,7 @@ function delete_link($link_id)
                          echo "$warning_green Link SuccessFully Deleted!";
 
                          $log_dat = "Link $link_name Has Been <font color=#FF0000>Deleted</font>";
-                         writelog("link",$log_dat);
+                         writelog("a_link",$log_dat);
                        }
 }
 
@@ -224,7 +216,7 @@ function edit_link($link_name,$link_address,$link_description,$link_size,$link_i
                          echo "$warning_green Link SuccessFully Edited!";
 
                          $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Edited</font>";
-                         writelog("link",$log_dat);
+                         writelog("a_link",$log_dat);
                       }
 }
 
@@ -235,7 +227,7 @@ function edit_character() {
      require("config.php");
      $post_character = $_POST['character'];
      $post_level = $_POST['level'];
-     $post_reset = $_POST['resets'];
+     $post_reset = $_POST['reset'];
      $post_zen = $_POST['zen'];
      $post_gm = $_POST['gm'];
      $post_strength = $_POST['strength'];
@@ -282,7 +274,7 @@ function edit_character() {
                                      echo "$warning_green Character $post_character SuccessFully Edited!";
 
                                      $log_dat = "Character $_POST[character] Has Been <font color=#FF0000>Edited</font> with the next->Level:$_POST[level]|Reset:$_POST[reset]|Zen:$_POST[zen]|Strengh:$_POST[strength]|Agiltiy:$_POST[agility]|Vitality:$_POST[vitality]|Energy:$_POST[energy]|Command:$_POST[command]|LevelUpPoint:$_POST[leveluppoint]|ResTime:$_POST[restime]|PkLevel:$_POST[pklevel]|PkTime:$_POST[pktime]|MapNumber:$_POST[mapnumber]|MapX:$_POST[mapposx]|Mapy:$_POST[mapposy]";
-                                     writelog("edit_char",$log_dat);
+                                     writelog("a_edit_char",$log_dat);
                                  }
 
 }
@@ -292,8 +284,7 @@ function edit_character() {
 
 
 function edit_account($post_account,$post_pwd,$post_mode,$post_email,$post_squestion,$post_sanswer,$post_unblock_time,$post_block_date,$post_block_reason,$post_admin_level)
-{
-        require("config.php");
+{       require("config.php");
         $sql_account_check = mssql_query("SELECT memb___id FROM memb_info WHERE memb___id='$post_account'"); 
         $account_check = mssql_num_rows($sql_account_check); 
         $sql_online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$post_account'");
@@ -312,7 +303,7 @@ function edit_account($post_account,$post_pwd,$post_mode,$post_email,$post_sques
                                    echo "$warning_green Account $post_account SuccessFully Edited!";
 
                                    $log_dat = "Account $_POST[account] Has Been <font color=#FF0000>Edited</font> with the next->New Password:$_POST[new_pwd]|E-mail:$_POST[email]|Secret Question:$_POST[squestion]|Secret Answer:$_POST[sanswer]|Admin Level:$_POST[admin_level]";
-                                   writelog("edit_acc",$log_dat);
+                                   writelog("a_edit_acc",$log_dat);
                            }
 }
 
@@ -320,8 +311,7 @@ function edit_account($post_account,$post_pwd,$post_mode,$post_email,$post_sques
 
 
 function edit_acc_wh($post_account,$post_warehouse,$post_extwarehouse)
-{
-        require("config.php");
+{       require("config.php");
         $sql_account_check = mssql_query("SELECT memb___id FROM memb_info WHERE memb___id='$post_account'"); 
         $account_check = mssql_num_rows($sql_account_check); 
            if (empty($post_account) || $post_warehouse<0 || $post_extwarehouse<0){echo "$warning_red Error: Some Fields Were Left Blank!  <br><a href='javascript:history.go(-1)'>Go Back.</a>";}
@@ -331,7 +321,7 @@ function edit_acc_wh($post_account,$post_warehouse,$post_extwarehouse)
                                    echo "$warning_green Acc Ware House $post_account SuccessFully Edited!";
 
                                    $log_dat = "Account <b>$post_account</b> Has Been <font color=#FF0000>Edited</font> with the next-> Extra WH: $post_extwarehouse | WH: $post_warehouse";
-                                   writelog("edit_acc_wh",$log_dat);
+                                   writelog("a_edit_acc_wh",$log_dat);
                            }
 }
 
@@ -358,7 +348,7 @@ function delete_acc($account)
 			if($no_error == 1) {
 			echo "$warning_green Account $account SuccessFully Deleted!";
 			$log_dat = "Account $account Has Been <font color=#FF0000>Deleted</font>";
-			writelog("del_acc",$log_dat);
+			writelog("a_del_acc",$log_dat);
 			}
                   }
 }
@@ -366,8 +356,7 @@ function delete_acc($account)
 
 
 function sql_query($sql_query)
-{
-        require("config.php");
+{       require("config.php");
            if (empty($sql_query)){echo "$warning_red Error: Some Fields Were Left Blank!  <br><a href='javascript:history.go(-1)'>Go Back.</a>";}
              else{
 		   if(mssql_query("$sql_query"))
@@ -375,9 +364,10 @@ function sql_query($sql_query)
 		   else
 			{echo "$warning_red <b>Error:</b> $sql_query";}
 
-                   writelog("sql_query","<font color=#FF0000>SQL Query:</font> <b>$sql_query</b>");
+                   writelog("a_sql_query","<font color=#FF0000>SQL Query:</font> <b>$sql_query</b>");
                  }
 }
+
 
 
 
@@ -395,7 +385,7 @@ function add_vote($question,$answer1,$answer2,$answer3,$answer4,$answer5,$answer
 		echo "$warning_green Vote SuccessFully Added!";
 
 		$log_dat = "Vote: $question Has Been <font color=#FF0000>Added</font>";
-		writelog("vote",$log_dat);
+		writelog("a_vote",$log_dat);
 	}
 }
 
@@ -410,10 +400,9 @@ function edit_vote($id_vote,$question,$answer1,$answer2,$answer3,$answer4,$answe
 		echo "$warning_green $old_name Server SuccessFully Edited!";
 
 		$log_dat = "Vote: $id_vote ([question]='$question',[answer1]='$answer1',[answer2]='$answer2',[answer3]='$answer3',[answer4]='$answer4',[answer5]='$answer5',[answer6]='$answer6') Has Been <font color=#FF0000>Edited</font>";
-		writelog("vote",$log_dat);
+		writelog("a_vote",$log_dat);
 	}
 }
-
 
 
 
@@ -426,7 +415,47 @@ function delete_vote($id_vote)
 		echo "$warning_green Vote SuccessFully Deleted!";
 
 		$log_dat = "Id Vote: $id_vote Has Been <font color=#FF0000>Deleted</font>";
-		writelog("vote",$log_dat);
+		writelog("a_vote",$log_dat);
 	}
+}
+
+
+
+
+
+
+
+function rename_char($name_char,$rename_char)
+{        require("config.php");
+         $date = date('d-m-Y H:i');
+         $name_check = mssql_query("SELECT Name FROM Character WHERE name='$rename_char'"); 
+         $check_char = mssql_num_rows($name_check);
+         if (empty($name_char) ||  empty($rename_char)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+             elseif ($check_char > 0) {echo "$warning_red Character Is Already In Use, Please Choose Another!";}
+                  else {
+                         @mssql_query("Update AccountCharacter set [GameID1]='$rename_char' WHERE [GameID1]='$name_char'");
+                         @mssql_query("Update AccountCharacter set [GameID2]='$rename_char' WHERE [GameID2]='$name_char'");
+                         @mssql_query("Update AccountCharacter set [GameID3]='$rename_char' WHERE [GameID3]='$name_char'");
+                         @mssql_query("Update AccountCharacter set [GameID4]='$rename_char' WHERE [GameID4]='$name_char'");
+                         @mssql_query("Update AccountCharacter set [GameID5]='$rename_char' WHERE [GameID5]='$name_char'");
+                         @mssql_query("Update Character set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update CharPreview set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update Guild set [G_Master]='$rename_char' WHERE [G_Master]='$name_char'");
+                         @mssql_query("Update GuildMember set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update MEMB_INFO set [char_set]='$rename_char' WHERE [char_set]='$name_char'");
+                         @mssql_query("Update MMW_comment set [c_char]='$rename_char' WHERE [c_char]='$name_char'");
+                         @mssql_query("Update MMW_forum set [f_char]='$rename_char' WHERE [f_char]='$name_char'");
+                         @mssql_query("Update MMW_forum set [f_lostchar]='$rename_char' WHERE [f_lostchar]='$name_char'");
+                         @mssql_query("Update MMW_market set [item_char]='$rename_char' WHERE [item_char]='$name_char'");
+                         @mssql_query("Update OptionData set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update T_CGuid set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update T_FriendList set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+                         @mssql_query("Update T_FriendMail set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+                         @mssql_query("Update T_FriendMain set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         @mssql_query("Update T_WaitFriend set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+
+                         echo "$warning_green $name_char Rename to $rename_char SuccessFully Edited!";
+                         writelog("a_rename_char","<font color=#FF0000>$name_char</font> Renamed to <b>$rename_char</b>");
+                      }
 }
 ?>

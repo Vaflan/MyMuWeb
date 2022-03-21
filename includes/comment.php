@@ -13,8 +13,7 @@ $comm_num = mssql_num_rows($result);
 	<td align="right" height="25">[ <a href="#sign">'.mmw_lang_add_comment.'</a> ]</td></tr>
 	<tr><td colspan="2">
            ';
-  for ($i = 0; $i < $comm_num; $i++)
-  {
+  for($i = 0; $i < $comm_num; $i++) {
       $num = $i+1;
       $row = mssql_fetch_row($result);
       $time_c = date('H:i:s', $row[3]);
@@ -32,7 +31,7 @@ $comm_num = mssql_num_rows($result);
       }
 
 	if($char_info[4] != "" && $char_info[4] != " "){$avatar_c_e="<img src='$char_info[4]' width='110' alt='$row[1]' border='0'>";}
-	else {$avatar_c_e="<img src='images/no_avatar.jpg' width='110' alt='No Аватор' border='0'>";}
+	else {$avatar_c_e="<img src='".default_img('no_avatar.jpg')."' width='110' alt='No Аватор' border='0'>";}
 
 	if($char_info[2] == '0'){$country = "Not Set";}
 	else{$country = country($char_info[2]);}
@@ -44,7 +43,7 @@ $comm_num = mssql_num_rows($result);
 	$comment_c_num = mssql_num_rows($c_num_result);
 
 	if($_SESSION['mmw_status'] >= $mmw[comment_can_delete] || $_SESSION['char_set']==$row[1])
-	{$edit = "<form action='' method='post' name='delete$num'><input name='c_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='images/delete.png' border='0' onclick='delete$num.submit()'></a></form>";}
+	{$edit = "<form action='' method='post' name='delete$num'><input name='c_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='".default_img('delete.png')."' border='0' onclick='delete$num.submit()'></a></form>";}
 	else {$edit = '';}
 
       echo '
@@ -66,7 +65,7 @@ $comm_num = mssql_num_rows($result);
 
 
   if($c_add_close == 'yes') {
-	echo '<div align="center">'.mmw_lang_comment_close.'</div>';
+      echo '<div align="center">'.mmw_lang_comment_close.'</div>';
   }
   elseif(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {
 ?>

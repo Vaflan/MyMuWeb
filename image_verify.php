@@ -1,7 +1,6 @@
 <?PHP
 // Image Verify For MMW
-// Edited by Vaflan
-// Creator =Master=
+// Creator =Master=, Edit by Vaflan
 // generate 5 digit random Alpha
 
 session_start();

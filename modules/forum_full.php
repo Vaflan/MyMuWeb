@@ -43,15 +43,15 @@ $get_forum = mssql_query("SELECT f_id,f_char,f_title,f_text,f_date,f_lostchar,f_
 	$row_acc = mssql_fetch_row($result_acc);
 
 	if($row_acc[2] != "" && $row_acc[2] != " ") {$avatar_c_e="<img src='$row_acc[2]' width='110' alt='$row[1]' border='0'>";}
-	else {$avatar_c_e="<img src='images/no_avatar.jpg' width='110' alt='No Аватор' border='0'>";}
+	else {$avatar_c_e="<img src='".default_img('no_avatar.jpg')."' width='110' alt='No Аватор' border='0'>";}
 
 	if($_SESSION['mmw_status'] >= $mmw[forum_can_delete] || $_SESSION['char_set'] == $row[1])
-	{$delete = "<form action='?op=forum' method='post' name='delete_$row[0]'><input name='f_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='images/delete.png' border='0' onclick='delete_$row[0].submit()'></a></form>";}
+	{$delete = "<form action='?op=forum' method='post' name='delete_$row[0]'><input name='f_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='".default_img('delete.png')."' border='0' onclick='delete_$row[0].submit()'></a></form>";}
 	else {$delete = '';}
 	if($_SESSION['mmw_status'] >= $mmw[forum_can_status] && $row[6]==0)
-	{$close = "<form action='?op=forum' method='post' name='close_$row[0]'><input name='f_id_close' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_close."'><img src='images/close.png' border='0' onclick='close_$row[0].submit()'></a></form>";}
+	{$close = "<form action='?op=forum' method='post' name='close_$row[0]'><input name='f_id_close' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_close."'><img src='".default_img('close.png')."' border='0' onclick='close_$row[0].submit()'></a></form>";}
 	elseif($_SESSION['mmw_status'] >= $mmw[forum_can_status] && $row[6]==1)
-	{$close = "<form action='?op=forum' method='post' name='open_$row[0]'><input name='f_id_open' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_open."'><img src='images/open.png' border='0' onclick='open_$row[0].submit()'></a></form>";}
+	{$close = "<form action='?op=forum' method='post' name='open_$row[0]'><input name='f_id_open' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_open."'><img src='".default_img('open.png')."' border='0' onclick='open_$row[0].submit()'></a></form>";}
 	else {$close = '';}
 
 	if($row[6]==1) {$status = 'closed';}
@@ -65,7 +65,7 @@ $get_forum = mssql_query("SELECT f_id,f_char,f_title,f_text,f_date,f_lostchar,f_
 	<tr><td style="padding:2px;" width="110" valign="top" align="center">
 	<a href="?op=character&character='.$row[1].'">'.$avatar_c_e.'</a><br/>
 	'.mmw_lang_char.': <a href="?op=character&character='.$row[1].'" class="level'.$row_char[1].'"><b>'.$row[1].'</b></a></td>
-	<td style="padding:4px;" valign="top"><img src="images/f_'.$status.'.gif" align="top"> <big><b>'.$row[2].'</b></big> '.$delete.' '.$close.' <div class="sizedforum">'.bbcode($row[3]).'</div></td></tr>
+	<td style="padding:4px;" valign="top"><img src="'.default_img('f_'.$status.'.gif').'" align="top"> <big><b>'.$row[2].'</b></big> '.$delete.' '.$close.' <div class="sizedforum">'.bbcode($row[3]).'</div></td></tr>
 	</table>
       ';
 

@@ -1,4 +1,5 @@
 <?
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["edit_account_done"])){edit_account($_POST['account'],$_POST['new_pwd'],$_POST['mode'],$_POST['email'],$_POST['squestion'],$_POST['sanswer'],$_POST['unblock_time'],$_POST['block_date'],$_POST['block_reason'],$_POST['admin_level']);}
 if(isset($_POST["edit_acc_wh_done"])){edit_acc_wh($_POST['account'],$_POST['wh'],$_POST['extrawh']);}
 ?>

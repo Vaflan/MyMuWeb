@@ -1,5 +1,5 @@
 ﻿<?PHP
-// This is Language For MMW
+// This is Language For MMW 0.7
 // Default English Language By Vaflan
 
 define('mmw_lang_theme',"Theme");
@@ -63,6 +63,16 @@ define('mmw_lang_drops',"Drops");
 define('mmw_lang_type',"Type");
 define('mmw_lang_online',"Online");
 define('mmw_lang_offline',"Offline");
+define('mmw_lang_serv_online',"Online");
+define('mmw_lang_serv_offline',"Offline");
+define('mmw_lang_acc_online',"Online");
+define('mmw_lang_acc_offline',"Offline");
+define('mmw_lang_total_on_web',"Total On Web");
+define('mmw_lang_total_guest',"Total Guest");
+define('mmw_lang_hall_of_fame',"Hall Of Fame");
+define('mmw_lang_very_strong',"Very Strong");
+define('mmw_lang_best_gamer',"Best Gamer");
+define('mmw_lang_best_guild',"Best Guild");
 
 //Other in Body
 define('mmw_lang_new_account',"New Account");

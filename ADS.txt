@@ -6,8 +6,9 @@
 
 
 <center>
-<a href="http://mmw.clan.su">MyMuWeb Support</a><br>
-<a href="http://redangel.put.lv">RedAngel MuOnline</a><br>
+<a href="http://www.mymuweb.ru/">MyMuWeb Support</a><br>
+<a href="http://www.red-angel.ru/">RedAngel MuOnline</a><br>
+<a href="http://www.podriv.ru/">Podriv Project</a><br>
 </center>
 
 

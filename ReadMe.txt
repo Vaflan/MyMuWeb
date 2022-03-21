@@ -1,34 +1,31 @@
-//MyMuWeb ReadMe
+####################################
+# MyMuWeb ReadMe                   #
+# Thank For use MyMuWeb by Vaflan. #
+# http://www.mymuweb.ru/           #
+# vaflancher@inbox.lv              #
+####################################
 
-*****************
-Change AppServer.
-Opne File: C:\WINDOWS\php.ini
+
+*********************************************************************
+Update AppServer, Opne File: C:\WINDOWS\php.ini
 You need 576 cols - ;extension=php_mssql.dll - delete simbel ';'.
 And 942 cols - mssql.secure_connection = Off - 'Îff' change to 'În'.
-
-*****************
-Change MSSQL.
-Copy File 'WZ_MD5_MOD.dll'
+*********************************************************************
+Update MSSQL, Copy File 'WZ_MD5_MOD.dll'
 To: Microsoft SQL 'Server\MSSQL\Binn\'
-
-*****************
-Change config.php.
-Open 'root/config.php'
+*********************************************************************
+Change config.php, Open 'config.php'
 Change: 'IP Address', 'Login', 'Password', 'DataBase'
-
-*****************
-Change DataBase.
-Open Browser:
-http://localhost/install.php
-
-And if All Done, Please Delete 'install.php'.
+*********************************************************************
+Export DataBase, Open Browser:
+http://127.0.0.1/install.php
+*********************************************************************
 
 
-!----------------------!
+!-------------------------------------------------------------------!
 To Create Admin Need:
-Register in web, 
-and in MEMB_INFO table with your name, 
-change 'admin' Colums - '0' to '9'.
+Register in web, and in MEMB_INFO table with your name, 
+change 'mmw_stats' Colums - '0' to '9'.
 Level (3 - GM, 6 - Mini Admin, 9 - Admin)
 Admin Username = Your Login in Reg WebSite
 Admin Password = Your Password in Reg WebSite
@@ -42,9 +39,4 @@ add language_name.php to 'lang' folder.
 
 How to add Theme?
 add folder to 'themes', and change in config.php $mmw[theme].
-!----------------------!
-
-Thank For use MyMuWeb.
-by Vaflan
-http://mmw.clan.su
-vaflancher@inbox.lv
+!--------------------------------------------------------------------!

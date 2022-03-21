@@ -23,4 +23,7 @@ legend {color: #ff0000; background: #ffffff; font: 11px tahoma, verdana, geneva,
 .login_stats {border: 0px; padding: 0px;}
 .sized {max-width:600px; width:expression(this.scrollWidth > 600? "600px" : "auto" ); overflow:auto; overflow-y:hidden;}
 .copyright {font-size: 10px; color: #101010;}
+
+.news-table {border: 1px solid #898989; margin: 2px;}
+.news-body {border-top: 1px solid #BBBBBB;}
 /* --------------- */

@@ -1,7 +1,7 @@
 <?PHP
 // PHP Script By Vaflan
 // For MyMuWeb
-// Ver. 1.2
+// Ver. 1.7
 
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 ?>
@@ -17,8 +17,8 @@ $top_rank = clean_var(stripslashes($_POST['top_rank']));
             </tr></thead>
 <?
 if($mmw['gm']=='no'){$no_gm_in_top = "and ctlcode!='32' and ctlcode!='8'";}
-$result = mssql_query("SELECT TOP $top_rank Name,Class,Reset,cLevel,AccountID,PKcount from Character where pkcount>0 $no_gm_in_top order by pkcount desc");
-$row_num = mssql_num_rows($result);
+$result = @mssql_query("SELECT TOP $top_rank Name,Class,Reset,cLevel,AccountID,PKcount from Character where pkcount>0 $no_gm_in_top order by pkcount desc");
+$row_num = @mssql_num_rows($result);
 if($row_num==0) {
  echo '<tr><td colspan="6">'.mmw_lang_no_characters.'</td></tr>';
 }
@@ -33,8 +33,8 @@ $status = mssql_fetch_row($status_reults);
 $statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$row[4]'");
 $statusdc = mssql_fetch_row($statusdc_reults);
 
-if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src=./images/online.gif width=6 height=6>';}
-else {$status[0] ='<img src=./images/offline.gif width=6 height=6>';}
+if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src='.default_img('online.gif').' width=6 height=6>';}
+else {$status[0] ='<img src='.default_img('offline.gif').' width=6 height=6>';}
 
 echo "<tbody><tr>
             <td>$rank</td>

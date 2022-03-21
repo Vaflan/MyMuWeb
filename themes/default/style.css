@@ -10,6 +10,7 @@ a:hover {font-size: 12px; color: #000000; text-decoration: none;}
 .offline {font-size: 12px; color: #ff0000;}
 
 .block_bg {background:#FFFFFF; padding:6px;}
+.hr-online-acc {border-top: 1px solid #000000;}
 .sizedforum {max-width:480px; width:expression(this.scrollWidth > 480? "480px" : "auto" ); overflow:auto; overflow-y:hidden;}
 .sizedcomment {max-width:370px; width:expression(this.scrollWidth > 370? "370px" : "auto" ); overflow:auto; overflow-y:hidden;}
 .info-table {background: #999999; color: #FFFFFF; text-align: center;}

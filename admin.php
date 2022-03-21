@@ -1,24 +1,27 @@
 <?PHP
 // This is modified Admin area
-// Creatro =Master=, Editor Vaflan
-// For MyMuWeb
+// Creator =Master=, Edit by Vaflan
+// For MyMuWeb Engine
 
 session_start();
 header("Cache-control: private");
 header("Cache-control: max-age=3600");
 include("config.php");
-include("admin/inc/query.php");
 include("includes/sql_check.php");
 include("includes/xss_check.php");
 include("includes/format.php");
 include("admin/inc/functions.php");
-writelog("check_ip","<b>".urldecode($_SERVER["HTTP_REFERER"])."</b>");
+
+// Check Admin Panel
+$mmw[admin_check] = $_SESSION['a_admin_level'];
+writelog("a_check_admin_panel","<b>Admin Panel: ".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link href="images/admin.css" rel="stylesheet" type="text/css" />
-<title>MyMuWeb Administrator</title>
+	<title>MyMuWeb Administrator</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link href="images/admin.css" rel="stylesheet" type="text/css">
+	<script language="javascript">var mmw_version = '<?echo $mmw[version];?>';</script>
 </head>
 <body>
 <div align="center">
@@ -39,6 +42,7 @@ writelog("check_ip","<b>".urldecode($_SERVER["HTTP_REFERER"])."</b>");
     </tr>
     <tr>
       <td align="center" height="20">
+<a href="?op=home">Home</a> | 
 <?if($_SESSION[a_admin_level] > 6){?>
 <a href="?op=sqlquery">SQL Query</a> | 
 <a href="?op=server">Server</a> | 
@@ -46,20 +50,22 @@ writelog("check_ip","<b>".urldecode($_SERVER["HTTP_REFERER"])."</b>");
 <a href="?op=news">News</a> | 
 <a href="?op=downloads">Downloads</a> | 
 <a href="?op=votes">Votes</a> | 
-<?}?>
+<a href="?op=ads">ADS</a> | 
+<a href="?op=rename">Rename Character</a>
+<?}?><br>
 <a href="?op=char">Search Character</a> | 
 <a href="?op=acc">Search Account</a> | 
 <a href="?op=acclist">Account List</a> | 
-<a href="?op=findip">Find Ip</a> | 
+<a href="?op=banip">Ban IP</a> | 
+<a href="?op=findip">Find IP</a> | 
 <a href="?op=logs">Logs</a> </td>
     </tr>
     <tr>
       <td align="center">
-	<br />
+	<br>
 <?
-if(!isset($_GET['op'])){include("admin/home.php");}
-elseif(is_file("admin/$_GET[op].php")){include("admin/$_GET[op].php");}
-else{echo "<br><b>Not Find!</b>";}
+if(is_file("admin/$_GET[op].php")) {include("admin/$_GET[op].php");}
+else {include("admin/home.php");}
 ?>
       </td>
     </tr>
@@ -68,25 +74,20 @@ else{echo "<br><b>Not Find!</b>";}
 <?}else{?>
 
 <script language='Javascript'>
-function check_admin_form()
-{
-if ( document.admin_form.adminusername.value == '')
-{
-alert('Please Enter Admin Username.');
-return false;
-}
-if ( document.admin_form.adminpassword.value == '')
-{
-alert('Please Enter Admin Password.');
-return false;
-}
-if ( document.admin_form.securitycode.value == '')
-{
-alert('Please Enter Admin SecurityCode.');
-return false;
-}
-//return false;
-document.admin_form.submit();
+function check_admin_form() {
+ if(document.admin_form.adminusername.value == '') {
+  alert('Please Enter Admin Username.');
+  return false;
+ }
+ if(document.admin_form.adminpassword.value == '') {
+  alert('Please Enter Admin Password.');
+  return false;
+ }
+ if(document.admin_form.securitycode.value == '') {
+  alert('Please Enter Admin SecurityCode.');
+  return false;
+ }
+ document.admin_form.submit();
 }
 </script>
 <p>&nbsp;</p>
@@ -122,7 +123,7 @@ document.admin_form.submit();
 
 <?}?>
 
-<br><span class="copyright">MyMuWeb. Design and PHP+SQL by Vaflan.</span>
+<br><span class="copyright">MyMuWeb <?echo $mmw[version];?>. Design and PHP+SQL by Vaflan.</span>
 </div>
 </body>
 </html>

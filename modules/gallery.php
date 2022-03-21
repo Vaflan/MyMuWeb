@@ -6,6 +6,12 @@
 
  $dir = "gallery/";
 
+function byteConvert($bytes) {
+	$s = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
+	$e = floor(log($bytes)/log(1024));
+	return sprintf('%.2f '.$s[$e], ($bytes/pow(1024, floor($e))));
+}
+
 // Add Image
 if(isset($_GET[w]) && isset($_SESSION['char_set'])) {
  if(isset($_FILES['image'])) {
@@ -123,13 +129,13 @@ if($dh = opendir($dir)) {
 		}
 
 		if($_SESSION['mmw_status'] >= $mmw[image_can_delete] || $_SESSION['char_set'] == $author)
-		{$edit = "<form action='' method='post' name='delete_$file_name'><input name='id_delete' type='hidden' value='$file_name'><a href='javascript://' title='".mmw_lang_delete."'><img src='images/delete.png' border='0' onclick='delete_$file_name.submit()'></a></form>";}
+		{$edit = "<form action='' method='post' name='delete_$file_name'><input name='id_delete' type='hidden' value='$file_name'><a href='javascript://' title='".mmw_lang_delete."'><img src='".default_img("delete.png")."' border='0' onclick='delete_$file_name.submit()'></a></form>";}
 		else {$edit = '';}
 
 		$file_list = $file_list . "<table border='0' cellpadding='0' cellspacing='0' width='100%' class='aBlock'>
 			<tr><td style='padding:2px;' width='160' align='center'>
 			<a href='$url' target='_blank' title='".mmw_lang_image_size.": $width x $height'><img src='$url' border='0' height='$sizeh' width='$sizew'></a></td>
-			<td style='padding:4px;' valign='top'><a href='$url' target='_blank'><big><b>$name</b></big></a> $edit<br>".mmw_lang_author.": <a href='?op=character&character=$author' class='level".$char_info[$author][1]."'>$author</a><br>".mmw_lang_image_comment.": $comment<br>".mmw_lang_date.": ".date('d.m.Y H:i:s',$date)."<br>".mmw_lang_image_size.": $width x $height<br>".mmw_lang_file_size.": $size Bytes</td></tr>
+			<td style='padding:4px;' valign='top'><a href='$url' target='_blank'><big><b>$name</b></big></a> $edit<br>".mmw_lang_author.": <a href='?op=character&character=$author' class='level".$char_info[$author][1]."'>$author</a><br>".mmw_lang_image_comment.": $comment<br>".mmw_lang_date.": ".date('d.m.Y H:i:s',$date)."<br>".mmw_lang_image_size.": $width x $height<br>".mmw_lang_file_size.": ".byteConvert($size)."</td></tr>
 			</table> \n " . $rowbr;
 	  }
      }

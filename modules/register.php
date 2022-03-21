@@ -2,61 +2,52 @@
 if(isset($_POST["registration"])){include("includes/character.class.php");option::register(); echo $rowbr;}
 
 for($i=0; $i<139; ++$i) {
-	$country = country($i);
-	if($i == $_POST[country]){$selected_country=" selected";} else{$selected_country="";}
-	$select_country = $select_country . "<option value='$i'$selected_country>$country</option>";
- }
+ $country = country($i);
+ if($i == $_POST[country]){$selected_country=" selected";} else{$selected_country="";}
+ $select_country .= "<option value='$i'$selected_country>$country</option>";
+}
 ?>
 <script language="Javascript" type="text/javascript">
-function check_register_form()
-{
-if ( document.register_from.account.value == "")
-{
-alert("Please enter Account.");
-return false;
-}
-if ( document.register_from.password.value == "")
-{
-alert("Please enter Password.");
-return false;
-}
-if ( document.register_from.repassword.value == "")
-{
-alert("Please enter Repeat password.");
-return false;
-}
-if ( document.register_from.email.value == "")
-{
-alert("Please enter E-mail address.");
-return false;
-}
-if ( document.register_from.question.value == "")
-{
-alert("Please enter Secret question.");
-return false;
-}
-if ( document.register_from.answer.value == "")
-{
-alert("Please enter Secret answer.");
-return false;
-}
-if ( document.register_from.country.value == "null")
-{
-alert("Please select Country.");
-return false;
-}
-if ( document.register_from.verifyinput.value == "")
-{
-alert("Please enter Verify input.");
-return false;
-}
-//return false;
-document.register_from.submit();
-return false;
+function check_register_form() {
+ if( document.register_from.account.value == "") {
+  alert("Please enter Account.");
+  return false;
+ }
+ if( document.register_from.password.value == "") {
+  alert("Please enter Password.");
+  return false;
+ }
+ if( document.register_from.repassword.value == "") {
+  alert("Please enter Repeat password.");
+  return false;
+ }
+ if( document.register_from.email.value == "") {
+  alert("Please enter E-mail address.");
+  return false;
+ }
+ if( document.register_from.question.value == "") {
+  alert("Please enter Secret question.");
+  return false;
+ }
+ if( document.register_from.answer.value == "") {
+  alert("Please enter Secret answer.");
+  return false;
+ }
+ if( document.register_from.country.value == "null") {
+  alert("Please select Country.");
+  return false;
+ }
+ if( document.register_from.verifyinput.value == "") {
+  alert("Please enter Verify input.");
+  return false;
+ }
+ document.register_from.submit();
+ return false;
 }
 </script>
 
-<?if($_GET['terms'] == 'agree') {
+<?
+if($_GET['terms'] == 'agree') {
 echo '<form action="" method="post" name="register_from">
                     <table align="center" width="300" border="0" class="sort-table" cellspacing="0" cellpadding="0">
                       <tr>
@@ -97,22 +88,28 @@ echo '<form action="" method="post" name="register_from">
                       </tr>
                       <tr>
                         <td align="right">'.mmw_lang_security_code.'</td>
-                        <td><input name="verifyinput" type="text" size="6" maxlength="8"> <img src="image_verify.php" align="center" id="secImg"> <img src="images/refresh.gif" align="center" onclick="document.getElementById(\'secImg\').src=\'image_verify.php?refresh=\'+Math.random();" title="'.mmw_lang_renew.'"></td>
+                        <td><input name="verifyinput" type="text" size="6" maxlength="8"> <img src="image_verify.php" align="center" id="secImg"> <img src="'.default_img('refresh.gif').'" align="center" onclick="document.getElementById(\'secImg\').src=\'image_verify.php?refresh=\'+Math.random();" title="'.mmw_lang_renew.'"></td>
                       </tr>
                       <tr>
                         <td colspan="2" align="center"><input type="submit" name="Submit" value="'.mmw_lang_new_account.'" onclick="return check_register_form()"> <input name="registration" type="hidden" value="registration"> <input type="reset" value="'.mmw_lang_renew.'"></td>
                       </tr>
                     </table>
                   </form>';
-}else{?>
+} else {
+if(is_file("lang/$_SESSION[set_lang]_terms.txt")) {$terms_file = "lang/$_SESSION[set_lang]_terms.txt";}
+else {$terms_file = "lang/English_terms.txt";}
+$terms_read = fopen($terms_file, 'r');
+$terms = fread($terms_read, filesize($terms_file));
+fclose($terms_read);
+?>
 <form action="?op=register&terms=agree" method="post" name="terms">
 <table width="200" border="0" cellspacing="2" cellpadding="0" align="center">
   <tr>
-    <td align="center"><h2><?echo mmw_lang_terms_of_agreement;?></h2></td>
+    <td align="center"><b><big><?echo mmw_lang_terms_of_agreement;?></big></b></td>
   </tr>
   <tr>
     <td align="center">
-	<textarea name="terms" cols="60" rows="20" readonly="readonly"><?include("modules/terms.txt");?></textarea>
+	<textarea name="terms" cols="60" rows="20"><?echo substr($terms,3);?></textarea>
 	<?echo $rowbr;?>
 	<input type="submit" value="<?echo mmw_lang_i_agree;?>"> <input type="reset" value="<?echo mmw_lang_i_dont;?>" onclick="top.location='?op=info';">
     </td>

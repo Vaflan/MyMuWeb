@@ -38,9 +38,16 @@ if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$sel
 <?echo $rowbr;?>
 
 <center>
-<? 
-if(!isset($_POST['sort'])){include("modules/rankings/character.php");}
-elseif(is_file("modules/rankings/$_POST[sort].php")){include("modules/rankings/$_POST[sort].php");}
-else{include("modules/rankings/character.php");}
+<?
+$mmw[ranking_sort] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_POST[sort]);
+if(is_file("modules/rankings/$mmw[ranking_sort].php")) {
+ include("modules/rankings/$mmw[ranking_sort].php");
+}
+elseif(is_file("modules/rankings/$mmw[ranking_sort].mmw")) {
+ mmw("modules/rankings/$mmw[ranking_sort].mmw");
+}
+else {
+ include("modules/rankings/character.php");
+}
 ?>
 </center>

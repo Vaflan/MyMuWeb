@@ -14,8 +14,8 @@ $status_sql = mssql_query("select connectstat,CONNECTTM from MEMB_STAT where mem
 $status_row = mssql_fetch_row($status_sql);
 $statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$info[7]'");
 $statusdc = mssql_fetch_row($statusdc_reults);
-if($statusdc[0]==$info[0] && $status_row[0]==1){$login_status='<span class="online">'.mmw_lang_online.'</span>';}
-else{$login_status='<span class="offline">'.mmw_lang_offline.'</span>';}
+if($statusdc[0]==$info[0] && $status_row[0]==1){$login_status='<span class="online">'.mmw_lang_acc_online.'</span>';}
+else{$login_status='<span class="offline">'.mmw_lang_acc_offline.'</span>';}
 
 $guildm_results = mssql_query("Select G_name from GuildMember where name='$info[0]'");
 $guildm = mssql_fetch_row($guildm_results);
@@ -24,7 +24,7 @@ else {
 $guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
 $guild_row = mssql_fetch_row($guild_results);
 $logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<a class='helpLink' href='javascript://' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
+$guild_end = "<img src='decode.php?decode=$logo' height='10' width='10' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
 }
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
@@ -34,10 +34,10 @@ elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen = mmw_la
 else {$send_zen = mmw_lang_guest_must_be_logged_on;}
 ?>
 
-      <table width="380" border="0" cellpadding="0" cellspacing="0" align="center">
+      <table width="400" border="0" cellpadding="0" cellspacing="0" align="center">
        <tr>
 	<td valign="top">
-	<table width="240" class="sort-table" cellpadding="0" cellspacing="0">
+	<table class="sort-table" cellpadding="0" cellspacing="0">
           <tr>
             <td align="right"><?echo mmw_lang_character;?>:</td>
             <td><span class="level<?echo $info[16];?>"><?echo $info[0];?></span></td>
@@ -97,7 +97,7 @@ else {$send_zen = mmw_lang_guest_must_be_logged_on;}
 	</table>
 	</td>
 	<td valign="top" align="center">
-		<?echo char_class($info[1],img);?><br><br>
+		<?echo "<img src='".default_img(char_class($info[1],img))."' title='".char_class($info[1],full)."'>";?><br><br>
 		<a href='?op=user&u=mail&to=<?echo $info[0];?>'><b><?echo mmw_lang_send_message;?></b></a><br/>
 		<?echo $profile;?>
 		<div class="div-menu-out" onclick="expandit('menu_1')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_send_zen;?></div>

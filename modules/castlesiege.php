@@ -115,7 +115,7 @@ else {echo "<tr><td>".mmw_lang_no_guilds."</td></tr>";}?>
 
 </td>
 <td width="200" align="right" valign="top">
-<img src="images/castlesiege.png" alt="Castle Siege">
+<img src="<?echo default_img("castlesiege.png");?>" title="Castle Siege">
 </td>
 </tr></table>
 <?

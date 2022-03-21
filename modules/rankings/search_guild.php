@@ -1,11 +1,11 @@
 <?PHP
 // PHP Script By Vaflan
 // For MyMuWeb
-// Ver. 1.6
+// Ver. 1.7
 
 $search = clean_var(stripslashes($_POST['search']));
-$result = mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");
-$row_num = mssql_num_rows($result);
+$result = @mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");
+$row_num = @mssql_num_rows($result);
 ?>
 <br><?echo mmw_lang_search_guild_results;?></br><br>&nbsp;</br>
            <table class="sort-table" cellspacing="0" cellpadding="0" border="0">
@@ -22,8 +22,7 @@ if($row_num==0) {
  echo '<tr><td colspan="6">'.mmw_lang_cant_find.'</td></tr>';
 }
 
-for($i=0;$i < $row_num;++$i)
-     {
+for($i=0;$i < $row_num;++$i) {
           $rank = $i+1;
           $row = mssql_fetch_row($result);
           if($row[2]==NULL){$row[2]="0";}
@@ -39,6 +38,6 @@ echo "<tbody><tr>
             <td>$row2[0]</td>
             <td align='center'><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=10 width=10 broder=0></a></td>
             </tr></tbody>";    
-       }
+}
 ?>
 </table>

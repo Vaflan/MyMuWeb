@@ -1,4 +1,5 @@
 <?PHP
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["edit_news_done"])) {edit_news($_POST['edit_news_title'],$_POST['edit_news_autor'],$_POST['category'],$_POST['news_id'],$_POST['edit_news_row_1'],$_POST['edit_news_row_2'],$_POST['edit_news_row_3']);}
 if(isset($_POST["delete_news"])) {delete_news($_POST['delete_news']);}
 if(isset($_POST["add_new_news"])) {add_new_news($_POST['news_title'],$_POST['category'],$_POST['news_row_1'],$_POST['news_row_2'],$_POST['news_row_3'],$_SESSION['a_admin_login']);}					  

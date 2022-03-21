@@ -1,6 +1,6 @@
 <?if($acc_online_check=="0"){
 
-if(empty($char_set) || $char_set==""){jump('?op=user');}
+if(empty($char_set)) {jump('?op=user');}
 
 if(isset($_POST["reset_char"])) {require("includes/character.class.php");option::reset($char_set); echo $rowbr;}
 if(isset($_POST["stats_char"])) {require("includes/character.class.php");option::add_stats($char_set); echo $rowbr;}
@@ -22,7 +22,7 @@ else {
 $guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
 $guild_row = mssql_fetch_row($guild_results);
 $logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<span class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></span> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
+$guild_end = "<img src='decode.php?decode=$logo' height='10' width='10' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
 	if($mmw[mix_cs_memb_reset]=="yes") {
 	$cs_query = mssql_query("SELECT owner_guild,money FROM MuCastle_DATA");
 	$cs_row = mssql_fetch_row($cs_query);
@@ -34,12 +34,12 @@ $guild_end = "<span class='helpLink' title='<img src=decode.php?decode=$logo hei
 	}
 }
 
-if($info[1] >= 0 && $info[1] <= 2) {$reset_level = $mmw[reset_level_dw];}
-if($info[1] >= 16 && $info[1] <= 18) {$reset_level = $mmw[reset_level_dk];}
-if($info[1] >= 32 && $info[1] <= 34) {$reset_level = $mmw[reset_level_elf];}
-if($info[1] >= 48 && $info[1] <= 50) {$reset_level = $mmw[reset_level_mg];}
-if($info[1] >= 64 && $info[1] <= 66) {$reset_level = $mmw[reset_level_dl];}
-if($info[1] >= 80 && $info[1] <= 82) {$reset_level = $mmw[reset_level_sum];}
+if($info[1] >= 0 && $info[1] <= 15) {$reset_level = $mmw[reset_level_dw];}
+if($info[1] >= 16 && $info[1] <= 31) {$reset_level = $mmw[reset_level_dk];}
+if($info[1] >= 32 && $info[1] <= 47) {$reset_level = $mmw[reset_level_elf];}
+if($info[1] >= 48 && $info[1] <= 63) {$reset_level = $mmw[reset_level_mg];}
+if($info[1] >= 64 && $info[1] <= 79) {$reset_level = $mmw[reset_level_dl];}
+if($info[1] >= 80 && $info[1] <= 95) {$reset_level = $mmw[reset_level_sum];}
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
 
@@ -56,7 +56,7 @@ $add_stats = 'Strength <input name="str" type="text" size="5" maxlength="5"><br>
 $add_stats = $add_stats.'Agility <input name="agi" type="text" size="5" maxlength="5"><br>';
 $add_stats = $add_stats.'Vitality <input name="vit" type="text" size="5" maxlength="5"><br>';
 $add_stats = $add_stats.'Energy <input name="ene" type="text" size="5" maxlength="5"><br>';
-if($info[1]==64){$add_stats = $add_stats.'Command <input name="com" type="text" size="5" maxlength="5"><br>';}
+if($info[1] >= 64 && $info[1] <= 79){$add_stats = $add_stats.'Command <input name="com" type="text" size="5" maxlength="5"><br>';}
 
 if($mmw[mix_cs_memb_reset]=="yes" && $cs_row[0]==$guildm[0]) {$edited_res_money = $mmw['reset_money'] - ($cs_memb_reset_zen * 1000000);}
 else {$edited_res_money = $mmw['reset_money'];}
@@ -158,7 +158,7 @@ if($mmw[change_class] == 'yes') {
 	</table>
 	</td>
 	<td valign="top" align="center">
-		<?echo char_class($info[1],img);?><br><br>
+		<?echo "<img src='".default_img(char_class($info[1],img))."' title='".char_class($info[1],full)."'>";?><br><br>
 		<?if($mmw[reset] == 'yes') {?>
 		<div class="div-menu-out" onclick="expandit('menu_1')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_reset;?></div>
 		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $reset;?></div><?}?>

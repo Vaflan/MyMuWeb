@@ -1,6 +1,3 @@
-
-
-
 if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_comment]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
 drop table [dbo].[MMW_comment]
 
@@ -44,6 +41,22 @@ CREATE TABLE [dbo].[MMW_links] (
 
 
 
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_market]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[MMW_market]
+
+CREATE TABLE [dbo].[MMW_market] (
+	[item_id] [int] IDENTITY (1, 1) NOT NULL ,
+	[item_char] [nvarchar] (10) NULL ,
+	[item_category] [int] NULL ,
+	[item_group] [int] NULL ,
+	[item_style] [int] NULL ,
+	[item_zen] [nvarchar] (100) NULL ,
+	[item_hex] [nvarchar] (50) NULL ,
+	[item_date] [int] NULL 
+) ON [PRIMARY]
+
+
+
 if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_news]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
 drop table [dbo].[MMW_news]
 
@@ -56,6 +69,19 @@ CREATE TABLE [dbo].[MMW_news] (
 	[news_row_3] [text] NULL ,
 	[news_autor] [nvarchar] (100) NULL ,
 	[news_date] [nvarchar] (100) NULL 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_online]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [dbo].[MMW_online]
+
+CREATE TABLE [dbo].[MMW_online] (
+	[online_ip] [nvarchar] (15) NULL ,
+	[online_date] [nvarchar] (11) NULL ,
+	[online_url] [text] NULL ,
+	[online_char] [nvarchar] (10) NULL ,
+	[online_agent] [text] NULL 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 

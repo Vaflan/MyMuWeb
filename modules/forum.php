@@ -62,12 +62,12 @@ $total_post = mssql_num_rows($result);
       else {$lost_comm = '';}
 
 	if($_SESSION['mmw_status'] >= $mmw[forum_can_delete] || $_SESSION['char_set'] == $row[1])
-	{$delete = "<form action='' method='post' name='delete_$row[0]'><input name='f_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='images/delete.png' border='0' onclick='delete_$row[0].submit()'></a></form>";}
+	{$delete = "<form action='' method='post' name='delete_$row[0]'><input name='f_id_delete' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_delete."'><img src='".default_img('delete.png')."' border='0' onclick='delete_$row[0].submit()'></a></form>";}
 	else {$delete = '';}
 	if($_SESSION['mmw_status'] >= $mmw[forum_can_status] && $row[5]==0)
-	{$close = "<form action='' method='post' name='close_$row[0]'><input name='f_id_close' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_close."'><img src='images/close.png' border='0' onclick='close_$row[0].submit()'></a></form>";}
+	{$close = "<form action='' method='post' name='close_$row[0]'><input name='f_id_close' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_close."'><img src='".default_img('close.png')."' border='0' onclick='close_$row[0].submit()'></a></form>";}
 	elseif($_SESSION['mmw_status'] >= $mmw[forum_can_status] && $row[5]==1)
-	{$close = "<form action='' method='post' name='open_$row[0]'><input name='f_id_open' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_open."'><img src='images/open.png' border='0' onclick='open_$row[0].submit()'></a></form>";}
+	{$close = "<form action='' method='post' name='open_$row[0]'><input name='f_id_open' type='hidden' value='$row[0]'><a href='javascript://' title='".mmw_lang_open."'><img src='".default_img('open.png')."' border='0' onclick='open_$row[0].submit()'></a></form>";}
 	else {$close = '';}
 
 	if($row[5]==1) {$status = 'closed';}
@@ -78,7 +78,7 @@ $total_post = mssql_num_rows($result);
 
       echo '
         <tr>
-	<td><a href="?forum='.$row[0].'"><img src="images/f_'.$status.'.gif" align="top" height="16"> '.$row[2].'</a> '.$delete.' '.$close.'</td>
+	<td><a href="?forum='.$row[0].'"><img src="'.default_img('f_'.$status.'.gif').'" align="top" height="16"> '.$row[2].'</a> '.$delete.' '.$close.'</td>
         <td align="center"><a href="?forum='.$row[0].'">'.$comm_num.'</a></td>
         <td align="center"><a href="?op=character&character='.$row[1].'" class="level'.$char_info[$row[1]][1].'">'.$row[1].'</a></td>
 	<td align="center">'.$lost_comm.'</td>

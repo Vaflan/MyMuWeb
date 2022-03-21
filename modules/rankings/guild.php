@@ -1,7 +1,7 @@
 <?PHP
 // PHP Script By Vaflan
 // For MyMuWeb
-// Ver. 1.4
+// Ver. 1.7
 
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 ?>
@@ -16,14 +16,14 @@ $top_rank = clean_var(stripslashes($_POST['top_rank']));
            <td><?echo mmw_lang_logo;?></td>
            </tr></thead>
 <?
-$result = mssql_query("SELECT TOP $top_rank G_Name,G_Score,G_Master,G_Mark FROM Guild WHERE G_Name!='$mmw[gm_guild]' order by G_score desc");
-$row_num = mssql_num_rows($result);
+$result = @mssql_query("SELECT TOP $top_rank G_Name,G_Score,G_Master,G_Mark FROM Guild WHERE G_Name!='$mmw[gm_guild]' order by G_score desc");
+$row_num = @mssql_num_rows($result);
 if($row_num==0) {echo '<tr><td colspan="6">'.mmw_lang_no_guilds.'</td></tr>';}
 
 for($i=0;$i < $row_num;++$i)
      {
 	$row = mssql_fetch_row($result);
-	if($row[1]==NULL || $row[1]<0)
+	if(empty($row[1]) || $row[1]<0)
 		{mssql_query("UPDATE guild SET [G_Score]='0' WHERE G_Name='$row[0]'");$row[1]="0";}
 	$rank = $i+1;
 	$logo = urlencode(bin2hex($row[3]));
@@ -36,7 +36,7 @@ echo "<tbody><tr>
             <td>$row[1]</td>
             <td><a href='?op=character&character=$row[2]'>$row[2]</a></td>
             <td>$members</td>
-            <td><a class='helpLink' href='javascript://' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height=20 width=20 broder=0></a></td>
+            <td><img src='decode.php?decode=$logo' height='20' width='20' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'></a></td>
             </tr></tbody>";    
        }
 ?>

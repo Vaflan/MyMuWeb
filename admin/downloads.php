@@ -1,4 +1,5 @@
 <?PHP
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["edit_link_done"])) {edit_link($_POST['link_name'],$_POST['link_address'],$_POST['link_description'],$_POST['link_size'],$_POST['link_id']);}
 if(isset($_POST["delete_link"])) {delete_link($_POST["delete_link"]);}
 if(isset($_POST["new_link"])) {new_link($_POST['link_name'],$_POST['link_address'],$_POST['link_description'],$_POST['link_size']);}

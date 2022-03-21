@@ -8,7 +8,6 @@
 	<script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
 	<script type="text/javascript" src="scripts/textfader.js">//script_by_vaflan</script>
 	<script type="text/javascript" src="scripts/jquery.js">//script_by_vaflan</script>
-	<link href="images/main/style.css" rel="stylesheet" type="text/css" media="all">
 	<link href="<?echo $mmw[theme_dir];?>/style.css" rel="stylesheet" type="text/css" media="all">
 	<link href="<?echo $mmw[theme_dir];?>/favicon.ico" rel="shortcut icon">
 </head>

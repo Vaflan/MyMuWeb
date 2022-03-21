@@ -7,12 +7,12 @@ $account_get = clean_var(stripslashes($_GET[profile]));
 $profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,mmw_status from memb_info where memb___id='$account_get'");
 $profile_info = mssql_fetch_row($profile_sql);
 $profile_info_check = mssql_num_rows($profile_sql);
-if($profile_info[2] == '' || $profile_info[2] == ' ') {$profile_info[2] = mmw_lang_no_set;}
-if($profile_info[5] == '' || $profile_info[5] == ' ') {$profile_info[5] = mmw_lang_no_set;}
-if($profile_info[6] == '' || $profile_info[6] == ' ') {$profile_info[6] = mmw_lang_no_set;}
-if($profile_info[7] == '' || $profile_info[7] == ' ') {$profile_info[7] = mmw_lang_no_set;}
-if($profile_info[8] == '' || $profile_info[8] == ' ') {$profile_info[8] = mmw_lang_no_set;}
-if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "images/no_avatar.jpg";}
+if(empty($profile_info[2]) || $profile_info[2] == ' ') {$profile_info[2] = mmw_lang_no_set;}
+if(empty($profile_info[5]) || $profile_info[5] == ' ') {$profile_info[5] = mmw_lang_no_set;}
+if(empty($profile_info[6]) || $profile_info[6] == ' ') {$profile_info[6] = mmw_lang_no_set;}
+if(empty($profile_info[7]) || $profile_info[7] == ' ') {$profile_info[7] = mmw_lang_no_set;}
+if(empty($profile_info[8]) || $profile_info[8] == ' ') {$profile_info[8] = mmw_lang_no_set;}
+if(empty($profile_info[3]) || $profile_info[3] == ' ') {$profile_info[3] = default_img('no_avatar.jpg');}
 ?>
 
 <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'> 
@@ -45,19 +45,19 @@ if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "ima
           <td><?echo time_format($profile_info[10],"d M Y, H:i");?></td>
 	</tr>
 	<tr>
-          <td><img src="images/im/im_yahoo.gif"> Yahoo!:</td>
+          <td><img src="<?echo default_img('im/im_yahoo.gif');?>"> Yahoo!:</td>
           <td><?echo $profile_info[5];?></td>
 	</tr>
 	<tr>
-          <td><img src="images/im/im_msn.gif"> MSN:</td>
+          <td><img src="<?echo default_img('im/im_msn.gif');?>"> MSN:</td>
           <td><?echo $profile_info[6];?></td>
 	</tr>
 	<tr>
-          <td><img src="images/im/im_icq.gif"> ICQ:</td>
+          <td><img src="<?echo default_img('im/im_icq.gif');?>"> ICQ:</td>
           <td><?echo $profile_info[7];?></td>
 	</tr>
 	<tr>
-          <td><img src="images/im/im_skype.gif"> Skype:</td>
+          <td><img src="<?echo default_img('im/im_skype.gif');?>"> Skype:</td>
           <td><?echo $profile_info[8];?></td>
 	</tr>
 	<tr>
@@ -92,8 +92,8 @@ for($i=0; $i<$row_num; ++$i) {
 	$statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$account_get'");
 	$statusdc = mssql_fetch_row($statusdc_reults);
 
-	if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src=./images/online.gif width=6 height=6>';}
-	else {$status[0] ='<img src=./images/offline.gif width=6 height=6>';}
+	if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src='.default_img('online.gif').' width=6 height=6>';}
+	else {$status[0] ='<img src='.default_img('offline.gif').' width=6 height=6>';}
 
 echo 	"<tbody><tr>
             <td>$rank</td>

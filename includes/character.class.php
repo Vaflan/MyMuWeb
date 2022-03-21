@@ -18,7 +18,6 @@ function register() {
        $gender = stripslashes($_POST['gender']);
        $fullname = stripslashes($_POST['fullname']);
        $referral = stripslashes($_SESSION['referral']);
-       $date = date('m/d/Y H:i:s', time());
        $ip = $_SERVER['REMOTE_ADDR'];
 
                       require("config.php");
@@ -80,14 +79,14 @@ function register() {
 
                                if($error!=1) {     
 				if($mmw['md5'] == yes) {
-				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
+				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
 				}
 				elseif($mmw['md5'] == no) {
-				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account','$password','$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
-				 mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
+				 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account','$password','$fullname','1234','$email',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
+				 mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0')");                    
 				}
 				 $warehouse_items = '0x'.free_hex($mmw[free_hex],120);
-				 mssql_query("INSERT INTO warehouse (AccountID,Items,EndUseDate,DbVersion,extMoney) VALUES ('$account',$warehouse_items,'$date','2','$mmw[zen_for_acc]')");                    
+				 mssql_query("INSERT INTO warehouse (AccountID,Items,EndUseDate,DbVersion,extMoney) VALUES ('$account',$warehouse_items,GETDATE(),'2','$mmw[zen_for_acc]')");                    
 				 echo $okey_start . mmw_lang_account_created . $okey_end;
                                }
                        }
@@ -113,12 +112,12 @@ function reset($charactername) {
 		$character_check = mssql_num_rows($result);
 		$row = mssql_fetch_row($result);
 
-			if($row[4] >= 0 && $row[4] <= 2) {$reset_level = $mmw[reset_level_dw];}
-			if($row[4] >= 16 && $row[4] <= 18) {$reset_level = $mmw[reset_level_dk];}
-			if($row[4] >= 32 && $row[4] <= 34) {$reset_level = $mmw[reset_level_elf];}
-			if($row[4] >= 48 && $row[4] <= 50) {$reset_level = $mmw[reset_level_mg];}
-			if($row[4] >= 64 && $row[4] <= 66) {$reset_level = $mmw[reset_level_dl];}
-			if($row[4] >= 80 && $row[4] <= 82) {$reset_level = $mmw[reset_level_sum];}
+			if($row[4] >= 0 && $row[4] <= 15) {$reset_level = $mmw[reset_level_dw]; $reset_points = $mmw[reset_points_dw];}
+			if($row[4] >= 16 && $row[4] <= 31) {$reset_level = $mmw[reset_level_dk]; $reset_points = $mmw[reset_points_dk];}
+			if($row[4] >= 32 && $row[4] <= 47) {$reset_level = $mmw[reset_level_elf]; $reset_points = $mmw[reset_points_elf];}
+			if($row[4] >= 48 && $row[4] <= 63) {$reset_level = $mmw[reset_level_mg]; $reset_points = $mmw[reset_points_mg];}
+			if($row[4] >= 64 && $row[4] <= 79) {$reset_level = $mmw[reset_level_dl]; $reset_points = $mmw[reset_points_dl];}
+			if($row[4] >= 80 && $row[4] <= 95) {$reset_level = $mmw[reset_level_sum]; $reset_points = $mmw[reset_points_sum];}
 
 		$reset_up = $row[1] + (1);
 		$char_money = $row[2];
@@ -144,15 +143,16 @@ function reset($charactername) {
                            if($mmw[reset_limit_price] != '0' && $mmw[reset_limit_price] <= $resetmoneysys) {$resetmoneysys = $mmw[reset_limit_price];}
                            $wh_money = $wh_row[1] - $resetmoneysys;
                            if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
-                           $resetpt = $row[3] + $mmw['resetpoints'];
-                           $resetpt1 = $mmw['resetpoints'] * $reset_up;
+                           $resetpt = $row[3] + $reset_points;
+                           $resetpt1 = $reset_points * $reset_up;
 
 			//Check Inventory
                            if($mmw[check_inventory] == 'yes') {
-                           $result = mssql_query("declare @vault varbinary(1728); set @vault=(SELECT Inventory FROM Character WHERE Name='$charactername'); print @vault;");
-                           $inventory = substr(mssql_get_last_message(),2,$mmw[free_hex] * 12);
-                           $test_invetory = free_hex($mmw[free_hex],12);
+                            $result = mssql_query("declare @vault varbinary(1728); set @vault=(SELECT Inventory FROM Character WHERE Name='$charactername'); print @vault;");
+                            $inventory = substr(mssql_get_last_message(),2,$mmw[free_hex] * 12);
+                            $test_invetory = free_hex($mmw[free_hex],12);
                            }
+
 
                             if(empty($charactername) || empty($login)){ $error=1;
 	                                 echo $die_start . mmw_lang_left_blank . $die_end;
@@ -177,31 +177,20 @@ function reset($charactername) {
                                                            }
 
                             if($error != 1){
-                                    if(($mmw['resetmode']=='keep') AND ($mmw['levelupmode']=='normal')){
-                                         $sql_reset_script="Update character set [clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$resetpt',[reset]='$reset_up' where name='$charactername'";}
-                                    elseif(($mmw['resetmode']=='reset') AND ($mmw['levelupmode']=='extra')){
-                                         $sql_reset_script="Update character set [strength]='25',[dexterity]='25',[vitality]='25',[energy]='25',[clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$resetpt1',[reset]='$reset_up' where name='$charactername'";}
-                                    elseif(($mmw['resetmode']=='keep') AND ($mmw['levelupmode']=='extra')){
-                                         $sql_reset_script="Update character set [clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$resetpt1',[reset]='$reset_up' where name='$charactername'";}
-                                    elseif(($mmw['resetmode']=='reset') AND ($mmw['levelupmode']=='normal')){
-                                         $sql_reset_script="Update character set [strength]='25',[dexterity]='25',[vitality]='25',[energy]='25',[clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$resetpt',[reset]='$reset_up' where name='$charactername'";}
-                                    if($mmw['clean_inventory']=='yes' && $mmw['clean_skills']=='yes'){
-                                         $sql_reset_script2="UPDATE character Set [inventory]=CONVERT(varbinary(1080), null),[magiclist]=CONVERT(varbinary(180), null) Where name='$charactername'";}
-                                    elseif($mmw['clean_inventory']=='no' && $mmw['clean_skills']=='no'){
-                                         $sql_reset_script2="Select name from character where name='$charactername'";}
-                                    elseif($mmw['clean_inventory']=='yes' && $mmw['clean_skills']=='no'){
-                                         $sql_reset_script2="UPDATE character Set [inventory]=CONVERT(varbinary(1080), null) Where name='$charactername'";}
-                                    elseif($mmw['clean_inventory']=='no' && $mmw['clean_skills']=='yes'){
-                                         $sql_reset_script2="UPDATE character Set [magiclist]=CONVERT(varbinary(180), null) Where name='$charactername'";}
+				if($mmw['level_up_mode']=='normal') {$LevelUpPoint = "$resetpt";} else {$LevelUpPoint = "$resetpt1";}
+				if($mmw['reset_mode']=='reset') {$reset_stats = "[strength]='25',[dexterity]='25',[vitality]='25',[energy]='25',";}
+				if($mmw['reset_command']=='yes' && $row[4] >= 64 && $row[4] <= 79) {$reset_command = "[Leadership]='25',";}
+				if($mmw['clean_inventory']=='yes') {$clean_inventory = "[inventory]=CONVERT(varbinary(1080), null),";}
+				if($mmw['clean_skills']=='yes') {$clean_skills = "[magiclist]=CONVERT(varbinary(180), null),";}
 
-                                    mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
-                                    mssql_query($sql_reset_script);
-                                    mssql_query($sql_reset_script2);
+				$sql_reset_script = "UPDATE character Set $clean_inventory $clean_skills $reset_stats $reset_command [clevel]='1',[experience]='0',[money]='$char_money',[LevelUpPoint]='$LevelUpPoint',[reset]='$reset_up' Where name='$charactername'";
+				mssql_query($sql_reset_script);
+				mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
 
-                                    echo $okey_start . mmw_lang_character_reseted . $okey_end;
-                                    writelog("resets","Character <b>$charactername</b> Has Been <font color=#FF0000>Reseted</font>, Before Reset: $row[1](reset), After Reset: $reset_up(reset), For: $resetmoneysys Zen");
-                               }      
-                      }                               
+				echo $okey_start . mmw_lang_character_reseted . $okey_end;
+				writelog("resets","Character <b>$charactername</b> Has Been <font color=#FF0000>Reseted</font>, Before Reset: $row[1](reset), After Reset: $reset_up(reset), For: $resetmoneysys Zen");
+                            }
+                      }
 }
 
 

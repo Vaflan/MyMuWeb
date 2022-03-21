@@ -4,27 +4,35 @@
 
 /////// Start Time Format ///////
 function time_format($date,$format) {
+ // Support SQL 2000(Rus) and 2005
  $formated_time = "d M Y, T";
+ $date_row = explode(" ",$date);
 
- if($date[1]==" ") {
-  $day = $date[0];
-  $month = substr($date,2,3);
-  $year = substr($date,6,4);
-  $time = substr($date,10);
+ if(!preg_match("/^\d*$/",$date_row[1])) {
+  $day = $date_row[0];
+  $month = $date_row[1];
+  $year = $date_row[2];
+  $time = $date_row[4];
+
+  if($month=='ÿíâ' || $month=='ÑÐ½Ð²' || $month=='ï­¢') {$month="Jan";}
+  elseif($month=='ôåâ' || $month=='Ñ„ÐµÐ²' || $month=='ä¥¢') {$month="Feb";}
+  elseif($month=='ìàð' || $month=='Ð¼Ð°Ñ€' || $month=='¬ à') {$month="Mar";}
+  elseif($month=='àïð' || $month=='Ð°Ð¿Ñ€' || $month==' ¯à') {$month="Apr";}
+  elseif($month=='ìàé' || $month=='Ð¼Ð°Ð¹' || $month=='¬ ©') {$month="May";}
+  elseif($month=='èþí' || $month=='Ð¸ÑŽÐ½' || $month=='¨î­') {$month="Jun";}
+  elseif($month=='èþë' || $month=='Ð¸ÑŽÐ»' || $month=='¨î«') {$month="Jul";}
+  elseif($month=='àâã' || $month=='Ð°Ð²Ð³' || $month==' ¢£') {$month="Aug";}
+  elseif($month=='ñåí' || $month=='ÑÐµÐ½' || $month=='á¥­') {$month="Sep";}
+  elseif($month=='îêò' || $month=='Ð¾ÐºÑ‚' || $month=='®ªâ') {$month="Oct";}
+  elseif($month=='íîÿ' || $month=='Ð½Ð¾Ñ' || $month=='­®ï') {$month="Nov";}
+  else {$month="Dec";}
  }
  else {
-  $day = substr($date,0,2);
-  $month = substr($date,3,3);
-  $year = substr($date,7,4);
-  $time = substr($date,11);
+  $day = $date_row[1];
+  $month = $date_row[0];
+  $year = $date_row[2];
+  $time = $date_row[4];
  }
-
- if($month=='ÿíâ') {$month="Jan";} elseif($month=='ôåâ') {$month="Feb";}
- elseif($month=='ìàð') {$month="Mar";} elseif($month=='àïð') {$month="Apr";}
- elseif($month=='ìàé') {$month="May";} elseif($month=='èþí') {$month="Jun";}
- elseif($month=='èþë') {$month="Jul";} elseif($month=='àâã') {$month="Aug";}
- elseif($month=='ñåí') {$month="Sep";} elseif($month=='îêò') {$month="Oct";}
- elseif($month=='íîÿ') {$month="Nov";} else {$month="Dec";}
 
  $formated_time = str_replace("d",$day,$formated_time);
  $formated_time = str_replace("M",$month,$formated_time);
@@ -481,65 +489,35 @@ function gender($gender) {
 
 /////// Start Class Formats ///////
 function char_class($class,$style=NULL) {
- if($style==full) {
-  if($class == 0){$class = 'Dark Wizard';}
-  elseif($class == 1){$class = 'Soul Master';}
-  elseif($class == 2){$class = 'Grand Master';}
-  elseif($class == 16){$class = 'Dark Knight';}
-  elseif($class == 17){$class = 'Blade Knight';}
-  elseif($class == 18){$class = 'Blade Master';}
-  elseif($class == 32){$class = 'Fairy Elf';}
-  elseif($class == 33){$class = 'Muse Elf';}
-  elseif($class == 34){$class = 'High Elf';}
-  elseif($class == 48){$class = 'Magic Gladiator';}
-  elseif($class == 49){$class = 'Duel Master';}
-  elseif($class == 50){$class = 'Duel Master';}
-  elseif($class == 64){$class = 'Dark Lord';}
-  elseif($class == 65){$class = 'Lord Emperor';}
-  elseif($class == 66){$class = 'Lord Emperor';}
-  elseif($class == 80){$class = 'Summoner';}
-  elseif($class == 81){$class = 'Bloody Summoner';}
-  elseif($class == 82){$class = 'Dimension Master';}
-  else{$class = 'Unknow';}
- }
- elseif($style==img) {
-  if($class >= 0 && $class <= 2){$class = '<img src=images/char/dw.gif width=110>';}
-  elseif($class >= 16 && $class <= 18){$class = '<img src=images/char/dk.gif width=110>';}
-  elseif($class >= 32 && $class <= 34){$class = '<img src=images/char/ef.gif width=110>';}
-  elseif($class >= 48 && $class <= 50){$class = '<img src=images/char/mg.gif width=110>';}
-  elseif($class >= 64 && $class <= 66){$class = '<img src=images/char/dl.gif width=110>';}
-  elseif($class >= 80 && $class <= 82){$class = '<img src=images/char/sm.gif width=110>';}
-  else{$class = 'Unknow';}
- }
- elseif($style==photo) {
-  if($class >= 0 && $class <= 2){$class = '0x00FFFFFFFFFF000000F80000F0FFFFFF';}
-  elseif($class >= 16 && $class <= 18){$class = '0x20FFFFFFFFFF000000F80000F0FFFFFF';}
-  elseif($class >= 32 && $class <= 34){$class = '0x40FFFFFFFFFF000000F80000F0FFFFFF';}
-  elseif($class >= 48 && $class <= 50){$class = '0x60FFFFFFFFFF000000F80000F0FFFFFF';}
-  elseif($class >= 64 && $class <= 66){$class = '0x80FFFFFFFFFF000000F80000F0FFFFFF';}
-  elseif($class >= 80 && $class <= 82){$class = '0xA0FFFFFFFFFF000000F80000F0FFFFFF';}
-  else{$class = '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF';}
- }
- else {
-  if($class == 0){$class = 'DW';}
-  elseif($class == 1){$class = 'SM';}
-  elseif($class == 2){$class = 'GrM';}
-  elseif($class == 16){$class = 'DK';}
-  elseif($class == 17){$class = 'BK';}
-  elseif($class == 18){$class = 'BM';}
-  elseif($class == 32){$class = 'Elf';}
-  elseif($class == 33){$class = 'ME';}
-  elseif($class == 34){$class = 'HE';}
-  elseif($class == 48){$class = 'MG';}
-  elseif($class == 49 || $class == 50){$class = 'DM';}
-  elseif($class == 64){$class = 'DL';}
-  elseif($class == 65 || $class == 66){$class = 'LE';}
-  elseif($class == 80){$class = 'Sum';}
-  elseif($class == 81){$class = 'Bsum';}
-  elseif($class == 82){$class = 'Dim';}
-  else{$class = 'Unknow';}
- }
- return $class;
+ if(empty($style)) {$style = 'off';}
+
+ if($class == 0){$class_row1 = array('off'=>'DW','full'=>'Dark Wizard');}
+ elseif($class == 1){$class_row1 = array('off'=>'SM','full'=>'Soul Master');}
+ elseif($class == 2){$class_row1 = array('off'=>'GrM','full'=>'Grand Master');}
+ elseif($class == 16){$class_row1 = array('off'=>'DK','full'=>'Dark Knight');}
+ elseif($class == 17){$class_row1 = array('off'=>'BK','full'=>'Blade Knight');}
+ elseif($class == 18){$class_row1 = array('off'=>'BM','full'=>'Blade Master');}
+ elseif($class == 32){$class_row1 = array('off'=>'Elf','full'=>'Fairy Elf');}
+ elseif($class == 33){$class_row1 = array('off'=>'ME','full'=>'Muse Elf');}
+ elseif($class == 34){$class_row1 = array('off'=>'HE','full'=>'High Elf');}
+ elseif($class == 48){$class_row1 = array('off'=>'MG','full'=>'Magic Gladiator');}
+ elseif($class == 49 || $class == 50){$class_row = array('off'=>'DM','full'=>'Duel Master');}
+ elseif($class == 64){$class_row1 = array('off'=>'DL','full'=>'Dark Lord');}
+ elseif($class == 65 || $class == 66){$class_row1 = array('off'=>'LE','full'=>'Lord Emperor');}
+ elseif($class == 80){$class_row1 = array('off'=>'Sum','full'=>'Summoner');}
+ elseif($class == 81){$class_row1 = array('off'=>'Bsum','full'=>'Bloody Summoner');}
+ elseif($class == 82){$class_row1 = array('off'=>'Dim','full'=>'Dimension Master');}
+ else{$class_row1 = array('off'=>'Unknow','full'=>'Unknow');}
+
+ if($class >= 0 && $class <= 15){$class_row2 = array('img'=>'char/dw.gif','photo'=>'0x00FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 16 && $class <= 31){$class_row2 = array('img'=>'char/dk.gif','photo'=>'0x20FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 32 && $class <= 47){$class_row2 = array('img'=>'char/ef.gif','photo'=>'0x40FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 48 && $class <= 63){$class_row2 = array('img'=>'char/mg.gif','photo'=>'0x60FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 64 && $class <= 79){$class_row2 = array('img'=>'char/dl.gif','photo'=>'0x80FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 80 && $class <= 95){$class_row2 = array('img'=>'char/sm.gif','photo'=>'0xA0FFFFFFFFFF000000F80000F0FFFFFF');}
+ else{$class_row2 = array('img'=>'Unknow','photo'=>'0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');}
+
+ return $class_row1[$style].$class_row2[$style];
 }
 /////// END Class Formats ///////
 
@@ -587,4 +565,4 @@ function utf_to_win($str) {
  return $str;
 }
 /////// END UTF to Win Formats ///////
-?> 
+?>

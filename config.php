@@ -1,25 +1,25 @@
 <?PHP
-// Config For MyMuWeb 0.6
+// Config For MyMuWeb 0.7
 // Copyright by Vaflan
 // Please Safe All (c)Vaflan
 
 
 // MSSQL settings
-$mmw[sqlhost] = 'IP Address';		// Ip SQL Server
-$mmw[sqluser] = 'Login';		// Login SQL
-$mmw[sqlpass] = 'Password';		// Pass SQL
-$mmw[database] = 'DataBase';		// DataBase SQL
-$mmw[md5] = 'no';			// Server MD5 yes or no
+$mmw[sqlhost] = 'IP Address';			// Ip SQL Server
+$mmw[sqluser] = 'Login';			// Login SQL
+$mmw[sqlpass] = 'Password';			// Pass SQL
+$mmw[database] = 'DataBase';			// DataBase SQL
 
 
 // MyMuWeb Config
+$mmw[md5] = 'yes';					// Server MD5 yes or no
 $mmw[theme] = 'default';				// Name Of Folder in 'Themes/'
 $mmw[language] = 'English';				// Default Language in Web
 $mmw[webtitle] = 'Name MuOnline Server';		// Web Title
 $mmw[servername] = 'Name MuOnline';			// Server Name
 $mmw[serverwebsite] = 'http://localhost/';		// WebSite
 $mmw[max_stats] = '32767';				// Max Stats In Game
-$mmw[free_hex] = '20';					// 20(Season 0~2) or 32(Season 3~4) or Other(WareHouse.Items.Length / 120 * 2)
+$mmw[free_hex] = '32';					// 20(Season 0~2) or 32(Season 3~4) or Other(WareHouse.Items.Length / 120 * 2)
 $mmw[max_ip_acc] = '0';					// Max Account With one IP Address (if 0 no max)
 $mmw[pkmoney] = '1000000';				// Zen for Pk Clean (Min 1kk)
 $mmw[move_zen] = '1000000';				// Zen for move (Min 1kk)
@@ -27,7 +27,8 @@ $mmw[gm] = 'yes';					// no(Not Show in TOP) or yes(Show in TOP)
 $mmw[gm_guild] = 'GM Guild';				// GM guild name (Don't Show)
 $mmw[last_in_forum] = '5';				// Max Topic in Block "Last in Forum"
 $mmw[max_post_forum] = '100';				// Max Topic in Forum
-$mmw[comment_time_out] = '15';				// Comment Time Out
+$mmw[time_out_online] = '100';				// Time Out for Online on Web in 'sec'
+$mmw[comment_time_out] = '30';				// Comment Time Out
 $mmw[min_send_zen] = '1000000';				// Minimum Zen for Send to Char (Can 0)
 $mmw[service_send_zen] = '1000000';			// Service fee Zen for Send to Char (Can 0)
 $mmw[zen_for_acc] = '50000000';				// Zen For New Account (Can 0)
@@ -58,7 +59,6 @@ $mmw[long_news_txt] = '220';				// Long News Text, if 0 this options off
 $mmw[news_row_1] = '<div><b>English:</b></div>';	// News Row 1
 $mmw[news_row_2] = '<div><b>Russian:</b></div>';	// News Row 2
 $mmw[news_row_3] = '<div><b>Latvian:</b></div>';	// News Row 3
-$mmw[news_row_end] = '';				// This is All Row End
 
 
 // Reset System
@@ -72,9 +72,15 @@ $mmw[reset_limit_level] = '999';			// Max Reset (Limit)
 $mmw[reset_limit_price] = '0';				// Limited Price For Reset or 0
 $mmw[reset_money] = '10000000';				// Zen for Reset (Min 1kk)
 $mmw[reset_system] = 'yes';				// yes(Zen*Reset) or no(Default)
-$mmw[resetpoints] = '0';				// Reset Points
-$mmw[resetmode] = 'keep';				// reset(Points = 25) or keep(Default)
-$mmw[levelupmode] = 'normal';				// extra(ResetPoints*Reset) or normal(Points+ResetPoints)
+$mmw[reset_points_dw] = '100';				// Reset Points DW,SM,GrM
+$mmw[reset_points_dk] = '100';				// Reset Points DK,BK,BM
+$mmw[reset_points_elf] = '100';				// Reset Points Elf,ME,HE
+$mmw[reset_points_mg] = '100';				// Reset Points MG,DM
+$mmw[reset_points_dl] = '100';				// Reset Points DL,LE
+$mmw[reset_points_sum] = '100';				// Reset Points Sum,Bsum,Dim
+$mmw[reset_mode] = 'keep';				// reset(Points = 25) or keep(Default)
+$mmw[reset_command] = 'no';				// If reset mode = keep, can keep command on DL
+$mmw[level_up_mode] = 'normal';				// extra(ResetPoints*Reset) or normal(Points+ResetPoints)
 $mmw[check_inventory] = 'no';				// no(NO Check) or yes(Check)
 $mmw[clean_inventory] = 'no';				// no(NO Clean) or yes(Clean)
 $mmw[clean_skills] = 'no';				// no(NO Clean) or yes(Clean)
@@ -109,21 +115,18 @@ $mmw[image_can_delete] = '3';				// Image Can Delete with this level
 // Config of site made off. Thank You!
 // Engine MyMuWeb. Don't Edit Please!
 // All this engine by Vaflan!
-$mmw[version] = '0.6';
+$warning_red = '<font color=red><u>/!\</u></font>';
+$warning_green = '<font color=green><u>/!\</u></font>';
+$mmw[version] = chr(hexdec('30')).'.'.chr(hexdec('37'));
 if($mmw[show_all_error] == 'no') {error_reporting(0);}
-$sql_die_start = '<table border="0" width="350" height="200" align="center" style="background:url(images/sql_die.png);" cellpadding="25"><tr><td valign="top"><b>MMW Result:</b><br>';$sql_die_end = '</td></tr></table>';
+$sql_die_start = "<table border='0' width='350' height='200' align='center' style='background:url(images/sql_die.png);padding:24px;'><tr><td valign='top' align='left'><b>MMW Result:</b><br>";$sql_die_end = "</td></tr></table>";
 if($mmw[sqlpass]=='Password' || $mmw[sqluser]=='Login' || $mmw[database]=='DataBase' || $mmw[sqlhost]=='IP Address') {die("$sql_die_start Please Check config.php! $sql_die_end");}
 $mssql_connect = @mssql_connect($mmw[sqlhost],$mmw[sqluser],$mmw[sqlpass]) or die("$sql_die_start MSSQL server is offline OR I can't Access to it! $sql_die_end");
 @mssql_select_db($mmw[database], $mssql_connect) or die("$sql_die_start Database don't exists OR I can't Access to it! $sql_die_end");
-if(isset($_GET[theme])) {$_SESSION[theme] = $_GET[theme];}
-if(isset($_POST[set_theme])) {$_SESSION[theme] = $_POST[set_theme];}
+if(isset($_POST[set_theme])) {$_SESSION[theme] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_POST[set_theme]);}
+if(isset($_GET[theme])) {$_SESSION[theme] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_GET[theme]);}
 if(isset($_SESSION[theme])) {$mmw[theme] = $_SESSION[theme];}
-if(is_file("themes/$mmw[theme]/info.php")) {
-$mmw[theme_dir] = "themes/$mmw[theme]";
-$mmw[theme_img] = "themes/$mmw[theme]/img";
-include("$mmw[theme_dir]/info.php");}
-elseif($mmw[theme_switch] == NULL) {unset($_SESSION[theme]);
-die("$sql_die_start ErroR Theme!<br>Cant find <b>$mmw[theme]/info.php</b> in <b>themes/</b>! $sql_die_end");}
+@include("themes/$mmw[theme]/info.php");
 $alpha_num = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 $mmw[rand_id] = substr(str_shuffle($alpha_num), 0, 8);
 ?>

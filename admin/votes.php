@@ -1,4 +1,5 @@
 <?PHP
+if($mmw[admin_check] < 1) {die("$die_start Security Admin Panel is Turn On $die_end");}
 if(isset($_POST["delete_id_vote"])){delete_vote($_POST["delete_id_vote"]);}
 if(isset($_POST["new_id_vote"])){add_vote($_POST['question'],$_POST['answer1'],$_POST['answer2'],$_POST['answer3'],$_POST['answer4'],$_POST['answer5'],$_POST['answer6']);}
 if(isset($_POST["edit_id_vote"])){edit_vote($_POST["edit_id_vote"],$_POST['question'],$_POST['answer1'],$_POST['answer2'],$_POST['answer3'],$_POST['answer4'],$_POST['answer5'],$_POST['answer6']);}
