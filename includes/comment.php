@@ -1,0 +1,99 @@
+<?
+if(isset($_POST['c_message'])){require("includes/character.class.php"); option::comment_send($c_id_blog,$c_id_code);}
+if(isset($_POST['c_id_delete'])){require("includes/character.class.php"); option::comment_delete($_POST['c_id_delete']);}
+
+$result = mssql_query("SELECT c_id,c_char,c_text,c_date FROM MMW_comment WHERE c_id_blog='$c_id_blog' AND c_id_code='$c_id_code' ORDER BY c_date ASC");
+$comm_num = mssql_num_rows($result);
+      echo '<a name="del"></a>
+	<table border="0" cellpadding="0" cellspacing="0" width="100%">
+	<tr><td width="60%" height="25">Total Comment: <b>'.$comm_num.'</b></td>
+	<td align="right" height="25">[ <a href="#sign">Add Comment</a> ]</td></tr>
+	<tr><td colspan="2">
+           ';
+  for ($i = 0; $i < $comm_num; $i++)
+  {
+      $row = mssql_fetch_row($result);
+      $num = $i+1;
+      $time_c = date('H:i:s', $row[3]);
+      $day_c = date('d.m.Y', $row[3]);
+      $row[2] = bbcode(smile($row[2]));
+
+	$result_char = mssql_query("SELECT AccountID,CtlCode FROM Character WHERE Name='$row[1]'");
+	$row_char = mssql_fetch_row($result_char);
+	$result_acc = mssql_query("SELECT country,gender,avatar FROM memb_info WHERE memb___id='$row_char[0]'");
+	$row_acc = mssql_fetch_row($result_acc);
+
+	if($row_acc[2] != "" && $row_acc[2] != " "){$avatar_c_e="<img src='$row_acc[2]' width='110' alt='$row[1]' border='0'>";}
+	else {$avatar_c_e="<img src='images/no_avatar.jpg' width='110' alt='No Àâàòîð' border='0'>";}
+
+	if($row_acc[0] == '0'){$country = "Not Set";}
+	else{$country = country($row_acc[0]);}
+
+	$c_num_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_char='$row[1]'");
+	$comment_c_num = mssql_num_rows($c_num_result);
+
+	if($_SESSION['admin'] >= $mmw[comment_can_delete] || $_SESSION['char_set']==$row[1])
+	{$edit = "<form action='' method='post' name='delete$num' id='delete$num'><input name='c_id_delete' type='hidden' id='c_id_delete' value='$row[0]'><a href='javascript://'><img src='images/delete.png'  border='0' onclick='delete$num.submit()'></a></form>";}
+	else {$edit = '';}
+
+      echo '
+	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
+	<tr><td style="padding:2px;" width="110" valign="top" align="center">'.$avatar_c_e.'</td>
+	<td style="padding:4px;" valign="top"><div class="sizedsig">'.$row[2].'</div></td>
+	<td style="padding:2px;" align="center" width="110" valign="top">
+	<table style="background:url(images/comment.png);" border="0" width="100%"><td style="padding-left:2px;color:#FFFFFF;font-size:8px;" align="left">â„–'.$num.'</td></table>
+	Char: <a class="level'.$row_char[1].'" href="?op=character&character='.$row[1].'">'.$row[1].'</a><br/>
+	Country: '.$country.'<br/>Gender: '.$row_acc[1].'<br/>Comment\'s: '.$comment_c_num.'<br/><span title="'.$time_c.'"><i>Date: '.$day_c.'</i></span><br/>'.$edit.'
+	</td></tr>
+	</table><br />
+           ';
+  }
+      echo '</td></tr>
+	<tr><td colspan="2" height="10"></td></tr>
+	</table><a name="sign"></a>
+           ';
+
+
+
+
+  if(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ') {
+?>
+	<form action="" method="post" name="comment">
+<table border="0" width="100%" cellspacing="0" cellpadding="0" class="commTable">
+<tr><td class="commTd2" colspan="2">
+ <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top"><textarea class="commFl" style="height:100px;width:100%;" rows="8" name="c_message" cols="30"></textarea></td>
+ <td width="5%" valign="top" align="center" style="padding-left:3px;">
+  <script language=JavaScript>var ico;function smile(ico) {document.comment.c_message.value=document.comment.c_message.value+ico;}</script>
+  <table border="0" cellpadding="3" class="smiles">
+  <tr>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' >( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/angry.gif" title="angry" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :D ');"><img style="margin:0;padding:0;border:0;" src="images/smile/biggrin.gif" title="biggrin" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' B) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/cool.gif" title="cool" /></a></td>
+  </tr><tr>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ;( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/cry.gif" title="cry" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' <_< ');"><img style="margin:0;padding:0;border:0;" src="images/smile/dry.gif" title="dry" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ^_^ ');"><img style="margin:0;padding:0;border:0;" src="images/smile/happy.gif" title="happy" /></a></td>
+  </tr><tr>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :( ');"><img style="margin:0;padding:0;border:0;" src="images/smile/sad.gif" title="sad" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/smile.gif" title="smile" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :o ');"><img style="margin:0;padding:0;border:0;" src="images/smile/surprised.gif" title="surprised" /></a></td>
+  </tr><tr>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' :p ');"><img style="margin:0;padding:0;border:0;" src="images/smile/tongue.gif" title="tongue" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' %) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/wacko.gif" title="wacko" /></a></td>
+  <td class="sml1" align="center"><a href="JavaScript: smile(' ;) ');"><img style="margin:0;padding:0;border:0;" src="images/smile/wink.gif" title="wink" /></a></td>
+  </tr></table>
+ </td></tr>
+ </table>
+</td></tr>
+<tr><td class="commTd2" colspan="2" align="center"><input class="commSbmFl" type="submit" value="- Add Comment -"></td></tr>
+</table>
+</form>
+<?
+   }
+  elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {
+      echo "$die_start Sorry, you can't add comment, need Character! $die_end";
+   }
+  else {
+      echo '<div align="center" class="commReg">The only authorized users can add comments.<br />[ <a href="?op=register">Register</a> | <a href="?op=login">Login</a> ]</div>';
+   }
+?>

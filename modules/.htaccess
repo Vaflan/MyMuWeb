@@ -1,0 +1,20 @@
+ AddType "application/x-httpd-php; charset=windows-1251" .php
+
+ Options -MultiViews
+ Options -Indexes
+
+ ErrorDocument 400 /mu/error.php?go=400
+ ErrorDocument 403 /mu/error.php?go=403
+ ErrorDocument 404 /mu/error.php?go=404
+ ErrorDocument 500 /mu/error.php?go=500
+
+ Options +FollowSymLinks
+
+ RewriteEngine On
+ RewriteBase /
+ RewriteRule ^(.*)$ $1 [L]
+ RewriteCond %{REQUEST_FILENAME} !-f
+ RewriteCond %{REQUEST_FILENAME} !-d
+
+ RewriteRule ^(.+)$ index.php?write=$1&%{QUERY_STRING} [L]
+ RewriteRule ^(.*)\.html $1.php [L]

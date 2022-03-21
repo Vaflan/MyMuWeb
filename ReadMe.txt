@@ -1,0 +1,41 @@
+//MyMuWeb 0.2 By Vaflan
+
+*****************
+Change AppServer.
+Opne File: C:\WINDOWS\php.ini
+You need 576 cols - ;extension=php_mssql.dll - delete simbel ';'.
+And 942 cols - mssql.secure_connection = Off - 'Îff' change to 'În'.
+
+*****************
+Change MSSQL.
+Copy File 'WZ_MD5_MOD.dll'
+To: Microsoft SQL Server\MSSQL\Binn\
+
+*****************
+Change config.php.
+Open 'root/config.php'
+Change: 'IP Address', 'Login', 'Password', 'DataBase'
+
+*****************
+Change DataBase.
+Open Browser:
+http://mywebsite/install.php
+
+And if All Done, Please Delete 'install.php'.
+
+
+!----------------------!
+To Create Admin Need:
+Register in web, 
+and in MEMB_INFO table with your name, 
+change 'admin' Colums - '0' to '9'.
+Level (3 - GM, 6 - Mini Admin, 9 - Admin)
+Admin Username = Your Login in Reg WebSite
+Admin Password = Your Password in Reg WebSite
+Admin SecurityCode = DateMonth (20.04.2009 = 2004)
+!----------------------!
+
+Thenks For use my MMW.
+by Vaflan
+http://tk3.clan.su
+vaflancher@inbox.lv
