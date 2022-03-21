@@ -1,4 +1,8 @@
 <?PHP
+// This Script from MuWeb 0.8
+// By =Master=
+// Cut by Vaflan
+
 /*
   Parameters of form elem that are being processed by the class
 $elem = array (

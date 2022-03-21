@@ -1,6 +1,4 @@
 <?PHP
-require('config.php');
-
 $search = stripslashes($_POST['account_search']);
 $search_type = stripslashes($_POST['search_type']);
 

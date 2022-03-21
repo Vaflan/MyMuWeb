@@ -15,28 +15,28 @@ for($i=0; $i < $now_total; ++$i) {
 	$row = mssql_fetch_row($get_news);
 	if($i >= $from){
 	$date = date("d.m.Y", $row[3]);
-	if($row[5][1]!=''){$news_eng="<div><u>English:</u></div>".bbcode(substr($row[5],0,$mmw[long_news_txt]))." ...";} else{$news_eng="";}
-	if($row[6][1]!=''){$news_rus="<div><u>Russian:</u></div>".bbcode(substr($row[6],0,$mmw[long_news_txt]*2))." ...";} else{$news_rus="";}
+	if($row[5][1]!=''){$news_eng="<div><u>English:</u></div>".bbcode(substr($row[5],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";} else{$news_eng="";}
+	if($row[6][1]!=''){$news_rus="<div><u>Russian:</u></div>".bbcode(substr($row[6],0,$mmw[long_news_txt]*2))." <a href='?news=$row[4]'>...</a>";} else{$news_rus="";}
 	$comm_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_id_blog='1' AND c_id_code='$row[4]'");
 	$comm_num = mssql_num_rows($comm_result);
 
-	echo    $rowbr . '
+	echo '
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
         <tr><td>
-        <div class="eTitle"><a href="?news='.$row[4].'">'.$row[0].'</a></div>
+        <div class="eTitle"><a href="?news='.$row[4].'" class="eTitleLink">'.$row[0].'</a></div>
         <div class="eMessage">'.$news_eng.$news_rus.'</div>
-        <div class="eDetails">Category: '.$row[2].' | Author: <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | Date: <span title="'.$date.'">'.$date.'</span> | Total Comment: <a href="?news='.$row[4].'">'.$comm_num.'</a></div>
-        </td></tr></table>';
+        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | '.mmw_lang_date.': <span title="'.$date.'">'.$date.'</span> | '.mmw_lang_total_comment.': <a href="?news='.$row[4].'">'.$comm_num.'</a></div>
+        </td></tr></table>' . $rowbr;
 	}
 }
 
 if($pg > 1){ $prev = ($pg - 1); // Previous Link
-$paginator ='<a href="?op=news&pg='.$prev.'">Back</a> '; }
+$paginator = "<a href='?op=news&pg=$prev'><img src='images/left.png' border='0'></a> ";}
 for($i = 1; $i <= $total_pgs; $i++){ /// Numbers
 if(($pg) == $i) { $paginator .= ' <b>'.$i.'</b> '; } else {
 $paginator .=' <a href="?op=news&pg='.$i.'">'.$i.'</a> '; }}
 if($pg < $total_pgs){ $next = ($pg + 1); // Next Link
-$paginator .=' <a href="?op=news&pg='.$next.'">Next</a>'; }
+$paginator .= " <a href='?op=news&pg=$next'><img src='images/right.png' border='0'></a>";}
 
 echo $rowbr . "<center>[ $paginator ]</center>";
 ?>

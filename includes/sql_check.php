@@ -38,13 +38,13 @@ check_inject();
 
 
 
-// Clean Var
+// Clean Var Edited by Vaflan
 
 function clean_var($var=NULL) {
-$newvar = @preg_replace('/[^a-zA-Z0-9\_\-\=\@\.]/','',$var);
+$newvar = @preg_replace('/[^a-zA-Z0-9\_\-\=\@\.\:\/]/','',$var);
 $newvar = str_replace("\0","",$newvar);
 $newvar = str_replace("'","",$newvar);
-if(@preg_match('/[^a-zA-Z0-9\_\-\=\@\.]/',$var)) { }
+if(@preg_match('/[^a-zA-Z0-9\_\-\=\@\.\:\/]/',$var)) { }
 return $newvar;
 }
 
@@ -53,7 +53,7 @@ return $newvar;
 
 
 
-// Onter Anti-SQL Injection 
+// Onter Anti-SQL Injection from MuWeb.org
 
 function xw_sanitycheck($str){ 
     if(strpos(str_replace("''","","$str"),"'")!=false)

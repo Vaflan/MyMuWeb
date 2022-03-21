@@ -1,20 +1,22 @@
-    <br>Top <?echo $top_rank;?> Killers<br>&nbsp;</br>
-            <table class="sort-table" id="table-1" height="30" border="0" cellpadding="0" cellspacing="0">                
+<?PHP
+$top_rank = clean_var(stripslashes($_POST['top_rank']));
+?>
+    <br><?echo mmw_lang_top." $top_rank ".mmw_lang_killers;?><br>&nbsp;</br>
+            <table class="sort-table" border="0" cellpadding="0" cellspacing="0">                
             <thead><tr>
-            <td class=thead2>#</td>
-            <td class=thead2 title="Name Of Character">Name</td>
-            <td class=thead2>Killed</td>
-            <td class=thead2>Level</td>
-            <td class=thead2>Reset</td>	
-            <td class=thead2>Class</td>
+            <td>#</td>
+            <td><?echo mmw_lang_character;?></td>
+            <td><?echo mmw_lang_killed;?></td>
+            <td><?echo mmw_lang_reset;?></td>
+            <td><?echo mmw_lang_level;?></td>	
+            <td><?echo mmw_lang_class;?></td>
             </tr></thead>
 <?
-$top_rank = clean_var(stripslashes($_POST['top_rank']));
-
-$result = mssql_query("SELECT TOP $top_rank Name,Class,cLevel,Reset,AccountID,PKcount from Character where pkcount>0 order by pkcount desc");
+if($mmw['gm']=='no'){$no_gm_in_top = "and ctlcode!='32' and ctlcode!='8'";}
+$result = mssql_query("SELECT TOP $top_rank Name,Class,Reset,cLevel,AccountID,PKcount from Character where pkcount>0 $no_gm_in_top order by pkcount desc");
 $row_num = mssql_num_rows($result);
 if($row_num==0) {
- echo '<tr><td colspan="6">No Characters</td></tr>';
+ echo '<tr><td colspan="6">'.mmw_lang_no_characters.'</td></tr>';
 }
 
 for($i=0;$i < $row_num;++$i)

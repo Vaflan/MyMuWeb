@@ -4,6 +4,7 @@
  Options -Indexes
 
  ErrorDocument 400 /error.php?go=400
+ ErrorDocument 402 /error.php?go=402
  ErrorDocument 403 /error.php?go=403
  ErrorDocument 404 /error.php?go=404
  ErrorDocument 500 /error.php?go=500

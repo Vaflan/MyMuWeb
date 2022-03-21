@@ -9,7 +9,7 @@ function writelog($logfile,$text){
 
 
 function clear_logs($name)
-{
+{  require("config.php");
    $new_data = "";
    $fp = fopen("logs/$name.php","w");
    fwrite ($fp, $new_data);
@@ -131,7 +131,7 @@ function add_new_news($news_title,$news_category,$news_eng,$news_rus,$news_autor
                if (empty($news_title) || empty($news_category)){
                       echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                            else{
-                                  mssql_query("INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_eng,news_rus,news_id) VALUES ('$_POST[news_title]','$_SESSION[a_admin_login]','$_POST[category]','$date','$news_eng','$news_rus','$mmw[news_id]')");
+                                  mssql_query("INSERT INTO MMW_news(news_title,news_autor,news_category,news_date,news_eng,news_rus,news_id) VALUES ('$_POST[news_title]','$_SESSION[a_admin_login]','$_POST[category]','$date','$news_eng','$news_rus','$mmw[rand_id]')");
                                   echo "$warning_green News SuccessFully Added!";
 
                                   $log_dat = "News: $_POST[news_title] Has Been <font color=#FF0000>Added</font> Author: $_SESSION[a_admin_login]";
@@ -186,7 +186,7 @@ function add_new_link($link_name,$link_address,$link_description)
                if (empty($link_name) ||  empty($link_address) || empty($link_description)){
 	              echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                            else{
-                                   mssql_query("INSERT INTO MMW_links(link_name,link_address,link_description,link_date,link_id) VALUES ('$_POST[link_name]','$_POST[link_address]','$_POST[link_description]','$date','$mmw[link_id]')");
+                                   mssql_query("INSERT INTO MMW_links(link_name,link_address,link_description,link_date,link_id) VALUES ('$_POST[link_name]','$_POST[link_address]','$_POST[link_description]','$date','$mmw[rand_id]')");
                                    echo "$warning_green Link SuccessFully Added!";
 
                                    $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Added</font>";
@@ -375,5 +375,56 @@ function sql_query($sql_query)
 
                    writelog("sql_query","<font color=#FF0000>SQL Query:</font> <b>$sql_query</b>");
                  }
+}
+
+
+
+
+
+
+
+function add_vote($question,$answer1,$answer2,$answer3,$answer4,$answer5,$answer6)
+{	require("config.php");
+	if (empty($question)){
+		echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+	else{
+		$time = time();
+		mssql_query("INSERT INTO MMW_votemain(question,answer1,answer2,answer3,answer4,answer5,answer6,add_date) VALUES ('$question','$answer1','$answer2','$answer3','$answer4','$answer5','$answer6','$time')");
+		echo "$warning_green Vote SuccessFully Added!";
+
+		$log_dat = "Vote: $question Has Been <font color=#FF0000>Added</font>";
+		writelog("vote",$log_dat);
+	}
+}
+
+
+
+function edit_vote($id_vote,$question,$answer1,$answer2,$answer3,$answer4,$answer5,$answer6)
+{	require("config.php");
+	if (empty($id_vote) || empty($question)){
+		echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+	else{
+		mssql_query("Update MMW_votemain set [question]='$question',[answer1]='$answer1',[answer2]='$answer2',[answer3]='$answer3',[answer4]='$answer4',[answer5]='$answer5',[answer6]='$answer6' where [ID]='$id_vote'");
+		echo "$warning_green $old_name Server SuccessFully Edited!";
+
+		$log_dat = "Vote: $id_vote ([question]='$question',[answer1]='$answer1',[answer2]='$answer2',[answer3]='$answer3',[answer4]='$answer4',[answer5]='$answer5',[answer6]='$answer6') Has Been <font color=#FF0000>Edited</font>";
+		writelog("vote",$log_dat);
+	}
+}
+
+
+
+
+function delete_vote($id_vote)
+{	require("config.php");
+	if (empty($id_vote)){echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+	else{
+		mssql_query("Delete from MMW_votemain where ID='$id_vote'");
+		mssql_query("Delete from MMW_voterow where id_vote='$id_vote'");
+		echo "$warning_green Vote SuccessFully Deleted!";
+
+		$log_dat = "Id Vote: $id_vote Has Been <font color=#FF0000>Deleted</font>";
+		writelog("vote",$log_dat);
+	}
 }
 ?>

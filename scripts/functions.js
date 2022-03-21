@@ -58,23 +58,6 @@ function confirmLink(theLink, theQuery)
 
 
 
-///////////////////////////////////////////////////////////////
-
-
-
-
-function ask_stats()
-{
-var detStatus=confirm("Are You Sure You Want To Add Those Stats?");
-if (detStatus)
-document.stats_normal.submit();
-else
-return false;
-}
-
-
-
-
 /////////////////////////////////////////////////////////////////
 
 
@@ -117,3 +100,32 @@ function CheckLeng(Target,MaxLength)
     document.new_request.msg.value =
       document.new_request.msg.value.substr(0,MaxLength);
  }
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////
+
+
+
+
+function number(nStr) {
+	nStr += '';
+	x = nStr.split('.');
+	x1 = x[0];
+	x2 = x.length > 1 ? '.' + x[1] : '';
+	var rgx = /(\d+)(\d{3})/;
+	while (rgx.test(x1)) {x1 = x1.replace(rgx, '$1' + ',' + '$2');}
+	return x1; //default x1 + x2
+}
+
+function calc_price(input, service, currency) {	
+	var a = input.value;
+	var cost = document.getElementById(service);
+	if(a > 1000000) {cost.innerHTML = (1 * a / 1000000);}
+	if(a < 1000000 && a > 0) {cost.innerHTML = (1);}
+	if(isNaN(cost.innerHTML) || a < 0) {cost.innerHTML = 'error';}
+	else {cost.innerHTML = number(cost.innerHTML) + currency;}
+}

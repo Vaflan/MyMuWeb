@@ -1,4 +1,6 @@
 <?PHP
+if(isset($_POST["registration"])){include("includes/character.class.php");option::register(); echo $rowbr;}
+
 for($i=0; $i<139; ++$i) {
 	$country = country($i);
 	if($i == $_POST[country]){$selected_country=" selected";} else{$selected_country="";}
@@ -43,7 +45,7 @@ if ( document.register_from.country.value == "null")
 alert("Please select Country.");
 return false;
 }
-if ( document.register_from.verifyinput2.value == "")
+if ( document.register_from.verifyinput.value == "")
 {
 alert("Please enter Verify input.");
 return false;
@@ -53,75 +55,69 @@ document.register_from.submit();
 }
 </script>
 
-<?if(isset($_POST["registration"])){include("includes/character.class.php");option::register(); echo $rowbr;}?>
-
 <?if($_GET['terms'] == 'agree') {
-echo '<form action="" method="post" name="register_from" id="register_from">
-                    <table align="center"  width="293" border="0" cellspacing="2" cellpadding="2">
+echo '<form action="" method="post" name="register_from">
+                    <table align="center" width="300" border="0" class="sort-table" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td width="106" align="right">Account ID</td>
-                        <td colspan="4"><input name="account" type="text" class="post" id="account" size="17" maxlength="10" value="'.$_POST[account].'"></td>
+                        <td width="110" align="right">'.mmw_lang_account.'</td>
+                        <td><input name="account" type="text" size="17" maxlength="10" value="'.$_POST[account].'"></td>
                       </tr>
                       <tr>
-                        <td align="right">Password</td>
-                        <td colspan="4"><input name="password" type="password" class="post" id="password" size="17" maxlength="10"></td>
+                        <td align="right">'.mmw_lang_password.'</td>
+                        <td><input name="password" type="password" size="17" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td align="right">Repeat Password</td>
-                        <td colspan="4"><input name="repassword" type="password" class="post" id="repassword" size="17" maxlength="10"></td>
+                        <td align="right">'.mmw_lang_repeat_password.'</td>
+                        <td><input name="repassword" type="password" size="17" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td align="right">E-Mail Address</td>
-                        <td colspan="4"><input name="email" type="text" class="post" id="email" size="17" maxlength="50" value="'.$_POST[email].'"></td>
+                        <td align="right">'.mmw_lang_email_address.'</td>
+                        <td><input name="email" type="text" size="17" maxlength="50" value="'.$_POST[email].'"></td>
                       </tr>
                       <tr>
-                        <td align="right">Secret Question</td>
-                        <td colspan="4"><input name="question" type="text" class="post" id="question" size="17" maxlength="10" value="'.$_POST[question].'"></td>
+                        <td align="right">'.mmw_lang_secret_question.'</td>
+                        <td><input name="question" type="text" size="17" maxlength="10" value="'.$_POST[question].'"></td>
                       </tr>
                       <tr>
-                        <td align="right">Secret Answer</td>
-                        <td colspan="4"><input name="answer" type="text" class="post" id="answer" size="17" maxlength="10" value="'.$_POST[answer].'"></td>
+                        <td align="right">'.mmw_lang_secret_answer.'</td>
+                        <td><input name="answer" type="text" size="17" maxlength="10" value="'.$_POST[answer].'"></td>
                       </tr>
                       <tr>
-                        <td align="right">Full Name</td>
-                        <td colspan="4"><input name="fullname" type="text" id="fullname" size="17" maxlength="12" value="'.$_POST[fullname].'"></td>
+                        <td align="right">'.mmw_lang_full_name.'</td>
+                        <td><input name="fullname" type="text" size="17" maxlength="10" value="'.$_POST[fullname].'"></td>
                       </tr>
                       <tr>
-                        <td align="right">Country</td>
-                        <td colspan="4"><select name="country" id="country">'.$select_country.'</select></td>
+                        <td align="right">'.mmw_lang_country.'</td>
+                        <td><select name="country">'.$select_country.'</select></td>
                       </tr>
                       <tr>
-                        <td align="right">Gender</td>
-                        <td width="20"><input name="gender" type="radio" value="male" checked></td>
-                        <td width="35" valign="top">Male</td>
-                        <td width="20" valign="top"><input name="gender" type="radio" value="female"></td>
-                        <td width="80" valign="top">Female</td>
+                        <td align="right">'.mmw_lang_gender.'</td>
+                        <td><input name="gender" type="radio" value="male" checked> '.mmw_lang_male.' &nbsp; <input name="gender" type="radio" value="female"> '.mmw_lang_female.'</td>
                       </tr>
                       <tr>
-                        <td align="right">Verify Code</td>
-                        <td colspan="4"><img src="image_verify.php" alt="Image Verify"></td>
+                        <td align="right">'.mmw_lang_verify_code.'</td>
+                        <td><img src="image_verify.php"></td>
                       </tr>
                       <tr>
-                        <td align="right">Verify Input</td>
-                        <td colspan="4"><input name="verifyinput2" type="text" class="post" id="verifyinput2" size="8" maxlength="10"></td>
+                        <td align="right">'.mmw_lang_verify_input.'</td>
+                        <td><input name="verifyinput" type="text" size="8" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td colspan="5" align="center"> <input type="submit" name="Submit" value="New Account" onclick="return check_register_form()"> <input name="registration" type="hidden" id="registration" value="registration"> <input type="reset" name="Reset" value="Reset"></td>
+                        <td colspan="2" align="center"><input type="submit" name="Submit" value="'.mmw_lang_new_account.'" onclick="return check_register_form()"> <input name="registration" type="hidden" value="registration"> <input type="reset" value="'.mmw_lang_renew.'"></td>
                       </tr>
                     </table>
                   </form>';
-}else{
-?>
-<form action="?op=register&terms=agree" method="post" name="terms" id="terms">
+}else{?>
+<form action="?op=register&terms=agree" method="post" name="terms">
 <table width="200" border="0" cellspacing="2" cellpadding="0" align="center">
   <tr>
-    <td align="center"><h2>Terms of Agreement</h2></td>
+    <td align="center"><h2><?echo mmw_lang_terms_of_agreement;?></h2></td>
   </tr>
   <tr>
     <td align="center">
-	<textarea name="terms" cols="60" rows="20" readonly="readonly" id="terms"><?include("modules/terms.txt");?></textarea>
+	<textarea name="terms" cols="60" rows="20" readonly="readonly"><?include("modules/terms.txt");?></textarea>
 	<?echo $rowbr;?>
-	<input type="submit" value="I agree!"> <input type="reset" value="I don't!" onclick="top.location='?op=news';">
+	<input type="submit" value="<?echo mmw_lang_i_agree;?>"> <input type="reset" value="<?echo mmw_lang_i_dont;?>" onclick="top.location='?op=info';">
     </td>
   </tr>
 </table>

@@ -4,43 +4,41 @@ $account_get = clean_var(stripslashes($_GET[profile]));
 $profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,admin from memb_info where memb___id='$account_get'");
 $profile_info = mssql_fetch_row($profile_sql);
 $profile_info_check = mssql_num_rows($profile_sql);
-if($profile_info[2] == '' || $profile_info[2] == ' ') {$profile_info[2] = "Not Set";}
-if($profile_info[5] == '' || $profile_info[5] == ' ') {$profile_info[5] = "Not Set";}
-if($profile_info[6] == '' || $profile_info[6] == ' ') {$profile_info[6] = "Not Set";}
-if($profile_info[7] == '' || $profile_info[7] == ' ') {$profile_info[7] = "Not Set";}
-if($profile_info[8] == '' || $profile_info[8] == ' ') {$profile_info[8] = "Not Set";}
+if($profile_info[2] == '' || $profile_info[2] == ' ') {$profile_info[2] = mmw_lang_no_set;}
+if($profile_info[5] == '' || $profile_info[5] == ' ') {$profile_info[5] = mmw_lang_no_set;}
+if($profile_info[6] == '' || $profile_info[6] == ' ') {$profile_info[6] = mmw_lang_no_set;}
+if($profile_info[7] == '' || $profile_info[7] == ' ') {$profile_info[7] = mmw_lang_no_set;}
+if($profile_info[8] == '' || $profile_info[8] == ' ') {$profile_info[8] = mmw_lang_no_set;}
 if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "images/no_avatar.jpg";}
-if($profile_info[1] == 'Male' || $profile_info[1] == 'male') {$profile_info[1] = "Male <img src='images/male.gif'>";}
-elseif($profile_info[1] == 'Female' || $profile_info[1] == 'female') {$profile_info[1] = "Female <img src='images/female.gif'>";}
 ?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='230'> 
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='240'> 
 	<tr>
-          <td width="100">Profile:</td>
+          <td width="100"><?echo mmw_lang_account;?>:</td>
           <td><?echo $account_get;?></td>
 	</tr>
 	<tr>
-          <td>Full Name:</td>
+          <td><?echo mmw_lang_full_name;?>:</td>
           <td><?echo $profile_info[9];?></td>
 	</tr>
 	<tr>
-          <td>Country:</td>
+          <td><?echo mmw_lang_country;?>:</td>
           <td><?echo country($profile_info[0]);?></td>
 	</tr>
 	<tr>
-          <td>Age:</td>
+          <td><?echo mmw_lang_age;?>:</td>
           <td><?echo $profile_info[2];?></td>
 	</tr>
 	<tr>
-          <td>Gender:</td>
-          <td><?echo $profile_info[1];?></td>
+          <td><?echo mmw_lang_gender;?>:</td>
+          <td><?echo gender($profile_info[1]);?></td>
 	</tr>
 	<tr>
-          <td>Level:</td>
+          <td><?echo mmw_lang_level;?>:</td>
           <td><?echo admin_level($profile_info[11]);?></td>
 	</tr>
 	<tr>
-          <td>Reg Date:</td>
+          <td><?echo mmw_lang_reg_date;?>:</td>
           <td><?echo time_format($profile_info[10],"d M Y, H:i");?></td>
 	</tr>
 	<tr>
@@ -60,7 +58,7 @@ elseif($profile_info[1] == 'Female' || $profile_info[1] == 'female') {$profile_i
           <td><?echo $profile_info[8];?></td>
 	</tr>
 	<tr>
-          <td valign="top">Avatar:</td>
+          <td valign="top"><?echo mmw_lang_avatar;?>:</td>
           <td><img  width="110" src="<?echo $profile_info[3];?>"></td>
 	</tr>
 </table>

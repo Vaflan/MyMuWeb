@@ -1,24 +1,34 @@
-<?
+<?PHP
 $id_forum = clean_var(stripslashes($_GET['forum']));
 
 if($id_forum == "add" && isset($_SESSION['user']) && isset($_SESSION['char_set'])) {
-echo $rowbr;?>
-<big><b>Add Topic</b></big>
-<?if(isset($_POST['title']) && isset($_POST['text'])){require("includes/character.class.php"); option::forum_send($_POST['title'],$_POST['text']);}?>
-<br>
+if(isset($_POST['title'])) {require("includes/character.class.php"); option::forum_send($_POST['title'],$_POST['text']); echo $rowbr;}
+?>
+
 <form method="POST" name="forum" action="" style="margin:0px">
-<table border="0" width="100%" cellspacing="1" cellpadding="2">
-<tr><td>Topic Title<font color="red">*</font> :</td>
-<td><input type='text' size='35' style='width:100%;' name='title' maxlength='32' value='<?echo $_POST['title'];?>'></td></tr>
-<tr><td colspan="2"><textarea rows="8" cols="40" name="text" style="width:100%;"><?echo $_POST['text'];?></textarea></td></tr>
-<tr><td align="center" colspan="2"><input style="font-weight:bold;" type="submit" value="Add"> &nbsp; <input type="reset" value="Reset"></td></tr>
-</table>
+  <table border="0" width="400" cellspacing="0" cellpadding="0" class="sort-table" align="center">
+    <tr>
+	<td align="right"><?echo mmw_lang_topic_title;?>:</td>
+	<td><input type='text' size='35' name='title' maxlength='32' value='<?echo $_POST['title'];?>'></td>
+    </tr>
+    <tr>
+	<td align="right"><?echo mmw_lang_topic_text;?>:</td>
+	<td><textarea rows="8" cols="40" name="text"><?echo $_POST['text'];?></textarea></td>
+    </tr>
+    <tr>
+	<td align="right"><?echo mmw_lang_new_topic;?>:</td>
+	<td><input type="submit" value="<?echo mmw_lang_add_topic;?>"> &nbsp; <input type="reset" value="<?echo mmw_lang_renew;?>"></td>
+    </tr>
+    <tr>
+	<td colspan="2">
+<?echo mmw_lang_bb_code;?>:<br>
+[br] - [hr] - <b>[b][/b]</b> - <i>[i][/i]</i> - <u>[u][/u]</u> - <s>[s][/s]</s> - <span style='text-decoration: overline'>[o][/o]</span> - <sup>[sup][/sup]</sup> - <sub>[sub][/sub]</sub> - 
+[c]<b>.::.</b>[/c] - [l]<b>::..</b>[/l] - [r]<b>..::</b>[/r] - [color=#][/color] - [size=#][/size] - <a href="#">[url=#][/url]</a> - [img]#[/img]
+	</td>
+    </tr>
+  </table>
 </form>
-<hr>BB Code:
-<div align=center>
-[br] - [hr] - <b>[b][/b]</b> - <i>[i][/i]</i> - <u>[u][/u]</u> - <s>[s][/s]</s> - <span style='text-decoration: overline'>[o][/o]</span> - <sup>[sup][/sup]</sup> - <sub>[sub][/sub]</sub>
-<br>[c]<b>.::.</b>[/c] - [l]<b>::..</b>[/l] - [r]<b>..::</b>[/r] - [color=#][/color] - [size=#][/size] - <a href="#">[url=#][/url]</a> - [img]#[/img]
-</div><?}
+<?}
 elseif(isset($id_forum) && $id_forum != "add") {
 $get_forum = mssql_query("SELECT f_id,f_char,f_title,f_text,f_date,f_lostchar FROM MMW_forum WHERE f_id='$id_forum'");
 
@@ -35,12 +45,16 @@ $get_forum = mssql_query("SELECT f_id,f_char,f_title,f_text,f_date,f_lostchar FR
 	if($row_acc[2] != "" && $row_acc[2] != " ") {$avatar_c_e="<img src='$row_acc[2]' width='110' alt='$row[1]' border='0'>";}
 	else {$avatar_c_e="<img src='images/no_avatar.jpg' width='110' alt='No Аватор' border='0'>";}
 
+	if($row[6]==1) {$status = 'closed';}
+	elseif($now_date - 86400 < $row[4] && $row[5]=='') {$status = 'hot';}
+	elseif($now_date - 259200 > $row[4]) {$status = 'old';}
+	else {$status = 'normal';}
+
       echo '
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="aBlock">
 	<tr><td style="padding:2px;" width="110" valign="top" align="center">
-	<a href="?op=character&character='.$row[1].'" class="level'.$row_char[1].'">
-	'.$avatar_c_e.'<br/><b>' . $row[1] . '</b></a></td>
-	<td style="padding:4px;" valign="top"><big><b>'.$row[2].'</b></big><br/>'.bbcode($row[3]).'</td></tr>
+	<a href="?op=character&character='.$row[1].'" class="level'.$row_char[1].'">'.$avatar_c_e.'<br/><b>'.$row[1].'</b></a></td>
+	<td style="padding:4px;" valign="top"><big><b>'.$row[2].'</b></big><div class="sizedforum">'.bbcode($row[3]).'</div></td></tr>
 	</table>
       ';
 

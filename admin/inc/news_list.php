@@ -1,7 +1,6 @@
 <?PHP
-require('config.php');
-
 $result = mssql_query("SELECT news_title,news_autor,news_category,news_date,news_id from MMW_news order by news_date desc");
+
 echo '
 <fieldset><legend>News List</legend>
 <table class="sort-table" id="table-1" height="0" border="0" cellpadding="0" cellspacing="0" width="500">                

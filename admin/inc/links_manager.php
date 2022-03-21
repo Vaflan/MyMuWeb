@@ -1,7 +1,6 @@
 <?PHP
-require('config.php');
-
 $result = mssql_query("SELECT link_name,link_address,link_description,link_id,link_date from MMW_links order by link_date desc");
+
 echo '
 <fieldset>
 <legend>Links List</legend>

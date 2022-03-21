@@ -1,7 +1,6 @@
 <?PHP
-require('config.php');
-
 $result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,display_order,type from MMW_servers order by display_order asc");
+
 echo '
 <fieldset>
 <legend>Links List</legend>
@@ -28,7 +27,6 @@ if ($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.5))
 	}
 else 
 	{
-	fclose($check);
 	$status_done = "<span class=status_offline><b>Offline</b></span>"; 
 	} 
 

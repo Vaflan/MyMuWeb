@@ -1,6 +1,6 @@
-<?
-if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.5)){fclose($check); $cs_status = '<span class="online">is Opened</span>';}
-else{$cs_status = '<span class="offline">is Closed</span>';}
+<?PHP
+if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.5)){fclose($check); $cs_status = '<span class="online">'.mmw_lang_is_opened.'</span>';}
+else{$cs_status = '<span class="offline">'.mmw_lang_is_closed.'</span>';}
 
 $query = mssql_query("SELECT owner_guild,siege_start_date,siege_end_date,money,tax_hunt_zone FROM MuCastle_DATA");
 $row = mssql_fetch_row($query);
@@ -25,81 +25,81 @@ $cs_memb_reset_proc = ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_
 $now_time = time();
 $cs_start = time_format($row[1],"d M Y");
 $cs_end = time_format($row[2],"d M Y");
-if( strtotime($cs_start)+86400 > $now_time ) {$cs_period="Register for Attack";} //0 00:00 - 0 23:59
-elseif( (strtotime($cs_start)+432000) > $now_time ) {$cs_period="Sing of Lord";} //1 00:00 - 4 23:59
-elseif( (strtotime($cs_start)+500400) > $now_time ) {$cs_period="Information";} //5 00:00 - 5 19:00
-elseif( (strtotime($cs_start)+586800) > $now_time ) {$cs_period="Ready for Attack";} //5 19:00 - 6 19:00
-elseif( (strtotime($cs_start)+594000) > $now_time ) {$cs_period="Attack to Castle Siege";} //6 19:00 - 6 21:00
+if( strtotime($cs_start)+86400 > $now_time ) {$cs_period = mmw_lang_register_for_attack;} //0 00:00 - 0 23:59
+elseif( (strtotime($cs_start)+432000) > $now_time ) {$cs_period = mmw_lang_sing_of_lord;} //1 00:00 - 4 23:59
+elseif( (strtotime($cs_start)+500400) > $now_time ) {$cs_period = mmw_lang_information;} //5 00:00 - 5 19:00
+elseif( (strtotime($cs_start)+586800) > $now_time ) {$cs_period = mmw_lang_ready_for_attack;} //5 19:00 - 6 19:00
+elseif( (strtotime($cs_start)+594000) > $now_time ) {$cs_period = mmw_lang_attack_castle_siege;} //6 19:00 - 6 21:00
 else {$cs_period="Truce";}
 ?>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 <td valign="top">
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='250'> 
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='276'> 
 	<tr>
-          <td width="100">Castle Siege:</td>
+          <td width="118">Castle Siege:</td>
           <td><?echo $cs_status;?></td>
 	</tr>          
 	<tr>
-          <td width="100">Owner Guild:</td>
+          <td><?echo mmw_lang_owner_guild;?>:</td>
           <td><?echo $cs_guild_mark;?> <a href="?op=guild&guild=<?echo $cs_guild;?>"><?echo $cs_guild;?></a></td>
 	</tr>
 	<tr>
-          <td>King of Castle:</td>
+          <td><?echo mmw_lang_king_of_castle;?>:</td>
           <td><a href="?op=character&character=<?echo $cs_guild_master;?>"><?echo $cs_guild_master;?></a></td>
 	</tr>
 	<?if($mmw[mix_cs_memb_reset]=="yes") {?><tr>
-          <td>Reset for Member's:</td>
+          <td><?echo mmw_lang_reset_for_members;?>:</td>
           <td>-<?echo $cs_memb_reset_proc;?>% (<?echo $cs_memb_reset_zen;?>kk Zen)</td>
 	</tr><?}?>
 	<tr>
-          <td>Tax Hunt Zone:</td>
+          <td><?echo mmw_lang_tax_hunt_zone;?>:</td>
           <td><?echo number_format($row[4]);?> Zen</td>
 	</tr>
 	<tr>
-          <td>Start Siege:</td>
+          <td><?echo mmw_lang_start_siege;?>:</td>
           <td><?echo $cs_start;?></td>
 	</tr>
 	<tr>
-          <td>End Siege:</td>
+          <td><?echo mmw_lang_next_siege;?>:</td>
           <td><?echo $cs_end;?></td>
 	</tr>
 	<tr>
-          <td>Now Period:</td>
+          <td><?echo mmw_lang_now_period;?>:</td>
           <td><?echo $cs_period;?></td>
 	</tr>
 </table>
 
 <?echo $rowbr;?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='250'>           
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='276'>           
 	<tr>
-          <td width="100">Register for Attack:</td>
-          <td>Mon. 00:00 - Mon. 23:59</td>
+          <td width="118"><?echo mmw_lang_register_for_attack;?>:</td>
+          <td><?echo mmw_lang_week_mon;?>.00:00 - <?echo mmw_lang_week_mon;?>.23:59</td>
 	</tr>
 	<tr>
-          <td>Sing of Lord:</td>
-          <td>Tue. 00:00 - Fri. 23:59</td>
+          <td><?echo mmw_lang_sing_of_lord;?>:</td>
+          <td><?echo mmw_lang_week_tue;?>.00:00 - <?echo mmw_lang_week_fri;?>.23:59</td>
 	</tr>
 	<tr>
-          <td>Information:</td>
-          <td>Sat. 00:00 - Sat. 19:00</td>
+          <td><?echo mmw_lang_information;?>:</td>
+          <td><?echo mmw_lang_week_sat;?>.00:00 - <?echo mmw_lang_week_sat;?>.19:00</td>
 	</tr>
 	<tr>
-          <td>Ready for Attack:</td>
-          <td>Sat. 19:00 - Sun. 19:00</td>
+          <td><?echo mmw_lang_ready_for_attack;?>:</td>
+          <td><?echo mmw_lang_week_sat;?>.19:00 - <?echo mmw_lang_week_sun;?>.19:00</td>
 	</tr>
 	<tr>
-          <td>Attack Castle Siege:</td>
-          <td>Sun. 19:00 - Sun. 21:00</td>
+          <td><?echo mmw_lang_attack_castle_siege;?>:</td>
+          <td><?echo mmw_lang_week_sun;?>.19:00 - <?echo mmw_lang_week_sun;?>.21:00</td>
 	</tr>
 </table>
 
 <?echo $rowbr;?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='250'>           
-	<tr><td>Guild's Registered for Attack</td></tr>
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='276'>           
+	<tr><td><?echo mmw_lang_registered_guilds_for_attack;?></td></tr>
 <?
 $cs_reg_query = mssql_query("SELECT SEQ_NUM,REG_SIEGE_GUILD,REG_MARKS,IS_GIVEUP FROM MuCastle_REG_SIEGE ORDER BY SEQ_NUM DESC"); 
 $cs_reg_num = mssql_num_rows($cs_reg_query);
@@ -109,7 +109,7 @@ if($cs_reg_num > 0){
  echo "<tr><td>$cs_row_reg[0]. <a href=?op=guild&guild=$cs_row_reg[1]>$cs_row_reg[1]</a> (Sing of Lord: $cs_row_reg[2])</td></tr>";
  }
 }
-else {?><tr><td>No Guild's</td></tr><?}?>
+else {echo "<tr><td>".mmw_lang_no_guilds."</td></tr>";}?>
 </table>
 
 </td>

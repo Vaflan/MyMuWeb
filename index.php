@@ -7,254 +7,220 @@ $timeStart_uS=$timeStart["usec"];
 $timeStart_S=$timeStart["sec"];
 include("config.php");
 include("includes/sql_check.php");
+include("includes/xss_check.php");
 include("includes/functions.php");
 include("includes/formats.php");
+include("menu.php");
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><?echo $mmw['webtitle'];?></title>
-<script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
-<script type="text/javascript" src="scripts/helptip.js">//script_by_vaflan</script>
-<link href="images/style.css" rel="stylesheet" type="text/css">
-<link rel="shortcut icon" href="images/favicon.ico">
+	<title><?echo $mmw[webtitle];?></title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
+	<script type="text/javascript" src="scripts/textfader.js">//script_by_vaflan</script>
+	<script type="text/javascript" src="scripts/helptip.js">//script_by_vaflan</script>
+	<link href="images/style.css" rel="stylesheet" type="text/css" media="all" />
+	<link href="images/favicon.ico" rel="shortcut icon" />
 </head>
-<body style="background:url(images/back.jpg) #CDCDCD; margin:10px; padding:0px;">
+<body style="background: #2f2f2f url(images/background.png) repeat-x; margin:20px; padding:0px;">
 
 <div align="center">
-<a href="<?echo $mmw[serverwebsite];?>" title="Home Page <?echo $mmw[servername];?>"><img src="images/logo.jpg" width="694" height="200" border="0"></a><br/><br/>
+  <a href="<?echo $mmw[serverwebsite];?>" title="<?echo mmw_lang_home_page ." $mmw[servername]";?>"><img src="images/logo.png" border="0"></a>
 </div>
 
-<table width="694" border="0" align="center" cellpadding="0" cellspacing="0" style="background:url(images/back_03.jpg) repeat;">
-  <tr>
-    <td colspan="3"><img src="images/back_02.png" width="694" height="27"></td>
-  </tr>
-  <tr>
-    <td width="17" style="background-image:url(images/back_04.jpg); background-repeat:repeat-y;">&nbsp;</td>
-    <td width="660" valign="top">
+<table width="800" border="0" align="center" cellpadding="0" cellspacing="0" style="background:url(images/bg_body.png) repeat; border: 1px solid #000000;">
+   <tr>
+      <td width="160" valign="top" style="padding:4px;">
+ <!-- Block -->
 
-
-	<table width="648" border="0" cellspacing="0" cellpadding="0">
-	 <tr>
-	  <td width="136" valign="top" style="padding-left:8px;padding-right:8px;">
-		<!-- LEFT -->
-
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_1.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_account_panel;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
 <!-- LOGIN -->
-<?if(isset($_SESSION['pass']) && isset($_SESSION['user'])){?>
-Hello <b><?echo $_SESSION[user];?></b>!<br>
-<?echo $rowbr;?>
-<?if(isset($_SESSION['char_set'])) { echo $setchar;?><br>
-<a href='?op=user&u=char'><b>Character Panel</b></a><br>
-<a href='?op=user&u=mail' id='upmess'><b>Mail [<?echo "$msg_new_num/$msg_num";?>]</b></a><br><?}?>
-<a href='?op=user&u=acc'><b>Account Panel</b></a><br>
-<a href='?op=user&u=wh'><b>Ware House</b></a><br>
-<?if($_SESSION['admin'] >= $mmw[gm_option_open]) {?>
-<a href='?op=user&u=gm'><b>GM Options</b></a><br><?}?>
-<?echo $rowbr;?>
-<form action='' method='post' name='logout_account' id='logout_account'>
-<input name='logoutaccount' type='hidden' id='logoutaccount' value='logoutaccount'>
-<input name='Logout!' type='submit' id='Logout!' title='Logout' value='Logout'><br>
-</form>
-<?if($msg_new_num>0){?>
+<?if(isset($_SESSION[pass]) && isset($_SESSION[user])){
+echo mmw_lang_hello . " <b>$_SESSION[user]</b>!<br> $rowbr";
+if(isset($_SESSION[char_set])) {
+echo " $setchar <br>
+<a href='?op=user&u=char'><b>".mmw_lang_character_panel."</b></a><br>
+<a href='?op=user&u=mail' id='upmess'><b>".mmw_lang_mail." [$msg_new_num/$msg_num] $msg_full</b></a><br>";}
+echo "<a href='?op=user&u=acc'><b>".mmw_lang_account_panel."</b></a><br>
+<a href='?op=user&u=wh'><b>".mmw_lang_ware_house."</b></a><br>";
+if($_SESSION[admin] >= $mmw[gm_option_open]) {
+echo "<a href='?op=user&u=gm'><b>".mmw_lang_gm_options."</b></a><br>";}
+echo "$rowbr
+<form action='' method='post' name='logout_account'>
+<input name='logoutaccount' type='hidden' value='logoutaccount'>
+<input name='Logout!' type='submit' title='".mmw_lang_logout."' value='".mmw_lang_logout."'><br>
+</form>";
+if($msg_new_num>0){?>
 <script type="text/javascript">
 function flashit(id,cl){
 var c = document.getElementById(id);
 if (c.style.color=='red'){c.style.color = cl;}
 else {c.style.color = 'red';}}
 setInterval("flashit('upmess','#FFFFFF')",500)</script>
-<?}?>
-<?}else{?>
-<form action='' method='post' name='login_account' id='login_account'>
-Username<br><input name='login' type='text' id='login' title='Username' size='15' maxlength='10'>
-<input name='account_login' type='hidden' id='account_login' value='account_login'><br>
-Password<br><input name='pass' type='password' id='pass' title='Password' size='15' maxlength='10'>
-<?echo $rowbr;?>
-<input name='Submit' type='submit' value='Login' title='Login'> 
-<a href='?op=lostpass'>Lost Pass</a>
-</form>
-<?}?>
+<?}
+}
+else {
+echo "<form action='' method='post' name='login_account'>
+".mmw_lang_account."<br><input name='login' type='text' title='".mmw_lang_account."' size='15' maxlength='10'>
+<input name='account_login' type='hidden' value='account_login'><br>
+".mmw_lang_password."<br><input name='pass' type='password' title='".mmw_lang_password."' size='15' maxlength='10'>
+$rowbr <input name='Submit' type='submit' value='".mmw_lang_login."' title='".mmw_lang_login."'> 
+<a href='?op=lostpass'>".mmw_lang_lost_pass."</a>
+</form>";
+}?>
 <!-- /END LOGIN -->
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	      </td>
+	   </tr>
 	</table>
-     <!-- // -->
 
-<?echo $rowbr;?>
+      <?echo $rowbr;?>
 
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
-		<?include('menu.txt');?>
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_2.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_menu;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
+<?// Menu
+for($i=0; $i < count($menu); ++$i) {
+//Switch Castle Siege
+ if($mmw[castle_siege]=='yes' && $menu[$i][0] == mmw_lang_castle_siege) {
+   echo '<img src="images/right.png"> <a href="'.$menu[$i][1].'">'.$menu[$i][0]."</a> <br/>\n";
+ }
+ elseif($menu[$i][0] != mmw_lang_castle_siege) {
+   echo '<img src="images/right.png"> <a href="'.$menu[$i][1].'">'.$menu[$i][0]."</a> <br/>\n";
+ }
+}
+?>
+	      </td>
+	   </tr>
 	</table>
-     <!-- // -->
 
-<?echo $rowbr;?>
+      <?echo $rowbr;?>
 
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
-		<script type="text/javascript" src="scripts/textfader.js"></script>
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_3.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_statistic;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
 		<script type="text/javascript">
 		function throbFade() {
 		  fade(2, Math.floor(throbStep / 2), (throbStep % 2) ? false : true);
 		  setTimeout("throbFade();", (throbStep % 2) ? 100 : 4000);
 		  if (++throbStep > fader[2].message.length * 2 - 1) throbStep = 0;
 		}
-		fader[2] = new fadeObj(2, 'statistics', 'FFFFFF', 'CCCCCC', 30, 30, false); <?statisitcs();?> 
+		fader[2] = new fadeObj(2, 'statistics', 'CCCCCC', '000000', 30, 30, false); <?statisitcs();?> 
 		var throbStep = 0;
 		setTimeout("throbFade();", 1000);
 		</script>
 		<div id="statistics"></div>
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	      </td>
+	   </tr>
 	</table>
-     <!-- // -->
 
-<?echo $rowbr;?>
+      <?echo $rowbr;?>
 
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
-		Who is on Web:<br>
-		<?echo $who_online;?>
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
-	</table>
-     <!-- // -->
-
-<?echo $rowbr;?>
-
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_4.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_server_time;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
 		<?include('includes/times.php');?>
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	      </td>
+	   </tr>
 	</table>
-     <!-- // -->
 
-<?echo $rowbr;?>
+      <?echo $rowbr;?>
 
-     <!-- || -->
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000" align="center">
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_5.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_last_in_forum;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
+		<?echo $last_in_forum;?>
+	      </td>
+	   </tr>
+	</table>
+
+      <?echo $rowbr;?>
+
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_6.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_who_is_on_web;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
+		<?echo $who_online;?>
+	      </td>
+	   </tr>
+	</table>
+
+      <?echo $rowbr;?>
+
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_7.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_voting;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
+		<?echo $voting;?>
+	      </td>
+	   </tr>
+	</table>
+
+      <?echo $rowbr;?>
+
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td height="26" style="background:url(images/block.png);"><img src="images/anime_8.gif" border="0" height="26"></td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_ads_banners;?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="2" valign="top" class="block_bg">
 		<?include('ads.txt');?>
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	      </td>
+	   </tr>
 	</table>
-     <!-- // -->
 
-		<!-- /LEFT -->
-	  </td>
-	  <td valign="top">
-		<!-- BODY -->
+ <!-- /Block -->
+      </td>
+      <td valign="top" style="padding-right:4px; padding-top:4px; padding-bottom:4px;">
+ <!-- Body -->
 
-	<table width="100%" border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td width="15" valign="top"><img src="images/content/top_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/top_mid.jpg) repeat-x;"><img src="images/content/top_mid.jpg"></td>
-            <td width="15" valign="top"><img src="images/content/top_right_corner.gif" width="15" height="15"></td>
-          </tr>
-          <tr>
-            <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
-            <td valign="top" bgcolor="#000000">
-	<!-- Center -->
-                <div class="link_content"><a href=".">Home</a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?></div> 
+	<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:1px solid #000000;">
+	   <tr>
+	      <td width="28" height="26" style="background:url(images/block.png);" align="center"><img src="images/mu.png" border="0" height="26"></td>
+	      <td style="background:url(images/block.png); padding-left:4px;"> <a href="<?echo $mmw[serverwebsite];?>"><?echo mmw_lang_home_page;?></a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?> </td>
+	      <td height="26" style="background:url(images/block.png); padding-right:4px;" align="right"><?echo mmw_lang_language;?>: <?language();?></td>
+	   </tr>
+	   <tr>
+	      <td colspan="3" valign="top" class="block_bg">
 <?
-echo $rowbr;
-
-if(isset($_GET['news'])){
+if(isset($_GET[news])) {
 	include("modules/news_full.php");
 }
-elseif(isset($_GET['forum'])){
+elseif(isset($_GET[forum])) {
 	include("modules/forum_full.php");
 }
-elseif(isset($_GET['op'])){
-	$op = clean_var(str_replace("..","",$_GET['op']));
+elseif(isset($_GET[op])) {
+	$op = clean_var(str_replace("..","",$_GET[op]));
 	if(is_file("modules/".$op.".php")){include("modules/$op.php");}
 	else {echo "$die_start Death Hacke! :@ Now I have your IP!<br>by Vaflan ;) $die_end";}
 }
@@ -262,39 +228,30 @@ else {
 	include("modules/news.php");
 }
 ?>
-	<!-- /Center -->
-            </td>
-            <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
-          </tr>
-          <tr>
-            <td valign="top"><img src="images/content/down_left_corner.gif" width="15" height="15"></td>
-            <td style="background:url(images/content/down_mid.jpg) repeat-x;"><img src="images/content/down_mid.jpg"></td>
-            <td valign="top"><img src="images/content/down_right_corner.gif" width="15" height="15"></td>
-          </tr>
+	      </td>
+	   </tr>
 	</table>
 
 <?if($mmw[mp3_player]=='yes'){include('media/player.php');}?>
 
-		<!-- /BODY -->
-	  </td>
-	 </tr>
-	</table>
-
-    </td>
-    <td width="17" style="background:url(images/back_05.jpg) repeat-y;">&nbsp;</td>
-  </tr>
-  <tr>
-    <td colspan="3"><img src="images/back_06.png" width="694" height="27"></td>
-  </tr>
-</table>
+ <!-- /Body -->
+      </td>
+   </tr>
+   <tr>
+      <td colspan="2" height="30" align="right" valign="bottom" style="background:url(images/footer.png); padding-right:2px;">
+ <!-- Footer -->
 <?
 $timeEnd=gettimeofday();
 $timeEnd_uS=$timeEnd["usec"];
 $timeEnd_S=$timeEnd["sec"];
 $ExecTime_S=($timeEnd_S+($timeEnd_uS/1000000))-($timeStart_S+($timeStart_uS/1000000));
 ?>
-<br/>
-<center>MyMuWeb 0.3. Copyright TK3 © 2006-<?echo date('Y');?>. Design and PHP+SQL by Vaflan. Generation Time: <?echo substr($ExecTime_S,0,5);?>s.<br></center>
+			MyMuWeb 0.4. Design and PHP+SQL by Vaflan. Generation Time: <?echo substr($ExecTime_S,0,5);?>s.
+ <!-- /Footer -->
+      </td>
+   </tr>
+</table>
+
 </body>
 </html>
 <?

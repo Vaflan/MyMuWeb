@@ -1,66 +1,76 @@
-<?
-if(isset($_POST['c_message'])){require("includes/character.class.php"); option::comment_send($c_id_blog,$c_id_code);}
-if(isset($_POST['c_id_delete'])){require("includes/character.class.php"); option::comment_delete($_POST['c_id_delete']);}
+<?PHP
+// Comment By Vaflan
+// For MyMuWeb
+
+if(isset($_POST['c_message'])){echo $rowbr; require("includes/character.class.php"); option::comment_send($c_id_blog,$c_id_code);}
+if(isset($_POST['c_id_delete'])){echo $rowbr; require("includes/character.class.php"); option::comment_delete($_POST['c_id_delete']);}
 
 $result = mssql_query("SELECT c_id,c_char,c_text,c_date FROM MMW_comment WHERE c_id_blog='$c_id_blog' AND c_id_code='$c_id_code' ORDER BY c_date ASC");
 $comm_num = mssql_num_rows($result);
-      echo '<a name="del"></a>
+      echo '
 	<table border="0" cellpadding="0" cellspacing="0" width="100%">
-	<tr><td width="60%" height="25">Total Comment: <b>'.$comm_num.'</b></td>
-	<td align="right" height="25">[ <a href="#sign">Add Comment</a> ]</td></tr>
+	<tr><td width="60%" height="25">'.mmw_lang_total_comment.': <b>'.$comm_num.'</b></td>
+	<td align="right" height="25">[ <a href="#sign">'.mmw_lang_add_comment.'</a> ]</td></tr>
 	<tr><td colspan="2">
            ';
   for ($i = 0; $i < $comm_num; $i++)
   {
-      $row = mssql_fetch_row($result);
       $num = $i+1;
+      $row = mssql_fetch_row($result);
       $time_c = date('H:i:s', $row[3]);
       $day_c = date('d.m.Y', $row[3]);
       $row[2] = bbcode(smile($row[2]));
+      $char_info = $char_array[$row[1]];
 
+      if($char_info == '') {
 	$result_char = mssql_query("SELECT AccountID,CtlCode FROM Character WHERE Name='$row[1]'");
 	$row_char = mssql_fetch_row($result_char);
-	$result_acc = mssql_query("SELECT country,gender,avatar FROM memb_info WHERE memb___id='$row_char[0]'");
+	$result_acc = mssql_query("SELECT country,gender,avatar,hide_profile FROM memb_info WHERE memb___id='$row_char[0]'");
 	$row_acc = mssql_fetch_row($result_acc);
+	$char_array[$row[1]] = array($row_char[0],$row_char[1],$row_acc[0],$row_acc[1],$row_acc[2],$row_acc[3]);
+	$char_info = $char_array[$row[1]];
+      }
 
-	if($row_acc[2] != "" && $row_acc[2] != " "){$avatar_c_e="<img src='$row_acc[2]' width='110' alt='$row[1]' border='0'>";}
+	if($char_info[4] != "" && $char_info[4] != " "){$avatar_c_e="<img src='$char_info[4]' width='110' alt='$row[1]' border='0'>";}
 	else {$avatar_c_e="<img src='images/no_avatar.jpg' width='110' alt='No Àâàòîð' border='0'>";}
 
-	if($row_acc[0] == '0'){$country = "Not Set";}
-	else{$country = country($row_acc[0]);}
+	if($char_info[2] == '0'){$country = "Not Set";}
+	else{$country = country($char_info[2]);}
+
+	if($char_info[5] == '0'){$avatar_c_e = "<a href='?op=profile&profile=$char_info[0]'>$avatar_c_e</a>";}
+	else{$avatar_c_e = $avatar_c_e;}
 
 	$c_num_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_char='$row[1]'");
 	$comment_c_num = mssql_num_rows($c_num_result);
 
 	if($_SESSION['admin'] >= $mmw[comment_can_delete] || $_SESSION['char_set']==$row[1])
-	{$edit = "<form action='' method='post' name='delete$num' id='delete$num'><input name='c_id_delete' type='hidden' id='c_id_delete' value='$row[0]'><a href='javascript://'><img src='images/delete.png'  border='0' onclick='delete$num.submit()'></a></form>";}
+	{$edit = "<form action='' method='post' name='delete$num'><input name='c_id_delete' type='hidden' value='$row[0]'><a href='javascript://'><img src='images/delete.png'  border='0' onclick='delete$num.submit()'></a></form>";}
 	else {$edit = '';}
 
       echo '
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
+	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="aBlock">
 	<tr><td style="padding:2px;" width="110" valign="top" align="center">'.$avatar_c_e.'</td>
-	<td style="padding:4px;" valign="top"><div class="sizedsig">'.$row[2].'</div></td>
-	<td style="padding:2px;" align="center" width="110" valign="top">
-	<table style="background:url(images/comment.png);" border="0" width="100%"><td style="padding-left:2px;color:#FFFFFF;font-size:8px;" align="left">â„–'.$num.'</td></table>
-	Char: <a class="level'.$row_char[1].'" href="?op=character&character='.$row[1].'">'.$row[1].'</a><br/>
-	Country: '.$country.'<br/>Gender: '.$row_acc[1].'<br/>Comment\'s: '.$comment_c_num.'<br/><span title="'.$time_c.'"><i>Date: '.$day_c.'</i></span><br/>'.$edit.'
+	<td style="padding:4px;" valign="top"><div class="sizedcomment">'.$row[2].'</div></td>
+	<td style="padding:2px;" align="center" width="114" valign="top">
+	<table border="0" width="100%"><td class="comment-right">â„–'.$num.'</td></table>
+	'.mmw_lang_char.': <a class="level'.$char_info[1].'" href="?op=character&character='.$row[1].'">'.$row[1].'</a><br/>
+	'.mmw_lang_country.': '.$country.'<br/>'.mmw_lang_gender.': '.gender($char_info[3]).'<br/>'.mmw_lang_comments.': '.$comment_c_num.'<br/><span title="'.$time_c.'"><i>'.mmw_lang_date.': '.$day_c.'</i></span><br/>'.$edit.'
 	</td></tr>
 	</table><br />
            ';
   }
       echo '</td></tr>
-	<tr><td colspan="2" height="10"></td></tr>
-	</table><a name="sign"></a>
+	<tr><td colspan="2"><a name="sign"></a></td></tr>
+	</table>
            ';
-
 
 
 
   if(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ') {
 ?>
 	<form action="" method="post" name="comment">
-<table border="0" width="100%" cellspacing="0" cellpadding="0" class="commTable">
-<tr><td class="commTd2" colspan="2">
+<table border="0" width="100%" cellspacing="0" cellpadding="0" class="aBlock">
+<tr><td style="padding: 4px;" colspan="2">
  <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top"><textarea class="commFl" style="height:100px;width:100%;" rows="8" name="c_message" cols="30"></textarea></td>
  <td width="5%" valign="top" align="center" style="padding-left:3px;">
   <script language=JavaScript>var ico;function smile(ico) {document.comment.c_message.value=document.comment.c_message.value+ico;}</script>
@@ -85,15 +95,15 @@ $comm_num = mssql_num_rows($result);
  </td></tr>
  </table>
 </td></tr>
-<tr><td class="commTd2" colspan="2" align="center"><input class="commSbmFl" type="submit" value="- Add Comment -"></td></tr>
+<tr><td style="padding-bottom: 4px;" colspan="2" align="center"><input type="submit" value="<?echo mmw_lang_add_comment;?>"></td></tr>
 </table>
 </form>
 <?
    }
   elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {
-      echo "$die_start Sorry, you can't add comment, need Character! $die_end";
+      echo $die_start . mmw_lang_cant_add_comment_no_char . $die_end;
    }
   else {
-      echo '<div align="center" class="commReg">The only authorized users can add comments.<br />[ <a href="?op=register">Register</a> | <a href="?op=login">Login</a> ]</div>';
+      echo '<div align="center">'.mmw_lang_guest_must_be_logged_on.'<br />[ <a href="?op=register">'.mmw_lang_register.'</a> | <a href="?op=login">'.mmw_lang_login.'</a> ]</div>';
    }
 ?>

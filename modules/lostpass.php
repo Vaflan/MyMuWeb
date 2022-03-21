@@ -24,75 +24,49 @@ elseif($_GET["step"]=="2")
  }
 ?>
 
-<script language="Javascript">
-function lostpassword_form()
-{
-if ( document.lostpass.username.value == "")
-{
-alert("Please Enter Your Username.");
-return false;
-}
-if ( document.lostpass.email.value == "")
-{
-alert("Please Enter Your E-Mail Address.");
-return false;
-}
-//return false;
-document.search_.submit();
-}
-</script>
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="bgcolor" align="center">
-        <fieldset><legend>Lost Password</legend>
-
-	<?if($step == ""){?>
-		<form action="?op=lostpass&step=1" method="post" name="lostpass" id="lostpass">
-		<?if($error=="login"){echo "$die_start Login or E-Mail Address You Entered Is Incorrect! $die_end";}?>
-		<?if($error=="answer"){echo "$die_start Secret Answer Is Incorrect! $die_end";}?>
-		<table width="246" border="0" cellspacing="4" cellpadding="0">
+<?if($step == "") {?>
+		<form action="?op=lostpass&step=1" method="post" name="lostpass">
+		<?if($error=="login"){echo $die_start . mmw_lang_account_or_email_address_is_incorrect . $die_end . $rowbr;}?>
+		<?if($error=="answer"){echo $die_start . mmw_lang_secret_answer_is_incorrect . $die_end . $rowbr;}?>
+		<table width="250" border="0" cellspacing="0" cellpadding="0" class="sort-table" align="center">
                       <tr>
-                        <td width="102" align="right">Login</td>
-                        <td width="144"><input name="username" type="text" id="username" maxlength="10"></td>
+                        <td width="100" align="right"><?echo mmw_lang_account;?></td>
+                        <td><input name="username" type="text" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td align="right">E-Mail Address</td>
-                        <td><input name="email" type="text" id="email" maxlength="50"></td>
+                        <td align="right"><?echo mmw_lang_email_address;?></td>
+                        <td><input name="email" type="text" maxlength="50"></td>
                       </tr>
-                    </table>
-                    <table width="200" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td width="114" align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></td>
-                        <td width="74"><input type="reset" name="Reset" value="Reset" class="button"></td>
+                        <td colspan="2" align="center"><input type="submit" name="Submit" value="<?echo mmw_lang_find_password;?>"> <input type="reset" value="<?echo mmw_lang_renew;?>"></td>
                       </tr>
 		</table>
 		</form>
-	<?}elseif($step == "1"){?>
-		<form action="?op=lostpass&step=2" method="post" name="step2" id="step2">
-		<input name="username" type="hidden" id="username" value="<?echo $_POST['username'];?>">
-		<input name="email" type="hidden" id="email" value="<?echo $_POST['email'];?>">
-		<input name="squestion" type="hidden" id="squestion" value="<?echo $quest;?>">
-		<table width="246" border="0" cellspacing="4" cellpadding="0">
+<?}elseif($step == "1") {?>
+		<form action="?op=lostpass&step=2" method="post" name="step2">
+		<input name="username" type="hidden" value="<?echo $_POST['username'];?>">
+		<input name="email" type="hidden" value="<?echo $_POST['email'];?>">
+		<input name="squestion" type="hidden" value="<?echo $quest;?>">
+		<table width="250" border="0" cellspacing="0" cellpadding="0" class="sort-table" align="center">
                       <tr>
-                        <td align="right">Secret Question</td>
+                        <td width="100" align="right"><?echo mmw_lang_secret_question;?></td>
                         <td><b><?echo $quest;?></b></td>
                       </tr>
                       <tr>
-                        <td align="right">Secret Answer</td>
-                        <td><input name="sanswer" type="text" id="sanswer" size="15" maxlength="10"></td>
+                        <td align="right"><?echo mmw_lang_secret_answer;?></td>
+                        <td><input name="sanswer" type="text" size="15" maxlength="10"></td>
                       </tr>
-                    </table>
-                    <table width="200" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td width="114" align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></td>
-                        <td width="74"><input type="reset" name="Reset" value="Reset" class="button"></td>
+                        <td colspan="2" align="center"><input type="submit" name="Submit" value="<?echo mmw_lang_find_password;?>"> <input type="reset" value="<?echo mmw_lang_renew;?>"></td>
                       </tr>
 		</table>
 		</form>
-	<?}elseif($step == "2"){?>
-		<?require("includes/character.class.php");option::lostpassword();?>
-	<?}else{echo "Error! Death Hacker!";}?>
-        </fieldset>
-      </td>
-    </tr>
-</table>
+<?
+}
+elseif($step == "2") {
+require("includes/character.class.php");option::lostpassword();
+}
+else {
+echo "$die_start What You Doing? d(O.o)b $die_end $rowbr";
+}
+?>

@@ -1,6 +1,4 @@
-G<?PHP
-require('config.php');
-
+<?PHP
 $search = stripslashes($_POST['character_search']);
 $search_type = stripslashes($_POST['search_type']);
 

@@ -1,4 +1,6 @@
 <?php
+// Formats by Vaflan
+// For MyMuWeb
 
 /////// Start Time Format ///////
 function time_format($date,$format) {
@@ -149,6 +151,32 @@ function bugsend($bug_send) {
 return $bug_send;
 }
 /////// END Smile Formats ///////
+
+
+
+
+
+/////// Start Zen Formats ///////
+function zen_format($money) {
+   $money_check = substr($money, -3);
+   if($money_check=='000') {
+	$money = substr($money, 0, -3) . 'k';
+	$money_check = substr($money, -4);
+	if($money_check=='000k') {
+	   $money = substr($money, 0, -4) . 'kk';
+	   $money_check = substr($money, -5);
+	   if($money_check=='000kk') {
+		$money = substr($money, 0, -5) . 'kkk';
+	   }
+	}
+   }
+   else {
+   $money = number_format($money);
+   }
+return $money;
+}
+/////// END Zen Formats ///////
+
 
 
 
@@ -390,7 +418,6 @@ return $a_level;
 
 
 
-
 /////// Start PK Status Formats ///////
 function pkstatus($pkstatus) {
 if($pkstatus == 1){$pkstatus = 'Hero';}
@@ -404,6 +431,38 @@ return $pkstatus;
 }
 /////// END PK Status Formats ///////
 
+
+
+
+
+
+
+/////// Start Guild Status Formats ///////
+function guild_status($num) {
+if($num == 0){$num = mmw_lang_guild_member;}
+elseif($num == 32){$num = mmw_lang_battle_master;}
+elseif($num == 64){$num = mmw_lang_assistant_guild_master;}
+elseif($num == 128){$num = mmw_lang_guild_master;}
+else{$num = 'Unknow';}
+return $num;
+}
+/////// END Guild Status Formats ///////
+
+
+
+
+
+
+
+
+/////// Start Gender Formats ///////
+function gender($gender) {
+if($gender == 'male'){$gender = mmw_lang_male.' <img src="images/male.gif">';}
+elseif($gender == 'female'){$gender = mmw_lang_female.' <img src="images/female.gif">';}
+else{$gender = 'Unknow';}
+return $gender;
+}
+/////// END Gender Formats ///////
 
 
 
@@ -435,15 +494,15 @@ elseif($class == 82){$class = 'Dimension Master';}
 else{$class = 'Unknow';}
 }
 elseif($style==img) {
-if($class >= 0 && $class <= 2){$class = '<img src=images/char/dw.gif>';}
-elseif($class >= 16 && $class <= 18){$class = '<img src=images/char/dk.gif>';}
-elseif($class >= 32 && $class <= 34){$class = '<img src=images/char/elf.gif>';}
-elseif($class >= 48 && $class <= 50){$class = '<img src=images/char/mg.gif>';}
-elseif($class >= 64 && $class <= 66){$class = '<img src=images/char/dl.gif>';}
-elseif($class >= 80 && $class <= 82){$class = '<img src=images/char/sum.gif>';}
+if($class >= 0 && $class <= 2){$class = '<img src=images/char/dw.gif width=110>';}
+elseif($class >= 16 && $class <= 18){$class = '<img src=images/char/dk.gif width=110>';}
+elseif($class >= 32 && $class <= 34){$class = '<img src=images/char/ef.gif width=110>';}
+elseif($class >= 48 && $class <= 50){$class = '<img src=images/char/mg.gif width=110>';}
+elseif($class >= 64 && $class <= 66){$class = '<img src=images/char/dl.gif width=110>';}
+elseif($class >= 80 && $class <= 82){$class = '<img src=images/char/sm.gif width=110>';}
 else{$class = 'Unknow';}
 }
-elseif($style==mess) {
+elseif($style==photo) {
 if($class >= 0 && $class <= 2){$class = '0x00FFFFFFFFFF000000F80000F0FFFFFF';}
 elseif($class >= 16 && $class <= 18){$class = '0x20FFFFFFFFFF000000F80000F0FFFFFF';}
 elseif($class >= 32 && $class <= 34){$class = '0x40FFFFFFFFFF000000F80000F0FFFFFF';}
@@ -463,11 +522,9 @@ elseif($class == 32){$class = 'Elf';}
 elseif($class == 33){$class = 'ME';}
 elseif($class == 34){$class = 'HE';}
 elseif($class == 48){$class = 'MG';}
-elseif($class == 49){$class = 'DM';}
-elseif($class == 50){$class = 'DM';}
+elseif($class == 49 || $class == 50){$class = 'DM';}
 elseif($class == 64){$class = 'DL';}
-elseif($class == 65){$class = 'LE';}
-elseif($class == 66){$class = 'LE';}
+elseif($class == 65 || $class == 66){$class = 'LE';}
 elseif($class == 80){$class = 'Sum';}
 elseif($class == 81){$class = 'Bsum';}
 elseif($class == 82){$class = 'Dim';}

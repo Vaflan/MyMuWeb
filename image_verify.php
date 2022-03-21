@@ -1,9 +1,11 @@
 <?PHP
+// Image Verify For MMW
+// Edited by Vaflan
+// Creator =Master=
+// generate 5 digit random Alpha
+
 session_start();
 
-// Edited by Vaflan
-// generate 5 digit random Alpha
-//$rand = rand(10000, 99999);
 $alphanum = "abcdefghijklmnopqwstuvwxyz0123456789";
 $rand = substr(str_shuffle($alphanum), 0, 6);
 
@@ -13,11 +15,20 @@ $_SESSION['image_random_value'] = md5($rand);
 // create the image
 $image = imagecreate(54, 18);
 
-// use white as the background image
-$bgColor = imagecolorallocate ($image, 0x79, 0x79, 0x79);
-
-// the text color is black
-$textColor = imagecolorallocate ($image, 0xCC, 0XCC, 0xCC);
+// Generate 3 Img Color
+$coloring = rand(1,3);
+if($coloring == 1) {
+	$bgColor = imagecolorallocate ($image, 0x79, 0x79, 0x79);
+	$textColor = imagecolorallocate ($image, 0xEE, 0XEE, 0xEE);
+ }
+if($coloring == 2) {
+	$bgColor = imagecolorallocate ($image, 0xCC, 0xCC, 0xCC);
+	$textColor = imagecolorallocate ($image, 0x00, 0X00, 0x00);
+ }
+if($coloring == 3) {
+	$bgColor = imagecolorallocate ($image, 0x00, 0x00, 0x00);
+	$textColor = imagecolorallocate ($image, 0xFF, 0XFF, 0xFF);
+ }
 
 // write the random number
 imagestring ($image, 4, 3, 1, $rand, $textColor);

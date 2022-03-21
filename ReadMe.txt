@@ -19,7 +19,7 @@ Change: 'IP Address', 'Login', 'Password', 'DataBase'
 *****************
 Change DataBase.
 Open Browser:
-http://mywebsite/install.php
+http://localhost/install.php
 
 And if All Done, Please Delete 'install.php'.
 
@@ -34,8 +34,11 @@ Admin Username = Your Login in Reg WebSite
 Admin Password = Your Password in Reg WebSite
 Admin SecurityCode = '1234'
 
-How add Mp3 to Player?
+How to add Mp3 to Player?
 add all need mp3 to 'media' folder.
+
+How to add Language?
+add language_name.php to 'lang' folder.
 !----------------------!
 
 Thank For use my MMW.

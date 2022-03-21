@@ -1,8 +1,14 @@
 <?PHP
+// This is modified Admin area
+// Creatro =Master=, Editor Vaflan
+// For MyMuWeb
+
 session_start();
 header("Cache-control: private");
 include("config.php");
+include("admin/inc/query.php");
 include("includes/sql_check.php");
+include("includes/xss_check.php");
 include("includes/formats.php");
 include("admin/inc/functions.php");
 ?>
@@ -35,6 +41,7 @@ include("admin/inc/functions.php");
 <?}if($_SESSION[a_admin_level] > 3){?>
 <a href="?op=news">News</a> | 
 <a href="?op=downloads">Downloads</a> | 
+<a href="?op=votes">Votes</a> | 
 <?}?>
 <a href="?op=char">Search Character</a> | 
 <a href="?op=acc">Search Account</a> | 

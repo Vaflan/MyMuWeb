@@ -1,11 +1,11 @@
-<?
+<?PHP
 if(isset($_POST[hexwh_run])){require("includes/character.class.php");option::edit_warehouse($_POST[hexwh_run]); echo $rowbr;}
 if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg($_POST[gm_msg]); echo $rowbr;}
 ?>
 
-  <table width="200" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+  <table class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
-      <td width="80" align="right">Your Level:</td>
+      <td width="100" align="right">Your Level:</td>
       <td><b><?echo $_SESSION['admin'];?> (<?echo admin_level($_SESSION['admin']);?>)</b></td>
     </tr>
     <tr>
@@ -32,10 +32,10 @@ $vault = substr(mssql_get_last_message(),2);
 <form name='edit_wh' method='post' action=''>
   <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'>           
 	<tr>
-          <td><textarea name="hexwh_run" cols="80" rows="12" id="hexwh_run"><?echo $vault;?></textarea></td>
+          <td><textarea name="hexwh_run" cols="80" rows="12"><?echo $vault;?></textarea></td>
 	</tr>
 	<tr>
-          <td align="center"><input name='submit' type='submit' value='Submit'> <input name='reset' type='reset' value='Reset'></td>
+          <td align="center"><input name='submit' type='submit' value='Submit'> <input name='reset' type='reset' value='Renew'></td>
 	</tr>
   </table>
 </form>
@@ -51,10 +51,10 @@ echo "<center><b>GameMaster Chat In Game!</b></center>" . $rowbr;
 <form name='form_gm_msg' method='post' action=''>
   <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'>           
 	<tr>
-          <td><input name='gm_msg' type='text' id='gm_msg' value='<?echo $gm_msg;?>' size='60' maxlength='40'></td>
+          <td><input name='gm_msg' type='text' value='<?echo $gm_msg;?>' size='60' maxlength='40'></td>
 	</tr>
 	<tr>
-          <td align="center"><input name='submit' type='submit' value='Submit'> <input name='reset' type='reset' value='Reset'></td>
+          <td align="center"><input name='submit' type='submit' value='Submit'> <input name='reset' type='reset' value='Renew'></td>
 	</tr>
   </table>
 </form>

@@ -2,6 +2,7 @@
 // All Tested and Work 100%!
 // Decode By Vaflan v1.1
 // http://tk3.clan.su
+// For MyMuWeb
 
 $size = 40;
 $pixelSize = $size/8;
@@ -12,7 +13,7 @@ for ($y=0;$y<8;$y++){
     for ($x=0;$x<8;$x++){
         $offset=($y*8)+$x;
 
-	if(substr($hex, $offset, 1) == '0'){$c1 = "79"; $c2 = "79"; $c3 = "79";} // BackGround WebSite Color
+	if(substr($hex, $offset, 1) == '0'){$c1 = "255"; $c2 = "255"; $c3 = "255";} // BackGround WebSite Color
 	elseif(substr($hex, $offset, 1) == '1'){$c1 = "0"; $c2 = "0"; $c3 = "0";}
 	elseif(substr($hex, $offset, 1) == '2'){$c1 = "128"; $c2 = "128"; $c3 = "128";}
 	elseif(substr($hex, $offset, 1) == '3'){$c1 = "255"; $c2 = "255"; $c3 = "255";}

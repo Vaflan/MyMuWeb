@@ -31,7 +31,7 @@ else {
 
 <?if($format == 'mp3'){?>
 <br>
-<embed src="player.swf?file=<?echo $file;?>&backcolor=0xCDCDCD" allowscriptaccess="always" width="400" height="20" bgcolor="#CDCDCD" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="player.swf?file=<?echo $file;?>&backcolor=0xCDCDCD&plugins=no" allowscriptaccess="always" width="400" height="20" bgcolor="#CDCDCD" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 <?}?>
 
 <br>

@@ -15,7 +15,6 @@ if($dh = opendir($dir)) {
 	  if($format == 'mp3') {
 		$num = $num + 1;
 		$size = filesize($dir.$file) . " Bytes";
-		//echo "$num. $dir$file ($format,$size) <br>\n";
 		$track[$num] = "\n        <track>\n            <location>$dir$file</location>\n            <title>$num. $file</title>\n            <creator>MyMuWeb</creator>\n            <annotation>MuOnline MMORPG Music by Vaflan</annotation>\n            <info>".$dir."?f=$file</info>\n        </track>\n";
 		$folder_list = $folder_list . $track[$num];
 	  }
@@ -37,5 +36,5 @@ echo $rowbr;
 ?>
 
 <center>
-<embed src="media/player.swf?file=media/playlist.xml&autostart=true&volume=100&backcolor=0xCDCDCD" allowscriptaccess="always" width="400" height="20" bgcolor="#CDCDCD" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="media/player.swf?file=media/playlist.xml&autostart=true&volume=100&backcolor=0xFFFFFF&plugins=no" allowscriptaccess="always" width="400" height="20" bgcolor="#FFFFFF" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </center>

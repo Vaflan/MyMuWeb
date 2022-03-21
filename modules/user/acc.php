@@ -11,6 +11,8 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
    $timeinfo_reslut = mssql_query("select CONNECTTM,DISCONNECTTM,connectstat from MEMB_STAT where memb___id = '$account'");
    $timeinfo = mssql_fetch_row($timeinfo_reslut);
 
+ // Referral
+ if($mmw[switch_ref]==yes) {
    $referral_result = mssql_query("SELECT memb___id,ref_check FROM MEMB_INFO WHERE ref_acc='$login'");
    $referral_num = mssql_num_rows($referral_result);
    if($referral_num>0) {
@@ -31,23 +33,22 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
 				}
 			}
 		}
-		if($referral_row[1]==1) {$ref_status="Have a Reset";} else {$ref_status="Have not a Reset";}
+		if($referral_row[1]==1) {$ref_status = mmw_lang_have_a_reset;} else {$ref_status = mmw_lang_have_not_a_reset;}
 		$referral_list = $referral_list . "$rank. $referral_row[0] ($ref_status)<br>";
 	}
    }
    else {
-	$referral_list = "No Referral";
+	$referral_list = mmw_lang_no_referral;
    }
    $referral_result_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE ref_acc='$login' AND ref_check='1'");
    $referral_num_check = mssql_num_rows($referral_result_check);
-
+ }
  // Online
-   if($acc_info[4]!='') {$gender_img=" <img src='images/$acc_info[4].gif'>";}
-   if($acc_info[6]==1) {$hide_profile="Yes";} else {$hide_profile="No";}
+   if($acc_info[6]==1) {$hide_profile = mmw_lang_yes;} else {$hide_profile = mmw_lang_no;}
    $country = country($acc_info[3]);
 
  // Offline
-   if($acc_info[4]=='Female') {$gender_sel[1]="selected";} else {$gender_sel[0]="selected";}
+   if($acc_info[4]=='female') {$gender_sel[1]="selected";} else {$gender_sel[0]="selected";}
    if($acc_info[6]>=0) {$hide_profile_sel[$acc_info[6]]="selected";}
    for($i=0; $i<139; ++$i) {
 	$country = country($i);
@@ -55,161 +56,163 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
 	$select_country = $select_country . "<option value='$i' $selected_country>$country</option>";
    }  
 ?>
-<form action="" method="post" name="change_profile" id="change_profile">
-  <table width="300" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+<form action="" method="post" name="change_profile">
+  <table width="380" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
-      <td width="78" align="right">Account ID:</td>
+      <td align="right"><?echo mmw_lang_account;?>:</td>
       <td><b><?echo $login;?></b></td>
     </tr>
     <tr>
-      <td align="right">E-Mail:</td>
+      <td align="right"><?echo mmw_lang_email_address;?>:</td>
       <td><?echo $acc_info[0];?></td>
     </tr>
     <tr>
-      <td align="right">Reg Date:</td>
+      <td align="right"><?echo mmw_lang_register_date;?>:</td>
       <td><?echo time_format($acc_info[11],"d M Y, H:i");?></td>
     </tr>
+<?if($mmw[switch_ref]==yes){?>
     <tr>
-      <td align="right">Referral:</td>
-      <td>1 Referral With Reset = <?echo substr($mmw[zen_for_ref], 0, -6)."kk";?> Zen</td>
+      <td align="right"><?echo mmw_lang_about_referral;?>:</td>
+      <td><?echo mmw_lang_one_referral_with_reset.' = '.zen_format($mmw[zen_for_ref]).' Zen';?></td>
     </tr>
     <tr>
-      <td align="right">Referral Link:</td>
+      <td align="right"><?echo mmw_lang_referral_link;?>:</td>
       <td><?echo $mmw[serverwebsite];?>?ref=<?echo $login;?></td>
     </tr>
     <tr>
-      <td align="right">Your Referrals:</td>
-      <td><a href="#" class="helpLink" onclick="showHelpTip(event,'<?echo $referral_list;?>',false); return false">All: <?echo $referral_num;?>, Have a Reset: <?echo $referral_num_check;?></td>
+      <td align="right"><?echo mmw_lang_your_referrals;?>:</td>
+      <td><a href="#" class="helpLink" onclick="showHelpTip(event,'<?echo $referral_list;?>',false); return false"><?echo mmw_lang_all_referrals.": $referral_num, ".mmw_lang_have_a_reset.": $referral_num_check";?></td>
     </tr>
+<?}?>
 <?if($timeinfo[2] == '1'){?>
     <tr>
-      <td align="right">Last Login:</td>
+      <td align="right"><?echo mmw_lang_last_login;?>:</td>
       <td align="left"><?echo time_format($timeinfo[0],"d M Y, H:i");?></td>
     </tr>
     <tr>
-      <td align="right">Login Status:</td>
-      <td align="left"><span class="online">Online</span></td>
+      <td align="right"><?echo mmw_lang_login_status;?>:</td>
+      <td align="left"><span class="online"><?echo mmw_lang_online;?></span></td>
     </tr>
     <tr>
-      <td align="right">Time in Playing:</td>
+      <td align="right"><?echo mmw_lang_time_in_playing;?>:</td>
       <td align="left"><span class="online"><?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),time());?></span></td>
     </tr>
 <?}elseif($timeinfo[2] == '0') {?>
     <tr>
-      <td align="right">Last Login:</td>
+      <td align="right"><?echo mmw_lang_last_login;?>:</td>
       <td align="left"><?echo time_format($timeinfo[0],"d M Y, H:i");?></td>
     </tr>
     <tr>
-      <td align="right">Login Status:</td>
-      <td align="left"><span class="offline">Offline [<?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),time());?>]</span></td>
+      <td align="right"><?echo mmw_lang_login_status;?>:</td>
+      <td align="left"><span class="offline"><?echo mmw_lang_offline;?> [<?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),time());?>]</span></td>
     </tr>
     <tr>
-      <td align="right">Last Play Time:</td>
+      <td align="right"><?echo mmw_lang_last_play_time;?>:</td>
       <td align="left"><span class="offline"><?echo date_formats(time_format($timeinfo[0],"d.m.Y H:i"),strtotime(time_format($timeinfo[1],"d.m.Y H:i")));?></span></td>
     </tr>
 <?}else{?>
     <tr>
-      <td align="right">Last Login:</td>
-      <td align="left">Not Joined</td>
+      <td align="right"><?echo mmw_lang_last_login;?>:</td>
+      <td align="left"><?echo mmw_lang_not_joined;?></td>
     </tr>
     <tr>
-      <td align="right">Login Status:</td>
-      <td align="left">Not Joined</td>
+      <td align="right"><?echo mmw_lang_login_status;?>:</td>
+      <td align="left"><?echo mmw_lang_not_joined;?></td>
     </tr>
     <tr>
-      <td align="right">Last Play Time:</td>
-      <td align="left">Not Joined</td>
+      <td align="right"><?echo mmw_lang_last_play_time;?>:</td>
+      <td align="left"><?echo mmw_lang_not_joined;?></td>
     </tr>
 <?}?>
     <tr>
-      <td align="right">Full Name:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[1];} else{?><input name='fullname' type='text' id='fullname' value='<?echo $acc_info[1];?>' size='12' maxlength='12'><?}?></td>
+      <td align="right"><?echo mmw_lang_full_name;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[1];} else{?><input name='fullname' type='text' value='<?echo $acc_info[1];?>' size='12' maxlength='10'><?}?></td>
     </tr>
     <tr>
-      <td align="right">Age:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[2];} else{?><input name='age' type='text' id='age' value='<?echo $acc_info[2];?>' size='2' maxlength='2'><?}?></td>
+      <td align="right"><?echo mmw_lang_age;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[2];} else{?><input name='age' type='text' value='<?echo $acc_info[2];?>' size='2' maxlength='2'><?}?></td>
     </tr>
     <tr>
-      <td align="right">Country:</td>
-      <td><?if($timeinfo[2] == '1'){echo $country;} else{?><select name='country' id='country'><?echo $select_country;?></select><?}?></td>
+      <td align="right"><?echo mmw_lang_country;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo $country;} else{?><select name='country'><?echo $select_country;?></select><?}?></td>
     </tr>
     <tr>
-      <td align="right">Gender:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[4].$gender_img;} else{?><select name='gender' id='gender'><option value='Male'<?echo $gender_sel[0];?>>Male</option><option value='Female'<?echo $gender_sel[1];?>>Female</option></select><?}?></td>
+      <td align="right"><?echo mmw_lang_gender;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo gender($acc_info[4]);} else{?><select name='gender'><option value='male'<?echo $gender_sel[0];?>><?echo mmw_lang_male;?></option><option value='female'<?echo $gender_sel[1];?>><?echo mmw_lang_female;?></option></select><?}?></td>
     </tr>
     <tr>
-      <td align="right">Avatar url:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[5];} else{?><input name='avatar' type='text' id='avatar' value='<?echo $acc_info[5];?>' size='20' maxlength='100'><?}?></td>
+      <td align="right"><?echo mmw_lang_avatar_url;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[5];} else{?><input name='avatar' type='text' value='<?echo $acc_info[5];?>' size='20' maxlength='100'><?}?></td>
     </tr>
     <tr>
-      <td align="right">Hide Profile:</td>
-      <td><?if($timeinfo[2] == '1'){echo $hide_profile;} else{?><select name='hide_profile' id='hide_profile'><option value='0'<?echo $hide_profile_sel[0];?>>No</option><option value='1'<?echo $hide_profile_sel[1];?>>Yes</option></select><?}?></td>
+      <td align="right"><?echo mmw_lang_hide_profile;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo $hide_profile;} else{?><select name='hide_profile'><option value='0'<?echo $hide_profile_sel[0];?>><?echo mmw_lang_no;?></option><option value='1'<?echo $hide_profile_sel[1];?>><?echo mmw_lang_yes;?></option></select><?}?></td>
     </tr>
     <tr>
       <td align="right">Yahoo!:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[7];} else{?><input name='y' type='text' id='y' value='<?echo $acc_info[7];?>' size='20' maxlength='100'><?}?></td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[7];} else{?><input name='y' type='text' value='<?echo $acc_info[7];?>' size='20' maxlength='100'><?}?></td>
     </tr>
     <tr>
       <td align="right">MSN:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[8];} else{?><input name='msn' type='text' id='msn' value='<?echo $acc_info[8];?>' size='20' maxlength='100'><?}?></td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[8];} else{?><input name='msn' type='text' value='<?echo $acc_info[8];?>' size='20' maxlength='100'><?}?></td>
     </tr>
     <tr>
-      <td align="right">ICQ Number:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[9];} else{?><input name='icq' type='text' id='icq' value='<?echo $acc_info[9];?>' size='20' maxlength='100'><?}?></td>
+      <td align="right">ICQ:</td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[9];} else{?><input name='icq' type='text' value='<?echo $acc_info[9];?>' size='20' maxlength='100'><?}?></td>
     </tr>
     <tr>
-      <td align="right">Skype Name:</td>
-      <td><?if($timeinfo[2] == '1'){echo $acc_info[10];} else{?><input name='skype' type='text' id='skype' value='<?echo $acc_info[10];?>' size='20' maxlength='100'><?}?></td>
+      <td align="right">Skype:</td>
+      <td><?if($timeinfo[2] == '1'){echo $acc_info[10];} else{?><input name='skype' type='text' value='<?echo $acc_info[10];?>' size='20' maxlength='100'><?}?></td>
     </tr>
     <tr>
-      <td align="right">Profile:</td>
-      <td><?if($timeinfo[2] == '1'){?>You Want Change? Must Be Logged Off!<?} else{?><input type='submit' name='Submit' value='Save Profile'> <input name='profile' type='hidden' id='profile' value='profile'> <input type='reset' name='Reset' value='Reset'><?}?></td>
+      <td align="right"><?echo mmw_lang_profile;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo mmw_lang_cant_change_online;} else{?><input type='submit' name='Submit' value='<?echo mmw_lang_save_profile;?>'> <input name='profile' type='hidden' value='profile'> <input type='reset' name='Reset' value='<?echo mmw_lang_renew;?>'><?}?></td>
     </tr>
 </table>
 </form>
 
 <?echo $rowbr;?>
 
-<form action="" method="post" name="change_password" id="change_password">
-  <table width="300" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+<form action="" method="post" name="change_password">
+  <table width="380" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
-      <td width="120" align="right">Curent Password:</td>
-      <td><input name='oldpassword' type='password' id='oldpassword' size='17' maxlength='10'></td>
+      <td align="right"><?echo mmw_lang_current_password;?>:</td>
+      <td><input name='oldpassword' type='password' size='17' maxlength='10'></td>
     </tr>
     <tr>
-      <td align="right">New Password:</td>
-      <td><input name='newpassword' type='password' id='newpassword' size='17' maxlength='10'></td>
+      <td align="right"><?echo mmw_lang_new_password;?>:</td>
+      <td><input name='newpassword' type='password' size='17' maxlength='10'></td>
     </tr>
     <tr>
-      <td align="right">Retype New Password:</td>
-      <td><input name='renewpassword' type='password' id='renewpassword' size='17' maxlength='10'></td>
+      <td align="right"><?echo mmw_lang_retype_new_password;?>:</td>
+      <td><input name='renewpassword' type='password' size='17' maxlength='10'></td>
     </tr>
     <tr>
-      <td align="right">Password:</td>
-      <td><?if($timeinfo[2] == '1'){?>Must Be Logged Off!<?} else{?><input type='submit' name='Submit' value='Change Password' onclick='return check_password_form()'><?}?></td>
+      <td align="right"><?echo mmw_lang_password;?>:</td>
+      <td><?if($timeinfo[2] == '1'){echo mmw_lang_cant_change_online;} else{?><input type='submit' name='Submit' value='<?echo mmw_lang_change_password;?>'><?}?></td>
     </tr>
   </table>
 </form>
 
 <?echo $rowbr;?>
 
-<form action="" method="post" name="new_request" id="new_request">
-  <table width="300" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+<form action="" method="post" name="new_request">
+  <table width="380" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
-      <td align="right" width="30">To:</td>
+      <td align="right"><?echo mmw_lang_to;?>:</td>
       <td><?echo $mmw[servername];?> Administrator</td>
     </tr>
     <tr>
-      <td align="right">Title:</td>
-      <td><input name="subject" type="text" id="subject" size="30" maxlength="30"></td>
+      <td align="right"><?echo mmw_lang_title;?>:</td>
+      <td><input name="subject" type="text" size="30" maxlength="30"></td>
     </tr>
     <tr>
-      <td align="right">Text:</td>
-      <td><textarea name="msg" cols="40" rows="10" id="msg" onFocus="CheckLeng(this,'250')" onBlur="CheckLeng(this,'250')" onChange="CheckLeng(this,'250')" onKeyDown="CheckLeng(this,'250')" onKeyUp="CheckLeng(this,'250')"></textarea></td>
+      <td align="right"><?echo mmw_lang_text;?>:</td>
+      <td><textarea name="msg" cols="32" rows="8" onFocus="CheckLeng(this,'250')" onBlur="CheckLeng(this,'250')" onChange="CheckLeng(this,'250')" onKeyDown="CheckLeng(this,'250')" onKeyUp="CheckLeng(this,'250')"></textarea></td>
     </tr>
     <tr>
-      <td align="right">Message:</td>
-      <td><input type="submit" name="Submit" value="Send"> <input name="new_request" type="hidden" id="new_request" value="new_request"> <input type="reset" name="Reset" value="Reset"></td>
+      <td align="right"><?echo mmw_lang_message;?>:</td>
+      <td><input type="submit" name="Submit" value="<?echo mmw_lang_send_message;?>"> <input name="new_request" type="hidden" value="new_request"> <input type="reset" name="Reset" value="<?echo mmw_lang_renew;?>"></td>
     </tr>
   </table>
 </form>

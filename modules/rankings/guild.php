@@ -1,22 +1,21 @@
-<?
-$top_rank=stripslashes($_POST['top_rank']);
-$top_rank=clean_var($top_rank);
+<?PHP
+$top_rank = clean_var(stripslashes($_POST['top_rank']));
 ?>
-<br>Top <?echo $top_rank;?> Guilds<br>&nbsp;</br>
-           <table class="sort-table" id="table-1" height="30" cellspacing="0" cellpadding="0" border="0">
+<br><?echo mmw_lang_top." $top_rank ".mmw_lang_guilds;?><br>&nbsp;</br>
+           <table class="sort-table" cellspacing="0" cellpadding="0" border="0">
            <thead><tr>
-           <td class=thead2>#</td>
-           <td class=thead2 title="Name Of Guild">Name</td>
-           <td class=thead2>Score</td>
-           <td class=thead2>Master</td>
-           <td class=thead2>Members</td>
-           <td class=thead2>Logo</td>
+           <td>#</td>
+           <td><?echo mmw_lang_guild;?></td>
+           <td><?echo mmw_lang_score;?></td>
+           <td><?echo mmw_lang_master;?></td>
+           <td><?echo mmw_lang_members;?></td>
+           <td><?echo mmw_lang_logo;?></td>
            </tr></thead>
 <?
 $result = mssql_query("SELECT TOP $top_rank G_Name,G_Score,G_Master,G_Mark FROM Guild WHERE G_Name!='$mmw[gm_guild]' order by G_score desc");
 $row_num = mssql_num_rows($result);
 if($row_num==0) {
- echo '<tr><td colspan="6">No Guild</td></tr>';
+ echo '<tr><td colspan="6">'.mmw_lang_no_guilds.'</td></tr>';
 }
 
 for($i=0;$i < $row_num;++$i)
@@ -35,7 +34,7 @@ echo "<tbody><tr>
             <td>$row[1]</td>
             <td><a href=index.php?op=character&character=$row[2]>$row[2]</a></td>
             <td>$members</td>
-            <td title='Guild Logo'><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=20 width=20 broder=0></a></td>
+            <td><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=20 width=20 broder=0></a></td>
             </tr></tbody>";    
        }
 ?>

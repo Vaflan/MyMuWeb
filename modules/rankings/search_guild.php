@@ -1,26 +1,22 @@
-<?
-$search = clean_var(stripslashes($_POST['character_search']));
-$search_type = clean_var(stripslashes($_POST['search_type']));
+<?PHP
+$search = clean_var(stripslashes($_POST['search']));
 
-if($_POST['search_type']==1)
-{$result = mssql_query("SELECT * from guild where G_Name='$search' order by G_score desc");}
-if($_POST['search_type']==0)
-{$result = mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");}
+$result = mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");
 $row_num = mssql_num_rows($result);
 ?>
-<br>Search Guild Results</br><br>&nbsp;</br>
-           <table class="sort-table" id="table-1" height="30" cellspacing="0" cellpadding="0" border="0">
+<br><?echo mmw_lang_search_guild_results;?></br><br>&nbsp;</br>
+           <table class="sort-table" cellspacing="0" cellpadding="0" border="0">
            <thead><tr>
-           <td class=thead2>#</td>
-           <td class=thead2 title="Name Of Guild">Name</td>
-           <td class=thead2>Score</td>
-           <td class=thead2>Master</td>
-           <td class=thead2>Members</td>
-           <td class=thead2>Logo</td>
+           <td>#</td>
+           <td><?echo mmw_lang_guild;?></td>
+           <td><?echo mmw_lang_score;?></td>
+           <td><?echo mmw_lang_master;?></td>
+           <td><?echo mmw_lang_members;?></td>
+           <td><?echo mmw_lang_logo;?></td>
            </tr></thead>
 <?
 if($row_num==0) {
- echo '<tr><td colspan="6">Not Find!</td></tr>';
+ echo '<tr><td colspan="6">'.mmw_lang_cant_find.'</td></tr>';
 }
 
 for($i=0;$i < $row_num;++$i)
@@ -38,7 +34,7 @@ echo "<tbody><tr>
             <td>$row[2]</td>
             <td><a href=index.php?op=character&character=$row[3]>$row[3]</a></td>
             <td>$row2[0]</td>
-            <td title='Guild Logo' align='center'><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=10 width=10 broder=0></a></td>
+            <td align='center'><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=10 width=10 broder=0></a></td>
             </tr></tbody>";    
        }
 ?>

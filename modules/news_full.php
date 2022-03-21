@@ -11,9 +11,9 @@ for($i=0;$i < mssql_num_rows($get_news);++$i)
 
 echo    '<table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
         <tr><td style="padding:0px;">
-        <div class="eTitle" style="text-align:left;">'.$row[0].'</div>
-        <div class="eMessage" style="text-align:left;clear:both;padding-top:2px;padding-bottom:2px;">'.$news_eng.$news_rus.'</div>
-        <div class="eDetails" style="clear:both;">&nbsp; Category: '.$row[2].' | Author: <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | Date: <span title="'.$date.'">'.$date.'</span>
+        <div class="eTitle">'.$row[0].'</div>
+        <div class="eMessage">'.$news_eng.$news_rus.'</div>
+        <div class="eDetails">'.mmw_lang_category.': '.$row[2].' | '.mmw_lang_author.': <a href="?op=profile&profile='.$row[1].'">'.$row[1].'</a> | '.mmw_lang_date.': <span title="'.$date.'">'.$date.'</span>
         </div>
         </td></tr></table>';
       }
