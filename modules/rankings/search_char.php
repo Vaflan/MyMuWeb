@@ -1,4 +1,8 @@
 <?PHP
+// PHP Script By Vaflan
+// For MyMuWeb
+// Ver. 1.6
+
 $search = clean_var(stripslashes($_POST['search']));
 
 $result = mssql_query("SELECT Name,Class,reset,cLevel,strength,dexterity,vitality,energy,accountid from Character where name like '%$search%'");

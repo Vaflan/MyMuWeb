@@ -1,13 +1,17 @@
 <?php
 // All Tested and Work 100%!
-// Decode By Vaflan v1.1
+// Decode By Vaflan v1.2
 // http://tk3.clan.su
 // For MyMuWeb
 
 $size = 40;
 $pixelSize = $size/8;
 $img = ImageCreate($size,$size);
-$hex = stripslashes($_GET['decode']);
+$hex = $_GET['decode'];
+if(@preg_match('/[^a-zA-Z0-9]/',$hex) || $hex == '')
+	{$hex = '0044450004445550441551554515515655555566551551660551166000566600';}
+else
+	{$hex = stripslashes($hex);}
 
 for ($y=0;$y<8;$y++){
     for ($x=0;$x<8;$x++){

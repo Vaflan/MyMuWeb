@@ -1,5 +1,6 @@
 <?PHP
-if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.5)){fclose($check); $cs_status = '<span class="online">'.mmw_lang_is_opened.'</span>';}
+if($mmw[castle_siege] == 'yes') {
+if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.3)){fclose($check); $cs_status = '<span class="online">'.mmw_lang_is_opened.'</span>';}
 else{$cs_status = '<span class="offline">'.mmw_lang_is_closed.'</span>';}
 
 $query = mssql_query("SELECT owner_guild,siege_start_date,siege_end_date,money,tax_hunt_zone FROM MuCastle_DATA");
@@ -9,7 +10,7 @@ if($row[0]!="" && $row[0]!=" ") {
 	$cs_guild = $row[0];
 	$cs_guild_master = $cs_guild_row[0];
 	$logo = urlencode(bin2hex($cs_guild_row[1]));
-	$cs_guild_mark = "<a class='helpLink' href='#' onclick=\"showHelpTip(event,'<img src=decode.php?decode=$logo height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a>";
+	$cs_guild_mark = "<a class='helpLink' href='javascript://' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a>";
 }
 else {
 	$cs_guild = "None";
@@ -117,3 +118,8 @@ else {echo "<tr><td>".mmw_lang_no_guilds."</td></tr>";}?>
 <img src="images/castlesiege.png" alt="Castle Siege">
 </td>
 </tr></table>
+<?
+}
+else {
+	echo '<center><b>' . mmw_lang_is_closed . '</b></center>';
+}?>

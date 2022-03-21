@@ -7,16 +7,19 @@ $result = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE acco
 $row = mssql_fetch_row($result);
 
 if($row[0]!="" && $row[0]!=" ") {
+
 // Money
 if($row[1]=="" || $row[1]==" ") {$row[1]="0";}
 if($row[2]=="" || $row[2]==" ") {$row[2]="0";}
 echo "
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'>           
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'>
+   <thead>
 	<tr>
           <td>".mmw_lang_where."</td>
           <td>Zen</td>
           <td width='50'>Max Zen</td>
 	</tr>
+   </thead>
 	<tr>
             <td>".mmw_lang_extra_ware_house."</td>
             <td>".number_format($row[2])."</td>

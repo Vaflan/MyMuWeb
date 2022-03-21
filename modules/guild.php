@@ -1,5 +1,5 @@
 <?PHP
-$guild_get = stripslashes($_GET[guild]);
+$guild_get = clean_var(stripslashes($_GET[guild]));
 
 $guild_query = mssql_query("SELECT g_mark,g_score,g_master,g_notice,g_union from guild where g_name='$guild_get'");
 $guild_row = mssql_fetch_row($guild_query);
@@ -63,8 +63,6 @@ $character_show = mssql_fetch_row($sql_character);
 
              if($status[0] == 1 && $statusdc[0] == $row[0]) 
 		{$status[0] ='<img src=./images/online.gif width=6 height=6>';}
-             elseif($status[0] == 1 && $statusdc[0] != $row[0]) 
-		{$status[0] ='<img src=./images/sleep.gif width=6 height=6>';}
              else {$status[0] ='<img src=./images/offline.gif width=6 height=6>';}
 
 $rank = $i+1;

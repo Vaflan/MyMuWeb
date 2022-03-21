@@ -1,4 +1,8 @@
 <?PHP
+// PHP Script By Vaflan
+// For MyMuWeb
+// Ver. 1.4
+
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 ?>
 <br><?echo mmw_lang_top." $top_rank ".mmw_lang_guilds;?><br>&nbsp;</br>
@@ -14,9 +18,7 @@ $top_rank = clean_var(stripslashes($_POST['top_rank']));
 <?
 $result = mssql_query("SELECT TOP $top_rank G_Name,G_Score,G_Master,G_Mark FROM Guild WHERE G_Name!='$mmw[gm_guild]' order by G_score desc");
 $row_num = mssql_num_rows($result);
-if($row_num==0) {
- echo '<tr><td colspan="6">'.mmw_lang_no_guilds.'</td></tr>';
-}
+if($row_num==0) {echo '<tr><td colspan="6">'.mmw_lang_no_guilds.'</td></tr>';}
 
 for($i=0;$i < $row_num;++$i)
      {
@@ -30,11 +32,11 @@ for($i=0;$i < $row_num;++$i)
 
 echo "<tbody><tr> 
             <td>$rank</td>
-            <td><a href=index.php?op=guild&guild=$row[0]>$row[0]</a></td>
+            <td><a href='?op=guild&guild=$row[0]'>$row[0]</a></td>
             <td>$row[1]</td>
-            <td><a href=index.php?op=character&character=$row[2]>$row[2]</a></td>
+            <td><a href='?op=character&character=$row[2]'>$row[2]</a></td>
             <td>$members</td>
-            <td><a class=helpLink href=? onclick=\"showHelpTip(event, '<img src=\'decode.php?decode=$logo\' height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height=20 width=20 broder=0></a></td>
+            <td><a class='helpLink' href='javascript://' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height=20 width=20 broder=0></a></td>
             </tr></tbody>";    
        }
 ?>

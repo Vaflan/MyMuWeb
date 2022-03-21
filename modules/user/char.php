@@ -6,6 +6,7 @@ if(isset($_POST["reset_char"])) {require("includes/character.class.php");option:
 if(isset($_POST["stats_char"])) {require("includes/character.class.php");option::add_stats($char_set); echo $rowbr;}
 if(isset($_POST["clearpk_char"])) {require("includes/character.class.php");option::clear_pk($char_set); echo $rowbr;}
 if(isset($_POST["move_char"])) {require("includes/character.class.php");option::move($char_set); echo $rowbr;}
+if(isset($_POST["change_class_char"])) {require("includes/character.class.php");option::change_class($char_set); echo $rowbr;}
 
 $char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,experience FROM Character WHERE Name='$char_set'"); 
 $info = mssql_fetch_row($char_results);
@@ -21,13 +22,13 @@ else {
 $guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
 $guild_row = mssql_fetch_row($guild_results);
 $logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<a class='helpLink' href='#' onclick=\"showHelpTip(event,'<img src=decode.php?decode=$logo height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
+$guild_end = "<span class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></span> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
 	if($mmw[mix_cs_memb_reset]=="yes") {
 	$cs_query = mssql_query("SELECT owner_guild,money FROM MuCastle_DATA");
 	$cs_row = mssql_fetch_row($cs_query);
 		if($cs_row[0]==$guildm[0]){
 		if($mmw[max_zen_cs_reset]>$cs_row[1]){$edited_zen_cs = $cs_row[1];} else{$edited_zen_cs = $mmw[max_zen_cs_reset];}
-		$cs_memb_reset_zen = ( substr($mmw['resetmoney'], 0, -6) * ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_reset] ) ) / 100;
+		$cs_memb_reset_zen = ( substr($mmw['reset_money'], 0, -6) * ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_reset] ) ) / 100;
 		$cs_memb_reset_proc = '<br>'.mmw_lang_you_have.': -'.ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_reset] ).'%';
 		}
 	}
@@ -42,18 +43,14 @@ if($info[1] >= 80 && $info[1] <= 82) {$reset_level = $mmw[reset_level_sum];}
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
 
-$locations = '<select name="map" style="width:76px" size="1">
-                <option value="maps">'.mmw_lang_select_map.'</option>
-                <option value="0">'.map(0).'</option>
-                <option value="1">'.map(1).'</option>
-                <option value="2">'.map(2).'</option>
-                <option value="3">'.map(3).'</option>
-                <option value="4">'.map(4).'</option>
-                <option value="6">'.map(6).'</option>
-                <option value="7">'.map(7).'</option>
-                <option value="8">'.map(8).'</option>
-                <option value="10">'.map(10).'</option>
-              </select>';
+
+include("move.php");
+$locations = '<select name="map" style="width:76px" size="1"><option value="maps">'.mmw_lang_select_map.'</option>';
+for($i=0; $i < count($move); ++$i) {
+	$locations .= "<option value='$i'>".map($move[$i][0])."</option>\n";
+}
+$locations .= '</select>';
+              
 
 $add_stats = 'Strength <input name="str" type="text" size="5" maxlength="5"><br>';
 $add_stats = $add_stats.'Agility <input name="agi" type="text" size="5" maxlength="5"><br>';
@@ -61,10 +58,11 @@ $add_stats = $add_stats.'Vitality <input name="vit" type="text" size="5" maxleng
 $add_stats = $add_stats.'Energy <input name="ene" type="text" size="5" maxlength="5"><br>';
 if($info[1]==64){$add_stats = $add_stats.'Command <input name="com" type="text" size="5" maxlength="5"><br>';}
 
-if($mmw[mix_cs_memb_reset]=="yes" && $cs_row[0]==$guildm[0]) {$edited_res_money = $mmw['resetmoney'] - ($cs_memb_reset_zen * 1000000);}
-else {$edited_res_money = $mmw['resetmoney'];}
+if($mmw[mix_cs_memb_reset]=="yes" && $cs_row[0]==$guildm[0]) {$edited_res_money = $mmw['reset_money'] - ($cs_memb_reset_zen * 1000000);}
+else {$edited_res_money = $mmw['reset_money'];}
 if($mmw[reset_system]=='yes') {$resetzen = $edited_res_money * ($info[10] + 1);}
 else {$resetzen = $edited_res_money;}
+if($mmw[reset_limit_price] != '0' && $mmw[reset_limit_price] <= $resetzen) {$resetzen = $mmw[reset_limit_price];}
 
 if($info[9] < $reset_level) {$reset = mmw_lang_need." $reset_level ".mmw_lang_level.'!';}
 elseif( $all_money < $resetzen) {$reset = mmw_lang_need.' '.zen_format($resetzen).' Zen!';}
@@ -77,9 +75,20 @@ if($all_money < $mmw['pkmoney']) {$pkclear = mmw_lang_need.' '.zen_format($mmw['
 elseif($info[13] <= 3) {$pkclear = mmw_lang_no_pk_status_found;}
 elseif($info[13] > 3) {$pkclear = "<form action='' method='post' name='clearpk'>".mmw_lang_price.': '.zen_format($mmw['pkmoney'])." Zen!<br><input name='clearpk_char' type='hidden' value='$char_set'><input type='submit' name='Submit' value='".mmw_lang_pk_clear."'></form>";}
 
-if($info[9] < 6) {$move="Need 6 level!";}
+if($info[9] < 6) {$move = mmw_lang_need_6_level;}
 elseif($all_money < $mmw['move_zen']) {$move = mmw_lang_need.' '.zen_format($mmw['move_zen']).' Zen!';}
 else {$move="<form action='' method='post' name='move'>".mmw_lang_price.': '.zen_format($mmw['move_zen'])." Zen!<br><input name='move_char' type='hidden' value='$char_set'>$locations<br><input type='submit' name='Submit' value='".mmw_lang_move."'></form>";}
+
+
+if($mmw[switch_change_class] == 'yes') {
+	include("class.php");
+	$change_class_form = '<select name="class" style="width:76px" size="1"><option value="class">'.mmw_lang_select_class.'</option>';
+	for($i=0; $i < count($class_list); ++$i) {
+		$change_class_form .= "<option value='$i'>".char_class($class_list[$i][0])." - ".zen_format($class_list[$i][1])." Zen</option>\n";
+	}
+	$change_class_form .= '</select>';
+	$change_class = "<form action='' method='post' name='change_class'>".mmw_lang_class_price."<br><input name='change_class_char' type='hidden' value='$char_set'>$change_class_form<br><input type='submit' name='Submit' value='".mmw_lang_change."'></form>";
+}
 ?>
 
       <table width="380" border="0" cellpadding="0" cellspacing="0" align="center">
@@ -157,7 +166,10 @@ else {$move="<form action='' method='post' name='move'>".mmw_lang_price.': '.zen
 		<div class="div-menu-out" onclick="expandit('menu_3')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_pk_clear;?></div>
 		<div id="menu_3" style="display:none;padding-bottom:4px;"><?echo $pkclear;?></div>
 		<div class="div-menu-out" onclick="expandit('menu_4')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_move;?></div>
-		<div id="menu_4" style="display:none;padding-bottom:4px;"><?echo $move;?><div>
+		<div id="menu_4" style="display:none;padding-bottom:4px;"><?echo $move;?></div>
+		<?if($mmw[switch_change_class] == 'yes') {?>
+		<div class="div-menu-out" onclick="expandit('menu_5')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_change_class;?></div>
+		<div id="menu_5" style="display:none;padding-bottom:4px;"><?echo $change_class;?></div><?}?>
 	</td>
        </tr>
       </table>

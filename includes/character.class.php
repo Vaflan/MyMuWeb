@@ -2,7 +2,7 @@
 // Creator =Master=
 // Get from MuWeb 0.8
 // Edited by Vaflan
-// It is modified for MyMuWeb
+// It's modified for MyMuWeb
 
 class option{
 
@@ -55,18 +55,18 @@ function register() {
                                if($_SESSION['image_random_value'] != md5($verifyinput)) {
                                          $error= 1;
                                          echo $die_start . mmw_lang_correctly_code . $die_end; 
-                                                                                         }                                                                                                                                       
+                                                                                         }
                                if($username_verify  > 0) {
                                          $error= 1;
-                                         echo $die_start . mmw_lang_account_in_use . $die_end; 
+                                         echo $die_start . mmw_lang_account_in_use . $die_end;
                                                          }
                                if($email_verify > 0) {
                                          $error= 1;
-                                         echo $die_start . mmw_lang_email_in_use . $die_end;  
+                                         echo $die_start . mmw_lang_email_in_use . $die_end;
                                                      }
                                if($country <= 0) {
                                          $error= 1;
-                                         echo $die_start . mmw_lang_invalid_country . $die_end;  
+                                         echo $die_start . mmw_lang_invalid_country . $die_end;
                                                      }
 
                                if($error!=1) {     
@@ -100,7 +100,7 @@ function reset($charactername) {
                            $wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
                            $wh_row = mssql_fetch_row($wh_result); if($wh_row[1]=="" || $wh_row[1]==" ") {$wh_row[1]="0";}
 
-                           $result = mssql_query("Select Clevel,Reset,Money,LevelUpPoint,class From Character where Name='$charactername' and AccountID='$login'");
+                           $result = mssql_query("SELECT Clevel,Reset,Money,LevelUpPoint,class FROM Character WHERE Name='$charactername' AND AccountID='$login'");
                            $character_check = mssql_num_rows($result);
                            $row = mssql_fetch_row($result);
 
@@ -113,7 +113,7 @@ function reset($charactername) {
 
                            $reset_up = $row[1] + (1);
                            $char_money = $row[2];
-			//CS Memb %
+			//CastleSiege Member % Price
                            if($mmw[mix_cs_memb_reset]=="yes") {
 				$guildm_results = mssql_query("Select G_name from GuildMember where name='$charactername'");
 				$guildm = mssql_fetch_row($guildm_results);
@@ -122,37 +122,49 @@ function reset($charactername) {
 					$cs_row = mssql_fetch_row($cs_query);
 					if($cs_row[0]==$guildm[0]) {
 						if($mmw[max_zen_cs_reset]>$cs_row[1]){$edited_zen_cs = $cs_row[1];} else{$edited_zen_cs = $mmw[max_zen_cs_reset];}
-						$cs_memb_reset_zen = ( substr($mmw['resetmoney'], 0, -6) * ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_reset] ) ) / 100;
+						$cs_memb_reset_zen = ( substr($mmw['reset_money'], 0, -6) * ceil( substr($edited_zen_cs, 0, -6) / $mmw[num_for_mix_cs_reset] ) ) / 100;
 					}
 				}
-				$edited_res_money = $mmw['resetmoney'] - ($cs_memb_reset_zen * 1000000);
+				$edited_res_money = $mmw['reset_money'] - ($cs_memb_reset_zen * 1000000);
                            }
-                           else {$edited_res_money = $mmw['resetmoney'];}
+                           else {$edited_res_money = $mmw['reset_money'];}
 			//Reset * Zen
                            if($mmw[reset_system]=='yes') {$resetmoneysys = $edited_res_money * $reset_up;}
                            else {$resetmoneysys = $edited_res_money;}
+
+                           if($mmw[reset_limit_price] != '0' && $mmw[reset_limit_price] <= $resetmoneysys) {$resetmoneysys = $mmw[reset_limit_price];}
                            $wh_money = $wh_row[1] - $resetmoneysys;
                            if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
                            $resetpt = $row[3] + $mmw['resetpoints'];
                            $resetpt1 = $mmw['resetpoints'] * $reset_up;
 
-                            if (empty($charactername) || empty($login)){ $error=1;
+			//Check Inventory
+                           if($mmw[check_inventory] == 'yes') {
+                           $result = mssql_query("declare @vault varbinary(1728); set @vault=(SELECT Inventory FROM Character WHERE Name='$charactername'); print @vault;");
+                           $inventory = substr(mssql_get_last_message(),2,$mmw[free_hex] * 12);
+                           $test_invetory = free_hex($mmw[free_hex],12);
+                           }
+
+                            if(empty($charactername) || empty($login)){ $error=1;
 	                                 echo $die_start . mmw_lang_left_blank . $die_end;
                                                            }
-                            if ($character_check <= 0) {$error=1;
+                            if($character_check <= 0) {$error=1;
                                          echo $die_start . $charactername . mmw_lang_character_does_not_exist . $die_end;
                                                            }
-                            if ($online_check[0] != 0) {$error=1;
+                            if($online_check[0] != 0) {$error=1;
                                          echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end; 
                                                   }
-                            if ($char_money < 0) {$error=1;
+                            if($char_money < 0) {$error=1;
                                          echo $die_start . mmw_lang_for_reset_need .' '.zen_format($resetmoneysys)." Zen! $die_end"; 
                                                     	   }
-                            if ($row[0] < $reset_level) {$error=1;
+                            if($row[0] < $reset_level) {$error=1;
                                          echo $die_start . mmw_lang_for_reset_need ." $reset_level ".mmw_lang_level."! $die_end"; 
                                                            }
-                            if ($row[1] > $mmw['resetslimit']) {$error=1;
-                                         echo $die_start . mmw_lang_reset_limit_to . " $mmw[resetslimit]! $die_end"; 
+                            if($row[1] > $mmw['reset_limit_level']) {$error=1;
+                                         echo $die_start . mmw_lang_reset_limit_to . " $mmw[reset_limit_level]! $die_end"; 
+                                                           }
+                            if($mmw[check_inventory] == 'yes' && $inventory!=$test_invetory) {$error=1;
+                                         echo $die_start . mmw_lang_take_off_set . $die_end;
                                                            }
 
                             if($error != 1){
@@ -429,44 +441,82 @@ function profile($account) {
 
 
 function move($name) {
+	include("move.php");
         require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
+        $map = clean_var(stripslashes($_POST['map']));
         $name = stripslashes($name);
-        $map = clean_var(stripslashes($_POST['map']));     
+	$mapnumber = $move[$map][0];
+        $x = $move[$map][1];
+	$y = $move[$map][2];
 
-        if($map == '0'){$x="125"; $y="125";}
-               elseif($map == '3'){$x="175"; $y="112";}
-                          elseif($map == '2'){$x="211"; $y="40";}
-                                     elseif($map == '1'){$x="232"; $y="126";}
-                                                elseif($map == '7'){$x="24"; $y="19";}
-                                                           elseif($map == '4'){$x="209"; $y="71";}
-                                                                      elseif($map == '8'){$x="187"; $y="58";}
-                                                           elseif($map == '6'){$x="64"; $y="116";}
-                                                elseif($map == '10'){$x="15"; $y="13";}
-                                     elseif($map == '30'){$x="93"; $y="37";}
-                          elseif($map == '33'){$x="82"; $y="8";}
-               elseif($map == '34'){$x="120"; $y="8";}
+	$select_zen_sql = mssql_query("Select money from character where name='$name'");
+	$select_zen = mssql_fetch_row($select_zen_sql);
 
-                    $select_zen_sql=mssql_query("Select money from character where name='$name'");
-                    $select_zen=mssql_fetch_row($select_zen_sql);
+	$wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
+	$wh_row = mssql_fetch_row($wh_result); if(empty($wh_row[1]) || $wh_row[1]==" ") {$wh_row[1]="0";}
 
-                    $wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
-                    $wh_row = mssql_fetch_row($wh_result); if(empty($wh_row[1]) || $wh_row[1]==" ") {$wh_row[1]="0";}
+	$char_money = $select_zen[0];
+	$wh_money = $wh_row[1] - $mmw['move_zen'];
+	if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
 
-                    $char_money = $select_zen[0];
-                    $wh_money = $wh_row[1] - $mmw['move_zen'];
-                    if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
+		if(empty($name)) {
+		   echo $die_start . mmw_lang_left_blank . $die_end;
+		}
+		elseif($char_money < 0) {
+		   echo $die_start . mmw_lang_move_need .' '.zen_format($mmw[move_zen])." Zen! $die_end";
+		}
+		else { 
+		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
+		   mssql_query("UPDATE character DET [mapnumber]='$mapnumber',[mapposx]='$x',[mapposy]='$y',[money]='$char_money' where name='$name'");
+		   echo $okey_start . mmw_lang_character_moved . $okey_end;
+		   writelog("move","Char <font color=red>$name</font> Has Been Moved To: $mapnumber, $x-$y|Char: $char_money Zen|Acc: $wh_money Zen");
+		}      
+}
 
-                         if(empty($name)) {
-                             echo $die_start . mmw_lang_left_blank . $die_end;}
-                         elseif($char_money < 0) {
-                             echo $die_start . mmw_lang_move_need .' '.zen_format($mmw[move_zen])." Zen! $die_end";}
-                    else { 
-				mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
-				mssql_query("Update character set [mapnumber]='$map',[mapposx]='$x',[mapposy]='$y',[money]='$char_money' where name='$name'");
-				echo $okey_start . mmw_lang_character_moved . $okey_end;
-				writelog("move","Char <font color=red>$name</font> Has Been Moved To: $map, $x-$y|Char: $char_money Zen|Acc: $wh_money Zen");
-                          }      
+
+
+
+
+
+function change_class($name) {
+	include("class.php");
+        require("config.php");
+	$login = clean_var(stripslashes($_SESSION['user']));
+        $change_class = clean_var(stripslashes($_POST['class']));
+        $name = stripslashes($name);
+	$class = $class_list[$change_class][0];
+        $price = $class_list[$change_class][1];
+
+	$result = mssql_query("declare @vault varbinary(1728); set @vault=(SELECT Inventory FROM Character WHERE Name='$name'); print @vault;");
+	$inventory = substr(mssql_get_last_message(),2,$mmw[free_hex] * 12);
+	$test_invetory = free_hex($mmw[free_hex],12);
+
+	$select_zen_sql = mssql_query("Select money from character where name='$name'");
+	$select_zen = mssql_fetch_row($select_zen_sql);
+
+	$wh_result = mssql_query("SELECT AccountID,extMoney FROM warehouse WHERE accountid='$login'");
+	$wh_row = mssql_fetch_row($wh_result); if(empty($wh_row[1]) || $wh_row[1]==" ") {$wh_row[1]="0";}
+
+	$char_money = $select_zen[0];
+	$wh_money = $wh_row[1] - $price;
+	if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
+
+		if(empty($name) || $change_class=='class') {
+		   echo $die_start . mmw_lang_left_blank . $die_end;
+		}
+		elseif($inventory != $test_invetory) {
+		   echo $die_start . mmw_lang_take_off_set . $die_end;
+		}
+		elseif($char_money < 0) {
+		   echo $die_start . mmw_lang_change_class_need .' '.zen_format($price)." Zen! $die_end";
+		}
+		else { 
+		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
+		   mssql_query("UPDATE character SET [class]='$class',[money]='$char_money' where name='$name'");
+		   echo $okey_start . mmw_lang_character_changed . $okey_end;
+		   writelog("change_class","Char <font color=red>$name</font> Has Been Changed Class To: $class|Char: $char_money Zen|Acc: $wh_money Zen");
+		}      
 }
 
 
@@ -580,7 +630,7 @@ function comment_delete($c_id) {
 	if(empty($c_id)) {
 		echo "$die_start Error: Some Fields Were Left Blank! $die_end";
 	}
-	elseif($row[0]==$char_set || $_SESSION['admin'] >= $mmw[comment_can_delete]) {
+	elseif($row[0]==$char_set || $_SESSION['mmw_status'] >= $mmw[comment_can_delete]) {
                 mssql_query("Delete from MMW_comment where c_id='$c_id'");
                 echo $okey_start . mmw_lang_comment_deleted . $okey_end;
 	}
@@ -630,10 +680,33 @@ function forum_delete($f_id) {
 	if(empty($f_id)) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	}
-	elseif($row[0]==$char_set || $_SESSION['admin'] >= $mmw[forum_can_delete]) {
+	elseif($row[0]==$char_set || $_SESSION['mmw_status'] >= $mmw[forum_can_delete]) {
                 mssql_query("Delete from MMW_forum where f_id='$f_id'");
                 mssql_query("Delete from MMW_comment where c_id_code='$f_id'");
                 echo $okey_start . mmw_lang_topic_deleted . $okey_end;
+	}
+	else {
+		echo $die_start . mmw_lang_cant_or_alread_delete . $die_end;
+	}
+}
+
+
+
+
+
+
+
+function forum_status($f_id,$f_status) {
+	require("config.php");
+	$f_id = clean_var(stripslashes($f_id));
+	$f_status = clean_var(stripslashes($f_status));
+
+	if(empty($f_id) || $f_status=='') {
+		echo $die_start . mmw_lang_left_blank . $die_end;
+	}
+	elseif($_SESSION['mmw_status'] >= $mmw['forum_can_status']) {
+                mssql_query("UPDATE MMW_forum SET f_status='$f_status' where f_id='$f_id'");
+                echo $okey_start . mmw_lang_topic_status . $okey_end;
 	}
 	else {
 		echo $die_start . mmw_lang_cant_or_alread_delete . $die_end;
@@ -655,7 +728,7 @@ function request($login) {
 	else {
 		$title = bugsend(stripslashes($_POST['subject']));
 		$msg = bugsend(stripslashes($_POST['msg']));
-		writelog("requests.php","Acc: <b>$login</b> New Request <u>Title</u>: $title <u>Message</u>: <font color=#FF0000>$msg</font>");
+		writelog("requests","Acc: <b>$login</b> New Request <u>Title</u>: $title <u>Message</u>: <font color=#FF0000>$msg</font>");
 		echo $okey_start . mmw_lang_request_sent . $okey_end;
 	}
 }
@@ -741,7 +814,7 @@ function edit_warehouse($hex_wh) {
 	$hex_wh = clean_var(stripslashes($hex_wh));
 
       if(empty($hex_wh) || empty($login)) {echo $die_start . mmw_lang_left_blank . $die_end;}
-        elseif($_SESSION['admin'] < $mmw[hex_wh_can]) {echo "$die_start You Can't Use HEX WareHouse! $die_end";}
+        elseif($_SESSION['mmw_status'] < $mmw[hex_wh_can]) {echo "$die_start You Can't Use HEX WareHouse! $die_end";}
           else {
 		$hex_query = "UPDATE warehouse SET [Items]=0x$hex_wh WHERE AccountID='$login'";
 		if(mssql_query($hex_query)) {
@@ -767,7 +840,7 @@ function gm_msg($text) {
 	include("includes/shout_msg.php");
 
       if(empty($text)) {echo $die_start . mmw_lang_left_blank . $die_end;}
-        elseif($_SESSION['admin'] < $mmw[gm_msg_send]) {echo "$die_start You Can't Send GM Message! $die_end";}
+        elseif($_SESSION['mmw_status'] < $mmw['gm_msg_send']) {echo "$die_start You Can't Send GM Message! $die_end";}
           else {
 		if( send_gm_msg("127.0.0.1", $mmw[joinserver_port], $text) == "yes") {
 			echo "$okey_start GM Msg SuccessFully Send! $okey_end";}

@@ -1,5 +1,5 @@
 <?PHP
-$step = stripslashes($_GET["step"]);
+$step = clean_var(stripslashes($_GET["step"]));
 
 if($_GET["step"]=="1")
  {

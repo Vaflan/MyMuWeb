@@ -5,7 +5,7 @@
 <div align="left">
 <b>Your Info About Server, This is MMW - MyMuWeb by Vaflan.<br>
 This text can edit in modules/info.php.<br>
-Visit: http://tk3.clan.su</b><br/>
+Visit: http://mmw.clan.su</b><br/>
 <br/>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td class='info-table' height='1' colspan='3'></td></tr>
@@ -39,7 +39,7 @@ Name<br/>
 
 <?echo $rowbr;?>
 
-<table width="100%" class='info-table' border="0" cellpadding="3" cellspacing="1">
+        <table width="100%" class='info-table' border="0" cellpadding="3" cellspacing="1">
     <tr>
       <td class='info-table'>Sys.</td>
       <td class='info-table'><span class="Estilo3">Minimum</span></td>

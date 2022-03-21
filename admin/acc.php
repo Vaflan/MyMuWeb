@@ -1,22 +1,28 @@
 <?
 if(isset($_POST["edit_account_done"])){edit_account($_POST['account'],$_POST['new_pwd'],$_POST['mode'],$_POST['email'],$_POST['squestion'],$_POST['sanswer'],$_POST['unblock_time'],$_POST['block_date'],$_POST['block_reason'],$_POST['admin_level']);}
 if(isset($_POST["edit_acc_wh_done"])){edit_acc_wh($_POST['account'],$_POST['wh'],$_POST['extrawh']);}
+?>
 
+<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
+	<tr>
+		<td align="center">
+		<fieldset>
+
+<?
 if(isset($_POST["account_search_edit"]) || isset($_GET["acc"])) {
 
 if(isset($_GET['acc'])){$_POST['account_search_edit'] = $_GET['acc'];}
 $account_edit = stripslashes($_POST['account_search_edit']);
-if($mmw[md5]==yes){$get_account = mssql_query("Select memb___id,memb__pwd2,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,admin from MEMB_INFO where memb___id='$account_edit'");}
-elseif($mmw[md5]==no){$get_account = mssql_query("Select memb___id,memb__pwd,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,admin from MEMB_INFO where memb___id='$account_edit'");}
+if($mmw[md5]==yes){$get_account = mssql_query("Select memb___id,memb__pwd2,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,mmw_status from MEMB_INFO where memb___id='$account_edit'");}
+elseif($mmw[md5]==no){$get_account = mssql_query("Select memb___id,memb__pwd,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,mmw_status from MEMB_INFO where memb___id='$account_edit'");}
 $get_account_done = mssql_fetch_row($get_account);
 
-if($get_account_done[5] == 'male'){$get_account_done[5] = "<img src='images/male.gif'> Male";}
-elseif($get_account_done[5] == 'female'){$get_account_done[5] = "<img src='images/female.gif'> Female";}
 if($get_account_done[3] == 1){$mode = "<option value='1'>Blocked</option><option value='0'>Normal</option>";}
 elseif($get_account_done[3] == 0){$mode = "<option value='0'>Normal</option><option value='1'>Blocked</option>";}
-if($get_account_done[1] == NULL){$get_account_done[1] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #111</font></td></tr></table>";}
-if($get_account_done[4] == NULL){$get_account_done[4] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #112</font></td></tr></table>";}
-if($get_account_done[5] == NULL){$get_account_done[5] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #113</font></td></tr></table>";}
+if($get_account_done[1] == NULL){$get_account_done[1] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #111</font></div>";}
+if($get_account_done[4] == NULL){$get_account_done[4] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #112</font></div>";}
+if($get_account_done[5] == NULL){$get_account_done[5] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #113</font></div>";}
+if($get_account_done[9] == NULL){$get_account_done[9] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #114</font></div>";}
 
 $get_wh = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$account_edit'");
 $get_acc_wh = mssql_fetch_row($get_wh);
@@ -45,174 +51,150 @@ if($get_acc_chr[2]=="" || $get_acc_chr[2]==" "){$get_acc_chr[2] = "No Char";}els
 if($get_acc_chr[3]=="" || $get_acc_chr[3]==" "){$get_acc_chr[3] = "No Char";}elseif($_SESSION[a_admin_level] > 3){$get_acc_chr[3] = "<a href='?op=char&chr=$get_acc_chr[3]'>$get_acc_chr[3]</a>";}else{$get_acc_chr[3] = "<u>$get_acc_chr[3]</u>";}
 if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}elseif($_SESSION[a_admin_level] > 3){$get_acc_chr[4] = "<a href='?op=char&chr=$get_acc_chr[4]'>$get_acc_chr[4]</a>";}else{$get_acc_chr[4] = "<u>$get_acc_chr[4]</u>";}
 ?>
-<table width="400" border="0" align="center" cellpadding="0" cellspacing="4">
-  <tr>
-    <td>
-        <fieldset>
-        <legend>Account <?echo $get_account_done[0];?></legend>
-		<form action="" method="post" name="edit_account_form" id="edit_account_form">
-                                                                    <table width="100%" border="0" cellspacing="4" cellpadding="0">
-                                                                      <tr>
-                                                                        <td width="50%" scope="row"><div align="right" class="text_administrator">Account</div></td>
-                                                                        <td width="50%" scope="row" class="text_administrator"><?echo $get_account_done[0];?></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Name</div></td>
-                                                                        <td scope="row" class="text_administrator"><?echo $get_account_done[9];?></td>
-                                                                      </tr>
-									<?if($_SESSION[a_admin_level] > 6){?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Password</div></td>
-                                                                        <td scope="row"><span class="text_administrator"><?echo $get_account_done[1];?></span></td>
-                                                                      </tr>
-									<?}?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">New Password</div></td>
-                                                                        <td scope="row"><span id="psw"></span><span id="pswrd" style="font-size:7pt;"><a href="javascript://" onclick="document.getElementById('pswrd').style.display='none';document.getElementById('psw').innerHTML='<input type=\'text\' name=\'new_pwd\' size=\'12\' maxlength=\'10\'>';return false;">Change</a></span></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Mode</div></td>
-                                                                        <td scope="row"><select name="mode" size="1" id="mode"><?echo $mode;?></select></td>
-                                                                      </tr>
-									<?if($get_account_done[3] == 1){?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">By <?echo date("H:i, d.m.Y", $get_account_done[10]);?></div></td>
-                                                                        <td scope="row"><div class="text_administrator">To <?echo date("H:i, d.m.Y", $get_account_done[10]+$get_account_done[11]);?></div></td>
-                                                                      </tr>
-									<?}?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Block Time</div></td>
-                                                                        <td scope="row"><select name="unblock_time" size="1" id="unblock_time"><option value='0'>Not Select</option><option value='21600'>6 h</option><option value='43200'>12 h</option><option value='86400'>1 day</option><option value='172800'>2 day</option><option value='259200'>3 day</option><option value='432000'>5 day</option><option value='864000'>10 day</option><option value='2592000'>30 day</option></select></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Block Date</div></td>
-                                                                        <td scope="row"><select name="block_date" size="1" id="block_date"><option value='0'>Not Select</option><option value='no'>Not ToDay</option><option value='yes'>ToDay</option></select></td>
-                                                                      </tr>
-									<?if($get_account_done[12] != ' ' && isset($get_account_done[12])){?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Blockec By</div></td>
-                                                                        <td scope="row"><span class="text_administrator"><?echo $get_account_done[12];?></span></td>
-                                                                      </tr>
-									<?}?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Block Reason</div></td>
-                                                                        <td scope="row"><input name="block_reason" type="text" id="block_reason" value="<?echo $get_account_done[13];?>" size="17" maxlength="200"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">E-mail address </div></td>
-                                                                        <td scope="row"><input name="email" type="text" id="email" value="<?echo $get_account_done[6];?>" size="17" maxlength="50"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Secret Question </div></td>
-                                                                        <td scope="row"><input name="squestion" type="text" id="squestion" value="<?echo $get_account_done[7];?>" size="10" maxlength="10"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Secret Answer </div></td>
-                                                                        <td scope="row"><input name="sanswer" type="text" id="sanswer" value="<?echo $get_account_done[8];?>" size="10" maxlength="10"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Country</div></td>
-                                                                        <td scope="row"><span class="text_administrator"><?echo country($get_account_done[4]);?></span></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Gender</div></td>
-                                                                        <td scope="row"><span class="text_administrator"><?echo $get_account_done[5];?></span></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator"></div></td>
-                                                                        <td scope="row"><input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"></td>
-                                                                      </tr>
-									<?if($_SESSION[a_admin_level] > 6){?>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Admin Level</div></td>
-                                                                        <td scope="row"><select name="admin_level" size="1" id="admin_level"><option value=0 <?echo $admin_level[0];?>>Normal</option><option value=3 <?echo $admin_level[3];?>>Game Master</option><option value=6 <?echo $admin_level[6];?>>Mini Admin</option><option value=9 <?echo $admin_level[9];?>>Administrator</option></select></td>
-                                                                      </tr>
-									<?}?>
-                                                                      <tr>
-                                                                        <td scope="row" align="right"><input name="Edit Account" type="submit" class="button" id="Edit Account" value="Edit Account"></td>
-                                                                        <td scope="row"><input name="edit_account_done" type="hidden" id="edit_account_done" value"edit_account_done"> <input type="reset" name="Reset" value="Reset" class="button"></td>
-                                                                      </tr>
-                                                                    </table>
-		</form>
-        </fieldset>
-    </td>
-  </tr>
-</table>
-
+		<legend>Account <?echo $get_account_done[0];?></legend>
+			<form action="" method="post" name="edit_account_form" id="edit_account_form">
+			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
+			  <tr>
+			    <td width="42%" align="right">Account</td>
+			    <td><?echo $get_account_done[0];?></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Name</td>
+			    <td><?echo $get_account_done[9];?></td>
+			  </tr>
+			<?if($_SESSION[a_admin_level] > 6){?>
+			  <tr>
+			    <td align="right">Password</td>
+			    <td><?echo $get_account_done[1];?></td>
+			  </tr>
+			<?}?>
+			  <tr>
+			    <td align="right">New Password</td>
+			    <td><span id="psw"></span><span id="pswrd" style="font-size:7pt;"><a href="javascript://" onclick="document.getElementById('pswrd').style.display='none';document.getElementById('psw').innerHTML='<input type=\'text\' name=\'new_pwd\' size=\'12\' maxlength=\'10\'>';return false;">Change</a></span></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Mode</td>
+			    <td><select name="mode" size="1" id="mode"><?echo $mode;?></select></td>
+			  </tr>
+			<?if($get_account_done[3] == 1){?>
+			  <tr>
+			    <td align="right">By <?echo date("H:i, d.m.Y", $get_account_done[10]);?></td>
+			    <td>To <?echo date("H:i, d.m.Y", $get_account_done[10]+$get_account_done[11]);?></td>
+			  </tr>
+			<?}?>
+			  <tr>
+			    <td align="right">Block Time</td>
+			    <td><select name="unblock_time" size="1" id="unblock_time"><option value='0'>Not Select</option><option value='21600'>6 h</option><option value='43200'>12 h</option><option value='86400'>1 day</option><option value='172800'>2 day</option><option value='259200'>3 day</option><option value='432000'>5 day</option><option value='864000'>10 day</option><option value='2592000'>30 day</option></select></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Block Date</td>
+			    <td><select name="block_date" size="1" id="block_date"><option value='0'>Not Select</option><option value='no'>Not ToDay</option><option value='yes'>ToDay</option></select></td>
+			  </tr>
+			<?if($get_account_done[12] != ' ' && isset($get_account_done[12])){?>
+			  <tr>
+			    <td align="right">Blockec By</td>
+			    <td><span class="text_administrator"><?echo $get_account_done[12];?></td>
+			  </tr>
+			<?}?>
+			  <tr>
+			    <td align="right">Block Reason</td>
+			    <td><input name="block_reason" type="text" id="block_reason" value="<?echo $get_account_done[13];?>" size="17" maxlength="200"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">E-mail address</td>
+			    <td><input name="email" type="text" id="email" value="<?echo $get_account_done[6];?>" size="17" maxlength="50"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Secret Question</td>
+			    <td><input name="squestion" type="text" id="squestion" value="<?echo $get_account_done[7];?>" size="10" maxlength="50"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Secret Answer</td>
+			    <td><input name="sanswer" type="text" id="sanswer" value="<?echo $get_account_done[8];?>" size="10" maxlength="10"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Country</td>
+			    <td><span class="text_administrator"><?echo country($get_account_done[4]);?></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Gender</td>
+			    <td><?echo gender($get_account_done[5]);?></td>
+			  </tr>
+			<?if($_SESSION[a_admin_level] > 6){?>
+			  <tr>
+			    <td align="right">Admin Level</td>
+			    <td><select name="admin_level" size="1" id="admin_level"><option value=0 <?echo $admin_level[0];?>><?echo mmw_status(0);?></option><option value=3 <?echo $admin_level[3];?>><?echo mmw_status(3);?></option><option value=6 <?echo $admin_level[6];?>><?echo mmw_status(6);?></option><option value=9 <?echo $admin_level[9];?>><?echo mmw_status(9);?></option></select></td>
+			  </tr>
+			<?}?>
+			  <tr>
+			    <td colspan="2" align="center"><input name="Edit Account" type="submit" id="Edit Account" value="Edit Account"> <input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"> <input name="edit_account_done" type="hidden" id="edit_account_done" value"edit_account_done"> <input type="reset" name="Reset" value="Reset"></td>
+			  </tr>
+			</table>
+			</form>
+		</fieldset>
+		</td>
+	</tr>
 <?if($get_acc_wh_num > 0 && $_SESSION[a_admin_level] > 3) {?>
-<table width="400" border="0" align="center" cellpadding="0" cellspacing="4">
-  <tr>
-    <td>
-        <fieldset>
-        <legend>Ware House <?echo $get_account_done[0];?></legend>
-		<form action="" method="post" name="edit_acc_wh_form" id="edit_acc_wh_form">
-                                                                    <table width="100%" border="0" cellspacing="4" cellpadding="0">
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Ware House</div></td>
-                                                                        <td scope="row"><input name="wh" type="text" id="wh" value="<?echo $get_acc_wh[1];?>" size="12" maxlength="10"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator">Extra Ware House</div></td>
-                                                                        <td scope="row"><input name="extrawh" type="text" id="extrawh" value="<?echo $get_acc_wh[2];?>" size="12"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row"><div align="right" class="text_administrator"></div></td>
-                                                                        <td scope="row"><input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>">
-                                                                        <input name="edit_acc_wh_done" type="hidden" id="edit_acc_wh_done" value"edit_acc_wh_done"></td>
-                                                                      </tr>
-                                                                      <tr>
-                                                                        <td scope="row" align="right"><input name="Edit Ware House" type="submit" class="button" id="Edit Ware House" value="Edit Ware House"></td>
-                                                                        <td scope="row"><input type="reset" name="Reset" value="Reset" class="button"></td>
-                                                                      </tr>
-                                                                    </table>
-		</form>
-        </fieldset>
-    </td>
-  </tr>
-</table>
-<?} //end wh?>
-
-<table width="400" border="0" align="center" cellpadding="0" cellspacing="4">
-  <tr>
-    <td>
-        <fieldset>
-        <legend>Character's <?echo $get_account_done[0];?></legend>
-              <table width="100%" border="0" cellspacing="4" cellpadding="0">
-                  <tr>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr[0];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr[1];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr[2];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr[3];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr[4];?></div></td>
-                  </tr>
-                  <tr>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr_online[0];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr_online[1];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr_online[2];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr_online[3];?></div></td>
-                    <td scope="row" align="center"><div class="text_administrator"><?echo $get_acc_chr_online[4];?></div></td>
-                  </tr>
-              </table>
-        </fieldset>
-    </td>
-  </tr>
-</table>
-
-<?} //end acc?>
-
-<table width="400" border="0" align="center" cellpadding="0" cellspacing="4">
-  <tr>
-    <td>
-        <fieldset>
-        <legend>Search Account</legend>
-		<form action="" method="post" name="search_account" id="search_account">
-			<table width="100%" border="0" cellspacing="2" cellpadding="0">
-                                <tr>
-                                  <td colspan="2"><span class="normal_text">Account:</span> <input name="account_search" type="text" id="account_search" size="17" maxlength="10"></td>
-                                </tr>
-                                <tr>
-                                  <td width="70"><span class="normal_text">Search type</span></td>
-                                  <td><p>
+	<tr>
+		<td align="center">
+		<fieldset>
+		<legend>Ware House <?echo $get_account_done[0];?></legend>
+			<form action="" method="post" name="edit_acc_wh_form" id="edit_acc_wh_form">
+			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
+			  <tr>
+			    <td width="42%" align="right">Ware House</td>
+			    <td><input name="wh" type="text" id="wh" value="<?echo $get_acc_wh[1];?>" size="12" maxlength="10"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Extra Ware House</td>
+			    <td><input name="extrawh" type="text" id="extrawh" value="<?echo $get_acc_wh[2];?>" size="12"></td>
+			  </tr>
+			  <tr>
+			    <td colspan="2" align="center"><input name="Edit Ware House" type="submit" id="Edit Ware House" value="Edit Ware House"> <input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"> <input name="edit_acc_wh_done" type="hidden" id="edit_acc_wh_done" value"edit_acc_wh_done"> <input type="reset" name="Reset" value="Reset"></td>
+			  </tr>
+			</table>
+			</form>
+		</fieldset>
+		</td>
+	</tr>
+<?} //end wh ?>
+	<tr>
+		<td align="center">
+		<fieldset>
+		<legend>Character's <?echo $get_account_done[0];?></legend>
+			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
+			  <tr>
+			    <td align="center"><?echo $get_acc_chr[0];?></td>
+			    <td align="center"><?echo $get_acc_chr[1];?></td>
+			    <td align="center"><?echo $get_acc_chr[2];?></td>
+			    <td align="center"><?echo $get_acc_chr[3];?></td>
+			    <td align="center"><?echo $get_acc_chr[4];?></td>
+			  </tr>
+			  <tr>
+			    <td align="center"><?echo $get_acc_chr_online[0];?></td>
+			    <td align="center"><?echo $get_acc_chr_online[1];?></td>
+			    <td align="center"><?echo $get_acc_chr_online[2];?></td>
+			    <td align="center"><?echo $get_acc_chr_online[3];?></td>
+			    <td align="center"><?echo $get_acc_chr_online[4];?></td>
+			  </tr>
+			</table>
+		</fieldset>
+		</td>
+	</tr>
+<?} //end acc ?>
+	<tr>
+		<td align="center">
+		<fieldset>
+		<legend>Search Account</legend>
+			<form action="" method="post" name="search_account" id="search_account">
+			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
+			  <tr>
+			    <td width="42%" align="right">Account</td>
+			    <td><input name="account_search" type="text" id="account_search" size="17" maxlength="10"></td>
+			  </tr>
+			  <tr>
+			    <td align="right">Search type</td>
+			    <td>
                                       <label>
                                       <input type="radio" name="search_type" value="1" checked>
                                       <span class="normal_text">Exact Match</span></label>
@@ -220,23 +202,24 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
                                       <label>
                                       <input type="radio" name="search_type" value="0">
                                       <span class="normal_text">Partial Match</span></label>
-                                      <br>
-                                  </p></td>
-                                </tr>
-                                <tr>
-                                  <td colspan="2"><input type="submit" name="Submit" value="Search Account"></td>
-                                </tr>
+                                      <br></td>
+			  </tr>
+			  <tr>
+			    <td colspan="2" align="center"><input type="submit" name="Submit" value="Search Account"></td>
+			  </tr>
 			</table>
-		</form>
-        </fieldset>
-    </td>
-  </tr>
-</table>
-
-<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
-  <tr>
-    <td scope="row" align="center">
-	<?if(isset($_POST["account_search"])){include("admin/inc/search_acc.php");}?>
-    </td>
-  </tr>
+			</form>
+		</fieldset>
+		</td>
+	</tr>
+<?if(isset($_POST["account_search"])){?>
+	<tr>
+		<td align="center">
+		<fieldset>
+		<legend>Search Account Results</legend>
+			<?include("admin/inc/search_acc.php");?>
+		</fieldset>
+		</td>
+	</tr>
+<?}?>
 </table>

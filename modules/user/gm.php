@@ -6,7 +6,7 @@ if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg
   <table class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
       <td width="100" align="right">Your Level:</td>
-      <td><b><?echo $_SESSION['admin'];?> (<?echo admin_level($_SESSION['admin']);?>)</b></td>
+      <td><b><?echo $_SESSION['mmw_status'];?> (<?echo mmw_status($_SESSION['mmw_status']);?>)</b></td>
     </tr>
     <tr>
       <td align="right">Security Code:</td>
@@ -21,7 +21,7 @@ if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg
 <?
 echo $rowbr;
 
-if($_SESSION['admin'] >= $mmw[hex_wh_can]) {
+if($_SESSION['mmw_status'] >= $mmw[hex_wh_can]) {
 echo "<center><b>HEX Ware House Can Edit!</b></center>" . $rowbr;
 //HEX WH
 $query = "declare @vault varbinary(1920); 
@@ -30,9 +30,9 @@ $result = mssql_query($query);
 $vault = substr(mssql_get_last_message(),2);
 ?>
 <form name='edit_wh' method='post' action=''>
-  <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'>           
+  <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='100%'>           
 	<tr>
-          <td><textarea name="hexwh_run" cols="80" rows="12"><?echo $vault;?></textarea></td>
+          <td><textarea name="hexwh_run" rows="12" style="width: 100%;"><?echo $vault;?></textarea></td>
 	</tr>
 	<tr>
           <td align="center"><input name='submit' type='submit' value='Submit'> <input name='reset' type='reset' value='Renew'></td>
@@ -43,7 +43,7 @@ $vault = substr(mssql_get_last_message(),2);
 echo $rowbr;
 }
 
-if($_SESSION['admin'] >= $mmw[gm_msg_send]) {
+if($_SESSION['mmw_status'] >= $mmw[gm_msg_send]) {
  if(isset($_POST[gm_msg])) {$gm_msg = $_POST[gm_msg];}
  else {$gm_msg = "$char: TEXT";}
 echo "<center><b>GameMaster Chat In Game!</b></center>" . $rowbr;
@@ -63,4 +63,4 @@ echo "<center><b>GameMaster Chat In Game!</b></center>" . $rowbr;
 echo $rowbr;
 ?>
 
-<center><a href="http://tk3.clan.su"><i>Thank Vaflan For This MMW!</i></a></center>
+<center><a href="http://mmw.clan.su"><i>Thank Vaflan For This MMW!</i></a></center>

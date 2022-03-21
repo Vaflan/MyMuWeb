@@ -9,8 +9,9 @@ include("config.php");
 include("admin/inc/query.php");
 include("includes/sql_check.php");
 include("includes/xss_check.php");
-include("includes/formats.php");
+include("includes/format.php");
 include("admin/inc/functions.php");
+writelog("check_ip","<b>".urldecode($_SERVER["HTTP_REFERER"])."</b>");
 ?>
 <html>
 <head>
@@ -18,20 +19,22 @@ include("admin/inc/functions.php");
 <link href="images/admin.css" rel="stylesheet" type="text/css" />
 <title>MyMuWeb Administrator</title>
 </head>
-<body bgcolor="#dddddd">
+<body>
 <div align="center">
 
 <?if(isset($_SESSION['a_admin_login'],$_SESSION['a_admin_pass'],$_SESSION['a_admin_security'],$_SESSION['a_admin_level'])){?>
 
   <table width="800" border="0" align="center" cellpadding="0" cellspacing="0">
     <tr>
-      <td align="center" height="50"><div class='normal_text'>
+      <td align="center" height="50">
+<div class="login_stats">
 <form action='' method='post' name='admin_logout' id='admin_logout'>
-<?echo $warning_red;?> You are loged in <b><?echo "$_SESSION[a_admin_login] ".admin_level($_SESSION[a_admin_level])." (Level: $_SESSION[a_admin_level])";?></b> 
+<?echo $warning_red;?> You are loged in <b><?echo "$_SESSION[a_admin_login] ".mmw_status($_SESSION[a_admin_level])." (Level: $_SESSION[a_admin_level])";?></b> 
 <input name='admin_logout' type='hidden' id='admin_logout' value='admin_logout'> 
 <input name='Logout' type='submit' id='Logout' title='Logout' value='Logout'>
 </form>
-      </div></td>
+</div>
+      </td>
     </tr>
     <tr>
       <td align="center" height="20">
@@ -62,6 +65,7 @@ else{echo "<br><b>Not Find!</b>";}
   </table>
 
 <?}else{?>
+
 <script language='Javascript'>
 function check_admin_form()
 {
@@ -87,7 +91,7 @@ document.admin_form.submit();
 <p>&nbsp;</p>
 <table width='302' border='0' align='center' cellpadding='0' cellspacing='4'>
   <tr>
-    <td width='294'><div align='center' class='normal_text'><?echo $warning_red;?> Welcome <?echo $_SERVER[REMOTE_ADDR];?></div></td>
+    <td width='294'><div align='center'><?echo $warning_red;?> Welcome <?echo $_SERVER[REMOTE_ADDR];?></div></td>
   </tr>
 </table>
 <table width='200' border='0' align='center' cellpadding='0' cellspacing='0'>
@@ -95,37 +99,29 @@ document.admin_form.submit();
     <td><form action='' method='post' name='admin_form' id='admin_form'>
       <table width='292' border='0' align='center' cellpadding='0' cellspacing='4'>
         <tr>
-          <td width='126'><div align='right' class='normal_text'>Admin Username</div></td>
+          <td width='126'><div align='right'>Admin Username</div></td>
           <td width='144'><input name='adminusername' type='text' size='15' maxlength='10'></td>
         </tr>
         <tr>
-          <td><div align='right' class='normal_text'>Admin Password </div></td>
+          <td align='right'>Admin Password</td>
           <td><input name='adminpassword' type='password' size='15' maxlength='10'></td>
         </tr>
         <tr>
-          <td><div align='right' class='normal_text'>Admin SecurityCode </div></td>
-          <td><input name='securitycode' type='password' size='8' maxlength='10'>
-              <input name='admin_login' type='hidden' id='admin_login' value='admin_login'>
-         </td>
+          <td align='right'>Admin SecurityCode</td>
+          <td><input name='securitycode' type='password' size='8' maxlength='10'> <input name='admin_login' type='hidden' id='admin_login' value='admin_login'></td>
         </tr>
-      </table>
-      <table width='200' border='0' align='center' cellpadding='0' cellspacing='4'>
         <tr>
-          <td><div align='right'>
-              <input name='Login' type='submit' id='Login' value='Login' onclick='return check_admin_form()'>
-          </div></td>
-          <td><div align='left'>
-              <input name='Reset' type='reset' id='Reset' value='Reset'>
-          </div></td>
+          <td align='right'> </td>
+          <td align='left'><input name='Login' type='submit' id='Login' value='Login' onclick='return check_admin_form()'> <input name='Reset' type='reset' id='Reset' value='Reset'></td>
         </tr>
       </table>
     </form></td>
   </tr>
 </table>
+
 <?}?>
 
-<br>
-MyMuWeb. Design and PHP+SQL by Vaflan.
+<br><span class="copyright">MyMuWeb. Design and PHP+SQL by Vaflan.</span>
 </div>
 </body>
 </html>

@@ -36,5 +36,5 @@ echo $rowbr;
 ?>
 
 <center>
-<embed src="media/player.swf?file=media/playlist.xml&autostart=true&volume=100&backcolor=0xFFFFFF&plugins=no" allowscriptaccess="always" width="400" height="20" bgcolor="#FFFFFF" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+<embed src="media/player.swf?file=media/playlist.xml&autostart=true&volume=100&backcolor=0x<?echo $media_color;?>&plugins=no" allowscriptaccess="always" width="400" height="20" bgcolor="#<?echo $media_color;?>" quality="high" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </center>

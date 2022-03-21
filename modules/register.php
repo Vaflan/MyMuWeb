@@ -95,12 +95,8 @@ echo '<form action="" method="post" name="register_from">
                         <td><input name="gender" type="radio" value="male" checked> '.mmw_lang_male.' &nbsp; <input name="gender" type="radio" value="female"> '.mmw_lang_female.'</td>
                       </tr>
                       <tr>
-                        <td align="right">'.mmw_lang_verify_code.'</td>
-                        <td><img src="image_verify.php"></td>
-                      </tr>
-                      <tr>
-                        <td align="right">'.mmw_lang_verify_input.'</td>
-                        <td><input name="verifyinput" type="text" size="8" maxlength="10"></td>
+                        <td align="right">'.mmw_lang_security_code.'</td>
+                        <td><input name="verifyinput" type="text" size="6" maxlength="8"> <img src="image_verify.php" align="center" id="secImg"> <img src="images/refresh.gif" align="center" onclick="document.getElementById(\'secImg\').src=\'image_verify.php?refresh=\'+Math.random();" title="'.mmw_lang_renew.'"></td>
                       </tr>
                       <tr>
                         <td colspan="2" align="center"><input type="submit" name="Submit" value="'.mmw_lang_new_account.'" onclick="return check_register_form()"> <input name="registration" type="hidden" value="registration"> <input type="reset" value="'.mmw_lang_renew.'"></td>

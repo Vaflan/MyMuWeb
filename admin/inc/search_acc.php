@@ -1,21 +1,20 @@
 <?PHP
-$search = stripslashes($_POST['account_search']);
-$search_type = stripslashes($_POST['search_type']);
+$search = clean_var(stripslashes($_POST['account_search']));
+$search_type = clean_var(stripslashes($_POST['search_type']));
 
 if($_POST['search_type']==0){$result = mssql_query("SELECT memb___id,memb__pwd,bloc_code,country,gender from MEMB_INFO where memb___id='$search'");}
-elseif($_POST['search_type']==1){$result = mssql_query("SELECT memb___id,memb__pwd,bloc_code,country,gender from MEMB_INFO where memb___id like '%$search%'");}
+if($_POST['search_type']==1){$result = mssql_query("SELECT memb___id,memb__pwd,bloc_code,country,gender from MEMB_INFO where memb___id like '%$search%'");}
 
 echo '
-<br><span class=normal_text>Search Account Results</span><br><br>
-<table class="sort-table" id="table-1" height="30" border="0" cellpadding="0" cellspacing="0">                
+<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
 <thead><tr>
-<td>#</td>
-<td>Account</td>
-<td>Mode</td>
-<td>Country</td>
-<td>Gender</td>
-<td>Status</td>
-<td>Edit?</td>
+<td align="center">#</td>
+<td align="left">Account</td>
+<td align="left">Mode</td>
+<td align="left">Country</td>
+<td align="left">Gender</td>
+<td align="center">Status</td>
+<td align="center">Edit</td>
 </tr></thead>';
 
 for($i=0;$i < mssql_num_rows($result);++$i) {
@@ -40,24 +39,20 @@ if($row[1] == NuLL){$row[1] = "<table><tr><td bgcolor='FF0000'><font color='#FFF
 if($row[3] == '0'){$country = "Not Set";}
 else{$country = country($row[3]);}
 
-$account_table_edit = "<table width='40' border='0' cellpadding='0' cellspacing='0'>
-  <tr>
-    <td width='85'><form action='' method='post' name='account_edit' id='account_edit'>
-      <input name='Edit' type='submit' id='Edit' value='Edit' class='button'>
-      <input name='account_search_edit' type='hidden' id='account_search_edit' value=$row[0]>
-    </form></td>
-  </tr>
-</table>";
+$account_table_edit = "<form action='' method='post' name='account_edit' id='account_edit'>
+	<input name='Edit' type='submit' id='Edit' value='Edit'>
+	<input name='account_search_edit' type='hidden' id='account_search_edit' value=$row[0]>
+</form>";
 
-echo "<tbody><tr>
-<td align=left class=text_statistics>$rank</td>
-<td align=left class=text_statistics>$row[0]</td>
-<td align=left class=text_statistics>$row[2]</td>
-<td align=left class=text_statistics>$country</td>
-<td align=left class=text_statistics>$row[4]</td>
-<td align=left class=text_statistics>$status[0]</td>
-<td align=left class=text_statistics>$account_table_edit</td>
-</tr></tbody>";
+echo "<tr>
+<td align='center'>$rank.</td>
+<td align='left'>$row[0]</td>
+<td align='left'>$row[2]</td>
+<td align='left'>$country</td>
+<td align='left'>$row[4]</td>
+<td align='center'>$status[0]</td>
+<td align='center'>$account_table_edit</td>
+</tr>";
 }
 ?>
 </table>

@@ -1,5 +1,5 @@
 <?PHP
-$character_get = stripslashes($_GET[character]);
+$character_get = clean_var(stripslashes($_GET[character]));
 
 if(isset($_POST["zen"])) {require("includes/character.class.php");option::send_zen($_POST["zen_to_char"],$_POST["zen"]); echo $rowbr;}
 
@@ -24,7 +24,7 @@ else {
 $guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
 $guild_row = mssql_fetch_row($guild_results);
 $logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<a class='helpLink' href='#' onclick=\"showHelpTip(event,'<img src=decode.php?decode=$logo height=60 width=60>',false); return false\"><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
+$guild_end = "<a class='helpLink' href='javascript://' title='<img src=decode.php?decode=$logo height=60 width=60>'><img src='decode.php?decode=$logo' height='10' width='10' broder='0'></a> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
 }
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}

@@ -12,7 +12,7 @@ $file = str_replace("/","",$file);
 <center>
 
 <br>
-<img src="logo.png">
+<img src="images/mmw.png">
 <br>
 
 <big><b>

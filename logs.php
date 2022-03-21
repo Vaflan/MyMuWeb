@@ -9,7 +9,7 @@ header("Cache-control: private");
 <title>MMW Admin Logs</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 </head>
-<body bgcolor="#dddddd">
+<body style="background: #dddddd; font-family: Arial;">
 <pre>
 <?
 if(!isset($_SESSION["a_admin_login"],$_SESSION["a_admin_pass"],$_SESSION['a_admin_security'],$_SESSION['a_admin_level']))

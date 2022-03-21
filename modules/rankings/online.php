@@ -1,7 +1,14 @@
 <?PHP
+// PHP Script By Vaflan
+// For MyMuWeb
+// Ver. 1.0
+
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
+
+$result = mssql_query("Select TOP $top_rank memb___id,ServerName,CONNECTTM from MEMB_STAT where ConnectStat='1' ORDER BY CONNECTTM ASC");
+$row_num = mssql_num_rows($result);
 ?>
-    <br><?echo mmw_lang_top." $top_rank ".mmw_lang_characters;?><br>&nbsp;</br>
+    <br><?echo mmw_lang_total_users_online.": $row_num";?><br>&nbsp;</br>
           <table class="sort-table" border="0" cellpadding="0" cellspacing="0">                
           <thead><tr>
           <td>#</td>
@@ -14,8 +21,6 @@ $top_rank = clean_var(stripslashes($_POST['top_rank']));
           </tr></thead>
 
 <?
-$result = mssql_query("Select TOP $top_rank memb___id,ServerName,CONNECTTM from MEMB_STAT where ConnectStat='1' ORDER BY CONNECTTM ASC");
-$row_num = mssql_num_rows($result);
 if($row_num==0) {
  echo '<tr><td colspan="7">'.mmw_lang_all_characters_is_offline.'</td></tr>';
 }

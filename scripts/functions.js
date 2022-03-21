@@ -1,3 +1,7 @@
+// All this Java Script
+// Be Find By Vaflan
+// And Edited By Vaflan
+
 function expandit(curobj, hide) {
 	if(document.getElementById(curobj)) {
   		folder=document.getElementById(curobj).style;
@@ -36,14 +40,12 @@ function expandit(curobj, hide) {
 
 
 
-    var confirmMsg  = 'Вы действительно желаете';
 
-function confirmLink(theLink, theQuery)
-{
-    if (confirmMsg == '' || typeof(window.opera) != 'undefined') {
+function confirmLink(theLink, theQuery) {
+    if (typeof(window.opera) != 'undefined') {
         return true;//script_by_vaflan
     }
-    var is_confirmed = confirm(confirmMsg + ':\n' + theQuery);
+    var is_confirmed = confirm(theQuery);
     if (is_confirmed) {
         if ( typeof(theLink.href) != 'undefined' ) {
             theLink.href;
@@ -57,51 +59,16 @@ function confirmLink(theLink, theQuery)
 
 
 
-
 /////////////////////////////////////////////////////////////////
 
 
 
 
-function check_password_form()
-{
-if ( document.change_password.oldpassword.value == "")
-{
-alert("Please enter Curent Password.");
-return false;
-}
-if ( document.change_password.newpassword.value == "")
-{
-alert("Please enter New Password.");
-return false;
-}
-if ( document.change_password.renewpassword.value == "")
-{
-alert("Please retype New Password.");
-return false;
-}
-//return false;
-document.change_password.submit();
-}
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////
-
-
-
-
-function CheckLeng(Target,MaxLength)
- {
+function CheckLeng(Target,MaxLength) {
   if (Target.value.length > MaxLength)
     document.new_request.msg.value =
       document.new_request.msg.value.substr(0,MaxLength);
  }
-
-
 
 
 
@@ -129,3 +96,8 @@ function calc_price(input, service, currency) {
 	if(isNaN(cost.innerHTML) || a < 0) {cost.innerHTML = 'error';}
 	else {cost.innerHTML = number(cost.innerHTML) + currency;}
 }
+
+
+
+
+/////////////////////////////////////////////////////////////////

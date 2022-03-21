@@ -1,6 +1,9 @@
 <?PHP
-$search = clean_var(stripslashes($_POST['search']));
+// PHP Script By Vaflan
+// For MyMuWeb
+// Ver. 1.6
 
+$search = clean_var(stripslashes($_POST['search']));
 $result = mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");
 $row_num = mssql_num_rows($result);
 ?>

@@ -24,12 +24,12 @@ function clear_logs($name)
 
 		if(($account == NULL) || ($password == NULL) || ($securitycode == NULL)) {die ("$warning_red <center><b>Fatal ErroR! by Vaflan</b></center>");}
 
-		if($mmw[md5] == yes) {$login_sql = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd=[dbo].[fn_md5]('$password','$account')");}
-		elseif ($mmw[md5] == no) {$login_sql = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd='$password'");}
+		if($mmw[md5] == yes) {$login_sql = mssql_query("SELECT memb___id,mmw_status FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd=[dbo].[fn_md5]('$password','$account')");}
+		elseif ($mmw[md5] == no) {$login_sql = mssql_query("SELECT memb___id,mmw_status FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd='$password'");}
 		$login_row = mssql_fetch_row($login_sql);
 
 		if(($login_row[0] != $account) || ($mmw[admin_securitycode] != $securitycode)) {
-			echo '<script language="Javascript">alert("Ups! '.$_SERVER["REMOTE_ADDR"].' Username or Password or SecurityCode Invalid!"); window.location="'.$mmw[serverwebsite].'";</script>';
+			echo '<script language="Javascript">alert("Ups! '.$_SERVER["REMOTE_ADDR"].' Username or Password or SecurityCode Invalid!"); window.location=".";</script>';
 			}
 		if($login_row[0] == $account && $login_row[1] < $mmw[min_level_to_ap]) {
 			echo '<script language="Javascript">alert("Ups! '.$login_row[0].' You Can\'t Enter in Here!"); window.location="'.$mmw[serverwebsite].'";</script>';
@@ -59,8 +59,8 @@ function clear_logs($name)
 			$code = clean_var(stripslashes($_SESSION['a_admin_security']));
 			$level = clean_var(stripslashes($_SESSION['a_admin_level']));
 
-			if($mmw[md5] == yes) {$check_sql = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$admin' AND memb__pwd=[dbo].[fn_md5]('$pass','$admin')");}
-			elseif ($mmw[md5] == no) {$check_sql = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$admin' AND memb__pwd='$pass'");}
+			if($mmw[md5] == yes) {$check_sql = mssql_query("SELECT memb___id,mmw_status FROM dbo.MEMB_INFO WHERE memb___id='$admin' AND memb__pwd=[dbo].[fn_md5]('$pass','$admin')");}
+			elseif ($mmw[md5] == no) {$check_sql = mssql_query("SELECT memb___id,mmw_status FROM dbo.MEMB_INFO WHERE memb___id='$admin' AND memb__pwd='$pass'");}
 			$check_row = mssql_fetch_row($check_sql);
 
 			if($mmw[admin_securitycode] != $code || $admin != $check_row[0] || $level != $check_row[1] || $level < $mmw[min_level_to_ap]) {
@@ -179,14 +179,14 @@ function edit_news($news_title,$news_autor,$news_cateogry,$news_id,$news_eng,$ne
 
 
 
-function add_new_link($link_name,$link_address,$link_description)
+function new_link($link_name,$link_address,$link_description,$link_size)
 {
           require("config.php");
           $date = date('d-m-Y H:i');
-               if (empty($link_name) ||  empty($link_address) || empty($link_description)){
+               if (empty($link_name) ||  empty($link_address) || empty($link_description) || empty($link_size)){
 	              echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                            else{
-                                   mssql_query("INSERT INTO MMW_links(link_name,link_address,link_description,link_date,link_id) VALUES ('$_POST[link_name]','$_POST[link_address]','$_POST[link_description]','$date','$mmw[rand_id]')");
+                                   mssql_query("INSERT INTO MMW_links(link_name,link_address,link_description,link_size,link_date,link_id) VALUES ('$link_name','$link_address','$link_description','$link_size','$date','$mmw[rand_id]')");
                                    echo "$warning_green Link SuccessFully Added!";
 
                                    $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Added</font>";
@@ -205,20 +205,20 @@ function delete_link($link_id)
                          mssql_query("Delete from MMW_links where link_id='$link_id'");
                          echo "$warning_green Link SuccessFully Deleted!";
 
-                         $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Deleted</font>";
+                         $log_dat = "Link $link_name Has Been <font color=#FF0000>Deleted</font>";
                          writelog("link",$log_dat);
                        }
 }
 
 
 
-function edit_link($link_name,$link_address,$link_description,$link_id)
+function edit_link($link_name,$link_address,$link_description,$link_size,$link_id)
 {        require("config.php");
          $date = date('d-m-Y H:i');
-         if (empty($link_name) ||  empty($link_address) || empty($link_description) || empty($link_id)){
+         if (empty($link_name) ||  empty($link_address) || empty($link_description) || empty($link_size) || empty($link_id)){
 	       echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
                   else{
-                         mssql_query("Update MMW_links set [link_name]='$_POST[link_name]',[link_address]='$_POST[link_address]',[link_description]='$_POST[link_description]',[link_date]='$date' where link_id='$_POST[link_id]'");
+                         mssql_query("Update MMW_links set [link_name]='$link_name',[link_address]='$link_address',[link_description]='$link_description',[link_size]='$link_size',[link_date]='$date' where link_id='$link_id'");
                          echo "$warning_green Link SuccessFully Edited!";
 
                          $log_dat = "Link $_POST[link_name] Has Been <font color=#FF0000>Edited</font>";
@@ -303,8 +303,8 @@ function edit_account($post_account,$post_pwd,$post_mode,$post_email,$post_sques
 				if($post_pwd!=""){$passmd5="[memb__pwd2]='$post_pwd',[memb__pwd]=[dbo].[fn_md5]('$post_pwd','$post_account'),"; $passdef="[memb__pwd2]='$post_pwd',[memb__pwd]='$post_pwd',";}
 				if($post_unblock_time!=""){$block_menu = "[unblock_time]='$post_unblock_time',";} if($post_block_date!="no"){ if($post_block_date=='yes'){$post_block_date = time();}else{$post_block_date = '0';} $block_menu = $block_menu . "[block_date]='$post_block_date',";}
 				$block_menu = $block_menu . "[blocked_by]='$_SESSION[a_admin_login]',[block_reason]='$post_block_reason',";
-                            if($mmw['md5']==yes){$sql_script_edit_account = "Update memb_info set $passmd5 $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_squestion',[fpas_answ]='$post_sanswer',[admin]='$post_admin_level' where memb___id='$post_account'";}
-                                 elseif($mmw['md5']==no){$sql_script_edit_account = "Update memb_info set $passdef $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_squestion',[fpas_answ]='$post_sanswer',[admin]='$post_admin_level' where memb___id='$post_account'";}
+                            if($mmw['md5']==yes){$sql_script_edit_account = "Update memb_info set $passmd5 $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_squestion',[fpas_answ]='$post_sanswer',[mmw_status]='$post_admin_level' where memb___id='$post_account'";}
+                                 elseif($mmw['md5']==no){$sql_script_edit_account = "Update memb_info set $passdef $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_squestion',[fpas_answ]='$post_sanswer',[mmw_status]='$post_admin_level' where memb___id='$post_account'";}
 
                                    mssql_query($sql_script_edit_account);
                                    echo "$warning_green Account $post_account SuccessFully Edited!";
@@ -426,5 +426,47 @@ function delete_vote($id_vote)
 		$log_dat = "Id Vote: $id_vote Has Been <font color=#FF0000>Deleted</font>";
 		writelog("vote",$log_dat);
 	}
+}
+
+
+
+
+
+
+function rename_char($name_char,$rename_char)
+{        require("config.php");
+         $date = date('d-m-Y H:i');
+         $name_check = mssql_query("SELECT Name FROM Character WHERE name='$rename_char'"); 
+         $check_char = mssql_num_rows($name_check);
+         if (empty($name_char) ||  empty($rename_char)){echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
+             elseif ($check_char > 0){echo "$warning_red Character Is Already In Use, Please Choose Another!";}
+                  else{
+                         mssql_query("Update Character set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         mssql_query("Update OptionData set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         mssql_query("Update Guild set [G_Master]='$rename_char' WHERE [G_Master]='$name_char'");
+                         mssql_query("Update GuildMember set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         mssql_query("Update AccountCharacter set [GameID1]='$rename_char' WHERE [GameID1]='$name_char'");
+                         mssql_query("Update AccountCharacter set [GameID2]='$rename_char' WHERE [GameID2]='$name_char'");
+                         mssql_query("Update AccountCharacter set [GameID3]='$rename_char' WHERE [GameID3]='$name_char'");
+                         mssql_query("Update AccountCharacter set [GameID4]='$rename_char' WHERE [GameID4]='$name_char'");
+                         mssql_query("Update AccountCharacter set [GameID5]='$rename_char' WHERE [GameID5]='$name_char'");
+
+                         mssql_query("Update MMW_comment set [c_char]='$rename_char' WHERE [c_char]='$name_char'");
+                         mssql_query("Update MMW_forum set [f_char]='$rename_char' WHERE [f_char]='$name_char'");
+                         mssql_query("Update MMW_forum set [f_lostchar]='$rename_char' WHERE [f_lostchar]='$name_char'");
+                         mssql_query("Update MMW_market set [item_char]='$rename_char' WHERE [item_char]='$name_char'");
+
+                         mssql_query("Update T_CGuid set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         mssql_query("Update T_FriendList set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+                         mssql_query("Update T_FriendMail set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+                         mssql_query("Update T_FriendMain set [Name]='$rename_char' WHERE [Name]='$name_char'");
+                         mssql_query("Update T_WaitFriend set [FriendName]='$rename_char' WHERE [FriendName]='$name_char'");
+                         mssql_query("Update WEB_ZS set [NAME]='$rename_char' WHERE [NAME]='$name_char'");
+                         mssql_query("Update MEMB_INFO set [char_set]='$rename_char' WHERE [char_set]='$name_char'");
+
+                             echo "$warning_green $name_char Rename to $rename_char SuccessFully Edited!";
+
+                             writelog("rename_char","<font color=#FF0000>$name_char</font> Renamed to <b>$rename_char</b>");
+                      }
 }
 ?>

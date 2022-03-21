@@ -29,7 +29,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
 				$wh_resoult = mssql_query("Select AccountID,extMoney From warehouse WHERE AccountID = '$login'");
 				$wh_row = mssql_fetch_row($wh_resoult); $wh_updated = $wh_row[1] + $mmw[zen_for_ref];
 				mssql_query("UPDATE warehouse SET [extMoney]='$wh_updated' WHERE AccountID = '$login'");
-				writelog("referral.php","Account <b>$login</b> Has Been <font color=#FF0000>GET</font> Zen: $mmw[zen_for_ref]|For Acc: $referral_row[0]|For Char: $char_ref_row[0]");
+				writelog("referral","Account <b>$login</b> Has Been <font color=#FF0000>GET</font> Zen: $mmw[zen_for_ref]|For Acc: $referral_row[0]|For Char: $char_ref_row[0]");
 				}
 			}
 		}
@@ -81,7 +81,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
     </tr>
     <tr>
       <td align="right"><?echo mmw_lang_your_referrals;?>:</td>
-      <td><a href="#" class="helpLink" onclick="showHelpTip(event,'<?echo $referral_list;?>',false); return false"><?echo mmw_lang_all_referrals.": $referral_num, ".mmw_lang_have_a_reset.": $referral_num_check";?></td>
+      <td><span class="helpLink" title="<?echo $referral_list;?>"><?echo mmw_lang_all_referrals.": $referral_num, ".mmw_lang_have_a_reset.": $referral_num_check";?></span></td>
     </tr>
 <?}?>
 <?if($timeinfo[2] == '1'){?>

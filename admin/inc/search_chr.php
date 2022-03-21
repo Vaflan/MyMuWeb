@@ -1,23 +1,21 @@
 <?PHP
-$search = stripslashes($_POST['character_search']);
-$search_type = stripslashes($_POST['search_type']);
+$search = clean_var(stripslashes($_POST['character_search']));
+$search_type = clean_var(stripslashes($_POST['search_type']));
 
 if($_POST['search_type']==0){$result = mssql_query("SELECT Name,Class,cLevel,reset,strength,dexterity,vitality,energy,accountid,ctlcode from Character where name='$search'");}
 if($_POST['search_type']==1){$result = mssql_query("SELECT Name,Class,cLevel,reset,strength,dexterity,vitality,energy,accountid,ctlcode  from Character where name like '%$search%'");}
 
 echo '
-<br><span class=normal_text>Search Character Results</span><br><br>
-<table class="sort-table" id="table-1" height="30" border="0" cellpadding="0" cellspacing="0">                
+<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
 <thead><tr>
-<td>#</td>
-<td>Name</td>
-<td>Account</td>
-<td>Level</td>
-<td>Resets</td>
-<td>Class</td>
-<td>Mode</td>
-<td>Status</td>
-<td>Edit</td>
+<td align="center">#</td>
+<td align="left">Name</td>
+<td align="left">Account</td>
+<td align="left">Level</td>
+<td align="left">Resets</td>
+<td align="left">Class</td>
+<td align="center">Status</td>
+<td align="center">Edit</td>
 </tr></thead>';
 
 for($i=0;$i < mssql_num_rows($result);++$i) {
@@ -34,39 +32,25 @@ if($row[9] == 1){$row[9] = "<table><tr><td bgcolor='yellow'><font color='#000000
 elseif($row[9] == 32 || $row[9] == 8){$row[9] = "<table><tr><td bgcolor='blue'><font color='#FFFFFF' size='1'>GM</font></td></tr></table>";}
 elseif($row[9] == 0){$row[9] = "Normal";}
 
-if($row[1] == 0){$row[1] ='DW';}
-if($row[1] == 1){$row[1] ='SM';}
-if($row[1] == 16){$row[1] ='DK';}
-if($row[1] == 17){$row[1] ='BK';}
-if($row[1] == 32){$row[1] ='ELF';}
-if($row[1] == 33){$row[1] ='ME';}
-if($row[1] == 48){$row[1] ='MG';}
-if($row[1] == 64){$row[1] ='DL';}
-
 if($_SESSION[a_admin_level] > 3) {
-$character_table_edit = "<table width='40' border='0' cellpadding='0' cellspacing='0'>
-  <tr>
-    <td width='85'><form action='' method='post' name='character_edit' id='character_edit'>
-      <input name='Edit' type='submit' id='Edit' value='Edit' class='button'>
-      <input name='character_search_edit' type='hidden' id='character_search_edit' value=$row[0]>
-    </form></td>
-  </tr>
-</table>";
+$character_table_edit = "<form action='' method='post' name='character_edit' id='character_edit'>
+	<input name='Edit' type='submit' id='Edit' value='Edit'>
+	<input name='character_search_edit' type='hidden' id='character_search_edit' value='$row[0]'>
+</form>";
 }
 else {
 $character_table_edit = "Can't";
 }
 
-echo "<tbody><tr>
-<td align=left class=text_statistics>$rank</td>
-<td align=left class=text_statistics>$row[0]</td>
-<td align=left class=text_statistics><a href='?op=acc&acc=$row[8]'>$row[8]</a></td>
-<td align=left class=text_statistics>$row[2]</td>
-<td align=left class=text_statistics>$row[3]</td>
-<td align=left class=text_statistics>$row[1]</td>
-<td align=left class=text_statistics>$row[9]</td>
-<td align=left class=text_statistics>$status[0]</td>
-<td align=left class=text_statistics>$character_table_edit</td>
-</tr></tbody>";
+echo "<tr>
+<td align='center'>$rank.</td>
+<td align='left'>$row[0]</td>
+<td align='left'><a href='?op=acc&acc=$row[8]'>$row[8]</a></td>
+<td align='left'>$row[2]</td>
+<td align='left'>$row[3]</td>
+<td align='left'>".char_class($row[1])."</td>
+<td align='center'>$status[0]</td>
+<td align='center'>$character_table_edit</td>
+</tr>";
 }?>
 </table>

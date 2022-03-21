@@ -1,4 +1,8 @@
 <?PHP
+// PHP Script By Vaflan
+// For MyMuWeb
+// Ver. 1.2
+
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 ?>
     <br><?echo mmw_lang_top." $top_rank ".mmw_lang_killers;?><br>&nbsp;</br>
@@ -29,10 +33,7 @@ $status = mssql_fetch_row($status_reults);
 $statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$row[4]'");
 $statusdc = mssql_fetch_row($statusdc_reults);
 
-if($status[0] == 1 && $statusdc[0] == $row[0]) 
-	{$status[0] ='<img src=./images/online.gif width=6 height=6>';}
-elseif($status[0] == 1 && $statusdc[0] != $row[0]) 
-	{$status[0] ='<img src=./images/sleep.gif width=6 height=6>';}
+if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src=./images/online.gif width=6 height=6>';}
 else {$status[0] ='<img src=./images/offline.gif width=6 height=6>';}
 
 echo "<tbody><tr>

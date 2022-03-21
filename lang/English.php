@@ -11,6 +11,7 @@ define('mmw_lang_menu',"Menu");
 define('mmw_lang_statistic',"Statistic");
 define('mmw_lang_server_time',"Server Time");
 define('mmw_lang_voting',"Voting");
+define('mmw_lang_top_list',"Top List");
 define('mmw_lang_last_in_forum',"Last in Forum");
 define('mmw_lang_who_is_on_web',"Who is on Web");
 define('mmw_lang_ads_banners',"ADS / Banners");
@@ -23,7 +24,7 @@ define('mmw_lang_lost_pass',"Lost Password");
 define('mmw_lang_hello',"Hello");
 define('mmw_lang_character_panel',"Character Panel");
 define('mmw_lang_mail',"Mail");
-define('mmw_lang_ware_house',"Ware House");
+define('mmw_lang_ware_house',"Bank (Vault Keeper)");
 define('mmw_lang_gm_options',"GM Options");
 define('mmw_lang_logout',"Logout");
 
@@ -51,7 +52,8 @@ define('mmw_lang_total_guilds',"Total Guilds");
 define('mmw_lang_total_in_guilds',"Total in Guilds");
 define('mmw_lang_total_male_users',"Total Male Users");
 define('mmw_lang_total_female_users',"Total Female Users");
-define('mmw_lang_online_users',"Online Users");
+define('mmw_lang_total_users_online',"Total Users Online");
+define('mmw_lang_on_server',"On Server");
 define('mmw_lang_version',"Version");
 define('mmw_lang_experience',"Experience");
 define('mmw_lang_drops',"Drops");
@@ -71,10 +73,9 @@ define('mmw_lang_author',"Author");
 define('mmw_lang_date',"Date");
 define('mmw_lang_total_comment',"Total Comment");
 define('mmw_lang_add_comment',"Add Comment");
-define('mmw_lang_char',"Char");
+define('mmw_lang_char',"Char.");
 define('mmw_lang_full_name',"Full Name");
 define('mmw_lang_age',"Age");
-define('mmw_lang_reg_date',"Reg. Date");
 define('mmw_lang_avatar',"Avatar");
 define('mmw_lang_country',"Country");
 define('mmw_lang_gender',"Gender");
@@ -137,8 +138,7 @@ define('mmw_lang_secret_question',"Secret Question");
 define('mmw_lang_secret_answer',"Secret Answer");
 define('mmw_lang_male',"Male");
 define('mmw_lang_female',"Female");
-define('mmw_lang_verify_code',"Verify Code");
-define('mmw_lang_verify_input',"Verify Input");
+define('mmw_lang_security_code',"Security code");
 define('mmw_lang_renew',"Renew");
 
 //Market
@@ -211,6 +211,7 @@ define('mmw_lang_guild_member',"Guild Member");
 define('mmw_lang_battle_master',"Battle Master");
 define('mmw_lang_assistant_guild_master',"Assistant Guild Master");
 define('mmw_lang_guild_master',"Guild Master");
+define('mmw_lang_all_characters_is_offline',"All Character is Offline");
 
 //Gallery
 define('mmw_lang_image',"Image");
@@ -251,7 +252,12 @@ define('mmw_lang_no_up_point_found',"No Up Point Found!");
 define('mmw_lang_no_pk_status_found',"No Pk Status Found!");
 define('mmw_lang_add_point',"Add Point");
 define('mmw_lang_pk_clear',"Pk Clear");
+define('mmw_lang_need_6_level',"Need 6 Level!");
 define('mmw_lang_move',"Move");
+define('mmw_lang_select_class',"Select Class");
+define('mmw_lang_change_class',"Change Class");
+define('mmw_lang_class_price',"Price Class Alongside");
+define('mmw_lang_change',"Change");
 define('mmw_lang_up_point',"Up Point");
 
 //Mail
@@ -296,7 +302,7 @@ define('mmw_lang_change_password',"Change Password");
 define('mmw_lang_zen_from',"From");
 define('mmw_lang_zen_to',"To");
 define('mmw_lang_where',"Where");
-define('mmw_lang_extra_ware_house',"Extra Ware House");
+define('mmw_lang_extra_ware_house',"Extra Bank");
 define('mmw_lang_sell',"Sell");
 
 //Option Character Class
@@ -316,6 +322,7 @@ define('mmw_lang_account_created',"Your Account Has Been SuccesFully Created!");
 define('mmw_lang_character_does_not_exist',"Character Does Not Exist!");
 define('mmw_lang_for_reset_need',"For Reset Need");
 define('mmw_lang_reset_limit_to',"Reset limit is set to");
+define('mmw_lang_take_off_set',"You Forgot to Take off Set from Character");
 define('mmw_lang_character_reseted',"Your Character Has Been SuccessFully Reseted!");
 define('mmw_lang_point_must_be_number',"Points must be a positive number!");
 define('mmw_lang_dont_have_point',"Character Don't Have Enough Point<br>Currently:");
@@ -358,5 +365,7 @@ define('mmw_lang_message_deleted',"Message SuccessFully Deleted!");
 define('mmw_lang_minimum_zen_can_send',"Minimum Zen Can Send! You Have:");
 define('mmw_lang_no_zen_for_send_zen',"Can't Send Zen, you haven't zen for Service:");
 define('mmw_lang_zen_sent',"Zen To Character SuccessFully Sent!");
+define('mmw_lang_change_class_need',"To Change Class Need");
+define('mmw_lang_character_changed',"Character Class SuccessFully Changed");
 
 ?>

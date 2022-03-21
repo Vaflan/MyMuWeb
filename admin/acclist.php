@@ -1,21 +1,23 @@
-<?if(isset($_POST["delete_acc"])) {delete_acc($_POST['account']);}?>
+<?PHP
+if(isset($_POST["delete_acc"])) {delete_acc($_POST['delete_acc']);}
+?>
 
-<table width="660" border="0" align="center" cellpadding="0" cellspacing="4">
-<tr>
-<td align="center">
-<fieldset>
-<legend>Account List</legend>
+<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
+	<tr>
+		<td align="center">
+		<fieldset>
+		<legend>Account List</legend>
 
-<table class="sort-table" id="table-1" width="100%" border="0" cellpadding="0" cellspacing="0">                
+<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
 <thead><tr>
-<td>#</td>
-<td>Account</td>
-<td>Mode</td>
-<td>Reg Date</td>
-<td>Login Date</td>
-<td>Char</td>
-<td>Status</td>
-<td>Delete</td>
+<td align="center">#</td>
+<td align="left">Account</td>
+<td align="left">Mode</td>
+<td align="left">Reg Date</td>
+<td align="left">Login Date</td>
+<td align="left">Char</td>
+<td align="center">Status</td>
+<td align="center">Delete</td>
 </tr></thead>
 
 <?
@@ -39,30 +41,26 @@ $rank = $i+1;
 $acctinfo = mssql_query("Select Name from Character where AccountID='$row[0]'");
 $char_numb = mssql_num_rows($acctinfo);
 
-$table_delete = "<table width='60' border='0' cellpadding='0' cellspacing='0'>
-  <tr>
-    <td width='85'><form action='' method='post' name='delete_acc' id='delete_acc'>
-      <input name='Delete' type='submit' id='Delete' value='Delete' class='button'>
-      <input name='account' type='hidden' id='account' value='$row[0]'>
-      <input name='delete_acc' type='hidden' id='delete_acc' value='$row[0]'>
-    </form></td>
-  </tr>
-</table>";
+$table_delete = "<form action='' method='post' name='delete_acc' id='delete_acc'>
+	<input name='Delete' type='submit' id='Delete' value='Delete'>
+	<input name='delete_acc' type='hidden' id='delete_acc' value='$row[0]'>
+</form>";
 
-echo "<tbody><tr>
-<td class=text_statistics>$rank</td>
-<td class=text_statistics><a href=?op=acc&acc=$row[0]>$row[0]</a></td>
-<td class=text_statistics>$row[1]</td>
-<td class=text_statistics>".time_format($row[2],"d.m.Y H:i")."</td>
-<td class=text_statistics>".date("d.m.Y H:i",$row[3])."</td>
-<td class=text_statistics>$char_numb</td>
-<td class=text_statistics>$status[0]</td>
-<td class=text_statistics>$table_delete</td>
-</tr></tbody>";
+echo "<tr>
+<td align='center'>$rank</td>
+<td align='left'><a href=?op=acc&acc=$row[0]>$row[0]</a></td>
+<td align='left'>$row[1]</td>
+<td align='left'>".time_format($row[2],"d.m.Y H:i")."</td>
+<td align='left'>".date("d.m.Y H:i",$row[3])."</td>
+<td align='left'>$char_numb</td>
+<td align='center'>$status[0]</td>
+<td align='center'>$table_delete</td>
+</tr>";
 }
 ?>
 </table>
 
-</fieldset>
-</td></tr>
+		</fieldset>
+		</td>
+	</tr>
 </table>

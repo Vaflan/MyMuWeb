@@ -5,7 +5,7 @@
 if(isset($_SESSION['a_admin_login'],$_SESSION['a_admin_pass'],$_SESSION['a_admin_security'],$_SESSION['a_admin_level'])){
 
    if(isset($_POST[sqlquery_query])) {$sqlquery_query = $_POST[sqlquery_query];}
-   else {$sqlquery_query = 'UPDATE table SET [column]=? WHERE [column]=?';}
+   else {$sqlquery_query = "UPDATE table SET [column]=? WHERE [column]=?\n\nSELECT * FROM table WHERE [column]=?\n\ndeclare @hex varbinary(1920); set @hex=(SELECT Items FROM warehouse where AccountId='?'); print @hex;";}
 
    if(isset($_POST["sql_query_true"])) {
 	if($sqlquery_result = mssql_query($sqlquery_query))
@@ -30,6 +30,11 @@ if(isset($_SESSION['a_admin_login'],$_SESSION['a_admin_pass'],$_SESSION['a_admin
 		if($i < $num - 1){echo "</td></tr>\n\n<tr><td>";}
 	   }
 	   echo "</td></tr></table>\n";
+	}
+	if($substr_query == 'DECLAR' || $substr_query == 'Declar' || $substr_query == 'declar') {
+	   mssql_query($sql_query);
+	   echo "<br><b>Result:</b><br>\n";
+	   echo "<textarea style='width:540; height:260;'>".mssql_get_last_message()."</textarea>\n";
 	}
    }
 

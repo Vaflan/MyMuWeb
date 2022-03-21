@@ -1,4 +1,15 @@
-Friends:
-<centeR>
-<a href="http://redangel.put.lv">RedAngel MuOnline</a>
+<!-- 
+* MyMuWeb ADS/Banners Body
+* By Vaflan
+* Use All HTML Teg. 
+-->
+
+
+<center>
+<a href="http://mmw.clan.su">MyMuWeb Support</a><br>
+<a href="http://redangel.put.lv">RedAngel MuOnline</a><br>
+<a href="http://podriv.net">Padriv E-Radio</a><br>
 </center>
+
+
+<br><small>This Text Can Edit in ads.txt</small>

@@ -15,8 +15,12 @@ for($i=0; $i < $now_total; ++$i) {
 	$row = mssql_fetch_row($get_news);
 	if($i >= $from){
 	$date = date("d.m.Y", $row[3]);
-	if($row[5][1]!=''){$news_eng="<div><u>English:</u></div>".bbcode(substr($row[5],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";} else{$news_eng="";}
-	if($row[6][1]!=''){$news_rus="<div><u>Russian:</u></div>".bbcode(substr($row[6],0,$mmw[long_news_txt]*2))." <a href='?news=$row[4]'>...</a>";} else{$news_rus="";}
+	if($row[5][1]!='' && $mmw[long_news_txt]!=0){$news_eng="<div><u>English:</u></div>".bbcode(substr($row[5],0,$mmw[long_news_txt]))." <a href='?news=$row[4]'>...</a>";}
+	elseif($row[5][1]!='' && $mmw[long_news_txt]==0){$news_eng="<div><u>English:</u></div>".bbcode($row[5]);}
+	else {$news_rus="";}
+	if($row[6][1]!='' && $mmw[long_news_txt]!=0){$news_rus="<div><u>Russian:</u></div>".bbcode(substr($row[6],0,$mmw[long_news_txt]*2))." <a href='?news=$row[4]'>...</a>";}
+	elseif($row[6][1]!='' && $mmw[long_news_txt]==0){$news_rus="<div><u>Russian:</u></div>".bbcode($row[6]);}
+	else {$news_rus="";}
 	$comm_result = mssql_query("SELECT c_id FROM MMW_comment WHERE c_id_blog='1' AND c_id_code='$row[4]'");
 	$comm_num = mssql_num_rows($comm_result);
 
@@ -31,12 +35,12 @@ for($i=0; $i < $now_total; ++$i) {
 }
 
 if($pg > 1){ $prev = ($pg - 1); // Previous Link
-$paginator = "<a href='?op=news&pg=$prev'><img src='images/left.png' border='0'></a> ";}
+$paginator = "<a href='?op=news&pg=$prev' title='Previos'><img src='$mmw[theme_img]/left.png' border='0'></a> ";}
 for($i = 1; $i <= $total_pgs; $i++){ /// Numbers
 if(($pg) == $i) { $paginator .= ' <b>'.$i.'</b> '; } else {
 $paginator .=' <a href="?op=news&pg='.$i.'">'.$i.'</a> '; }}
 if($pg < $total_pgs){ $next = ($pg + 1); // Next Link
-$paginator .= " <a href='?op=news&pg=$next'><img src='images/right.png' border='0'></a>";}
+$paginator .= " <a href='?op=news&pg=$next' title='Next'><img src='$mmw[theme_img]/right.png' border='0'></a>";}
 
 echo $rowbr . "<center>[ $paginator ]</center>";
 ?>

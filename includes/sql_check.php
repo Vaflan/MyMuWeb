@@ -1,5 +1,6 @@
-<?php
-// MuWeb Anti-SQL Injection 
+<?PHP
+// MuWeb Anti-SQL Injection
+
 function check_inject() 
   { 
     $badchars = array(";","'","*","/"," \ ","DROP", "SELECT", "UPDATE", "DELETE", "WHERE", "drop", "select", "update", "delete", "where", "-1", "-2", "-3","-4", "-5", "-6", "-7", "-8", "-9", "distinct", "having", "truncate", "replace", "handler", "like", "procedure", "limit", "order by", "group by"); 
@@ -25,14 +26,12 @@ function check_inject()
       } 
     } 
   } 
-function clean_variable($var) 
-	{ 
+function clean_variable($var) { 
 	$newvar = preg_replace('/[^a-zA-Z0-9\_\-]/', '', $var); 
 	return $newvar; 
-	}
-
-
+}
 check_inject();
+
 
 
 
@@ -40,11 +39,15 @@ check_inject();
 
 // Clean Var Edited by Vaflan
 
-function clean_var($var=NULL) {
-$newvar = @preg_replace('/[^a-zA-Z0-9\_\-\=\@\.\:\/]/','',$var);
+function clean_var($var) {
+$var = stripslashes($var);
+$rules = '/[^a-zA-Z0-9-\_\=\@\.\,\:\/\^\+\!\~\[\]\*\{\}\(\)\|\\\ ]/';
+if(@preg_match($rules,$var) || $var==NULL) { } //If isset ErroR
+$newvar = @preg_replace($rules,'',$var);
+$newvar = str_replace(" ","",$newvar);
+$newvar = str_replace("\n","",$newvar);
 $newvar = str_replace("\0","",$newvar);
-$newvar = str_replace("'","",$newvar);
-if(@preg_match('/[^a-zA-Z0-9\_\-\=\@\.\:\/]/',$var)) { }
+$newvar = str_replace("'","&apos;",$newvar);
 return $newvar;
 }
 

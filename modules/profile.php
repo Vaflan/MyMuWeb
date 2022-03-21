@@ -1,7 +1,10 @@
 <?PHP
+// Profile for MMW
+// By Vaflan
+
 $account_get = clean_var(stripslashes($_GET[profile]));
 
-$profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,admin from memb_info where memb___id='$account_get'");
+$profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,mmw_status from memb_info where memb___id='$account_get'");
 $profile_info = mssql_fetch_row($profile_sql);
 $profile_info_check = mssql_num_rows($profile_sql);
 if($profile_info[2] == '' || $profile_info[2] == ' ') {$profile_info[2] = mmw_lang_no_set;}
@@ -12,9 +15,9 @@ if($profile_info[8] == '' || $profile_info[8] == ' ') {$profile_info[8] = mmw_la
 if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "images/no_avatar.jpg";}
 ?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='240'> 
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'> 
 	<tr>
-          <td width="100"><?echo mmw_lang_account;?>:</td>
+          <td width="120"><?echo mmw_lang_account;?>:</td>
           <td><?echo $account_get;?></td>
 	</tr>
 	<tr>
@@ -35,10 +38,10 @@ if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "ima
 	</tr>
 	<tr>
           <td><?echo mmw_lang_level;?>:</td>
-          <td><?echo admin_level($profile_info[11]);?></td>
+          <td><?echo mmw_status($profile_info[11]);?></td>
 	</tr>
 	<tr>
-          <td><?echo mmw_lang_reg_date;?>:</td>
+          <td><?echo mmw_lang_register_date;?>:</td>
           <td><?echo time_format($profile_info[10],"d M Y, H:i");?></td>
 	</tr>
 	<tr>
@@ -61,4 +64,44 @@ if($profile_info[3] == NULL || $profile_info[3] == " ") {$profile_info[3] = "ima
           <td valign="top"><?echo mmw_lang_avatar;?>:</td>
           <td><img  width="110" src="<?echo $profile_info[3];?>"></td>
 	</tr>
+</table>
+
+<?echo $rowbr;?>
+
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'> 
+	<thead><tr>
+          <td>#</td>
+          <td><?echo mmw_lang_character;?></td>
+          <td><?echo mmw_lang_reset;?></td>
+          <td><?echo mmw_lang_level;?></td>
+          <td><?echo mmw_lang_class;?></td>
+	</tr></thead>
+<?PHP
+$result = mssql_query("Select Name,Class,cLevel,Reset from Character where AccountID='$account_get' order by reset desc, clevel desc");
+$row_num = mssql_num_rows($result);
+
+if($row_num<=0) {
+ echo '<tr><td colspan="5">'.mmw_lang_no_characters.'</td></tr>';
+}
+
+for($i=0; $i<$row_num; ++$i) {
+	$rank = $i+1;
+	$row = mssql_fetch_row($result);
+	$status_reults = mssql_query("Select ConnectStat from MEMB_STAT where memb___id='$account_get'");
+	$status = mssql_fetch_row($status_reults);
+	$statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$account_get'");
+	$statusdc = mssql_fetch_row($statusdc_reults);
+
+	if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src=./images/online.gif width=6 height=6>';}
+	else {$status[0] ='<img src=./images/offline.gif width=6 height=6>';}
+
+echo 	"<tbody><tr>
+            <td>$rank</td>
+            <td>$status[0] <a href=?op=character&character=$row[0]>$row[0]</a></td>
+            <td>$row[3]</td>
+            <td>$row[2]</td>
+            <td>".char_class($row[1],off)."</td>
+            </tr></tbody>";
+}
+?>
 </table>

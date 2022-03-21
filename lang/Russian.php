@@ -11,6 +11,7 @@ define('mmw_lang_menu',"Меню");
 define('mmw_lang_statistic',"Статистика");
 define('mmw_lang_server_time',"Время Сервера");
 define('mmw_lang_voting',"Голосования");
+define('mmw_lang_top_list',"Топ список");
 define('mmw_lang_last_in_forum',"Последнее в Форуме");
 define('mmw_lang_who_is_on_web',"Кто на сайте");
 define('mmw_lang_ads_banners',"Реклама / Баннеры");
@@ -51,10 +52,11 @@ define('mmw_lang_total_guilds',"Гильдий");
 define('mmw_lang_total_in_guilds',"В Гильдиях");
 define('mmw_lang_total_male_users',"Парней");
 define('mmw_lang_total_female_users',"Девушек");
-define('mmw_lang_online_users',"В игре");
+define('mmw_lang_total_users_online',"Всего В игре");
+define('mmw_lang_on_server',"На Сервере");
 define('mmw_lang_version',"Версия");
 define('mmw_lang_experience',"Опыт");
-define('mmw_lang_drops',"Drops");
+define('mmw_lang_drops',"Дроп");
 define('mmw_lang_type',"Тип");
 define('mmw_lang_online',"Онлайн");
 define('mmw_lang_offline',"Оффлайн");
@@ -74,12 +76,11 @@ define('mmw_lang_add_comment',"Добавить Комментарий");
 define('mmw_lang_char',"Перс.");
 define('mmw_lang_full_name',"Имя");
 define('mmw_lang_age',"Возраст");
-define('mmw_lang_reg_date',"Reg. Date");
 define('mmw_lang_avatar',"Аватар");
 define('mmw_lang_country',"Страна");
 define('mmw_lang_gender',"Пол");
 define('mmw_lang_cant_add_comment_no_char',"Извините, вы не имеете Персонажа!");
-define('mmw_lang_guest_must_be_logged_on',"Гость, Вы должен быть зарегистрирован!");
+define('mmw_lang_guest_must_be_logged_on',"Гость, Вы должны зарегистрироваться!");
 define('mmw_lang_week_mon',"Пон");
 define('mmw_lang_week_tue',"Вто");
 define('mmw_lang_week_fri',"Пят");
@@ -137,8 +138,7 @@ define('mmw_lang_secret_question',"Секретный Вопрос");
 define('mmw_lang_secret_answer',"Секретный Ответ");
 define('mmw_lang_male',"Парень");
 define('mmw_lang_female',"Девушка");
-define('mmw_lang_verify_code',"Проверочный Код");
-define('mmw_lang_verify_input',"Проверочный Ввод");
+define('mmw_lang_security_code',"Код безопасности");
 define('mmw_lang_renew',"Обновить");
 
 //Market
@@ -205,13 +205,13 @@ define('mmw_lang_killed',"Убил");
 define('mmw_lang_guilds',"Гильдий");
 define('mmw_lang_server',"Сервер");
 define('mmw_lang_connect_date',"Дата Входа");
-define('mmw_lang_all_characters_is_offline',"Все Пермонажы Оффлайн");
 define('mmw_lang_alliance',"Альянс");
 define('mmw_lang_guilds_in_alliance',"Гильдии в Альянсе");
 define('mmw_lang_guild_member',"Член Гильдии");
 define('mmw_lang_battle_master',"Боевой Мастер");
 define('mmw_lang_assistant_guild_master',"Помощник Мастера Гильдии");
 define('mmw_lang_guild_master',"Мастер Гильдии");
+define('mmw_lang_all_characters_is_offline',"Все персонажы Оффлайн");
 
 //Gallery
 define('mmw_lang_image',"Изображения");
@@ -222,7 +222,7 @@ define('mmw_lang_image_name',"Имя Изображения");
 define('mmw_lang_image_comment',"Комментарий");
 define('mmw_lang_upload',"Послать");
 define('mmw_lang_image_size',"Размеры Изображения");
-define('mmw_lang_file_size',"Размеры Файла");
+define('mmw_lang_file_size',"Размер Файла");
 define('mmw_lang_image_exists',"Изображения с таким имени уже есть!");
 define('mmw_lang_file_size_max',"Размеры Файла очень большой!");
 define('mmw_lang_image_no_image',"Это не *.jpg,*.png,*.gif Формат!");
@@ -249,10 +249,15 @@ define('mmw_lang_you_have',"У Вас");
 define('mmw_lang_select_map',"Выберите Карту");
 define('mmw_lang_need',"Надо");
 define('mmw_lang_no_up_point_found',"Нету Пойнтов!");
-define('mmw_lang_no_pk_status_found',"Нету Статуса Убийцы!");
+define('mmw_lang_no_pk_status_found',"Не Статуса Убийцы!");
 define('mmw_lang_add_point',"Добавить Пойнты");
 define('mmw_lang_pk_clear',"Очистка Убийцы");
+define('mmw_lang_need_6_level',"Надо 6 Уровень!");
 define('mmw_lang_move',"Перемещения");
+define('mmw_lang_select_class',"Выберите Класс");
+define('mmw_lang_change_class',"Изменить Класс");
+define('mmw_lang_class_price',"Рядом Цена Класса");
+define('mmw_lang_change',"Изменить");
 define('mmw_lang_up_point',"Пойнты");
 
 //Mail
@@ -317,6 +322,7 @@ define('mmw_lang_account_created',"Пользователь Успешно Со�
 define('mmw_lang_character_does_not_exist',"Персонаж не Существует!");
 define('mmw_lang_for_reset_need',"Для Ресет Надо");
 define('mmw_lang_reset_limit_to',"Ресет Лимит до");
+define('mmw_lang_take_off_set',"Вы Забыли Снять Сэт с Персонажа");
 define('mmw_lang_character_reseted',"Персонаж Успешно Ресет!");
 define('mmw_lang_point_must_be_number',"Пойнты должен быть положительными цифрами!");
 define('mmw_lang_dont_have_point',"Персонаж не Имеют Стоко Пойнтов<br>В настоящее время:");
@@ -359,5 +365,7 @@ define('mmw_lang_message_deleted',"Сообщения Успешно Удале�
 define('mmw_lang_minimum_zen_can_send',"минимум Zen Можно Послать! У вас:");
 define('mmw_lang_no_zen_for_send_zen',"Невозможно послать Zen, У вас недостаточно для Стоимость услуги:");
 define('mmw_lang_zen_sent',"Zen Для Персонажа Успешно Послано!");
+define('mmw_lang_change_class_need',"Для Изменения Класса Надо");
+define('mmw_lang_character_changed',"Персонажа Класс Успешно Изменён!");
 
 ?>
