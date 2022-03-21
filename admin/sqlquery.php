@@ -1,12 +1,12 @@
 <?
 if(isset($_POST[sql_query])) {$sql_query=stripslashes($_POST[sql_query]);}
-else {$sql_query="UPDATE table SET [row]='?' WHERE [row]='?'";}
+else {$sql_query='UPDATE table SET [row]=? WHERE [row]=?';}
 
 if(isset($_POST["sql_query_true"])) {
 	if(mssql_query($sql_query))
-		{echo "All done!";}
+		{echo "$warning_green All done";}
 	else
-		{echo "Error: $sql_query";}
+		{echo "$warning_red Error: $sql_query";}
 }
 ?>
 

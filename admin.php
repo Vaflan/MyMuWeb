@@ -21,7 +21,7 @@ include("admin/inc/functions.php");
     <tr>
       <td align="center" height="50"><div class='normal_text'>
 <form action='' method='post' name='admin_logout' id='admin_logout'>
-You are loged in <b><?echo "$_SESSION[a_admin_login] (Level: $_SESSION[a_admin_level])";?></b> 
+<?echo $warning_red;?> You are loged in <b><?echo "$_SESSION[a_admin_login] ".admin_level($_SESSION[a_admin_level])." (Level: $_SESSION[a_admin_level])";?></b> 
 <input name='admin_logout' type='hidden' id='admin_logout' value='admin_logout'> 
 <input name='Logout' type='submit' id='Logout' title='Logout' value='Logout'>
 </form>
@@ -35,7 +35,6 @@ You are loged in <b><?echo "$_SESSION[a_admin_login] (Level: $_SESSION[a_admin_l
 <?}if($_SESSION[a_admin_level] > 3){?>
 <a href="?op=news">News</a> | 
 <a href="?op=downloads">Downloads</a> | 
-<a href="?op=rename">Rename Character</a> | 
 <?}?>
 <a href="?op=char">Search Character</a> | 
 <a href="?op=acc">Search Account</a> | 
@@ -81,7 +80,7 @@ document.admin_form.submit();
 <p>&nbsp;</p>
 <table width='302' border='0' align='center' cellpadding='0' cellspacing='4'>
   <tr>
-    <td width='294'><div align='center' class='normal_text'><font color=red><u>/!\</u></font> Welcome <?echo $_SERVER[REMOTE_ADDR];?></div></td>
+    <td width='294'><div align='center' class='normal_text'><?echo $warning_red;?> Welcome <?echo $_SERVER[REMOTE_ADDR];?></div></td>
   </tr>
 </table>
 <table width='200' border='0' align='center' cellpadding='0' cellspacing='0'>
@@ -98,7 +97,7 @@ document.admin_form.submit();
         </tr>
         <tr>
           <td><div align='right' class='normal_text'>Admin SecurityCode </div></td>
-          <td><input name='securitycode' type='password' size='8' maxlength='4'>
+          <td><input name='securitycode' type='password' size='8' maxlength='10'>
               <input name='admin_login' type='hidden' id='admin_login' value='admin_login'>
          </td>
         </tr>

@@ -1,0 +1,44 @@
+                <table width="110" border="0" align="left" cellpadding="0" cellspacing="4">
+                  <tr>
+                    <td width="10"><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td width="100" class="link_menu"><a href="?op=news">Home</a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=downloads">Downloads</a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=info"><b>Information</b></a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=statistics">Statistics</a></td>
+                  </tr>
+			<?if($mmw[castle_siege]=='yes'){?>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=castlesiege">Castle Siege</a></td>
+                  </tr>
+			<?}?>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=rankings">Rankings</a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=register"><b>Register</b></a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=search">Search</a></td>
+                  </tr>
+                  <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=forum"><b>Forum</b></a></td>
+                  </tr>
+                  <!-- <tr>
+                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
+                    <td class="link_menu"><a href="?op=sms">SMS Zen</a> <sup>beta</sup></td>
+                  </tr> -->
+                </table>

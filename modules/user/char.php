@@ -1,12 +1,11 @@
-<?if($acc_online_check=="0"){?>
+<?if($acc_online_check=="0"){
 
-<?
 if(empty($char_set) || $char_set==""){jump('?op=user');}
 
-if(isset($_POST["reset_char"])) {require("includes/character.class.php");option::reset($char_set); echo $divbr;}
-if(isset($_POST["stats_char"])) {require("includes/character.class.php");option::add_stats($char_set); echo $divbr;}
-if(isset($_POST["clearpk_char"])) {require("includes/character.class.php");option::clear_pk($char_set); echo $divbr;}
-if(isset($_POST["warp_char"])) {require("includes/character.class.php");option::warp($char_set); echo $divbr;}
+if(isset($_POST["reset_char"])) {require("includes/character.class.php");option::reset($char_set); echo $rowbr;}
+if(isset($_POST["stats_char"])) {require("includes/character.class.php");option::add_stats($char_set); echo $rowbr;}
+if(isset($_POST["clearpk_char"])) {require("includes/character.class.php");option::clear_pk($char_set); echo $rowbr;}
+if(isset($_POST["warp_char"])) {require("includes/character.class.php");option::warp($char_set); echo $rowbr;}
 
 $char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,experience FROM Character WHERE Name='$char_set'"); 
 $info = mssql_fetch_row($char_results);
@@ -142,7 +141,7 @@ else {$move="<form action='' method='post' name='warp' id='warp'>Price: ".number
 	</table>
 	</td>
 	<td valign="top" align="center" width="100">
-	<?echo char_class($info[1],img);?><br><br>
+		<?echo char_class($info[1],img);?><br><br>
 		<div style="cursor:pointer" onclick="expandit('menu_1')"><b>Reset</b></div>
 		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $reset;?></div>
 		<div style="cursor:pointer" onclick="expandit('menu_2')"><b>Add Point</b></div>

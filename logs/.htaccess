@@ -1,12 +1,12 @@
- AddType "application/x-httpd-php; charset=windows-1251" .php
+ AddType "application/x-httpd-php; charset=UTF-8" .php
 
  Options -MultiViews
  Options -Indexes
 
- ErrorDocument 400 /mu/error.php?go=400
- ErrorDocument 403 /mu/error.php?go=403
- ErrorDocument 404 /mu/error.php?go=404
- ErrorDocument 500 /mu/error.php?go=500
+ ErrorDocument 400 /error.php?go=400
+ ErrorDocument 403 /error.php?go=403
+ ErrorDocument 404 /error.php?go=404
+ ErrorDocument 500 /error.php?go=500
 
  Options +FollowSymLinks
 

@@ -1,4 +1,4 @@
- AddType "application/x-httpd-php; charset=windows-1251" .php
+ AddType "application/x-httpd-php; charset=UTF-8" .php
 
  Options -MultiViews
  Options -Indexes
@@ -7,6 +7,11 @@
  ErrorDocument 403 /error.php?go=403
  ErrorDocument 404 /error.php?go=404
  ErrorDocument 500 /error.php?go=500
+
+ php_value upload_max_filesize 100M
+ php_value post_max_size 100M
+ php_flag session.use_trans_sid off
+ php_flag session.use_cookies on
 
  <FilesMatch "config.php"> 
 	Order deny,allow 

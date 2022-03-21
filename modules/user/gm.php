@@ -1,16 +1,33 @@
 <?
-if(isset($_POST[hexwh_run])){require("includes/character.class.php");option::edit_warehouse($_POST[hexwh_run]); echo $divbr;}
-if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg($_POST[gm_msg]); echo $divbr;}
+if(isset($_POST[hexwh_run])){require("includes/character.class.php");option::edit_warehouse($_POST[hexwh_run]); echo $rowbr;}
+if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg($_POST[gm_msg]); echo $rowbr;}
+?>
 
+  <table width="200" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+      <td width="80" align="right">Your Level:</td>
+      <td><b><?echo $_SESSION['admin'];?> (<?echo admin_level($_SESSION['admin']);?>)</b></td>
+    </tr>
+    <tr>
+      <td align="right">Security Code:</td>
+      <td><b><?echo $mmw[admin_securitycode];?></b></td>
+    </tr>
+    <tr>
+      <td align="right">Admin Area:</td>
+      <td><a target="_blank" href="admin.php">Enter</a></td>
+    </tr>
+  </table>
+
+<?
+echo $rowbr;
 
 if($_SESSION['admin'] >= $mmw[hex_wh_can]) {
-echo "<center><b>HEX Ware House Can Edit!</b></center>".$divbr;
+echo "<center><b>HEX Ware House Can Edit!</b></center>" . $rowbr;
 //HEX WH
 $query = "declare @vault varbinary(1920); 
 		set @vault=(SELECT Items FROM warehouse where AccountId='$login'); print @vault;";
 $result = mssql_query($query);
 $vault = substr(mssql_get_last_message(),2);
-//echo $vault;
 ?>
 <form name='edit_wh' method='post' action=''>
   <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'>           
@@ -23,13 +40,13 @@ $vault = substr(mssql_get_last_message(),2);
   </table>
 </form>
 <?
-echo $divbr;
+echo $rowbr;
 }
 
 if($_SESSION['admin'] >= $mmw[gm_msg_send]) {
  if(isset($_POST[gm_msg])) {$gm_msg = $_POST[gm_msg];}
  else {$gm_msg = "$char: TEXT";}
-echo "<center><b>GameMaster Chat In Game!</b></center>".$divbr;
+echo "<center><b>GameMaster Chat In Game!</b></center>" . $rowbr;
 ?>
 <form name='form_gm_msg' method='post' action=''>
   <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'>           
@@ -41,4 +58,9 @@ echo "<center><b>GameMaster Chat In Game!</b></center>".$divbr;
 	</tr>
   </table>
 </form>
-<?}?>
+<?}
+
+echo $rowbr;
+?>
+
+<center><a href="http://tk3.clan.su"><i>Thank Vaflan For This MMW!</i></a></center>

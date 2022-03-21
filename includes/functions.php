@@ -13,12 +13,20 @@ if($_GET['op']=='user'){
 }
 
 
+	//Jump Link
+function jump($location) {
+header('Location: '.$location.'');
+}
+
+
 	//Statisitcs
 function statisitcs(){
 require("config.php");
 
+$mess_numb_off_server = 1;
 $total_accounts = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO") );
-$total_characters = mssql_fetch_row( mssql_query("SELECT count(*) FROM Character WHERE ctlcode !='32' AND ctlcode !='8'") );
+if($mmw[gm]=='no') {$gm_not_show = "WHERE ctlcode !='32' AND ctlcode !='8'";}
+$total_characters = mssql_fetch_row( mssql_query("SELECT count(*) FROM Character $gm_not_show") );
 $total_guilds = mssql_fetch_row( mssql_query("SELECT count(*) FROM Guild WHERE G_Name!='$mmw[gm_guild]'") );
 $total_banneds = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_INFO WHERE bloc_code = '1'") );
 $activ_acc = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT") );
@@ -26,6 +34,7 @@ $users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT 
 
 echo "\n fader[2].message[0] = \"Total Accounts: $total_accounts[0]<br>Total Characters: $total_characters[0]<br>Total Banneds: $total_banneds[0]<br>Total Actives: $activ_acc[0]<br>Total Guilds: $total_guilds[0]<br>Online Users: $users_connected[0]\";";
 
+if($mmw[castle_siege]=='yes') {
 $cs_data = mssql_fetch_row( mssql_query("SELECT owner_guild,siege_start_date,siege_end_date FROM MuCastle_DATA") );
 $cs_gm = mssql_fetch_row( mssql_query("SELECT G_Master FROM Guild WHERE G_Name='$cs_data[0]'") );
 if($cs_data[0]!="" && $cs_data[0]!=" ") {$cs_guild=$cs_data[0]; $cs_guildmaster=$cs_gm[0];}
@@ -40,21 +49,17 @@ elseif( (strtotime($cs_start)+586800) > $now_time ) {$cs_period="Ready";} //5 19
 elseif( (strtotime($cs_start)+594000) > $now_time ) {$cs_period="Attack";} //6 19:00 - 6 21:00
 else {$cs_period="Truce";}
 echo "\n fader[2].message[1] = \"Castle Siege<br>Start: $cs_start<br>End: $cs_end<br>Now Guild: $cs_guild<br>King: $cs_guildmaster<br>Period: $cs_period\";";
+$mess_numb_off_server = $mess_numb_off_server + 1;
+}
 
 $result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type from MMW_servers order by display_order asc");
 for($i=0;$i < mssql_num_rows($result);++$i) {
-$rank = $i+2;
+$rank = $i + $mess_numb_off_server;
 $row = mssql_fetch_row($result);
 if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.5)) {fclose($check); $status_done = "<img src=images/online.gif width=6 height=6> <span class='online'>Online";}
 else {$status_done = "<img src=images/offline.gif width=6 height=6> <span class='offline'>Offline";} 
 echo "\n fader[2].message[$rank] = \"$row[0]<br>Version: $row[5]<br>Experience: $row[1]<br>Drops: $row[2]<br>Type: $row[6]<br>$status_done\";";
     }
-}
-
-
-	//Jump Link
-function jump($location) {
-header('Location: '.$location.'');
 }
 
 
@@ -84,8 +89,8 @@ function writelog($logfile,$text){
                 $account = clean_var(stripslashes($_POST['login']));
                 $password = clean_var(stripslashes($_POST['pass']));
                 if($account == NULL || $password == NULL) {}
-                if($mmw['md5'] == 1) {$login_check = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd=[dbo].[fn_md5]('$password','$account')");}
-                elseif ($mmw['md5'] == 0) {$login_check = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd='$password'");}
+                if($mmw['md5'] == yes) {$login_check = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd=[dbo].[fn_md5]('$password','$account')");}
+                elseif ($mmw['md5'] == no) {$login_check = mssql_query("SELECT memb___id,admin FROM dbo.MEMB_INFO WHERE memb___id='$account' AND memb__pwd='$password'");}
                 $login_result = mssql_fetch_row($login_check);
                     if ($login_result > 0) {
                         $_SESSION['user'] = $login_result[0];
@@ -103,9 +108,9 @@ function writelog($logfile,$text){
                 require("config.php");
                 $login = clean_var(stripslashes($_SESSION['user']));
 		$pass = clean_var(stripslashes($_SESSION['pass']));
-                if($mmw['md5'] == 1)
+                if($mmw['md5'] == yes)
 			{$login_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd=[dbo].[fn_md5]('$pass','$login')");}
-                elseif($mmw['md5'] == 0)
+                elseif($mmw['md5'] == no)
 			{$login_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd='$pass'");}
                 $login_result = mssql_fetch_row($login_check);
                 $acc_check = mssql_query("SELECT bloc_code,block_date,unblock_time,admin FROM MEMB_INFO WHERE memb___id='$login'");
@@ -191,6 +196,7 @@ $form_setchar_sql = mssql_query("Select name,CtlCode FROM Character WHERE Accoun
 $form_set_char_num = mssql_num_rows($form_setchar_sql);
 $form_memb_info_sql = mssql_query("Select char_set FROM MEMB_INFO WHERE memb___id='$login'");
 $form_memb_info_row = mssql_fetch_row($form_memb_info_sql);
+if($_GET[op]=='by'){die("$sql_die_start MMW by Vaflan $sql_die_end");}
 if($form_set_char_num>0) {
 $setchar = "<form name='set_char' method='post' action=''><select name='setchar' onChange='document.set_char.submit();'>";
 for($i=0; $i < $form_set_char_num; ++$i) {
@@ -278,4 +284,22 @@ else{
 $who_online = "There is nobody";
 }
 /////// END Online Char ///////
+
+
+
+
+
+/////// Start Guard MMW Message Info ///////
+function guard_mmw_mess($to,$text) {
+$date = date("m/d/y H:i:s");
+$msg_to_sql = mssql_query("SELECT GUID,MemoCount FROM T_FriendMain WHERE Name='$to'");
+$msg_to_row = mssql_fetch_row($msg_to_sql);
+$mail_total_sql = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$msg_to_row[0]'");
+$mail_total_num = mssql_num_rows($mail_total_sql);
+$msg_id = $msg_to_row[1] + 1;
+$msg_text = utf_to_win($text);
+mssql_query("INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subject, bRead, Memo, Dir, Act, Photo) VALUES ('$msg_id','$msg_to_row[0]','Guard','$date','MMW Message!','0',CAST('$msg_text' AS VARBINARY(1000)),'143','2',0x3061FF99999F12490400000060F0)");
+mssql_query("UPDATE T_FriendMain set [MemoCount]='$msg_id',[MemoTotal]='$mail_total_num' WHERE Name='$to'");
+}
+/////// Start Guard MMW Message Info ///////
 ?>

@@ -1,4 +1,6 @@
 <?PHP
+if(isset($_POST["zen"])) {require("includes/character.class.php");option::send_zen($_POST["zen_to_char"],$_POST["zen"]); echo $rowbr;}
+
 $character_get = stripslashes($_GET[character]);
 
 $char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,CtlCode FROM Character WHERE Name='$character_get'"); 
@@ -6,7 +8,7 @@ $info = mssql_fetch_row($char_results);
 
 $profile_sql = mssql_query("Select hide_profile from memb_info where memb___id='$info[7]'");
 $profile_row = mssql_fetch_row($profile_sql);
-if($profile_row[0] == '0'){$profile = "<a href=?op=profile&profile=$info[7]><b>View Profile</b></a>";}
+if($profile_row[0] == '0'){$profile = "<a href=?op=profile&profile=$info[7]><b>View Profile</b></a><br/>";}
 
 $status_sql = mssql_query("select connectstat,CONNECTTM from MEMB_STAT where memb___id='$info[7]'");
 $status_row = mssql_fetch_row($status_sql);
@@ -26,8 +28,10 @@ $guild_end = "<a class='helpLink' href='#' onclick=\"showHelpTip(event,'<img src
 }
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = 'No Kills';}
+
+if(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen="<form action='' method='post' name='send_zen' id='send_zen'><input name='zen_to_char' type='hidden' id='zen_to_char' value='$character_get'> <input name='zen' type='text' id='zen' size='8' maxlength='10'> <input type='submit' name='Submit' value='Send'><br>Service fee: ".number_format($mmw[service_send_zen])." Zen</form>";}
+else {$send_zen="You Need Login!";}
 ?>
-<div class="brdiv"></div>
 
       <table width="300" border="0" cellpadding="0" cellspacing="0" align="center">
        <tr>
@@ -92,9 +96,11 @@ if($info[12]==NULL || $info[12]==" "){$info[12] = 'No Kills';}
 	</table>
 	</td>
 	<td valign="top" align="center" width="100">
-	<?echo char_class($info[1],img);?><br><br>
-	<a href='?op=user&u=mail&to=<?echo $info[0];?>'><b>Send Message</b></a><br/>
-	<?echo $profile;?><br/>
+		<?echo char_class($info[1],img);?><br><br>
+		<a href='?op=user&u=mail&to=<?echo $info[0];?>'><b>Send Message</b></a><br/>
+		<?echo $profile;?>
+		<div style="cursor:pointer" onclick="expandit('menu_1')"><b>Send Zen</b></div>
+		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $send_zen;?><div>
 	</td>
        </tr>
       </table>

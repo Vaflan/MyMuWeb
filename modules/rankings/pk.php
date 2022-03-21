@@ -1,6 +1,4 @@
-<table border="0" cellPadding="0" cellSpacing="0">
-            <br>Top <?echo $top_rank;?> Killers<br>&nbsp;</br>
-            <br></br>
+    <br>Top <?echo $top_rank;?> Killers<br>&nbsp;</br>
             <table class="sort-table" id="table-1" height="30" border="0" cellpadding="0" cellspacing="0">                
             <thead><tr>
             <td class=thead2>#</td>
@@ -14,8 +12,12 @@
 $top_rank = clean_var(stripslashes($_POST['top_rank']));
 
 $result = mssql_query("SELECT TOP $top_rank Name,Class,cLevel,Reset,AccountID,PKcount from Character where pkcount>0 order by pkcount desc");
+$row_num = mssql_num_rows($result);
+if($row_num==0) {
+ echo '<tr><td colspan="6">No Characters</td></tr>';
+}
 
-for($i=0;$i < mssql_num_rows($result);++$i)
+for($i=0;$i < $row_num;++$i)
 {
 $row = mssql_fetch_row($result);
 $rank = $i+1;

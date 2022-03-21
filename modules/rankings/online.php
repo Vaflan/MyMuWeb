@@ -2,8 +2,7 @@
 $top_rank=stripslashes($_POST['top_rank']);
 $top_rank=clean_var($top_rank);
 ?>
-<table border=0 cellPadding=0 cellSpacing=0 >
-          <br><span class="normal_text_white">Top <?echo $top_rank;?> Characters</span><br>&nbsp;</br>
+    <br>Top <?echo $top_rank;?> Characters<br>&nbsp;</br>
           <table class="sort-table" id="table-1" height="30" border="0" cellpadding="0" cellspacing="0">                
           <thead><tr>
           <td class=thead2>#</td>

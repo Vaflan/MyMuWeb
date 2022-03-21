@@ -6,6 +6,7 @@ if($_POST['search_type']==1)
 {$result = mssql_query("SELECT Name,Class,cLevel,reset,strength,dexterity,vitality,energy,accountid from Character where name='$search'");}
 if($_POST['search_type']==0)
 {$result = mssql_query("SELECT Name,Class,cLevel,reset,strength,dexterity,vitality,energy,accountid from Character where name like '%$search%'");}
+$row_num = mssql_num_rows($result);
 ?>
 <br>Search Character Results<br>&nbsp;</br>
             <table class="sort-table" id="table-1" height=30 border="0" cellpadding="0" cellspacing="0">                
@@ -18,7 +19,11 @@ if($_POST['search_type']==0)
             <td class=thead2>Status</td>
             </tr></thead>
 <?
-for($i=0;$i < mssql_num_rows($result);++$i)
+if($row_num==0) {
+ echo '<tr><td colspan="6">Not Find!</td></tr>';
+}
+
+for($i=0;$i < $row_num;++$i)
 {
 $row = mssql_fetch_row($result);
 

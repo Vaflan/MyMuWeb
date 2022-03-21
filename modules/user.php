@@ -10,10 +10,6 @@ if(mssql_num_rows($online_check)==1) {
 else {
 	$acc_online_check = 0;
 }
-
-$divbr = '<div class="brdiv"></div>';
- echo $divbr;
-
 	if(!isset($_GET['u'])) {include("modules/user/acc.php");}
 	elseif(is_file("modules/user/$_GET[u].php")) {include("modules/user/$_GET[u].php");}
 ?>

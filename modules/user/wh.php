@@ -1,13 +1,11 @@
 <?if($acc_online_check=="0"){
 
 if(isset($_POST["zen"])){require("includes/character.class.php");option::warehouse($_POST["from_wh"],$_POST["to_wh"],$_POST["zen"]); echo $divbr;}
-if(isset($_GET[item]) && isset($_POST[item_pirce])){require("includes/character.class.php");option::item_sell($_GET[item],$_POST[item_pirce]); echo $divbr;}
 
 $result = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$login'");
 $row = mssql_fetch_row($result);
 
 if($row[0]!="" && $row[0]!=" ") {
-
 // Money
 if($row[2]=="" || $row[2]==" ") {$row[2]="0";}
 echo "
@@ -31,20 +29,6 @@ echo "
 
 	$select_form = "<option value='ewh'>Extra Ware House</option><option value='wh0'>Ware House</option>";
 
-$result = mssql_query("SELECT AccountID,Number,Money FROM extwarehouse WHERE accountid='$login' ORDER BY Number ASC");
-for($i=0;$i < mssql_num_rows($result);++$i)
-  {
-	$row = mssql_fetch_row($result);
-echo "
-	<tr>
-            <td>Ware House $row[1]</td>
-            <td>".number_format($row[2])."</td>
-            <td>2kkk</td>
-	</tr>
-";
-	$select_form = $select_form . "<option value='wh$row[1]'>Ware House $row[1]</option>";
-  }
-
 $result = mssql_query("SELECT AccountID,Name,Money FROM character WHERE accountid='$login'");
 for($i=0;$i < mssql_num_rows($result);++$i)
   {
@@ -62,7 +46,7 @@ echo "
 ?>
 </table>
 
-<div class='brdiv'></div>
+<?echo $rowbr;?>
 
 <form name='send_money' method='post' action=''>
   <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'>           

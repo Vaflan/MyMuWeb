@@ -1,18 +1,27 @@
 <?if($_GET[op]!='user') {echo "$die_start Access Denied! $die_end";}
 
-if(isset($_POST["delete_msg_inbox"])) {require("includes/character.class.php");option::delete_msg($char_set); echo $divbr;}
-if(isset($_POST["new_message"])) {require("includes/character.class.php");option::send_msg($char_set); echo $divbr;}
+if(isset($_POST["delete_msg_inbox"])) {require("includes/character.class.php");option::delete_msg($char_set); echo $rowbr;}
+if(isset($_POST["new_message"])) {require("includes/character.class.php");option::send_msg($char_set); echo $rowbr;}
 
 // Start View Msg
 if(isset($_POST["view_msg_inbox"])) {
 $view_msg_inbox = clean_var(stripslashes($_POST["view_msg_inbox"]));
 $view_msg_sql = mssql_query("SELECT MemoIndex,FriendName,Subject,wDate,memo,bRead FROM T_FriendMail WHERE GUID='$char_guid' and MemoIndex='$view_msg_inbox'"); 
 $view_msg_row = mssql_fetch_row($view_msg_sql);
+ if($view_msg_row[1]!='Guard') {
 $view_msg_re ="
 <form action='?op=user&u=mail&to=$view_msg_row[1]' method='post' name='view_msg_re' id='view_msg_re'>
 <input name='Reply' type='submit' id='Reply' value='Reply' class='button'>
 <input name='send_msg_subject' type='hidden' id='send_msg_subject' value='".win_to_utf($view_msg_row[2])."'>
 </form>";
+ }
+
+//test
+$query = "declare @vault varbinary(13); 
+		set @vault=(SELECT Photo FROM T_FriendMail where GUID='$char_guid' and MemoIndex='$view_msg_inbox'); print @vault;";
+//$result = mssql_query($query);
+//$vault = substr(mssql_get_last_message(),0);
+//echo 'Photo: ' . $vault;
 
 echo "
   <table width='300' class='sort-table' border='0' cellspacing='0' cellpadding='0' align='center'>
@@ -37,7 +46,7 @@ echo "
 	if($view_msg_row[5]==0){
 	mssql_query("UPDATE T_FriendMail SET [bRead]='1' WHERE GUID='$char_guid' and MemoIndex='$view_msg_inbox'");
 	}
-echo $divbr;
+echo $rowbr;
 }
 // End View Msg
 
@@ -69,7 +78,7 @@ elseif(isset($_POST[send_msg_subject])) {$send_msg_subject = "RE: ".$_POST[send_
   </table>
 </form>
 <?
-echo $divbr;
+echo $rowbr;
 }
 // End Send Msg
 

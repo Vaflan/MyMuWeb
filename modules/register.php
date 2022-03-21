@@ -53,7 +53,7 @@ document.register_from.submit();
 }
 </script>
 
-<?if(isset($_POST["registration"])){include("includes/character.class.php");option::register(); echo '<div class="brdiv"></div>';}?>
+<?if(isset($_POST["registration"])){include("includes/character.class.php");option::register(); echo $rowbr;}?>
 
 <?if($_GET['terms'] == 'agree') {
 echo '<form action="" method="post" name="register_from" id="register_from">
@@ -67,7 +67,7 @@ echo '<form action="" method="post" name="register_from" id="register_from">
                         <td colspan="4"><input name="password" type="password" class="post" id="password" size="17" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td><div align="right" class="normal_text_white">Repeat Password</div></td>
+                        <td align="right">Repeat Password</td>
                         <td colspan="4"><input name="repassword" type="password" class="post" id="repassword" size="17" maxlength="10"></td>
                       </tr>
                       <tr>
@@ -120,7 +120,7 @@ echo '<form action="" method="post" name="register_from" id="register_from">
   <tr>
     <td align="center">
 	<textarea name="terms" cols="60" rows="20" readonly="readonly" id="terms"><?include("modules/terms.txt");?></textarea>
-	<div class="brdiv"></div>
+	<?echo $rowbr;?>
 	<input type="submit" value="I agree!"> <input type="reset" value="I don't!" onclick="top.location='?op=news';">
     </td>
   </tr>

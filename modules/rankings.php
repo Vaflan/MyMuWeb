@@ -4,7 +4,6 @@ if($_POST[top_rank] != ''){$select_top[$_POST[top_rank]]=" selected";} else{$sel
 if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$select_sort['all']=" selected";}
 ?>
 
-<div class="brdiv"></div>
 <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
     <td width="100%"><fieldset>
@@ -24,12 +23,12 @@ if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$sel
                         <option value="all"<?echo $select_sort['all'];?>>All Characters</option>
                         <option value="pk"<?echo $select_sort['pk'];?>>Killers</option>
                         <option value="guild"<?echo $select_sort['guilds'];?>>Guilds</option>
-                        <!-- <option value="ds"<?echo $select_sort['ds'];?>>Devil Square</option> -->
-                        <option value="sm"<?echo $select_sort['sm'];?>>Only DW's/SM's</option>
-                        <option value="bk"<?echo $select_sort['bk'];?>>Only DK's/BK's</option>
-                        <option value="me"<?echo $select_sort['me'];?>>Only ELF's/ME's</option>
-                        <option value="mg"<?echo $select_sort['mg'];?>>Only MG's</option>
-                        <option value="dl"<?echo $select_sort['dl'];?>>Only DL's</option>
+                        <option value="dw"<?echo $select_sort['dw'];?>>Only DW's-GrM's</option>
+                        <option value="dk"<?echo $select_sort['dk'];?>>Only DK's-BM's</option>
+                        <option value="elf"<?echo $select_sort['elf'];?>>Only ELF's-HE's</option>
+                        <option value="mg"<?echo $select_sort['mg'];?>>Only MG's-DM's</option>
+                        <option value="dl"<?echo $select_sort['dl'];?>>Only DL's-LE's</option>
+                        <option value="sum"<?echo $select_sort['sum'];?>>Only Sum's-Dim's</option>
                         <option value="online"<?echo $select_sort['online'];?>>Online Characters</option>
                       </select> 
                       <input type="submit" name="Submit" value="Submit New Ranking" class="button">

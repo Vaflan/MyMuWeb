@@ -1,4 +1,4 @@
-<?
+<?PHP
 $step = stripslashes($_GET["step"]);
 
 if($_GET["step"]=="1")
@@ -52,18 +52,18 @@ document.search_.submit();
 		<?if($error=="answer"){echo "$die_start Secret Answer Is Incorrect! $die_end";}?>
 		<table width="246" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td width="102"><div align="right" class="normal_text_white">Login</div></td>
-                        <td width="144"><div align="left"><input name="username" type="text" id="username" maxlength="10"></div></td>
+                        <td width="102" align="right">Login</td>
+                        <td width="144"><input name="username" type="text" id="username" maxlength="10"></td>
                       </tr>
                       <tr>
-                        <td><div align="right" class="normal_text_white">E-Mail Address</div></td>
-                        <td><div align="left"><input name="email" type="text" id="email" maxlength="50"></div></td>
+                        <td align="right">E-Mail Address</td>
+                        <td><input name="email" type="text" id="email" maxlength="50"></td>
                       </tr>
                     </table>
                     <table width="200" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td width="114"><div align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></div></td>
-                        <td width="74"><div align="left"><input type="reset" name="Reset" value="Reset" class="button"></div></td>
+                        <td width="114" align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></td>
+                        <td width="74"><input type="reset" name="Reset" value="Reset" class="button"></td>
                       </tr>
 		</table>
 		</form>
@@ -74,18 +74,18 @@ document.search_.submit();
 		<input name="squestion" type="hidden" id="squestion" value="<?echo $quest;?>">
 		<table width="246" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td><div align="right" class="normal_text_white">Secret Question</div></td>
-                        <td><div align="left"><b><?echo $quest;?></b></div></td>
+                        <td align="right">Secret Question</td>
+                        <td><b><?echo $quest;?></b></td>
                       </tr>
                       <tr>
-                        <td><div align="right" class="normal_text_white">Secret Answer</div></td>
-                        <td><div align="left"><input name="sanswer" type="text" id="sanswer" size="15" maxlength="10"></div></td>
+                        <td align="right">Secret Answer</td>
+                        <td><input name="sanswer" type="text" id="sanswer" size="15" maxlength="10"></td>
                       </tr>
                     </table>
                     <table width="200" border="0" cellspacing="4" cellpadding="0">
                       <tr>
-                        <td width="114"><div align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></div></td>
-                        <td width="74"><div align="left"><input type="reset" name="Reset" value="Reset" class="button"></div></td>
+                        <td width="114" align="right"><input type="submit" name="Submit" value="Find Password" onClick="return lostpassword_form()" class="button"></td>
+                        <td width="74"><input type="reset" name="Reset" value="Reset" class="button"></td>
                       </tr>
 		</table>
 		</form>

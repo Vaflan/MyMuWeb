@@ -1,25 +1,24 @@
 <div align='center'><b>:: Server Information ::</b></div>
 <br>
 <div align="left">
-<b>Your Info About Server, This is MMW - MyMuWeb by Vaflan. This text can edit in modules/info.php</b><br/>
+<b>Your Info About Server, This is MMW - MyMuWeb by Vaflan. This text can edit in modules/info.php. Visit: http://tk3.clan.su</b><br/>
 <br/>
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td class='alt-table' height='1' colspan='3'></td></tr>
 
 <tr><td valign="top"><br/>
 Version: 1.02k<br/>
-Experience: 260x<br/>
-Drops: 70%<br/>
+Experience: 500x<br/>
+Drops: 75%<br/>
 Type: PVP<br/>
 Bless Bug: Off<br/>
 Level Points: 5-6/7<br/>
 Max level: 400lvl<br/>
 Max Stats: 32767<br/>
-Reset Zen: 50kk<br/>
-Vault Keeper: 5 (/keep 0-4)<br/>
-Guild Creation: 200lvl<br/>
-Character deleta: < 200lvl<br/>
-[POST]: > 200lvl (/post)<br/>
+Reset Zen: 10kk<br/>
+Guild Creation: 100lvl<br/>
+Character deleta: < 100lvl<br/>
+[POST]: > 100lvl (/post)<br/>
 Extra Ware House: ~ (MAX Zen)<br/>
 <br/>
 </td><td class='alt-table' width='1'></td>

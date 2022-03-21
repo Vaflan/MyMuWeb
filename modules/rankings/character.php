@@ -7,25 +7,27 @@ if(!isset($_POST['sort'])){$race = "all";}
 
 if($mmw['gm']=='no'){
 $query[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
-$query[sm] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='1' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
-$query[bk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='17' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
-$query[me] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='33' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
-$query[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class='48' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
-$query[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class='64' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='2' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='18' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='34' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='50' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='66' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
+$query[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='82' and ctlcode!='32' and ctlcode!='8' order by reset desc ,clevel desc";
 }
 elseif($mmw['gm']=='yes'){
 $query[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character order by reset desc ,clevel desc";
-$query[sm] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='1' order by reset desc ,clevel desc";
-$query[bk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='17' order by reset desc ,clevel desc";
-$query[me] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='33' order by reset desc ,clevel desc";
-$query[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class='48' order by reset desc ,clevel desc";
-$query[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class='64' order by reset desc ,clevel desc";
+$query[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='2' order by reset desc ,clevel desc";
+$query[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='18' order by reset desc ,clevel desc";
+$query[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='34' order by reset desc ,clevel desc";
+$query[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='50' order by reset desc ,clevel desc";
+$query[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='66' order by reset desc ,clevel desc";
+$query[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='82' order by reset desc ,clevel desc";
 }
 
 $result = mssql_query($query[$race]);
+$row_num = mssql_num_rows($result);
 
-echo '<table border=0 cellPadding=0 cellSpacing=0 >
-          <br><span class="normal_text_white">Top '.$top_rank.' Characters</span><br>&nbsp;</br>
+echo '<br>Top '.$top_rank.' Characters<br>&nbsp;</br>
           <table class="sort-table" id="table-1" height=30 border="0" cellpadding="0" cellspacing="0">                
           <thead><tr>
           <td class=thead2>#</td>
@@ -36,7 +38,11 @@ echo '<table border=0 cellPadding=0 cellSpacing=0 >
           <td class=thead2>Guild</td>
           </tr></thead>';
 
-for($i=0;$i < mssql_num_rows($result);++$i)
+if($row_num==0) {
+ echo '<tr><td colspan="6">No Characters</td></tr>';
+}
+
+for($i=0;$i < $row_num;++$i)
          {
              $rank = $i+1;
              $row = mssql_fetch_row($result);

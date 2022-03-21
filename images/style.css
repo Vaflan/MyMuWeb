@@ -15,8 +15,7 @@ a:hover {font-size: 11px; color: #FFFFFF; text-decoration: none; font-family: Ar
 .offline {font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: #ff0000;}
 
 div {font-size: 11px; color: #CCCCCC; line-height: 15px; font-family: Arial, Helvetica, sans-serif;}
-.brdiv {padding:3px; font-size: 4px;}
-.sizedsig {max-width:220px;width:expression(this.scrollWidth > 220? "220px" : "auto" );overflow:auto;overflow-y:hidden;}
+.sizedsig {max-width:220px; width:expression(this.scrollWidth > 220? "220px" : "auto" ); overflow:auto; overflow-y:hidden;}
 
 a.helpLink {color: #CCCCCC; text-decoration: underline; cursor: help; font-size: 11px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
 a.helpLink:hover {color: #FFFFFF; text-decoration: underline; cursor: help; font-size: 11px; font-family: Arial, Helvetica, sans-serif; font-weight: bold;}
@@ -56,13 +55,6 @@ a.level0:hover,a.level0:active {text-decoration: none; color: #C0C0C0;}
 .level32 {text-decoration: none; color: #FF0000; font-weight: bold;}
 a.level32:link,a.level32:visited {text-decoration: none; color: #FF0000; font-weight: bold;}
 a.level32:hover,a.level32:active {text-decoration: none; color: #CF0F0F; font-weight: bold;}
-/* ---------------- */
-
-/* Items BackGround and size */
-.item-table {border: 1px solid #000000; background: #464646;}
-.item-slot {border: 1px solid #666666; background: #464646;}
-.item-style {border: 1px solid #666666; background: #464646; cursor: help;}
-.item-sell {border: 1px solid #666666; width: 80%; padding: 4px;}
 /* ---------------- */
 
 /* Other Style */

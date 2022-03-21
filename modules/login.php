@@ -1,5 +1,4 @@
-<div class='brdiv'></div>
-<?if($_GET[login]=='false'){echo "$die_start Username Or Password Is Incorrect! $die_end <div class='brdiv'></div>";}?>
+<?if($_GET[login]=='false'){echo "$die_start Username Or Password Is Incorrect! $die_end $rowbr";}?>
 
 <form action='' method='post' name='login_account' id='login_account'>
   <table width='160' border='0' align="center" cellpadding='0' cellspacing='0'>

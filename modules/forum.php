@@ -20,7 +20,6 @@ $total_comm_post = mssql_num_rows($result);
 
 $result = mssql_query("SELECT f_id,f_char,f_title,f_date,f_lostchar FROM MMW_forum ORDER BY f_date DESC");
 $total_post = mssql_num_rows($result);
-  if($total_post == 0){echo 'No Topic';}
 ?>
         <table border="0" cellpadding="0" cellspacing="0" width="100%" class="eBlock">
 	<tr>
@@ -30,6 +29,10 @@ $total_post = mssql_num_rows($result);
 		<td align="center" width="86"><b>Lost Message</b></td>
 	</tr>
 <?
+  if($total_post == 0) {
+	echo '<tr><td colspan="4">No Topic In Forum.</td></tr>';
+  }
+
   for ($i = 0; $i < $total_post; $i++)
   {
       $row = mssql_fetch_row($result);

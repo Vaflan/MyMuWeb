@@ -100,6 +100,8 @@ $bbcode = array(
 "/\[sub\](.*?)\[\/sub\]/is" => "<sub>$1</sub>",
 "/\[img\](.*?)\[\/img\]/is" => "<img src=$1 border=0>",
 "/\[color\=(.*?)\](.*?)\[\/color\]/is" => "<font color='$1'>$2</font>",
+"/\[font\=(.*?)\](.*?)\[\/font\]/is" => "<font face='$1'>$2</font>",
+"/\[size\=(.*?)\](.*?)\[\/size\]/is" => "<font size='$1'>$2</font>",
 "/\[url\=(.*?)\](.*?)\[\/url\]/is" => "<a target='_blank' href='$1'>$2</a>"
 );
 $text = preg_replace(array_keys($bbcode), array_values($bbcode), $text);
@@ -141,7 +143,6 @@ function bugsend($bug_send) {
  $bug_send = str_replace("%","&#37;",$bug_send);
  $bug_send = str_replace('\\\"',"&quot;",$bug_send);
  $bug_send = str_replace(" +$"," ",$bug_send);
- $bug_send = str_replace(" +"," ",$bug_send);
  $bug_send = str_replace("^ +"," ",$bug_send);
  $bug_send = str_replace("\r"," ",$bug_send);
  $bug_send = str_replace("\n","[br]",$bug_send);
@@ -342,10 +343,46 @@ elseif($map == 31){$map = 'Lands Of Trials';}
 elseif($map == 32){$map = 'Devil Square';}
 elseif($map == 33){$map = 'Aida';}
 elseif($map == 34){$map = 'CryWolf';}
+elseif($map == 36){$map = 'Kalima 7';}
+elseif($map == 37){$map = 'Kantru 1';}
+elseif($map == 38){$map = 'Kantru 2';}
+elseif($map == 39){$map = 'Kantru 3';}
+elseif($map == 40){$map = 'Silent';}
+elseif($map == 41){$map = 'Refuge';}
+elseif($map == 42){$map = 'Barracks';}
+elseif($map == 45){$map = 'Illusion 1';}
+elseif($map == 46){$map = 'Illusion 2';}
+elseif($map == 47){$map = 'Illusion 3';}
+elseif($map == 48){$map = 'Illusion 4';}
+elseif($map == 49){$map = 'Illusion 5';}
+elseif($map == 50){$map = 'Illusion 6';}
+elseif($map == 51){$map = 'Elbeland';}
+elseif($map == 52){$map = 'Blood Castle 8';}
+elseif($map == 53){$map = 'Chaos Castle 7';}
+elseif($map == 56){$map = 'Swamp Of Calmness';}
+elseif($map == 57){$map = 'Raklion';}
 else{$map = 'Unknow';}
 return $map;
 }
 /////// END Map Formats ///////
+
+
+
+
+
+
+
+
+/////// Start Admin Level Formats ///////
+function admin_level($a_level) {
+if($a_level == 0){$a_level = 'Member';}
+elseif($a_level == 3){$a_level = 'Game Master';}
+elseif($a_level == 6){$a_level = 'Mini Admin';}
+elseif($a_level == 9){$a_level = 'Administrator';}
+else{$a_level = 'Unknow';}
+return $a_level;
+}
+/////// END Admin Level Formats ///////
 
 
 
@@ -379,31 +416,61 @@ function char_class($class,$style) {
 if($style==full) {
 if($class == 0){$class = 'Dark Wizard';}
 elseif($class == 1){$class = 'Soul Master';}
+elseif($class == 2){$class = 'Grand Master';}
 elseif($class == 16){$class = 'Dark Knight';}
 elseif($class == 17){$class = 'Blade Knight';}
+elseif($class == 18){$class = 'Blade Master';}
 elseif($class == 32){$class = 'Fairy Elf';}
 elseif($class == 33){$class = 'Muse Elf';}
+elseif($class == 34){$class = 'High Elf';}
 elseif($class == 48){$class = 'Magic Gladiator';}
+elseif($class == 49){$class = 'Duel Master';}
+elseif($class == 50){$class = 'Duel Master';}
 elseif($class == 64){$class = 'Dark Lord';}
+elseif($class == 65){$class = 'Lord Emperor';}
+elseif($class == 66){$class = 'Lord Emperor';}
+elseif($class == 80){$class = 'Summoner';}
+elseif($class == 81){$class = 'Bloody Summoner';}
+elseif($class == 82){$class = 'Dimension Master';}
 else{$class = 'Unknow';}
 }
 elseif($style==img) {
-if($class == 0 || $class == 1){$class = '<img src=images/char/dw.gif>';}
-elseif($class == 16 || $class == 17){$class = '<img src=images/char/dk.gif>';}
-elseif($class == 32 || $class == 33){$class = '<img src=images/char/elf.gif>';}
-elseif($class == 48){$class = '<img src=images/char/mg.gif>';}
-elseif($class == 64){$class = '<img src=images/char/dl.gif>';}
+if($class >= 0 && $class <= 2){$class = '<img src=images/char/dw.gif>';}
+elseif($class >= 16 && $class <= 18){$class = '<img src=images/char/dk.gif>';}
+elseif($class >= 32 && $class <= 34){$class = '<img src=images/char/elf.gif>';}
+elseif($class >= 48 && $class <= 50){$class = '<img src=images/char/mg.gif>';}
+elseif($class >= 64 && $class <= 66){$class = '<img src=images/char/dl.gif>';}
+elseif($class >= 80 && $class <= 82){$class = '<img src=images/char/sum.gif>';}
 else{$class = 'Unknow';}
+}
+elseif($style==mess) {
+if($class >= 0 && $class <= 2){$class = '0x00FFFFFFFFFF000000F80000F0FFFFFF';}
+elseif($class >= 16 && $class <= 18){$class = '0x20FFFFFFFFFF000000F80000F0FFFFFF';}
+elseif($class >= 32 && $class <= 34){$class = '0x40FFFFFFFFFF000000F80000F0FFFFFF';}
+elseif($class >= 48 && $class <= 50){$class = '0x60FFFFFFFFFF000000F80000F0FFFFFF';}
+elseif($class >= 64 && $class <= 66){$class = '0x80FFFFFFFFFF000000F80000F0FFFFFF';}
+elseif($class >= 80 && $class <= 82){$class = '0xA0FFFFFFFFFF000000F80000F0FFFFFF';}
+else{$class = '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF';}
 }
 else {
 if($class == 0){$class = 'DW';}
 elseif($class == 1){$class = 'SM';}
+elseif($class == 2){$class = 'GrM';}
 elseif($class == 16){$class = 'DK';}
 elseif($class == 17){$class = 'BK';}
+elseif($class == 18){$class = 'BM';}
 elseif($class == 32){$class = 'Elf';}
 elseif($class == 33){$class = 'ME';}
+elseif($class == 34){$class = 'HE';}
 elseif($class == 48){$class = 'MG';}
+elseif($class == 49){$class = 'DM';}
+elseif($class == 50){$class = 'DM';}
 elseif($class == 64){$class = 'DL';}
+elseif($class == 65){$class = 'LE';}
+elseif($class == 66){$class = 'LE';}
+elseif($class == 80){$class = 'Sum';}
+elseif($class == 81){$class = 'Bsum';}
+elseif($class == 82){$class = 'Dim';}
 else{$class = 'Unknow';}
 }
 return $class;

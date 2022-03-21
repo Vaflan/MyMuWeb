@@ -1,4 +1,4 @@
-//MyMuWeb 0.2 By Vaflan
+//MyMuWeb By Vaflan
 
 *****************
 Change AppServer.
@@ -32,10 +32,13 @@ change 'admin' Colums - '0' to '9'.
 Level (3 - GM, 6 - Mini Admin, 9 - Admin)
 Admin Username = Your Login in Reg WebSite
 Admin Password = Your Password in Reg WebSite
-Admin SecurityCode = DateMonth (20.04.2009 = 2004)
+Admin SecurityCode = '1234'
+
+How add Mp3 to Player?
+add all need mp3 to 'media' folder.
 !----------------------!
 
-Thenks For use my MMW.
+Thank For use my MMW.
 by Vaflan
 http://tk3.clan.su
 vaflancher@inbox.lv

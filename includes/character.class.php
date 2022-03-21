@@ -1,4 +1,4 @@
-<?
+<?PHP
 class option{
 
 function register()
@@ -66,10 +66,10 @@ function register()
                                                      }
 
                                if($error!=1) {     
-                                          if($mmw['md5'] == 1) {
+                                          if($mmw['md5'] == yes) {
                                                 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referal')");
                                                                 }
-                                          elseif($mmw['md5'] == 0) {
+                                          elseif($mmw['md5'] == no) {
                                                 mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$account','$password','$fullname','1234','$email','$date','$date','2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referal')");
                                                 mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
                                                                     }
@@ -217,8 +217,8 @@ function add_stats($name) {
                         if ($points < 0) {$error = 1; 
                                  echo "$die_start $name Don't Have Enough Points (Currently: $row[4])! $die_end"; 
                         }
-                        if($new_str>32767 || $new_agi>32767 || $new_vit>32767 || $new_eng>32767 || $new_com>32767) {$error=1;
-                                 echo "$die_start 32767 Max Points! $die_end";
+                        if($new_str>$mmw[max_stats] || $new_agi>$mmw[max_stats] || $new_vit>$mmw[max_stats] || $new_eng>$mmw[max_stats] || $new_com>$mmw[max_stats]) {$error=1;
+                                 echo "$die_start $mmw[max_stats] Max Points! $die_end";
                         }
                         if($error!=1) {	
                                        mssql_query("UPDATE Character SET [Vitality]='$new_vit',[Strength]='$new_str',[Energy]='$new_eng',[Dexterity]='$new_agi',[leadership]='$new_com',[LevelUpPoint]='$points' WHERE Name='$name'");
@@ -295,8 +295,8 @@ function changepassword() {
                $online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$login'");
                $online_check_row = mssql_fetch_row($online_check);
 
-                  if($mmw['md5']==1) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd = [dbo].[fn_md5]('$oldpwd','$login')");}
-                  elseif($mmw['md5']==0) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd='$oldpwd'");}
+                  if($mmw['md5']==yes) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd = [dbo].[fn_md5]('$oldpwd','$login')");}
+                  elseif($mmw['md5']==no) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd='$oldpwd'");}
                   $pw_check = mssql_num_rows($sql_pw_check); 
 
 	          $elems[] = array('name'=>'oldpassword', 'label'=>''.$die_start.' Curent Password Is Invalid (4-10 Alpha-Numeric Characters) '.$die_end.'', 'type'=>'text', 'required'=>true, 'len_min'=>4,'len_max'=>10, 'cont' =>'alpha');
@@ -329,8 +329,8 @@ function changepassword() {
                            echo "$die_start Current Password Is Incorrect! $die_end"; 
                   }
                   if($error!=1){	
-				if($mmw['md5']==1){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]=[dbo].[fn_md5]('$newpwd','$login'),[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");}
-				elseif($mmw['md5']==0){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]='$newpwd',[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");} 
+				if($mmw['md5']==yes){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]=[dbo].[fn_md5]('$newpwd','$login'),[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");}
+				elseif($mmw['md5']==no){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]='$newpwd',[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");} 
                                     
 				$_SESSION['pass'] = $newpwd;
 				echo "$okey_start Password SuccessFully Changed! $okey_end";
@@ -360,8 +360,8 @@ function lostpassword()
               $sql_mail_check = mssql_query("SELECT mail_addr FROM MEMB_INFO WHERE mail_addr='$email' and memb___id='$login'"); 
               $sql_pw_check = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE fpas_ques='$squestion' and memb___id='$login' and fpas_answ='$sanswer'");
   
-                    if($mmw['md5'] == 1) {$sql_pw_get = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
-                    elseif($mmw['md5'] == 0) {$sql_pw_get = mssql_query("SELECT memb__pwd,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
+                    if($mmw['md5'] == yes) {$sql_pw_get = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
+                    elseif($mmw['md5'] == no) {$sql_pw_get = mssql_query("SELECT memb__pwd,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
 
                     $pw_check = mssql_num_rows($sql_pw_check);
                     $pw_retrieval = mssql_fetch_row($sql_pw_get);
@@ -498,12 +498,6 @@ function warehouse($from,$to,$zen)
 				$from_query[0]="Update warehouse set [extMoney]='"; $from_query[1]="' where AccountID='$login'";
 			}
 		}
-	elseif(substr($from,0,2)=="wh" && $from!="wh0") {
-			$result = mssql_query("SELECT AccountID,Money,Number FROM extwarehouse WHERE accountid='$login' AND number='".substr($from,2)."'");
-			$row_from = mssql_fetch_row($result); 
-			if($row_from[1]=="") {$from_wh="0";} else{$from_wh=$row_from[1];}
-			$from_query[0]="Update extwarehouse set [Money]='"; $from_query[1]="' where AccountID='$login' AND Number='$row_from[2]'";
-		}
 	elseif(substr($from,0,2)=="ch") {
 			$result = mssql_query("SELECT AccountID,Money,Name FROM Character WHERE accountid='$login' AND Name='".substr($from,2)."'");
 			$row_from = mssql_fetch_row($result); 
@@ -523,12 +517,6 @@ function warehouse($from,$to,$zen)
 				if($row_to[2]=="") {$to_wh="0";} else{$to_wh=$row_to[2];}
 				$to_query[0]="Update warehouse set [extMoney]='"; $to_query[1]="' where AccountID='$login'";
 			}
-		}
-	elseif(substr($to,0,2)=="wh" && $to!="wh0") {
-			$result = mssql_query("SELECT AccountID,Money,Number FROM extwarehouse WHERE accountid='$login' AND number='".substr($to,2)."'");
-			$row_to = mssql_fetch_row($result); 
-			if($row_to[1]=="") {$to_wh="0";} else{$to_wh=$row_to[1];}
-			$to_query[0]="Update extwarehouse set [Money]='"; $to_query[1]="' where AccountID='$login' AND Number='$row_to[2]'";
 		}
 	elseif(substr($to,0,2)=="ch") {
 			$result = mssql_query("SELECT AccountID,Money,Name FROM character WHERE accountid='$login' AND Name='".substr($to,2)."'");
@@ -551,8 +539,8 @@ function warehouse($from,$to,$zen)
                                            				echo "$die_start Money surplus, it's more 2kkk Zen! $die_end";}
 
 	if($error!=1){
-		mssql_query("$from_query[0] $from_end $from_query[1]");
-		mssql_query("$to_query[0] $to_end $to_query[1]");
+		mssql_query("$from_query[0]$from_end$from_query[1]");
+		mssql_query("$to_query[0]$to_end$to_query[1]");
 		echo "$okey_start ".number_format($zen)." Zen SuccessFully Moved! $okey_end";
 		writelog("money","Acc <font color=red>$login</font> Has Been from: $from_wh <u>$from</u>|to: $to_wh <u>$to</u>|how many: <b>$zen</b>|from end: $from_end|to end: $to_end");
 	}                          
@@ -564,8 +552,7 @@ function warehouse($from,$to,$zen)
 
 
 
-function comment_send($c_id_blog,$c_id_code)
- {
+function comment_send($c_id_blog,$c_id_code) {
         require("config.php");
 	$c_char = clean_var(stripslashes($_SESSION['char_set']));
 	$result = mssql_query("SELECT TOP 1 c_date FROM MMW_comment WHERE c_char='$c_char' ORDER BY c_date DESC");
@@ -592,14 +579,19 @@ function comment_send($c_id_blog,$c_id_code)
 
 
 
-function comment_delete($c_id)
-{     require("config.php");
+function comment_delete($c_id) {
+	require("config.php");
+	$char_set = stripslashes($_SESSION['char_set']);
+	$result = mssql_query("SELECT c_char FROM MMW_comment WHERE c_id='$c_id'");
+	$row = mssql_fetch_row($result);
+
       if (empty($c_id)){echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
-                else{
-			$c_id = clean_var(stripslashes($c_id));
-                        mssql_query("Delete from MMW_comment where c_id='$c_id'");
-                        echo "$okey_start Comment SuccessFully Deleted! $okey_end";
-                    }
+          elseif($row[0]==$char_set || $_SESSION['admin'] >= $mmw[comment_can_delete]) {
+		$c_id = clean_var(stripslashes($c_id));
+                mssql_query("Delete from MMW_comment where c_id='$c_id'");
+                echo "$okey_start Comment SuccessFully Deleted! $okey_end";
+             }
+		else {echo "$die_start You Can't Delete, or is already delete! $die_end";}
 }
 
 
@@ -607,10 +599,9 @@ function comment_delete($c_id)
 
 
 
-function forum_send($title,$text)
- {
+function forum_send($title,$text) {
         require("config.php");
-	$char = clean_var(stripslashes($_SESSION['char_set']));
+	$char_set = stripslashes($_SESSION['char_set']);
 	$date = time();
 
 	if($title=="" || $text=="") {
@@ -619,7 +610,7 @@ function forum_send($title,$text)
 	elseif($title!="" && $text!="") {
 		$text = bugsend(stripslashes($text));
 		$title = bugsend(stripslashes($title));
-		mssql_query("INSERT INTO MMW_forum ([f_id],[f_char],[f_title],[f_text],[f_date]) VALUES ('$mmw[forum_id]','$char','$title','$text','$date')");
+		mssql_query("INSERT INTO MMW_forum ([f_id],[f_char],[f_title],[f_text],[f_date]) VALUES ('$mmw[forum_id]','$char_set','$title','$text','$date')");
 		echo "$okey_start Your topic is send! $okey_end";
 	}
 	else {
@@ -632,15 +623,20 @@ function forum_send($title,$text)
 
 
 
-function forum_delete($f_id)
-{     require("config.php");
-      if (empty($f_id)){echo "$die_start  Error: Some Fields Were Left Blank! $die_end";}
-                else {
-			$f_id = clean_var(stripslashes($f_id));
-                        mssql_query("Delete from MMW_forum where f_id='$f_id'");
-                        mssql_query("Delete from MMW_comment where c_id_code='$f_id'");
-                        echo "$okey_start Forum SuccessFully Deleted! $okey_end";
-                    }
+function forum_delete($f_id) {
+	require("config.php");
+	$char_set = stripslashes($_SESSION['char_set']);
+	$result = mssql_query("SELECT f_char FROM MMW_forum WHERE f_id='$f_id'");
+	$row = mssql_fetch_row($result);
+
+      if(empty($f_id)) {echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
+          elseif($row[0]==$char_set || $_SESSION['admin'] >= $mmw[forum_can_delete]) {
+		$f_id = clean_var(stripslashes($f_id));
+                mssql_query("Delete from MMW_forum where f_id='$f_id'");
+                mssql_query("Delete from MMW_comment where c_id_code='$f_id'");
+                echo "$okey_start Forum SuccessFully Deleted! $okey_end";
+          }
+		else {echo "$die_start Message not find, or is already delete! $die_end";}
 }
 
 
@@ -648,8 +644,9 @@ function forum_delete($f_id)
 
 
 
-function request($login)
-{     require("config.php");
+function request($login) {
+	require("config.php");
+
       if (empty($_POST['subject']) || empty($_POST['msg'])) 
 	{echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
                 else {
@@ -659,9 +656,6 @@ function request($login)
 			echo "$okey_start Request SuccessFully Send To $mmw[servername] Administrator! $okey_end";
                     }
 }
-
-
-
 
 
 
@@ -710,12 +704,16 @@ function send_msg() {
 	$msg_to_sql = mssql_query("SELECT GUID,MemoCount FROM T_FriendMain WHERE Name='$msg_to'");
 	$msg_to_row = mssql_fetch_row($msg_to_sql);
 
-	if(empty($char_set) || empty($msg_subject)) {
+	$char_class_sql = mssql_query("SELECT class FROM Character WHERE Name='$char_set'");
+	$char_class_row = mssql_fetch_row($char_class_sql);
+	$char_photo = char_class($char_class_row[0],mess);
+
+	if(empty($char_set) || empty($msg_subject) || empty($msg_to)) {
 		echo "$die_start Error: Some Fields Were Left Blank! $die_end";
 	}
 	elseif($msg_to_row[0]!='' && $msg_to_row[0]!=' ') {
 		$msg_id = $msg_to_row[1] + 1;
-		$query = "INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subject, bRead, Memo, Dir, Act) VALUES ('$msg_id','$msg_to_row[0]','$char_set','$date','$msg_subject','0',CAST('$msg_text' AS VARBINARY(1000)),'143','2')";
+		$query = "INSERT INTO T_FriendMail (MemoIndex, GUID, FriendName, wDate, Subject, bRead, Memo, Dir, Act, Photo) VALUES ('$msg_id','$msg_to_row[0]','$char_set','$date','$msg_subject','0',CAST('$msg_text' AS VARBINARY(1000)),'143','2',$char_photo)";
 		if(mssql_query($query)) {
 			$mail_total_sql = mssql_query("SELECT bRead FROM T_FriendMail WHERE GUID='$msg_to_row[0]'");
 			$mail_total_num = mssql_num_rows($mail_total_sql);
@@ -745,6 +743,7 @@ function edit_warehouse($hex_wh) {
 	$hex_wh = clean_var(stripslashes($hex_wh));
 
       if(empty($hex_wh) || empty($login)) {echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
+        elseif($_SESSION['admin'] < $mmw[hex_wh_can]) {echo "$die_start You Can't Use HEX wh! $die_end";}
           else {
 		$hex_query = "UPDATE warehouse SET [Items]=0x$hex_wh WHERE AccountID='$login'";
 		if(mssql_query($hex_query)) {
@@ -771,6 +770,7 @@ function gm_msg($text) {
 	include("includes/shout_msg.php");
 
       if(empty($text)) {echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
+        elseif($_SESSION['admin'] < $mmw[gm_msg_send]) {echo "$die_start You Can't Send GM Message! $die_end";}
           else {
 		if( send_gm_msg("127.0.0.1", $mmw[joinserver_port], $text) == "yes") {
 			echo "$okey_start GM Msg SuccessFully Send! $okey_end";}
@@ -779,6 +779,48 @@ function gm_msg($text) {
 		}
                 writelog("gm_msg","Char: <b>$char</b> Has Been <font color=#FF0000>Send Msg</font>: $text");
 	}
+}
+
+
+
+
+
+
+
+
+
+
+function send_zen($char,$zen) {
+	require("config.php");
+	$char = stripslashes($char);
+	$zen = clean_var(stripslashes($zen));
+	$char_set = stripslashes($_SESSION['char_set']);
+	$login = clean_var(stripslashes($_SESSION['user']));
+
+	$result = mssql_query("SELECT extMoney FROM warehouse WHERE accountid='$login'");
+	$from = mssql_fetch_row($result);
+
+	$result = mssql_query("Select AccountID FROM Character WHERE Name='$char'");
+	$acc_to = mssql_fetch_row($result);
+	$acc_to_result = mssql_query("SELECT extMoney FROM warehouse WHERE accountid='$acc_to[0]'");
+	$acc_to_row = mssql_fetch_row($acc_to_result);
+
+	$from_end = $from[0] - $zen;
+	$to_end = $acc_to_row[0] + $zen;
+	$from_end_and_service = $from_end - $mmw[service_send_zen];
+
+      if(empty($char) || empty($zen) || empty($login)) {echo "$die_start Error: Some Fields Were Left Blank! $die_end";}
+        elseif(!preg_match("/^\d*$/", $zen)){echo "$die_start Money must be a positive number! $die_end";}
+          elseif($login == $acc_to[0]) {echo "$die_start From = To! You Can't Send Zen $die_end";}
+            elseif($zen < $mmw[min_send_zen] || $from_end < '0' || $to_end < '0') {echo "$die_start Minimum ".number_format($mmw[min_send_zen])." Can Send! You Have: $from[0] $die_end";}
+              elseif($from_end_and_service < '0') {echo "$die_start Can't Send ".number_format($zen)." Zen, you haven't ".number_format($mmw[service_send_zen])." for Service! $die_end";}
+		elseif($acc_to[0] != $login) {
+			echo "$okey_start $zen Zen To $char SuccessFully Send! $okey_end";
+			mssql_query("UPDATE warehouse SET [extMoney]='$to_end' WHERE AccountID='$acc_to[0]'");
+			mssql_query("UPDATE warehouse SET [extMoney]='$from_end_and_service' WHERE AccountID='$login'");
+			guard_mmw_mess($char,"It was sent to you in Extra Ware House: ".number_format($zen).", From: $char_set.");
+			writelog("send_zen","Char: <b>$char_set</b> Has Been <font color=#FF0000>Send Zen</font>: $zen, To: $char (Start:$from[0],End:$from_end | Start:$acc_to_row[0],End:$to_end)");
+			}
 }
 
 

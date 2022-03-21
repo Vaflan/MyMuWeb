@@ -1,6 +1,10 @@
 <?PHP
+ob_start();
 session_start();
 header("Cache-control: private");
+$timeStart=gettimeofday();
+$timeStart_uS=$timeStart["usec"];
+$timeStart_S=$timeStart["sec"];
 include("config.php");
 include("includes/sql_check.php");
 include("includes/functions.php");
@@ -11,16 +15,15 @@ include("includes/formats.php");
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><?echo $mmw['webtitle'];?></title>
-<script type="text/javascript" src="scripts/calc_price.js">//script_by_vaflan</script>
 <script type="text/javascript" src="scripts/functions.js">//script_by_vaflan</script>
 <script type="text/javascript" src="scripts/helptip.js">//script_by_vaflan</script>
 <link href="images/style.css" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="images/favicon.ico">
 </head>
-<body style="background-image: url(images/back.jpg); margin:10px; padding:0px;">
+<body style="background:url(images/back.jpg) #CDCDCD; margin:10px; padding:0px;">
 
 <div align="center">
-<a href="." title="Home Page <?echo $mmw[servername];?>"><img src="images/logo.jpg" width="694" height="200" border="0"></a><br/><br/>
+<a href="<?echo $mmw[serverwebsite];?>" title="Home Page <?echo $mmw[servername];?>"><img src="images/logo.jpg" width="694" height="200" border="0"></a><br/><br/>
 </div>
 
 <table width="694" border="0" align="center" cellpadding="0" cellspacing="0" style="background:url(images/back_03.jpg) repeat;">
@@ -50,7 +53,7 @@ include("includes/formats.php");
 <!-- LOGIN -->
 <?if(isset($_SESSION['pass']) && isset($_SESSION['user'])){?>
 Hello <b><?echo $_SESSION[user];?></b>!<br>
-<div class='brdiv'></div>
+<?echo $rowbr;?>
 <?if(isset($_SESSION['char_set'])) { echo $setchar;?><br>
 <a href='?op=user&u=char'><b>Character Panel</b></a><br>
 <a href='?op=user&u=mail' id='upmess'><b>Mail [<?echo "$msg_new_num/$msg_num";?>]</b></a><br><?}?>
@@ -58,7 +61,7 @@ Hello <b><?echo $_SESSION[user];?></b>!<br>
 <a href='?op=user&u=wh'><b>Ware House</b></a><br>
 <?if($_SESSION['admin'] >= $mmw[gm_option_open]) {?>
 <a href='?op=user&u=gm'><b>GM Options</b></a><br><?}?>
-<div class='brdiv'></div>
+<?echo $rowbr;?>
 <form action='' method='post' name='logout_account' id='logout_account'>
 <input name='logoutaccount' type='hidden' id='logoutaccount' value='logoutaccount'>
 <input name='Logout!' type='submit' id='Logout!' title='Logout' value='Logout'><br>
@@ -76,7 +79,7 @@ setInterval("flashit('upmess','#FFFFFF')",500)</script>
 Username<br><input name='login' type='text' id='login' title='Username' size='15' maxlength='10'>
 <input name='account_login' type='hidden' id='account_login' value='account_login'><br>
 Password<br><input name='pass' type='password' id='pass' title='Password' size='15' maxlength='10'>
-<div class='brdiv'></div>
+<?echo $rowbr;?>
 <input name='Submit' type='submit' value='Login' title='Login'> 
 <a href='?op=lostpass'>Lost Pass</a>
 </form>
@@ -93,7 +96,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
 	</table>
      <!-- // -->
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
      <!-- || -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -105,44 +108,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
           <tr>
             <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
             <td valign="top" bgcolor="#000000">
-                <table width="110" border="0" align="left" cellpadding="0" cellspacing="4">
-                  <tr>
-                    <td width="10"><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td width="100" class="link_menu"><a href="?op=news">Home</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=downloads">Downloads</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=info"><b>Information</b></a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=statistics">Statistics</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=castlesiege">Castle Siege</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=rankings">Rankings</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=register"><b>Register</b></a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=search">Search</a></td>
-                  </tr>
-                  <tr>
-                    <td><img src="images/arrow.jpg" width="9" height="9"></td>
-                    <td class="link_menu"><a href="?op=forum"><b>Forum</b></a></td>
-                  </tr>
-                </table>
+		<?include('menu.txt');?>
             </td>
             <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
           </tr>
@@ -154,7 +120,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
 	</table>
      <!-- // -->
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
      <!-- || -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -189,7 +155,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
 	</table>
      <!-- // -->
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
      <!-- || -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -214,7 +180,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
 	</table>
      <!-- // -->
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
      <!-- || -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -226,7 +192,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
           <tr>
             <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
             <td valign="top" bgcolor="#000000">
-		<? include('includes/times.php');?>
+		<?include('includes/times.php');?>
             </td>
             <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
           </tr>
@@ -238,7 +204,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
 	</table>
      <!-- // -->
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
      <!-- || -->
 	<table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -250,7 +216,7 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
           <tr>
             <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
             <td valign="top" bgcolor="#000000" align="center">
-		<? include('ads.txt');?>
+		<?include('ads.txt');?>
             </td>
             <td valign="top" style="background:url(images/content/right.jpg) repeat-y;">&nbsp;</td>
           </tr>
@@ -277,8 +243,10 @@ Password<br><input name='pass' type='password' id='pass' title='Password' size='
             <td valign="top" style="background:url(images/content/left.jpg) #000000 repeat-y;">&nbsp;</td>
             <td valign="top" bgcolor="#000000">
 	<!-- Center -->
-                <div class="link_content"><a href=".">Home</a> &gt; <a href="?op=info"><? echo($mmw['servername']); ?></a> <?curent_module();?></div> 
+                <div class="link_content"><a href=".">Home</a> &gt; <a href="?op=info"><?echo $mmw[servername];?></a> <?curent_module();?></div> 
 <?
+echo $rowbr;
+
 if(isset($_GET['news'])){
 	include("modules/news_full.php");
 }
@@ -305,6 +273,8 @@ else {
           </tr>
 	</table>
 
+<?if($mmw[mp3_player]=='yes'){include('media/player.php');}?>
+
 		<!-- /BODY -->
 	  </td>
 	 </tr>
@@ -317,9 +287,17 @@ else {
     <td colspan="3"><img src="images/back_06.png" width="694" height="27"></td>
   </tr>
 </table>
+<?
+$timeEnd=gettimeofday();
+$timeEnd_uS=$timeEnd["usec"];
+$timeEnd_S=$timeEnd["sec"];
+$ExecTime_S=($timeEnd_S+($timeEnd_uS/1000000))-($timeStart_S+($timeStart_uS/1000000));
+?>
 <br/>
-<center>
-MyMuWeb 0.2. Copyright TK3 © 2006-<?echo date('Y');?>. Design and PHP+SQL by Vaflan.<br>
-</center>
+<center>MyMuWeb 0.3. Copyright TK3 © 2006-<?echo date('Y');?>. Design and PHP+SQL by Vaflan. Generation Time: <?echo substr($ExecTime_S,0,5);?>s.<br></center>
 </body>
 </html>
+<?
+mssql_close($connect_mssql);
+ob_end_flush();
+?>

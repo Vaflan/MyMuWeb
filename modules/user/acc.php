@@ -1,8 +1,8 @@
 <?if($_GET[op]!='user') {echo "$die_start Access Denied! $die_end";}
 
-if(isset($_POST["newpassword"])) {require("includes/character.class.php");option::changepassword($login); echo $divbr;}										
-if(isset($_POST["profile"])) {require("includes/character.class.php");option::profile($login); echo $divbr;}
-if(isset($_POST["new_request"])) {require("includes/character.class.php");option::request($login); echo $divbr;}
+if(isset($_POST["newpassword"])) {require("includes/character.class.php");option::changepassword($login); echo $rowbr;}										
+if(isset($_POST["profile"])) {require("includes/character.class.php");option::profile($login); echo $rowbr;}
+if(isset($_POST["new_request"])) {require("includes/character.class.php");option::request($login); echo $rowbr;}
 
    $account = clean_var(stripslashes($login));
    $acc_info_reslut = mssql_query("Select mail_addr,memb_name,age,country,gender,avatar,hide_profile,y,msn,icq,skype,appl_days from MEMB_INFO where memb___id='$account'");
@@ -75,7 +75,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
     </tr>
     <tr>
       <td align="right">Referral Link:</td>
-      <td>http://redangel.put.lv/mu/?ref=<?echo $login;?></td>
+      <td><?echo $mmw[serverwebsite];?>?ref=<?echo $login;?></td>
     </tr>
     <tr>
       <td align="right">Your Referrals:</td>
@@ -168,7 +168,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
 </table>
 </form>
 
-<div class="brdiv"> &nbsp; </div>
+<?echo $rowbr;?>
 
 <form action="" method="post" name="change_password" id="change_password">
   <table width="300" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
@@ -191,7 +191,7 @@ if(isset($_POST["new_request"])) {require("includes/character.class.php");option
   </table>
 </form>
 
-<div class="brdiv"> &nbsp; </div>
+<?echo $rowbr;?>
 
 <form action="" method="post" name="new_request" id="new_request">
   <table width="300" class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">

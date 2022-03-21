@@ -6,6 +6,7 @@ if($_POST['search_type']==1)
 {$result = mssql_query("SELECT * from guild where G_Name='$search' order by G_score desc");}
 if($_POST['search_type']==0)
 {$result = mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");}
+$row_num = mssql_num_rows($result);
 ?>
 <br>Search Guild Results</br><br>&nbsp;</br>
            <table class="sort-table" id="table-1" height="30" cellspacing="0" cellpadding="0" border="0">
@@ -18,7 +19,11 @@ if($_POST['search_type']==0)
            <td class=thead2>Logo</td>
            </tr></thead>
 <?
-for($i=0;$i < mssql_num_rows($result);++$i)
+if($row_num==0) {
+ echo '<tr><td colspan="6">Not Find!</td></tr>';
+}
+
+for($i=0;$i < $row_num;++$i)
      {
           $rank = $i+1;
           $row = mssql_fetch_row($result);

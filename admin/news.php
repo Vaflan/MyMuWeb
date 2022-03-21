@@ -1,7 +1,7 @@
 <?PHP
 if (isset($_POST["edit_news_done"])){edit_news($_POST['edit_news_title'],$_POST['edit_news_autor'],$_POST['category'],$_POST['news_id'],$_POST['edit_news_eng'],$_POST['edit_news_rus']);}
 if (isset($_POST["delete_news"])){delete_news($_POST['news_id']);}
-if (isset($_POST["add_new_news"])){add_new_news($_POST['news_title'],$_POST['news_autor'],$_POST['category'],$_POST['news_eng'],$_POST['news_rus']);}					  
+if (isset($_POST["add_new_news"])){add_new_news($_POST['news_title'],$_POST['category'],$_POST['news_eng'],$_POST['news_rus'],$_SESSION['a_admin_login']);}					  
 ?>
 
 <table width="500" border="0" align="center" cellpadding="0" cellspacing="4">
@@ -66,15 +66,11 @@ echo '                                  <tr>
                                                     <form action="" method="post" name="new_news_form" id="new_news_form">
                                                         <table width="100%" border="0" cellpadding="0" cellspacing="4">
                                                           <tr>
-                                                            <td width="63" scope="row"><div align="right"  class="text_administrator">News Title </div></td>
-                                                            <td scope="row"><input name="news_title" type="text" id="news_title" size="40" maxlength="100"></td>
+                                                            <td width="63" scope="row" align="right"><div class="text_administrator">News Title </div></td>
+                                                            <td scope="row"><input name="news_title" type="text" id="news_title" size="40" maxlength="100"> <input name="add_new_news" type="hidden" id="add_new_news" value="add_new_news"></td>
                                                           </tr>
                                                           <tr>
-                                                            <td scope="row"><div align="right" class="text_administrator">Author</div></td>
-                                                            <td scope="row"><input name="news_autor" type="text" id="news_autor" size="20" maxlength="20"><input name="add_new_news" type="hidden" id="add_new_news" value="add_new_news"></td>
-                                                          </tr>
-                                                          <tr>
-                                                            <td scope="row"><div align="right" class="text_administrator">Category</div></td>
+                                                            <td scope="row" align="right"><div class="text_administrator">Category</div></td>
                                                             <td scope="row"><select name="category" id="category">
                                                               <option value="NEWS">NEWS</option>
                                                               <option value="ANNOUNCEMENT">ANNOUNCEMENT</option>

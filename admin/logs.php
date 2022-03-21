@@ -141,6 +141,14 @@ if(isset($_POST["clear_logs"])){clear_logs($_POST["log_name"]);}
             </form><?}?>
           </td>
         </tr>
+        <tr>
+          <td class="link_logs"><a href="logs.php?log=send_zen" target="_blank">Send Zen Logs</a></td>
+          <td class="link_logs"><?if($_SESSION[a_admin_level] > 6){?>
+            <form action="" method="post" name="clear28" id="clear28">
+               <input name="log_name" type="hidden" id="log_name" value="send_zen"> <input name="clear_logs" type="hidden" id="clear_logs"> <input type="submit" name="Submit" value="Clear">
+            </form><?}?>
+          </td>
+        </tr>
       </table>
     </fieldset></td>
   </tr>

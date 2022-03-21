@@ -1,4 +1,3 @@
-<div class='brdiv'></div>
 <?
 if($_GET[w]=="online")
  {

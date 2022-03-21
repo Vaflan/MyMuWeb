@@ -1,13 +1,13 @@
 <?
-if(isset($_POST["edit_account_done"])){edit_account($_POST['account'],$_POST['new_pwd'],$_POST['mode'],$_POST['email'],$_POST['squestion'],$_POST['sanswer'],$_POST['unblock_time'],$_POST['block_date'],$_POST['blocked_by'],$_POST['block_reason']);}
+if(isset($_POST["edit_account_done"])){edit_account($_POST['account'],$_POST['new_pwd'],$_POST['mode'],$_POST['email'],$_POST['squestion'],$_POST['sanswer'],$_POST['unblock_time'],$_POST['block_date'],$_POST['block_reason'],$_POST['admin_level']);}
 if(isset($_POST["edit_acc_wh_done"])){edit_acc_wh($_POST['account'],$_POST['wh'],$_POST['extrawh']);}
 
 if(isset($_POST["account_search_edit"]) || isset($_GET["acc"])) {
 
 if(isset($_GET['acc'])){$_POST['account_search_edit'] = $_GET['acc'];}
 $account_edit = stripslashes($_POST['account_search_edit']);
-if($mmw[md5]==1){$get_account = mssql_query("Select memb___id,memb__pwd2,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason from MEMB_INFO where memb___id='$account_edit'");}
-elseif($mmw[md5]==0){$get_account = mssql_query("Select memb___id,memb__pwd,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason from MEMB_INFO where memb___id='$account_edit'");}
+if($mmw[md5]==yes){$get_account = mssql_query("Select memb___id,memb__pwd2,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,admin from MEMB_INFO where memb___id='$account_edit'");}
+elseif($mmw[md5]==no){$get_account = mssql_query("Select memb___id,memb__pwd,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,admin from MEMB_INFO where memb___id='$account_edit'");}
 $get_account_done = mssql_fetch_row($get_account);
 
 if($get_account_done[5] == 'male'){$get_account_done[5] = "<img src='images/male.gif'> Male";}
@@ -24,16 +24,20 @@ $get_acc_wh_num = mssql_num_rows($get_wh);
 if($get_acc_wh[1]==""){$get_acc_wh[1] = 0;}
 if($get_acc_wh[2]==""){$get_acc_wh[2] = 0;}
 
+if($get_account_done[14] >= 0){$admin_level[$get_account_done[14]] = "selected";} else{$admin_level[0] = "selected";}
+
 $online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$account_edit'");
 $oc_row = mssql_fetch_row($online_check);
 
 $get_chr = mssql_query("SELECT GameID1,GameID2,GameID3,GameID4,GameID5,GameIDC FROM AccountCharacter WHERE Id='$account_edit'");
 $get_acc_chr = mssql_fetch_row($get_chr);
-if($get_acc_chr[0]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[0] = "<font color='#00FF00'>Online</font>";}else{$get_acc_chr_online[0] = "<font color='#FF0000'>Offline</font>";}
-if($get_acc_chr[1]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[1] = "<font color='#00FF00'>Online</font>";}else{$get_acc_chr_online[1] = "<font color='#FF0000'>Offline</font>";}
-if($get_acc_chr[2]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[2] = "<font color='#00FF00'>Online</font>";}else{$get_acc_chr_online[2] = "<font color='#FF0000'>Offline</font>";}
-if($get_acc_chr[3]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[3] = "<font color='#00FF00'>Online</font>";}else{$get_acc_chr_online[3] = "<font color='#FF0000'>Offline</font>";}
-if($get_acc_chr[4]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[4] = "<font color='#00FF00'>Online</font>";}else{$get_acc_chr_online[4] = "<font color='#FF0000'>Offline</font>";}
+$online_stats = "<font color='#00FF00'>Online</font>";
+$offline_stats = "<font color='#FF0000'>Offline</font>";
+if($get_acc_chr[0]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[0] = $online_stats;}else{$get_acc_chr_online[0] = $offline_stats;}
+if($get_acc_chr[1]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[1] = $online_stats;}else{$get_acc_chr_online[1] = $offline_stats;}
+if($get_acc_chr[2]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[2] = $online_stats;}else{$get_acc_chr_online[2] = $offline_stats;}
+if($get_acc_chr[3]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[3] = $online_stats;}else{$get_acc_chr_online[3] = $offline_stats;}
+if($get_acc_chr[4]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[4] = $online_stats;}else{$get_acc_chr_online[4] = $offline_stats;}
 
 if($get_acc_chr[0]=="" || $get_acc_chr[0]==" "){$get_acc_chr[0] = "No Char";}elseif($_SESSION[a_admin_level] > 3){$get_acc_chr[0] = "<a href='?op=char&chr=$get_acc_chr[0]'>$get_acc_chr[0]</a>";}else{$get_acc_chr[0] = "<u>$get_acc_chr[0]</u>";}
 if($get_acc_chr[1]=="" || $get_acc_chr[1]==" "){$get_acc_chr[1] = "No Char";}elseif($_SESSION[a_admin_level] > 3){$get_acc_chr[1] = "<a href='?op=char&chr=$get_acc_chr[1]'>$get_acc_chr[1]</a>";}else{$get_acc_chr[1] = "<u>$get_acc_chr[1]</u>";}
@@ -84,10 +88,12 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
                                                                         <td scope="row"><div align="right" class="text_administrator">Block Date</div></td>
                                                                         <td scope="row"><select name="block_date" size="1" id="block_date"><option value='0'>Not Select</option><option value='no'>Not ToDay</option><option value='yes'>ToDay</option></select></td>
                                                                       </tr>
+									<?if($get_account_done[12] != ' ' && isset($get_account_done[12])){?>
                                                                       <tr>
                                                                         <td scope="row"><div align="right" class="text_administrator">Blockec By</div></td>
-                                                                        <td scope="row"><input name="blocked_by" type="text" id="blocked_by" value="<?echo $get_account_done[12];?>" size="17" maxlength="50"></td>
+                                                                        <td scope="row"><span class="text_administrator"><?echo $get_account_done[12];?></span></td>
                                                                       </tr>
+									<?}?>
                                                                       <tr>
                                                                         <td scope="row"><div align="right" class="text_administrator">Block Reason</div></td>
                                                                         <td scope="row"><input name="block_reason" type="text" id="block_reason" value="<?echo $get_account_done[13];?>" size="17" maxlength="200"></td>
@@ -114,12 +120,17 @@ if($get_acc_chr[4]=="" || $get_acc_chr[4]==" "){$get_acc_chr[4] = "No Char";}els
                                                                       </tr>
                                                                       <tr>
                                                                         <td scope="row"><div align="right" class="text_administrator"></div></td>
-                                                                        <td scope="row"><input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>">
-                                                                        <input name="edit_account_done" type="hidden" id="edit_account_done" value"edit_account_done"></td>
+                                                                        <td scope="row"><input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"></td>
                                                                       </tr>
+									<?if($_SESSION[a_admin_level] > 6){?>
+                                                                      <tr>
+                                                                        <td scope="row"><div align="right" class="text_administrator">Admin Level</div></td>
+                                                                        <td scope="row"><select name="admin_level" size="1" id="admin_level"><option value=0 <?echo $admin_level[0];?>>Normal</option><option value=3 <?echo $admin_level[3];?>>Game Master</option><option value=6 <?echo $admin_level[6];?>>Mini Admin</option><option value=9 <?echo $admin_level[9];?>>Administrator</option></select></td>
+                                                                      </tr>
+									<?}?>
                                                                       <tr>
                                                                         <td scope="row" align="right"><input name="Edit Account" type="submit" class="button" id="Edit Account" value="Edit Account"></td>
-                                                                        <td scope="row"><input type="reset" name="Reset" value="Reset" class="button"></td>
+                                                                        <td scope="row"><input name="edit_account_done" type="hidden" id="edit_account_done" value"edit_account_done"> <input type="reset" name="Reset" value="Reset" class="button"></td>
                                                                       </tr>
                                                                     </table>
 		</form>

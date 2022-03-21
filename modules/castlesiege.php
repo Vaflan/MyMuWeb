@@ -1,6 +1,6 @@
 <?
-if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.5)){fclose($check); $cs_status = '<span class="online">Open</span>';}
-else{$cs_status = '<span class="offline">Close</span>';}
+if($check=@fsockopen($mmw[gs_cs_ip],$mmw[gs_cs_port],$ERROR_NO,$ERROR_STR,(float)0.5)){fclose($check); $cs_status = '<span class="online">is Opened</span>';}
+else{$cs_status = '<span class="offline">is Closed</span>';}
 
 $query = mssql_query("SELECT owner_guild,siege_start_date,siege_end_date,money,tax_hunt_zone FROM MuCastle_DATA");
 $row = mssql_fetch_row($query);
@@ -32,8 +32,6 @@ elseif( (strtotime($cs_start)+586800) > $now_time ) {$cs_period="Ready for Attac
 elseif( (strtotime($cs_start)+594000) > $now_time ) {$cs_period="Attack to Castle Siege";} //6 19:00 - 6 21:00
 else {$cs_period="Truce";}
 ?>
-
-<div class="brdiv"></div>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%"><tr>
 <td valign="top">
@@ -73,7 +71,7 @@ else {$cs_period="Truce";}
 	</tr>
 </table>
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
 <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='250'>           
 	<tr>
@@ -98,7 +96,7 @@ else {$cs_period="Truce";}
 	</tr>
 </table>
 
-<div class="brdiv"></div>
+<?echo $rowbr;?>
 
 <table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='250'>           
 	<tr><td>Guild's Registered for Attack</td></tr>

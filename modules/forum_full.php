@@ -1,8 +1,8 @@
 <?
 $id_forum = clean_var(stripslashes($_GET['forum']));
 
-if($id_forum == "add" && isset($_SESSION['user']) && isset($_SESSION['char_set'])) {?>
-<div class="brdiv"></div>
+if($id_forum == "add" && isset($_SESSION['user']) && isset($_SESSION['char_set'])) {
+echo $rowbr;?>
 <big><b>Add Topic</b></big>
 <?if(isset($_POST['title']) && isset($_POST['text'])){require("includes/character.class.php"); option::forum_send($_POST['title'],$_POST['text']);}?>
 <br>
@@ -17,7 +17,7 @@ if($id_forum == "add" && isset($_SESSION['user']) && isset($_SESSION['char_set']
 <hr>BB Code:
 <div align=center>
 [br] - [hr] - <b>[b][/b]</b> - <i>[i][/i]</i> - <u>[u][/u]</u> - <s>[s][/s]</s> - <span style='text-decoration: overline'>[o][/o]</span> - <sup>[sup][/sup]</sup> - <sub>[sub][/sub]</sub>
-<br>[c]<b>.::.</b>[/c] - [l]<b>::..</b>[/l] - [r]<b>..::</b>[/r] - <font color=red>[color=red][/color]</font> - <a href="#">[url=#][/url]</a>
+<br>[c]<b>.::.</b>[/c] - [l]<b>::..</b>[/l] - [r]<b>..::</b>[/r] - [color=#][/color] - [size=#][/size] - <a href="#">[url=#][/url]</a> - [img]#[/img]
 </div><?}
 elseif(isset($id_forum) && $id_forum != "add") {
 $get_forum = mssql_query("SELECT f_id,f_char,f_title,f_text,f_date,f_lostchar FROM MMW_forum WHERE f_id='$id_forum'");
