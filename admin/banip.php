@@ -1,6 +1,6 @@
 <?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
 
-// Ban Sistem by Vaflan
+// Ban System by Vaflan
 $banip_file = 'includes/banip.dat';
 
 if(isset($_POST['base'])) {

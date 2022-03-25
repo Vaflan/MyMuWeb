@@ -17,7 +17,7 @@ function clearlog($logfile) {
 }
 
 
-// Start Login Sistem
+// Start Login System
 if(isset($_POST["admin_login"])) {
  $account = clean_var(stripslashes($_POST['account']));
  $password = clean_var(stripslashes($_POST['password']));

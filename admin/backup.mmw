@@ -2,7 +2,7 @@
 =======================================
 
 [cfg]
-// BackUp Web Sistem v1.0 by Vaflan
+// BackUp Web System v1.0 by Vaflan
 // Only for MyMuWeb MSSQL 2000 Year
 $backup = "%database%_%year%-%month%-%day%.bak";
 $dir = str_replace('admin.php','',$_SERVER['SCRIPT_FILENAME'])."includes/backup/";
