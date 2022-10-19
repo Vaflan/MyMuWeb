@@ -1,4 +1,4 @@
-<?PHP
+<?php
 // Info Image By MyMuWeb
 $format = 'jpg';
 $name = 'WallPaper 1';
@@ -8,4 +8,3 @@ $date = '18395676121';
 $width = '1024';
 $height = '768';
 $size = '465222';
-?>

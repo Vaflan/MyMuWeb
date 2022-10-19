@@ -1,91 +1,82 @@
-<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
+<?php if (empty($_SESSION['admin']['level'])) {
+	die('<u style="color:red">/!\</u> Access Denied!');
+}
 
 // SQL Query Analyzer by Vaflan
-$sqlquery_query = "UPDATE table SET [column]=? WHERE [column]=?\n\nSELECT * FROM table WHERE [column]=?\n\ndeclare @hex varbinary(1920); set @hex=(SELECT Items FROM warehouse where AccountId='?'); print @hex;";
+$exampleQuery = "UPDATE table SET [column]=? WHERE [column]=?\n\nSELECT * FROM table WHERE [column]=?\n\nSELECT CAST(Items AS varbinary(1920)) FROM warehouse WHERE AccountID='?'";
 
-if(isset($_POST[sql_query_true])) {
- $sqlquery_query = str_replace('\"','"', str_replace("\'","",$_POST[sqlquery_query]) );
- $sqlquery_result = @mssql_query($sqlquery_query);
- if($sqlquery_result) {
-  $query_result = "$warning_green Query done!";
-  $log_dat = "Query: <b>$sqlquery_query</b> Has Been <font color=#FF0000>Injection</font>";
-  writelog("a_sql_query",$log_dat);
- }
- else {
-  $query_result = "$warning_red Error: $sqlquery_query";
- }
+if (isset($_POST['sql_query_true'])) {
+	$sqlQuery = str_replace(array('\"', '\''), array('"', ''), $_POST['sql_query']);
+	if ($sqlQueryResult = mssql_query($sqlQuery)) {
+		$queryResult = $mmw['warning']['green'] . 'Query done!';
+		writelog('a_sql_query', 'Query: <b>' . $sqlQuery . '</b> Has Been <span style="color:red">Injection</span>');
+	} else {
+		$queryResult = $mmw['warning']['red'] . 'Error: ' . $sqlQuery;
+	}
 }
 
-function sqlquery_result($sql_query,$sql_result) {
-   $substr_query = substr($sql_query, 0, 6);
-   if($substr_query == 'SELECT' || $substr_query == 'Select' || $substr_query == 'select') {
-	$sql_query_array = preg_split("/[\s,]+/", $sql_query);
-	if($sql_query_array[1] == '*') {
-		$sql_column_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.Columns where TABLE_NAME='$sql_query_array[3]'";
-		$sql_column_query_result = @mssql_query($sql_column_query);
-	}
-	if($sql_query_array[3] == '*') {
-		$sql_column_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.Columns where TABLE_NAME='$sql_query_array[5]'";
-		$sql_column_query_result = @mssql_query($sql_column_query);
-	}
-	echo "<br><b>Result:</b><br><div class='sized'>";
-	echo "<table border='1' cellspacing='0' cellpadding='2'><tr><td><b>\n";
-	$num = mssql_num_rows($sql_result);
-	$column = mssql_num_fields($sql_result);
-	for($i=0; $i < $num; $i++) {
-		$row = mssql_fetch_row($sql_result);
-		if($i == 0) {
-			for($cn=0;$cn < $column; $cn++) {
-				if(isset($sql_column_query)) {
-					$sql_column_query_row = @mssql_fetch_row($sql_column_query_result);
-					echo $sql_column_query_row[0];
+function sql_query_result($sqlQuery, $sqlResult)
+{
+	$substrQuery = strtolower(substr($sqlQuery, 0, 6));
+	if ($substrQuery === 'select') {
+		$sql_query_array = preg_split('/[\s,]+/', preg_replace('/\stop\s\d+\s/i', ' ', $sqlQuery));
+		if ($sql_query_array[1] === '*') {
+			$sql_column_query = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.Columns where TABLE_NAME='$sql_query_array[3]'";
+			$sql_column_query_result = mssql_query($sql_column_query);
+		}
+		echo '<div style="margin:15px;font-weight:bold">Result:</div><div class="sized">';
+		echo '<table border="1" cellspacing="0" cellpadding="2"><thead><tr>' . PHP_EOL;
+		$count = mssql_num_rows($sqlResult);
+		$column = mssql_num_fields($sqlResult);
+		for ($i = 0; $i < $count; $i++) {
+			$row = mssql_fetch_row($sqlResult);
+			if ($i === 0) {
+				for ($cn = 0; $cn < $column; $cn++) {
+					echo '<th>';
+					if (isset($sql_column_query)) {
+						$sql_column_query_row = mssql_fetch_row($sql_column_query_result);
+						echo $sql_column_query_row[0];
+					} else {
+						echo $sql_query_array[1 + $cn];
+					}
+					echo '</th>' . PHP_EOL;
 				}
-				elseif($sql_query_array[1] == 'TOP') {echo $sql_query_array[3+$cn];}
-				else {echo $sql_query_array[1+$cn];}
-				if($cn < $column - 1) {echo "</b></td><td><b>\n";}
+				echo '</tr></thead><tbody>' . PHP_EOL;
 			}
-			echo "</b></td></tr>\n\n<tr><td>";
+			echo '<tr><td>' . implode('</td><td>', $row) . '</td></tr>' . PHP_EOL;
 		}
-		for($c=0; $c < $column; $c++) {
-			echo $row[$c];
-			if($c < $column - 1) {echo "</td><td>\n";}
-		}
-		if($i < $num - 1) {echo "</td></tr>\n\n<tr><td>";}
+		echo '</tbody></table>' . PHP_EOL . '</div>';
 	}
-	echo "</td></tr></table>\n</div>";
-   }
-   if($substr_query == 'DECLAR' || $substr_query == 'Declar' || $substr_query == 'declar') {
-	mssql_query($sql_query);
-	echo "<br><b>Result:</b><br>\n";
-	echo "<textarea style='width:540; height:260;'>".mssql_get_last_message()."</textarea>\n";
-   }
-   if($substr_query == 'UPDATE' || $substr_query == 'Update' || $substr_query == 'update') {
-	echo "<br><b>Result:</b><br>\n";
-	echo $sql_query;
-   }
+	if ($substrQuery === 'insert') {
+		echo '<br><b>Result:</b><br>' . PHP_EOL
+			. '<textarea style="width:540px;height:260px">' . mssql_get_last_message() . '</textarea>';
+	}
+	if ($substrQuery === 'update') {
+		echo '<br><b>Result:</b><br>' . PHP_EOL
+			. $sqlQuery;
+	}
 }
 
-echo $query_result;
+echo $queryResult;
 ?>
 
-<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
-	<tr>
-		<td align="center">
-		<fieldset>
+	<fieldset class="content">
 		<legend>SQL Query</legend>
-			<form action="" method="post" name="new_server_form" id="new_server_form">
-			<table width="100%" border="0" cellspacing="4" cellpadding="0">
-			  <tr>
-			    <td align="center"><textarea style="Width: 100%; Height: 140px;" name="sqlquery_query"><?echo $sqlquery_query;?></textarea></td>
-			  </tr>
-			  <tr>
-			    <td align="center"><input type="submit" name="Submit" value="New SQL Query"> <input name="sql_query_true" type="hidden" id="sql_query_true" value="sql_query_true"> <input type="reset" name="Reset" value="Reset"></td>
-			  </tr>
-			</table>
-			</form>
-		</fieldset>
-		</td>
-	</tr>
-</table>
+		<form method="post" action="">
+			<input type="hidden" name="sql_query_true" value="sql_query_true">
+			<div style="text-align:center;padding:4px">
+				<textarea style="width:100%;height:140px" name="sql_query"><?php
+					echo isset($sqlQuery) ? $sqlQuery : $exampleQuery;
+					?></textarea>
+			</div>
+			<div style="text-align:center;padding:4px">
+				<input type="submit" value="New SQL Query">
+				<input type="reset" value="Reset">
+			</div>
+		</form>
+	</fieldset>
 
-<?if(isset($query_result)) {sqlquery_result($sqlquery_query,$sqlquery_result);}?>
+<?php
+if (isset($queryResult)) {
+	sql_query_result($sqlQuery, $sqlQueryResult);
+}

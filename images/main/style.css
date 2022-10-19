@@ -4,21 +4,89 @@
 /* Center Button */
 
 /* Effect For Button */
-.effect70 {filter: alpha(opacity=70); -moz-opacity: .70; opacity: .70;}
-.effect80 {filter: alpha(opacity=80); -moz-opacity: .80; opacity: .80;}
+.effect70 {
+    filter: alpha(opacity=70);
+    -moz-opacity: .70;
+    opacity: .70;
+}
+
+.effect80 {
+    filter: alpha(opacity=80);
+    -moz-opacity: .80;
+    opacity: .80;
+}
 
 /* Style Text */
-.main1 {font-family: Verdana,Arial, Helvetica, sans-serif; color: #a0a0a0; font-size: 11px; font-weight: bold;}
-.main2 {font-family: Verdana,Arial, Helvetica, sans-serif; color: #a0a0a0; font-size: 10px; font-weight: bold;}
-.main3 {font-family: Verdana,Arial, Helvetica, sans-serif; color: #ffffff; font-size: 10px; font-weight: normal;}
+.main1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #a0a0a0;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.main2 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #a0a0a0;
+    font-size: 10px;
+    font-weight: bold;
+    display: inline-block;
+    width: 50%;
+}
+
+.main3 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: normal;
+}
 
 /* Table Border */
-.maintl {background:url('p_t_l.png'); width: 5px; height: 5px;}
-.maintc {background:url('p_t_c.png'); width: 5px; height: 5px;}
-.maintr {background:url('p_t_r.png'); width: 5px; height: 5px;}
-.maincl {background:url('p_c_l.png'); width: 5px;}
-.mainc {background:url('p_c.png'); width: 183px;}
-.maincr {background:url('p_c_r.png'); width: 5px;}
-.mainbl {background:url('p_b_l.png'); width: 5px; height: 5px;}
-.mainbc {background:url('p_b_c.png'); width: 5px; height: 5px;}
-.mainbr {background:url('p_b_r.png'); width: 5px; height: 5px;}
+.maintl {
+    background: url('p_t_l.png');
+    width: 5px;
+    height: 5px;
+}
+
+.maintc {
+    background: url('p_t_c.png');
+    width: 183px;
+    height: 5px;
+}
+
+.maintr {
+    background: url('p_t_r.png');
+    width: 5px;
+    height: 5px;
+}
+
+.maincl {
+    background: url('p_c_l.png');
+    width: 5px;
+}
+
+.mainc {
+    background: url('p_c.png');
+    width: 183px;
+}
+
+.maincr {
+    background: url('p_c_r.png');
+    width: 5px;
+}
+
+.mainbl {
+    background: url('p_b_l.png');
+    width: 5px;
+    height: 5px;
+}
+
+.mainbc {
+    background: url('p_b_c.png');
+    height: 5px;
+}
+
+.mainbr {
+    background: url('p_b_r.png');
+    width: 5px;
+    height: 5px;
+}

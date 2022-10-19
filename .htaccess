@@ -14,13 +14,13 @@
 
  # Max File Upload / Session Security
  php_value upload_max_filesize 100M
- php_value post_max_size 100M
+ php_value post_max_size 16M
  php_flag register_globals off
  php_flag session.use_trans_sid off
  php_flag session.use_cookies on
 
  # Config Security
  <FilesMatch "config.php"> 
-	Order deny,allow 
-	deny from all 
+  Order deny,allow
+  Deny from all
  </FilesMatch>

@@ -1,65 +1,84 @@
-<?PHP
-// PHP Script By Vaflan
-// For MyMuWeb
-// Ver. 1.7
+<?php
+/**
+ * PHP Script By Vaflan For MyMuWeb
+ * @var array $mmw
+ */
 
-$top_rank = clean_var(stripslashes($_POST['top_rank']));
-$race = clean_var(stripslashes($_POST['sort']));
+$topCount = intval($_POST['top_rank']);
+$race = isset($_POST['sort'])
+	? clean_var(stripslashes($_POST['sort']))
+	: 'all';
 
-if(empty($_POST['top_rank'])){$top_rank = '100';}
-if(empty($_POST['sort'])){$race = 'all';}
-
-if($mmw['gm']=='no'){$no_gm_in_top = "and ctlcode!='32' and ctlcode!='8'";}
-$query_race[all] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dw] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='0' and class<='15' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dk] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='16' and class<='31' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='32' and class<='47' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='63' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='79' $no_gm_in_top order by reset desc, clevel desc";
-$query_race[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='95' $no_gm_in_top order by reset desc, clevel desc";
-
-$result = @mssql_query($query_race[$race]);
-$row_num = @mssql_num_rows($result);
-
-echo "<br>".mmw_lang_top." $top_rank ".mmw_lang_characters."<br>&nbsp;</br>
-          <table class='sort-table' border='0' cellpadding='0' cellspacing='0'>                
-          <thead><tr>
-          <td>#</td>
-          <td>".mmw_lang_character."</td>
-          <td>".mmw_lang_reset."</td>
-          <td>".mmw_lang_level."</td>
-          <td>".mmw_lang_class."</td>
-          <td>".mmw_lang_guild."</td>
-          </tr></thead>";
-
-if($row_num==0) {
- echo '<tr><td colspan="6">'.mmw_lang_no_characters.'</td></tr>';
+if (!$mmw['gm_show']) {
+	$no_gm_in_top = "AND c.CtlCode NOT IN (8, 32)";
 }
 
-for($i=0; $i<$row_num; ++$i) {
-	$rank = $i+1;
-	$row = mssql_fetch_row($result);
-	$status_reults = mssql_query("Select ConnectStat from MEMB_STAT where memb___id='$row[4]'");
-	$status = mssql_fetch_row($status_reults);
-	$statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$row[4]'");
-	$statusdc = mssql_fetch_row($statusdc_reults);
-	if(empty($_SESSION['guild_'.$row[0]])) {
-	 $guild_reults = mssql_query("Select G_Name from GuildMember where Name='$row[0]'");
-	 $_SESSION['guild_'.$row[0]] = mssql_fetch_row($guild_reults);
-	}
-	$guild = $_SESSION['guild_'.$row[0]];
-
-	if($status[0] == 1 && $statusdc[0] == $row[0]) {$status[0] ='<img src='.default_img('online.gif').' width=6 height=6>';}
-	else {$status[0] ='<img src='.default_img('offline.gif').' width=6 height=6>';}
-
-echo 	"<tbody><tr>
-            <td>$rank</td>
-            <td>$status[0] <a href=?op=character&character=$row[0]>$row[0]</a></td>
-            <td>$row[3]</td>
-            <td>$row[2]</td>
-            <td>".char_class($row[1],off)."</td>
-            <td><a href=?op=guild&guild=$guild[0]>$guild[0]</a></td>
-            </tr></tbody>";
-}
+$query_race['all'] = "c.Class>-1";
+$query_race['dw'] = "c.Class>=0 AND c.Class<=15";
+$query_race['dk'] = "c.Class>=16 AND c.Class<=31";
+$query_race['elf'] = "c.Class>=32 AND c.Class<=47";
+$query_race['mg'] = "c.Class>=48 AND c.Class<=63";
+$query_race['dl'] = "c.Class>=64 AND c.Class<=79";
+$query_race['sum'] = "c.Class>=80 AND c.Class<=95";
+$query_race['rf'] = "c.Class>=96 AND c.Class<=112";
 ?>
+
+<br>
+<b><?php echo mmw_lang_top . ' ' . $topCount . ' ' . mmw_lang_characters; ?></b><br>
+<br>
+
+<table class="sort-table" style="margin:0 auto;border:0;padding:0">
+	<thead>
+	<tr>
+		<td>#</td>
+		<td><?php echo mmw_lang_character; ?></td>
+		<td><?php echo mmw_lang_reset; ?></td>
+		<td><?php echo mmw_lang_level; ?></td>
+		<td><?php echo mmw_lang_class; ?></td>
+		<td><?php echo mmw_lang_guild; ?></td>
+	</tr>
+	</thead>
+	<tbody>
+	<?php
+	$query = "SELECT TOP {$topCount}
+		c.Name,
+		c.Class,
+		c.cLevel,
+		c.{$mmw['reset_column']},
+		ms.ConnectStat,
+		ac.GameIDC,
+		gm.G_Name
+			FROM dbo.Character AS c
+			LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = c.AccountID
+			LEFT JOIN dbo.AccountCharacter AS ac ON ac.Id = c.AccountID
+			LEFT JOIN dbo.GuildMember AS gm ON gm.Name = c.Name
+				WHERE {$query_race[$race]} {$no_gm_in_top} ORDER BY c.{$mmw['reset_column']} DESC, c.cLevel DESC";
+	$result = mssql_query($query);
+	$row_num = mssql_num_rows($result);
+
+	if (empty($row_num)) {
+		echo '<tr><td colspan="6">' . mmw_lang_no_characters . '</td></tr>';
+	} else {
+		$rank = 1;
+		while ($row = mssql_fetch_row($result)) {
+			$status = ($row[4] && $row[5] === $row[0])
+				? '<img src=' . default_img('online.gif') . ' width=6 height=6>'
+				: '<img src=' . default_img('offline.gif') . ' width=6 height=6>';
+			$class = char_class($row[1]);
+
+			echo <<<HTML
+<tr>
+	<td>{$rank}</td>
+	<td>{$status} <a href=?op=character&character={$row[0]}>{$row[0]}</a></td>
+	<td>{$row[3]}</td>
+	<td>{$row[2]}</td>
+	<td>{$class}</td>
+	<td><a href=?op=guild&guild={$row[6]}>{$row[6]}</a></td>
+</tr>
+HTML;
+			$rank++;
+		}
+	}
+	?>
+	</tbody>
 </table>

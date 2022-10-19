@@ -1,326 +1,438 @@
-<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
+<?php if (empty($_SESSION['admin']['level'])) {
+	die('<u style="color:red">/!\</u> Access Denied!');
+}
 
 // Account Editor
-if(isset($_POST["edit_account_done"])) {
- $post_account = $_POST['account'];
- $post_pwd = $_POST['new_pwd'];
- $post_mode = $_POST['mode'];
- $post_email = $_POST['email'];
- $post_squestion = $_POST['squestion'];
- $post_sanswer = $_POST['sanswer'];
- $post_unblock_time = $_POST['unblock_time'];
- $post_block_date = $_POST['block_date'];
- $post_block_reason = $_POST['block_reason'];
- $post_admin_level = $_POST['admin_level'];
+if (isset($_POST['edit_account_done'])) {
+	$post_account = stripslashes($_POST['edit_account_done']);
+	$post_pwd = $_POST['new_pwd'];
+	$post_mode = intval($_POST['mode']);
+	$post_email = $_POST['email'];
+	$post_secret_question = stripslashes($_POST['secret_question']);
+	$post_secret_answer = stripslashes($_POST['secret_answer']);
+	$post_unblock_time = intval($_POST['unblock_time']);
+	$post_block_date = $_POST['block_date'];
+	$post_block_reason = stripslashes($_POST['block_reason']);
+	$post_admin_level = intval($_POST['admin_level']);
 
- $sql_account_check = mssql_query("SELECT memb___id FROM memb_info WHERE memb___id='$post_account'");
- $online_check = mssql_fetch_row( mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$post_account'") );
- if(empty($post_account) || empty($post_email) || empty($post_squestion) || empty($post_sanswer)) {echo "<img src=./images/warning.gif> Error: Some Fields Were Left Blank!  <br><a href='javascript:history.go(-1)'>Go Back.</a>";}
- elseif(mssql_num_rows($sql_account_check) <= 0) {echo "$warning_red Error: Account $post_account Doesn't Exist!<br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
- elseif($online_check[0] != 0) {echo "$warning_red Error: Account $post_account Must Be Logged Off!<br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
- else {
-  if(!empty($post_unblock_time)) {$block_menu = "[unblock_time]='$post_unblock_time',";}
-  if($post_block_date!="no") {
-   if($post_block_date=='yes') {$post_block_date = time();}
-   else {$post_block_date = '0';}
-   $block_menu = $block_menu . "[block_date]='$post_block_date',";
-  }
-  $block_menu = $block_menu . "[blocked_by]='$_SESSION[a_admin_login]',[block_reason]='$post_block_reason',";
-  if(!empty($post_pwd) && $post_pwd!=' ') {
-   if($mmw['md5']==yes) {$new_pass = "[memb__pwd2]='$post_pwd',[memb__pwd]=[dbo].[fn_md5]('$post_pwd','$post_account'),";}
-   if($mmw['md5']==no) {$new_pass = "[memb__pwd2]='$post_pwd',[memb__pwd]='$post_pwd',";}
-  }
+	$online_check = mssql_fetch_row(mssql_query("SELECT ConnectStat FROM dbo.MEMB_STAT WHERE memb___id='{$post_account}'"));
+	if (empty($post_account) || empty($post_email) || empty($post_secret_question) || empty($post_secret_answer)) {
+		echo $mmw['warning']['red'] . 'Error: Some Fields Were Left Blank!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} elseif ($online_check[0] != 0) {
+		echo $mmw['warning']['red'] . 'Error: Account ' . $post_account . ' must be offline!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} else {
+		$new_pass = $block_menu = '';
+		if (!empty($post_unblock_time)) {
+			$block_menu .= "[unblock_time]={$post_unblock_time},";
+		}
+		if ($post_block_date !== 'no') {
+			$post_block_date = ($post_block_date === 'yes')
+				? time()
+				: 0;
+			$block_menu .= "[block_date]='{$post_block_date}',[blocked_by]='{$_SESSION['admin']['account']}',";
+		}
+		$block_menu .= "[block_reason]='{$post_block_reason}',";
 
-  mssql_query("UPDATE memb_info SET $new_pass $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_squestion',[fpas_answ]='$post_sanswer',[mmw_status]='$post_admin_level' WHERE memb___id='$post_account'");
-  echo "$warning_green Account $post_account SuccessFully Edited!";
-  writelog("edit_acc","Account $_POST[account] Has Been <font color=#FF0000>Edited</font> with the next->New Password:$_POST[new_pwd]|E-mail:$_POST[email]|Secret Question:$_POST[squestion]|Secret Answer:$_POST[sanswer]|Admin Level:$_POST[admin_level]");
- }
+		if (!empty($post_pwd)) {
+			$new_pass = ($mmw['md5'])
+				? "[memb__pwd] = [dbo].[fn_md5]('{$post_pwd}', '{$post_account}'),"
+				: "[memb__pwd] = '{$post_pwd}',";
+		}
+
+		mssql_query("UPDATE dbo.MEMB_INFO SET $new_pass $block_menu [bloc_code]='$post_mode',[mail_addr]='$post_email',[fpas_ques]='$post_secret_question',[fpas_answ]='$post_secret_answer',[mmw_status]='$post_admin_level' WHERE memb___id='{$post_account}'");
+		echo $mmw['warning']['green'] . 'Account ' . $post_account . ' SuccessFully Edited!';
+		writelog('edit_acc', "Account {$_POST['account']} Has Been <font color=#FF0000>Edited</font> with the next->New Password:$_POST[new_pwd]|E-mail:$_POST[email]|Secret Question:$_POST[secret_question]|Secret Answer:$_POST[secret_answer]|Admin Level:$_POST[admin_level]");
+	}
 }
 
-if(isset($_POST["edit_acc_wh_done"])) {
- $post_account = $_POST['account'];
- $post_warehouse = $_POST['wh'];
- $post_extwarehouse = $_POST['extrawh'];
+if (isset($_POST['edit_acc_wh_done'])) {
+	$post_account = stripslashes($_POST['edit_acc_wh_done']);
+	$post_warehouse = preg_replace('/[^\d]+/', '', $_POST['wh']);
+	$post_ext_warehouse = preg_replace('/[^\d]+/', '', $_POST['extrawh']);
 
- $sql_account_check = mssql_query("SELECT memb___id FROM memb_info WHERE memb___id='$post_account'");
- if(empty($post_account) || $post_warehouse<0 || $post_extwarehouse<0) {echo "$warning_red Error: Some Fields Were Left Blank!  <br><a href='javascript:history.go(-1)'>Go Back.</a>";}
- elseif(mssql_num_rows($sql_account_check) <= 0) {echo "$warning_red Error: Account $post_account Doesn't Exist!<br><a href='javascript:history.go(-1)'>Go Back.</a>"; }
- else {
-  mssql_query("UPDATE warehouse SET [Money]='$post_warehouse',[extMoney]='$post_extwarehouse' WHERE AccountID='$post_account'");
-  echo "$warning_green Acc Ware House $post_account SuccessFully Edited!";
-  writelog("a_edit_acc_wh","Account <b>$post_account</b> Has Been <font color=#FF0000>Edited</font> with the next-> Extra WH: $post_extwarehouse | WH: $post_warehouse");
- }
+	if (empty($post_account) || $post_warehouse < 0 || $post_ext_warehouse < 0) {
+		echo $mmw['warning']['red'] . 'Error: Some Fields Were Left Blank!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} else {
+		mssql_query("UPDATE dbo.warehouse SET [Money]={$post_warehouse},[extMoney]={$post_ext_warehouse} WHERE AccountID='{$post_account}'");
+		echo $mmw['warning']['green'] . 'Acc Ware House ' . $post_account . ' SuccessFully Edited!';
+		writelog('a_edit_acc_wh', 'Account <b>' . $post_account . '</b> Has Been <b style="color:#F00">Edited</b> with the next-> Extra WH: ' . $post_ext_warehouse . ' | WH: ' . $post_warehouse);
+	}
 }
-?>
-<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
-	<tr>
-		<td align="center">
-		<fieldset>
 
-<?
-if(isset($_POST["account_search_edit"]) || isset($_GET["acc"])) {
- if(isset($_GET['acc'])){$_POST['account_search_edit'] = $_GET['acc'];}
- $account_edit = stripslashes($_POST['account_search_edit']);
- if($mmw[md5]==yes){$get_account = mssql_query("Select memb___id,memb__pwd2,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,mmw_status from MEMB_INFO where memb___id='$account_edit'");}
- elseif($mmw[md5]==no){$get_account = mssql_query("Select memb___id,memb__pwd,sno__numb,bloc_code,country,gender,mail_addr,fpas_ques,fpas_answ,memb_name,block_date,unblock_time,blocked_by,block_reason,mmw_status from MEMB_INFO where memb___id='$account_edit'");}
- $get_account_done = mssql_fetch_row($get_account);
+if (isset($_GET['acc'])) {
+	$account_edit = stripslashes($_GET['acc']);
+	$get_account = mssql_query("SELECT
+		mi.memb___id,
+		mi.memb_name,
+		mi.sno__numb,
+		mi.bloc_code,
+		mi.country,
+		mi.gender,
+		mi.mail_addr,
+		mi.fpas_ques,
+		mi.fpas_answ,
+		mi.appl_days,
+		mi.block_date,
+		mi.unblock_time,
+		mi.blocked_by,
+		mi.block_reason,
+		mi.mmw_status,
+		ms.ConnectStat
+		FROM dbo.MEMB_INFO AS mi
+			LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
+			WHERE mi.memb___id = '{$account_edit}'");
+	$get_account_done = mssql_fetch_array($get_account);
 
- if($get_account_done[3] == 1){$mode = "<option value='1'>Blocked</option><option value='0'>Normal</option>";}
- elseif($get_account_done[3] == 0){$mode = "<option value='0'>Normal</option><option value='1'>Blocked</option>";}
- if($get_account_done[1] == NULL){$get_account_done[1] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #111</font></div>";}
- if($get_account_done[4] == NULL){$get_account_done[4] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #112</font></div>";}
- if($get_account_done[5] == NULL){$get_account_done[5] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #113</font></div>";}
- if($get_account_done[9] == NULL){$get_account_done[9] = "<div style='background: #FF0000; color: #FFFFFF; font-size: 1pt;'>Error #114</font></div>";}
+	$mode = '<option value="0">Normal</option><option value="1">Blocked</option>';
+	if ($get_account_done[3] == 1) {
+		$mode = '<option value="1">Blocked</option><option value="0">Normal</option>';
+	}
 
- $get_wh = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$account_edit'");
- $get_acc_wh = mssql_fetch_row($get_wh);
- $get_acc_wh_num = mssql_num_rows($get_wh);
- if($get_acc_wh[1]==""){$get_acc_wh[1] = 0;}
- if($get_acc_wh[2]==""){$get_acc_wh[2] = 0;}
+	if ($get_account_done[1] === null) {
+		$get_account_done[1] = '<span style="background:red;color:white;border:1px solid black;">Error #111</span>';
+	}
+	if ($get_account_done[4] === null) {
+		$get_account_done[4] = '<span style="background:red;color:white;border:1px solid black;">Error #112</span>';
+	}
+	if ($get_account_done[5] === null) {
+		$get_account_done[5] = '<span style="background:red;color:white;border:1px solid black;">Error #113</span>';
+	}
+	if ($get_account_done[9] === null) {
+		$get_account_done[9] = '<span style="background:red;color:white;border:1px solid black;">Error #114</span>';
+	}
 
- if($get_account_done[5]=='male'){$gender = 'Male';} else{$gender = 'Female';}
- if($get_account_done[14] >= 0){$admin_level[$get_account_done[14]] = "selected";} else{$admin_level[0] = "selected";}
+	$get_wh = mssql_query("SELECT AccountID,Money,extMoney FROM dbo.warehouse WHERE accountid='{$account_edit}'");
+	$get_acc_wh = mssql_fetch_row($get_wh);
+	$get_acc_wh_num = mssql_num_rows($get_wh);
+	if (empty($get_acc_wh[1])) {
+		$get_acc_wh[1] = 0;
+	}
+	if (empty($get_acc_wh[2])) {
+		$get_acc_wh[2] = 0;
+	}
 
- $online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$account_edit'");
- $oc_row = mssql_fetch_row($online_check);
+	if ($get_account_done[5] === 'male') {
+		$gender = 'Male';
+	} elseif ($get_account_done[5] === 'female') {
+		$gender = 'Female';
+	}
 
- $get_chr = mssql_query("SELECT GameID1,GameID2,GameID3,GameID4,GameID5,GameIDC FROM AccountCharacter WHERE Id='$account_edit'");
- $get_acc_chr = mssql_fetch_row($get_chr);
- $online_stats = "<font color='#00FF00'>Online</font>";
- $offline_stats = "<font color='#FF0000'>Offline</font>";
- if($get_acc_chr[0]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[0] = $online_stats;}else{$get_acc_chr_online[0] = $offline_stats;}
- if($get_acc_chr[1]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[1] = $online_stats;}else{$get_acc_chr_online[1] = $offline_stats;}
- if($get_acc_chr[2]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[2] = $online_stats;}else{$get_acc_chr_online[2] = $offline_stats;}
- if($get_acc_chr[3]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[3] = $online_stats;}else{$get_acc_chr_online[3] = $offline_stats;}
- if($get_acc_chr[4]==$get_acc_chr[5] && $oc_row[0]=='1'){$get_acc_chr_online[4] = $online_stats;}else{$get_acc_chr_online[4] = $offline_stats;}
+	$get_chr = mssql_query("SELECT GameID1,GameID2,GameID3,GameID4,GameID5,GameIDC FROM dbo.AccountCharacter WHERE Id='{$account_edit}'");
+	$get_acc_chr = mssql_fetch_row($get_chr);
+	$online_stats = '<i style="color:#0F0">Online</i>';
+	$offline_stats = '<i style="color:#F00">Offline</i>';
 
- if(empty($get_acc_chr[0]) || $get_acc_chr[0]==" ") {$get_acc_chr[0] = "No Char";} else{$get_acc_chr[0] = "<a href='?op=char&chr=$get_acc_chr[0]'>$get_acc_chr[0]</a>";}
- if(empty($get_acc_chr[1]) || $get_acc_chr[1]==" ") {$get_acc_chr[1] = "No Char";} else{$get_acc_chr[1] = "<a href='?op=char&chr=$get_acc_chr[1]'>$get_acc_chr[1]</a>";}
- if(empty($get_acc_chr[2]) || $get_acc_chr[2]==" ") {$get_acc_chr[2] = "No Char";} else{$get_acc_chr[2] = "<a href='?op=char&chr=$get_acc_chr[2]'>$get_acc_chr[2]</a>";}
- if(empty($get_acc_chr[3]) || $get_acc_chr[3]==" ") {$get_acc_chr[3] = "No Char";} else{$get_acc_chr[3] = "<a href='?op=char&chr=$get_acc_chr[3]'>$get_acc_chr[3]</a>";}
- if(empty($get_acc_chr[4]) || $get_acc_chr[4]==" ") {$get_acc_chr[4] = "No Char";} else{$get_acc_chr[4] = "<a href='?op=char&chr=$get_acc_chr[4]'>$get_acc_chr[4]</a>";}
+	for ($index = 0; $index < 5; $index++) {
+		$get_acc_chr[$index] = trim($get_acc_chr[$index]);
+		$get_acc_chr_online[$index] = ($get_acc_chr[$index] == $get_acc_chr[5] && $get_account_done['ConnectStat'])
+			? $online_stats
+			: $offline_stats;
 
- foreach($mmw[status_rules] as $key => $value) {
-  $mmw_status_list .= "<option value=$key $admin_level[$key]>$value[name]</option>";
- }
-?>
-		<legend>Account <?echo $get_account_done[0];?></legend>
-			<form action="" method="post" name="edit_account_form" id="edit_account_form">
+		$get_acc_chr[$index] = !empty($get_acc_chr[$index])
+			? "<a href='?op=char&chr=$get_acc_chr[$index]'>$get_acc_chr[$index]</a>"
+			: '_ _ _';
+	}
+	?>
+	<fieldset class="content">
+		<legend>Account <?php echo $get_account_done[0]; ?></legend>
+		<form action="" method="post" name="edit_account_form">
 			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
-			  <tr>
-			    <td width="42%" align="right">Account</td>
-			    <td><?echo $get_account_done[0];?></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Name</td>
-			    <td><?echo $get_account_done[9];?></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Password</td>
-			    <td><?echo $get_account_done[1];?></td>
-			  </tr>
-			  <tr>
-			    <td align="right">New Password</td>
-			    <td><span id="psw"></span><span id="pswrd" style="font-size:7pt;"><a href="javascript://" onclick="document.getElementById('pswrd').style.display='none';document.getElementById('psw').innerHTML='<input type=\'text\' name=\'new_pwd\' size=\'12\' maxlength=\'10\'>';return false;">Change</a></span></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Mode</td>
-			    <td><select name="mode" size="1" id="mode"><?echo $mode;?></select></td>
-			  </tr>
-			<?if($get_account_done[3] == 1){?>
-			  <tr>
-			    <td align="right">By <?echo date("H:i, d.m.Y", $get_account_done[10]);?></td>
-			    <td>To <?echo date("H:i, d.m.Y", $get_account_done[10]+$get_account_done[11]);?></td>
-			  </tr>
-			<?}?>
-			  <tr>
-			    <td align="right">Block Time</td>
-			    <td><select name="unblock_time" size="1" id="unblock_time"><option value='0'>Forever</option><option value='1800'>30 m</option><option value='3600'>1 h</option><option value='21600'>6 h</option><option value='43200'>12 h</option><option value='86400'>1 day</option><option value='172800'>2 day</option><option value='259200'>3 day</option><option value='432000'>5 day</option><option value='864000'>10 day</option><option value='2592000'>30 day</option></select></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Block Date</td>
-			    <td><select name="block_date" size="1" id="block_date"><option value='0'>Not Select Day</option><option value='no'><?echo date("H:i, d.m.Y", $get_account_done[10]);?></option><option value='yes'>Today <?echo date("H:i");?></option></select></td>
-			  </tr>
-			<?if($get_account_done[12]!=' ' && !empty($get_account_done[12])){?>
-			  <tr>
-			    <td align="right">Blockec By</td>
-			    <td><span class="text_administrator"><?echo $get_account_done[12];?></td>
-			  </tr>
-			<?}?>
-			  <tr>
-			    <td align="right">Block Reason</td>
-			    <td><input name="block_reason" type="text" id="block_reason" value="<?echo $get_account_done[13];?>" size="17" maxlength="200"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">E-mail address</td>
-			    <td><input name="email" type="text" id="email" value="<?echo $get_account_done[6];?>" size="17" maxlength="50"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Secret Question</td>
-			    <td><input name="squestion" type="text" id="squestion" value="<?echo $get_account_done[7];?>" size="10" maxlength="50"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Secret Answer</td>
-			    <td><input name="sanswer" type="text" id="sanswer" value="<?echo $get_account_done[8];?>" size="10" maxlength="10"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Country</td>
-			    <td><span class="text_administrator"><?echo country($get_account_done[4]);?></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Gender</td>
-			    <td><?echo $gender;?></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Admin Level</td>
-			    <td><select name="admin_level" size="1" id="admin_level"><?echo $mmw_status_list;?></select></td>
-			  </tr>
-			  <tr>
-			    <td colspan="2" align="center"><input name="Edit Account" type="submit" id="Edit Account" value="Edit Account"> <input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"> <input name="edit_account_done" type="hidden" id="edit_account_done" value"edit_account_done"> <input type="reset" name="Reset" value="Reset"></td>
-			  </tr>
+				<tr>
+					<td width="42%" align="right">Account</td>
+					<td><a href="?op=acc&acc=<?php echo $get_account_done[0]; ?>"><?php echo $get_account_done[0]; ?></a></td>
+				</tr>
+				<tr>
+					<td align="right">Name</td>
+					<td><?php echo $get_account_done[1]; ?></td>
+				</tr>
+				<tr>
+					<td align="right">Application day</td>
+					<td><?php echo $get_account_done[9]; ?></td>
+				</tr>
+				<tr>
+					<td align="right">New Password</td>
+					<td>
+					<span id="pswrd">
+						<button style="font-size:10px;padding:0 6px"
+								onclick="document.getElementById('pswrd').innerHTML='<input type=text name=new_pwd size=12 maxlength=10>';return false;">
+							CHANGE
+						</button>
+					</span>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Mode</td>
+					<td><select name="mode" size="1"><?php echo $mode; ?></select></td>
+				</tr>
+				<?php if ($get_account_done[3] == 1) : ?>
+					<tr>
+						<?php if ($get_account_done[11]) : ?>
+							<td align="right">
+								From <?php echo date('H:i, d.m.Y', $get_account_done[10]); ?>
+							</td>
+							<td>
+								to <?php echo date('H:i, d.m.Y', $get_account_done[10] + $get_account_done[11]); ?>
+							</td>
+						<?php else: ?>
+							<td></td>
+							<td>Forever</td>
+						<?php endif; ?>
+					</tr>
+				<?php endif; ?>
+				<tr>
+					<td align="right">Block Time</td>
+					<td>
+						<select name="unblock_time" size="1">
+							<option value="0">Forever</option>
+							<option value="1800">30 m</option>
+							<option value="3600">1 h</option>
+							<option value="21600">6 h</option>
+							<option value="43200">12 h</option>
+							<option value="86400">1 day</option>
+							<option value="172800">2 day</option>
+							<option value="259200">3 day</option>
+							<option value="432000">5 day</option>
+							<option value="864000">10 day</option>
+							<option value="2592000">30 day</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Block Date</td>
+					<td>
+						<select name="block_date" size="1">
+							<option value="0">Not Select Day</option>
+							<?php if ($get_account_done[10]) : ?>
+								<option value="no"><?php echo date('H:i, d.m.Y', $get_account_done[10]); ?></option>
+							<?php endif; ?>
+							<option value="yes">Today <?php echo date('H:i'); ?></option>
+						</select>
+					</td>
+				</tr>
+				<?php if (!empty($get_account_done[12]) && $get_account_done[12] != ' ') : ?>
+					<tr>
+						<td align="right">Blocked By</td>
+						<td><span class="text_administrator"><?php echo $get_account_done[12]; ?></td>
+					</tr>
+				<?php endif; ?>
+				<tr>
+					<td align="right">Block Reason</td>
+					<td>
+						<input type="text" name="block_reason" value="<?php echo $get_account_done[13]; ?>" size="17" maxlength="200">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">E-mail address</td>
+					<td>
+						<input type="text" name="email" value="<?php echo $get_account_done[6]; ?>" size="17" maxlength="50">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Secret Question</td>
+					<td>
+						<input type="text" name="secret_question" value="<?php echo $get_account_done[7]; ?>" size="10" maxlength="50">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Secret Answer</td>
+					<td>
+						<input type="text" name="secret_answer" value="<?php echo $get_account_done[8]; ?>" size="10" maxlength="10">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Country</td>
+					<td><span class="text_administrator"><?php echo country($get_account_done[4]); ?></td>
+				</tr>
+				<tr>
+					<td align="right">Gender</td>
+					<td><?php echo $gender; ?></td>
+				</tr>
+				<tr>
+					<td align="right">Admin Level</td>
+					<td>
+						<select name="admin_level" size="1">
+							<?php
+							foreach ($mmw['status_rules'] as $id => $data) {
+								$selected = ($get_account_done[14] == $id)
+									? ' selected'
+									: '';
+								echo '<option value="' . $id . '"' . $selected . '>' . $data['name'] . '</option>';
+							}
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="submit" value="Edit Account">
+						<input type="hidden" name="edit_account_done" value="<?php echo $get_account_done[0]; ?>">
+						<input type="reset" value="Reset"></td>
+				</tr>
 			</table>
+		</form>
+	</fieldset>
+	<?php if ($get_acc_wh_num > 0) : ?>
+		<fieldset class="content">
+			<legend>Ware House <?php echo $get_account_done[0]; ?></legend>
+			<form action="" method="post">
+				<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
+					<tr>
+						<td width="42%" align="right">Ware House</td>
+						<td><input name="wh" type="text" value="<?php echo $get_acc_wh[1]; ?>" size="12" maxlength="10">
+						</td>
+					</tr>
+					<tr>
+						<td align="right">Extra Ware House</td>
+						<td><input name="extrawh" type="text" value="<?php echo $get_acc_wh[2]; ?>" size="12"></td>
+					</tr>
+					<tr>
+						<td colspan="2" align="center">
+							<input type="submit" value="Edit Ware House">
+							<input type="hidden" name="edit_acc_wh_done" value="<?php echo $get_account_done[0]; ?>">
+							<input type="reset" value="Reset">
+						</td>
+					</tr>
+				</table>
 			</form>
 		</fieldset>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-		<fieldset>
-<?if($get_acc_wh_num > 0) {?>
-		<legend>Ware House <?echo $get_account_done[0];?></legend>
-			<form action="" method="post" name="edit_acc_wh_form" id="edit_acc_wh_form">
-			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
-			  <tr>
-			    <td width="42%" align="right">Ware House</td>
-			    <td><input name="wh" type="text" id="wh" value="<?echo $get_acc_wh[1];?>" size="12" maxlength="10"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Extra Ware House</td>
-			    <td><input name="extrawh" type="text" id="extrawh" value="<?echo $get_acc_wh[2];?>" size="12"></td>
-			  </tr>
-			  <tr>
-			    <td colspan="2" align="center"><input name="Edit Ware House" type="submit" id="Edit Ware House" value="Edit Ware House"> <input name="account" type="hidden" id="account" value="<?echo $get_account_done[0];?>"> <input name="edit_acc_wh_done" type="hidden" id="edit_acc_wh_done" value"edit_acc_wh_done"> <input type="reset" name="Reset" value="Reset"></td>
-			  </tr>
-			</table>
-			</form>
-		</fieldset>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-		<fieldset>
-<?} //end wh ?>
-		<legend>Character's <?echo $get_account_done[0];?></legend>
-			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
-			  <tr>
-			    <td align="center"><?echo $get_acc_chr[0];?></td>
-			    <td align="center"><?echo $get_acc_chr[1];?></td>
-			    <td align="center"><?echo $get_acc_chr[2];?></td>
-			    <td align="center"><?echo $get_acc_chr[3];?></td>
-			    <td align="center"><?echo $get_acc_chr[4];?></td>
-			  </tr>
-			  <tr>
-			    <td align="center"><?echo $get_acc_chr_online[0];?></td>
-			    <td align="center"><?echo $get_acc_chr_online[1];?></td>
-			    <td align="center"><?echo $get_acc_chr_online[2];?></td>
-			    <td align="center"><?echo $get_acc_chr_online[3];?></td>
-			    <td align="center"><?echo $get_acc_chr_online[4];?></td>
-			  </tr>
-			</table>
-		</fieldset>
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-		<fieldset>
-<?} //end acc ?>
+	<?php endif; ?>
+	<fieldset class="content">
+		<legend>Character's <?php echo $get_account_done[0]; ?></legend>
+		<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
+			<tr>
+				<td align="center"><?php echo $get_acc_chr[0]; ?></td>
+				<td align="center"><?php echo $get_acc_chr[1]; ?></td>
+				<td align="center"><?php echo $get_acc_chr[2]; ?></td>
+				<td align="center"><?php echo $get_acc_chr[3]; ?></td>
+				<td align="center"><?php echo $get_acc_chr[4]; ?></td>
+			</tr>
+			<tr>
+				<td align="center"><?php echo $get_acc_chr_online[0]; ?></td>
+				<td align="center"><?php echo $get_acc_chr_online[1]; ?></td>
+				<td align="center"><?php echo $get_acc_chr_online[2]; ?></td>
+				<td align="center"><?php echo $get_acc_chr_online[3]; ?></td>
+				<td align="center"><?php echo $get_acc_chr_online[4]; ?></td>
+			</tr>
+		</table>
+	</fieldset>
+<?php } ?>
+
+	<fieldset class="content">
 		<legend>Search Account</legend>
-			<form action="" method="post" name="search_account" id="search_account">
+		<form action="" method="post">
 			<table width="100%" border="0" cellspacing="4" cellpadding="0" align="center">
-			  <tr>
-			    <td width="42%" align="right">Account</td>
-			    <td><input name="account_search" type="text" id="account_search" size="17" maxlength="10"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Search type</td>
-			    <td>
-                                      <label>
-                                      <input type="radio" name="search_type" value="1" checked>
-                                      <span class="normal_text">Partial Match</span></label>
-                                      <br>
-                                      <label>
-                                      <input type="radio" name="search_type" value="0">
-                                      <span class="normal_text">Exact Match</span></label>
-                                      <br></td>
-			  </tr>
-			  <tr>
-			    <td colspan="2" align="center"><input type="submit" name="Submit" value="Search Account"></td>
-			  </tr>
+				<tr>
+					<td width="42%" align="right">Account</td>
+					<td>
+						<input name="search_account" type="text" size="17" maxlength="10">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Search type</td>
+					<td>
+						<label>
+							<input type="radio" name="search_type" value="1" checked>
+							<span class="normal_text">Partial Match</span></label>
+						<br>
+						<label>
+							<input type="radio" name="search_type" value="0">
+							<span class="normal_text">Exact Match</span></label>
+						<br></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="submit" value="Search Account">
+					</td>
+				</tr>
 			</table>
-			</form>
-		</fieldset>
-		</td>
-	</tr>
-<?if(isset($_POST["account_search"])){?>
-	<tr>
-		<td align="center">
-		<fieldset>
+		</form>
+	</fieldset>
+
+<?php if (isset($_POST['search_account'])) : ?>
+	<fieldset class="content">
 		<legend>Search Account Results</legend>
 
-<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
-<thead><tr>
-<td align="center">#</td>
-<td align="left">Account</td>
-<td align="left">Mode</td>
-<td align="left">Country</td>
-<td align="left">Gender</td>
-<td align="center">Status</td>
-<td align="center">Edit</td>
-</tr></thead>
-<?
-$search = clean_var(stripslashes($_POST['account_search']));
-$search_type = clean_var(stripslashes($_POST['search_type']));
+		<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
+			<thead>
+			<tr>
+				<td align="center">#</td>
+				<td>Account</td>
+				<td>Mode</td>
+				<td>Country</td>
+				<td>Gender</td>
+				<td align="center">Status</td>
+				<td align="center">Edit</td>
+			</tr>
+			</thead>
+			<?php
+			$search = clean_var(stripslashes($_POST['search_account']));
 
-if($_POST['search_type']==0){$result = mssql_query("SELECT memb___id,memb__pwd,bloc_code,country,gender from MEMB_INFO where memb___id='$search'");}
-if($_POST['search_type']==1){$result = mssql_query("SELECT memb___id,memb__pwd,bloc_code,country,gender from MEMB_INFO where memb___id like '%$search%'");}
+			$queryBuildWhere = !empty($_POST['search_type'])
+				? "LIKE '%{$search}%'"
+				: "= '{$search}'";
+			$result = mssql_query("SELECT
+				mi.memb___id,mi.memb__pwd,mi.bloc_code,mi.country,mi.gender,ms.ConnectStat
+				FROM dbo.MEMB_INFO AS mi
+				LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
+					WHERE mi.memb___id {$queryBuildWhere}");
 
-for($i=0;$i < mssql_num_rows($result);++$i) {
- $row = mssql_fetch_row($result);
- $rank = $i+1;
+			$rank = 1;
+			while ($row = mssql_fetch_row($result)) {
+				if ($row[5] == 0) {
+					$status = '<img src="../images/offline.gif" alt="offline">';
+				}
+				if ($row[5] == 1) {
+					$status = '<img src="../images/online.gif" alt="online">';
+				}
+				if ($row[5] === null) {
+					$status = '<img src="../images/death.gif" alt="death">';
+				}
 
- $status_reults = mssql_query("Select ConnectStat from MEMB_STAT where memb___id='$row[0]'");
- $status = mssql_fetch_row($status_reults);
+				if ($row[2] == 0) {
+					$row[2] = 'Normal';
+				}
+				if ($row[2] == 1) {
+					$row[2] = '<span style="background:yellow;color:black;border:1px solid black;">Blocked</span>';
+				}
 
- if($status[0] == 0){$status[0] ='<img src=images/offline.gif>';}
- if($status[0] == 1){$status[0] ='<img src=images/online.gif>';}
+				if ($row[4] === 'male') {
+					$row[4] = '<img src="../images/male.gif" alt="male">';
+				} elseif ($row[4] === 'female') {
+					$row[4] = '<img src="../images/female.gif" alt="female">';
+				} elseif ($row[4] === null) {
+					$row[4] = '<span style="background:red;color:white;border:1px solid black;">Error #113</span>';
+				}
 
- if($row[2] == 0){$row[2] ='Normal';}
- if($row[2] == 1){$row[2] ="<table><tr><td bgcolor='yellow'><font color='#000000' size='1'>Blocked</font></td></tr></table>";}
+				if ($row[3] === null) {
+					$row[3] = '<span style="background:red;color:white;border:1px solid black;">Error #112</span>';
+				}
+				if ($row[1] === null) {
+					$row[1] = '<span style="background:red;color:white;border:1px solid black;">Error #111</span>';
+				}
 
- if($row[4] == 'male'){$row[4] = "<img src='images/male.gif'>";}
- elseif($row[4] == 'female'){$row[4] = "<img src='images/female.gif'>";}
- elseif($row[4] == NULL){$row[4] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #113</font></td></tr></table>";}
- if($row[3] == NULL){$row[3] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #112</font></td></tr></table>";}
- if($row[1] == NuLL){$row[1] = "<table><tr><td bgcolor='FF0000'><font color='#FFFFFF' size='1'>Error #111</font></td></tr></table>";}
+				if ($row[3] == '0') {
+					$country = 'Not Set';
+				} else {
+					$country = country($row[3]);
+				}
+				?>
+				<tr>
+					<td align="center"><?php echo $rank++; ?>.</td>
+					<td><a href=?op=acc&acc=<?php echo $row[0]; ?>><?php echo $row[0]; ?></a></td>
+					<td><?php echo $row[2]; ?></td>
+					<td><?php echo $country; ?></td>
+					<td><?php echo $row[4]; ?></td>
+					<td align="center"><?php echo $status; ?></td>
+					<td align="center">
+						<form action="" method="get">
+							<input type="hidden" name="op" value="acc">
+							<input type="hidden" name="acc" value="<?php echo $row[0]; ?>">
+							<input type="submit" value="Edit">
+						</form>
+					</td>
+				</tr>
+			<?php } ?>
+		</table>
 
- if($row[3] == '0'){$country = "Not Set";} else{$country = country($row[3]);}
-
- $account_table_edit = "<form action='' method='post'><input type='submit' value='Edit'><input name='account_search_edit' type='hidden' value=$row[0]></form>";
-?>
- <tr>
-  <td align='center'><?echo $rank;?>.</td>
-  <td align='left'><?echo $row[0];?></td>
-  <td align='left'><?echo $row[2];?></td>
-  <td align='left'><?echo $country;?></td>
-  <td align='left'><?echo $row[4];?></td>
-  <td align='center'><?echo $status[0];?></td>
-  <td align='center'><?echo $account_table_edit;?></td>
- </tr>
-<?}?>
-</table>
-
-		</fieldset>
-		</td>
-	</tr>
-<?}?>
-</table>
+	</fieldset>
+<?php endif; ?>

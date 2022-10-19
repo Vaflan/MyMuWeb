@@ -1,8 +1,8 @@
 <!-- 
-* MyMuWeb PopUnder Body
-* By Vaflan
+* MyMuWeb PopUnder
 * Max Width Size: 900px
-* Use All HTML Teg. 
 -->
 
-<script type="text/javascript" src="http://tk3.clan.su/rtr/3"></script>
+<a href="http://mymuweb.ru/dir/" title="MyMuWeb TOP!" target="_blank">
+	<img src="./images/mmw-top-banner.png" alt="MyMuWeb TOP!">
+</a>
