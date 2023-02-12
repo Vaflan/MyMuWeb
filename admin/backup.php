@@ -4,7 +4,7 @@
 $backup = '%database%_%year%-%month%-%day%.bak';
 $dir = __DIR__ . '/../includes/backup/';
 
-if ($_POST['backup'] === 'new') {
+if (isset($_POST['backup']) && $_POST['backup'] === 'new') {
 	$file = str_replace(
 		array('%database%', '%year%', '%month%', '%day%'),
 		array($mmw['sql']['database'], date('Y'), date('m'), date('d')),

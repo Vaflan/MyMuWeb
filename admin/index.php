@@ -97,7 +97,7 @@ $css = is_file('../themes/' . $mmw['theme'] . '/admin.css')
 					<div>
 						<form action="" method="post" name="admin_logout">
 							<?php echo $mmw['warning']['red']; ?> You are logged in
-							<b><?php echo $_SESSION['admin']['login'] . ' ' . $mmw['status_rules'][$_SESSION['admin']['level']]['name'] . ' (Level: ' . $_SESSION['admin']['level'] . ')'; ?></b>
+							<b><?php echo $_SESSION['admin']['account'] . ' ' . $mmw['status_rules'][$_SESSION['admin']['level']]['name'] . ' (Level: ' . $_SESSION['admin']['level'] . ')'; ?></b>
 							<input name="logout" type="hidden" value="logout">
 							<input type="submit" title="Logout" value="Logout">
 						</form>
@@ -128,9 +128,9 @@ $css = is_file('../themes/' . $mmw['theme'] . '/admin.css')
 			<tr>
 				<td style="text-align:center;padding-top:10px">
 					<?php
-					if (is_file($_GET['op'] . '.php')) {
+					if (isset($_GET['op']) && is_file($_GET['op'] . '.php')) {
 						include_once $_GET['op'] . '.php';
-					} elseif (is_file($_GET['op'] . '.mmw')) {
+					} elseif (isset($_GET['op']) && is_file($_GET['op'] . '.mmw')) {
 						mmw($_GET['op'] . '.mmw');
 					} else {
 						include_once 'home.php';

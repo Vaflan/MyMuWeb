@@ -62,7 +62,7 @@ if (isset($_POST['server_name_edit'])) {
 }
 ?>
 <fieldset class="content">
-	<legend><?php echo $editServer ? 'Edit' : 'Add'; ?> Server</legend>
+	<legend><?php echo empty($editServer) ? 'Add' : 'Edit'; ?> Server</legend>
 	<form action="" method="post">
 		<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
 			<tr>

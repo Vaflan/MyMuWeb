@@ -68,7 +68,12 @@ function time_format($date, $format = 'd.m.Y H:i')
 	$formattedTime = 'd M Y, T';
 	$date_row = explode(' ', $date);
 
-	if (!preg_match('/^\d+$/', $date_row[1])) {
+	if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $date_row[0], $matches) && $matches) {
+		$unixTimestamp = strtotime($date);
+		return ($format !== null)
+			? date($format, $unixTimestamp)
+			: $unixTimestamp;
+	} elseif (preg_match('/^\d+$/', $date_row[1], $matches) && $matches) {
 		$day = $date_row[0];
 		$month = $date_row[1];
 		$year = $date_row[2];

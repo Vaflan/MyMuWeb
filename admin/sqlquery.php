@@ -57,7 +57,9 @@ function sql_query_result($sqlQuery, $sqlResult)
 	}
 }
 
-echo $queryResult;
+if (isset($queryResult)) {
+	echo $queryResult;
+}
 ?>
 
 	<fieldset class="content">

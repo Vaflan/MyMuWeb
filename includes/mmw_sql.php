@@ -2,7 +2,7 @@
 /*
 	It's bridge from mssql to odbc
 	Copyright by Ruslans Jermakovics [Vaflan]
-	Version of bridge 2.0 - 23:39 08.04.2022
+	Version of bridge 2.1 - 23:39 12.02.2023
 	Insert to config.php: require_once __DIR__ . '/includes/mmwsql.php';
 */
 

@@ -46,7 +46,7 @@ if (isset($_POST['name_char'])) {
 		<table width="100%" border="0" cellspacing="2" cellpadding="0">
 			<tr>
 				<td width="42%" align="right">Character</td>
-				<td><input type="text" name="name_char" value="<?php echo $_GET['name']; ?>" size="17" maxlength="10"></td>
+				<td><input type="text" name="name_char" value="<?php echo isset($_GET['name']) ? $_GET['name'] : ''; ?>" size="17" maxlength="10"></td>
 			</tr>
 			<tr>
 				<td align="right">Rename To</td>
