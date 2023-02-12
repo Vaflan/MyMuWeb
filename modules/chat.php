@@ -6,14 +6,16 @@
  * @var string $die_end
  */
 
-if (!empty($_SESSION['character']) && $_POST['send'] === 'send') {
+if (isset($_POST['send']) && $_POST['send'] === 'send' && !empty($_SESSION['character'])) {
 	$date = time();
 	$message = bugsend(stripslashes($_POST['message']));
-	$timeout = $_SESSION['chat_date'] + $mmw['chat_timeout'];
+	$timeout = isset($_SESSION['chat_date'])
+		? $_SESSION['chat_date'] + $mmw['chat_timeout']
+		: 0;
 
 	if ($timeout > $date) {
 		echo '<script>alert(\'' . mmw_lang_antiflood . ' ' . ($timeout - $date) . ' sec.\');</script>';
-	} elseif ($message !== $_SESSION['chat_message']) {
+	} elseif (isset($_SESSION['chat_message']) && $_SESSION['chat_message'] !== $message) {
 		mssql_query("INSERT INTO dbo.MMW_chatbox (f_char,f_message,f_date) VALUES ('{$_SESSION['character']}','{$message}','{$date}')");
 		$_SESSION['chat_message'] = $message;
 		$_SESSION['chat_date'] = $date;

@@ -5,7 +5,10 @@
 session_start();
 header('Cache-Control: no-store, no-cache, must-revalidate');
 
-/** @var array $mmw */
+/**
+ * @var array $mmw
+ * @var string $media_color
+ */
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/sql_check.php';
 require_once __DIR__ . '/includes/xss_check.php';
@@ -95,6 +98,7 @@ HTML;
 		<td valign="top" width="130" align="right">
 			<div style="width: 100%; height: 380px; overflow: auto; padding: 2px;">
 				<?php
+				$timeout = time() - $mmw['timeout_online'];
 				$result = mssql_query("SELECT
 					c.name,
 					c.CtlCode,

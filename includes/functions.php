@@ -204,7 +204,14 @@ function week2str($num)
 /////// Start Now Module //////
 function current_module()
 {
-	$currentModule = preg_replace('/[^\w_-]/', '', $_GET['op']);
+	if (isset($_GET['op'])) {
+		$currentModule = preg_replace('/[^\w_-]/', '', $_GET['op']);
+	} else {
+		global $mmw;
+		$splitFileName = explode('.', $mmw['home_page']);
+		$currentModule = reset($splitFileName);
+	}
+
 	if (isset($_GET['news'])) {
 		echo '&gt; <a href="?op=news">' . mmw_lang_news . '</a>';
 	} elseif (isset($_GET['forum'])) {

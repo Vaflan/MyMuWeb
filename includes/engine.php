@@ -1,5 +1,5 @@
 <?php /* Engine By Vaflan For MyMuWeb */
-define('REGEX_PATTERN_SLUG', '/[^\w\-_]/');
+define('REGEX_PATTERN_SLUG', '/[^\w\-_]/', false);
 /** @var array $mmw */
 
 
@@ -69,7 +69,7 @@ if (is_file('themes/' . $mmw['theme'] . '/info.php')) {
 	die($mmw['die']['start'] . 'Error theme!<br>Can`t find <b>themes/' . $mmw['theme'] . '/info.php</b> in <b>themes/</b>!' . $mmw['die']['end']);
 }
 
-if ($_GET['op'] === 'by') {
+if (isset($_GET['op']) && $_GET['op'] === 'by') {
 	$by_result = '<br>MyMuWeb ' . $mmw['version'] . ' By Vaflan<br>'
 		. 'Installed: ' . date("d.m.Y H:i:s", $mmw['installed']) . '<br>'
 		. 'Home Page: <a href="http://www.mymuweb.ru/">www.MyMuWeb.Ru</a><br>';
@@ -80,7 +80,7 @@ if ($_GET['op'] === 'by') {
 	die($mmw['die']['start'] . $by_result . $mmw['die']['end']);
 }
 
-if ($_GET['op'] === 'theme') {
+if (isset($_GET['op']) && $_GET['op'] === 'theme') {
 	$theme_result = 'Theme Name: ' . $mmw['thm_name'] . '<br>Creator: ' . $mmw['thm_creator'] . '<br>'
 		. 'Version: ' . $mmw['thm_version'] . '<br>Date: ' . $mmw['thm_date'] . '<br><i>' . $mmw['thm_description'] . '</i>';
 	die($mmw['die']['start'] . $theme_result . $mmw['die']['end']);
@@ -99,7 +99,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 $time = time();
 
 /** @deprecated Use $_SESSION['character'] */
-$character = $_SESSION['character'];
+$character = isset($_SESSION['character']) ? $_SESSION['character'] : null;
 /** @deprecated Use $_SESSION['character'] */
 $char_set = $character;
 
@@ -115,7 +115,8 @@ if (isset($_REQUEST['ref'])) {
 
 /* Online Character */
 if (mssql_num_rows(mssql_query("SELECT online_char FROM dbo.MMW_online WHERE [online_id]='" . session_id() . "'"))) {
-	mssql_query("UPDATE dbo.MMW_online SET [online_date]='{$time}',[online_char]='{$_SESSION['character']}',[online_url]='{$url}',[online_agent]='{$agent}' WHERE online_id='" . session_id() . "'");
+	$character = isset($_SESSION['character']) ? $_SESSION['character'] : '';
+	mssql_query("UPDATE dbo.MMW_online SET [online_date]='{$time}',[online_char]='{$character}',[online_url]='{$url}',[online_agent]='{$agent}' WHERE online_id='" . session_id() . "'");
 } else {
 	mssql_query("INSERT INTO dbo.MMW_online ([online_id],[online_ip],[online_date],[online_url],[online_char],[online_agent]) VALUES ('" . session_id() . "','" . $ip . "','" . $time . "','" . $url . "','" . $_SESSION['character'] . "','" . $agent . "')");
 }
@@ -125,8 +126,13 @@ if (mssql_num_rows(mssql_query("SELECT online_char FROM dbo.MMW_online WHERE [on
 /////// Start Login Modules ///////
 /* Login */
 if (isset($_POST['login']) || isset($_POST['account_login'])) {
-	$account = clean_var($_POST['login']);
-	$password = clean_var($_POST['pass']);
+	$password = $account = '';
+	if (isset($_POST['login'])) {
+		$account = clean_var($_POST['login']);
+	}
+	if (isset($_POST['pass'])) {
+		$password = clean_var($_POST['pass']);
+	}
 	if (isset($_POST['account'])) {
 		$account = clean_var($_POST['account']);
 	}
@@ -179,15 +185,17 @@ if (isset($_SESSION['user'])) {
 }
 /* Logout */
 if (isset($_REQUEST['logout'])) {
-	session_destroy();
+	unset($_SESSION['user'], $_SESSION['pass'], $_SESSION['mmw_status'], $_SESSION['character']);
 	jump('?op=news');
 }
 /* User Panel */
-if ($_GET['op'] === 'user' && empty($_SESSION['user'])) {
-	jump('?op=login');
-}
-if (in_array($_GET['op'], ['login', 'register']) && isset($_SESSION['user'])) {
-	jump('?op=user');
+if (isset($_GET['op'])) {
+	if ($_GET['op'] === 'user' && empty($_SESSION['user'])) {
+		jump('?op=login');
+	}
+	if (in_array($_GET['op'], ['login', 'register']) && isset($_SESSION['user'])) {
+		jump('?op=user');
+	}
 }
 /////// End Login Modules ///////
 
@@ -236,7 +244,7 @@ if (isset($_POST['id_vote'], $_POST['answer'])) {
 
 /////// Start Auto Func //////
 if ($mmw['auto_func']['switch'] > 0) {
-	if ($dh = opendir($mmw['auto_func']['dir'])) {
+	if (is_dir($mmw['auto_func']['dir']) && $dh = opendir($mmw['auto_func']['dir'])) {
 		while (($file = readdir($dh)) !== false) {
 			switch (substr($file, -3)) {
 				case 'php':

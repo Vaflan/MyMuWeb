@@ -238,7 +238,7 @@ function voting($return = false)
 {
 	global $mmw;
 	$votingIndicator = ($mmw['votes_check'] === 'acc')
-		? $_SESSION['user']
+		? (isset($_SESSION['user']) ? $_SESSION['user'] : null)
 		: $_SERVER['REMOTE_ADDR'];
 
 	$query = mssql_query("SELECT TOP 1 ID,question,answer1,answer2,answer3,answer4,answer5,answer6 FROM dbo.MMW_votemain ORDER BY NEWID()");
@@ -300,8 +300,16 @@ function statisitcs($style = 'default')
 
 	if ($style === 'cscw') {
 		$dataCSCW = mssql_fetch_assoc(
-			mssql_query("SELECT CASTLE_OCCUPY, OWNER_GUILD, CRYWOLF_OCCUFY FROM dbo.MuCastle_DATA, dbo.MuCrywolf_DATA")
-		);
+			mssql_query("SELECT CASTLE_OCCUPY, OWNER_GUILD FROM dbo.MuCastle_DATA")
+		) ?: [];
+		try {
+			$dataCW = mssql_fetch_assoc(
+				mssql_query("SELECT CRYWOLF_OCCUFY FROM dbo.MuCrywolf_DATA")
+			);
+			$dataCSCW += $dataCW ?: [];
+		} catch (Exception $ignored) {
+			// Do nothing
+		}
 
 		$dataCSCW['CASTLE_OCCUPY'] = empty($dataCSCW['CASTLE_OCCUPY'])
 			? '<span style="color: red">Not captured</span>'
@@ -354,7 +362,8 @@ function statisitcs($style = 'default')
 		mmw_s.maxplayer,
 		ms.total_online
 	FROM dbo.MMW_servers AS mmw_s
-	LEFT JOIN (SELECT ServerName, count(ServerName) AS total_online FROM dbo.MEMB_STAT WHERE ConnectStat=1 GROUP BY ServerName) AS ms ON ms.ServerName = mmw_s.Name
+	LEFT JOIN (SELECT ServerName, count(ServerName) AS total_online FROM dbo.MEMB_STAT WHERE ConnectStat=1 GROUP BY ServerName) AS ms
+		ON ms.ServerName COLLATE DATABASE_DEFAULT = mmw_s.Name COLLATE DATABASE_DEFAULT
 	ORDER BY mmw_s.display_order");
 	$server = array();
 	if (empty($_ENV['mmw_cache']['server_cache']) || $_ENV['mmw_cache']['server_cache']['timeout'] + $mmw['server_timeout'] < time()) {
@@ -424,7 +433,7 @@ HTML;
 					. $row['html_status'];
 			}
 
-			$_ENV['fader'] = $_ENV['fader'] ? ++$_ENV['fader'] : 1;
+			$_ENV['fader'] = isset($_ENV['fader']) ? ++$_ENV['fader'] : 1;
 			$json = json_encode($data);
 			echo <<<HTML
 <div id="statistics"></div>

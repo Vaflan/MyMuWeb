@@ -3,7 +3,7 @@ ob_start();
 session_start();
 header('Connection: Keep-Alive');
 header('Cache-Control: Private');
-define('TIME_START', serialize(gettimeofday()));
+define('TIME_START', serialize(gettimeofday()), false);
 
 /**
  * @var array $mmw

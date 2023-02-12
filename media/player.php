@@ -1,5 +1,5 @@
 <?php
-define('MMW_MEDIA_DIR', 'media/');
+define('MMW_MEDIA_DIR', 'media/', false);
 
 // Read Folder
 $playlist = array();

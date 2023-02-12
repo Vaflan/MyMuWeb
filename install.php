@@ -1,5 +1,5 @@
 ﻿<?php
-define('CUSTOM_IP_ADDRESS', '192.168.0.101');
+define('CUSTOM_IP_ADDRESS', '192.168.0.101', false);
 
 /** @var array $mmw */
 require_once __DIR__ . '/config.php';
@@ -90,7 +90,11 @@ $page = intval($_GET['page']);
 	$queryList = array();
 
 	// DECODE DATABASE
-	$queryList['decode_database'] = "ALTER DATABASE {$mmw['sql']['database']} COLLATE SQL_Latin1_General_CP1251_CI_AS";
+	$queryList['decode_database'] = array(
+		"ALTER DATABASE {$mmw['sql']['database']} SET SINGLE_USER WITH ROLLBACK IMMEDIATE",
+		"ALTER DATABASE {$mmw['sql']['database']} COLLATE SQL_Latin1_General_CP1_CI_AS",
+		"ALTER DATABASE {$mmw['sql']['database']} SET MULTI_USER"
+	);
 
 	// CREAT TABLES
 	$queryList['load_db_mmw'] = @file_get_contents('includes/db_mmw.sql');
@@ -146,8 +150,8 @@ $page = intval($_GET['page']);
 		foreach ($queryList as $queryName => $query) {
 			try {
 				if (is_array($query)) {
-					for ($i = 0; $i < count($query); ++$i) {
-						echo mssql_query($query[$i])
+					foreach ($query as $i => $singleQuery) {
+						echo mssql_query($singleQuery)
 							? $queryName . '_' . $i . ' - Done!' . PHP_EOL
 							: $queryName . '_' . $i . ' - Error!' . PHP_EOL;
 					}

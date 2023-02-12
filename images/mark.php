@@ -8,7 +8,7 @@ header('Cache-Control: max-age=86400');
 header('Content-type: image/png');
 header('Pragma: no-cache');
 
-define('ROW_COUNT', 8);
+define('ROW_COUNT', 8, false);
 
 $hex = $_GET['decode'];
 if (empty($hex) || preg_match('/[^a-fA-F0-9]/', $hex)) {

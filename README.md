@@ -10,12 +10,13 @@
 ## Instruction
 *********************************************************************
 The first step, you need PHP settings:
-* On Windows system ~ C:\WINDOWS\php.ini
+* On Windows system ~ C:\WINDOWS\php.ini (extensions with .dll)
 * On Linux system ~ /etc/php/phpX.X/php.ini
 
 
-    extension = php_mssql.dll
-    mssql.secure_connection = On
+    extension = gd2
+    extension = odbc
+    error_reporting = E_ALL & ~E_NOTICE
 
 *********************************************************************
 The second step, add library if database uses MD5
@@ -23,6 +24,7 @@ The second step, add library if database uses MD5
 *********************************************************************
 The third step is to change socks
 * Change `config.php` and replace 'IP Address', 'Login', 'Password', 'DataBase'
+* If you will be installing from a non-local ip, you set CUSTOM_IP_ADDRESS in install.php
 * Open installation http://localhost/install.php
 *********************************************************************
 

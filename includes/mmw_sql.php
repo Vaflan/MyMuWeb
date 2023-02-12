@@ -7,9 +7,9 @@
 */
 
 if (!function_exists('mssql_connect')) {
-	defined('MSSQL_ASSOC') or define('MSSQL_ASSOC', 1);
-	defined('MSSQL_NUM') or define('MSSQL_NUM', 2);
-	defined('MSSQL_BOTH') or define('MSSQL_BOTH', 3);
+	defined('MSSQL_ASSOC') or define('MSSQL_ASSOC', 1, false);
+	defined('MSSQL_NUM') or define('MSSQL_NUM', 2, false);
+	defined('MSSQL_BOTH') or define('MSSQL_BOTH', 3, false);
 
 	/**
 	 * @deprecated After PHP 5.2
@@ -24,6 +24,11 @@ if (!function_exists('mssql_connect')) {
 			'user' => $username,
 			'pass' => $password,
 		);
+
+		if (!extension_loaded('odbc')) {
+			throw new Exception('ODBC extension not loaded. Please open php.ini and add odbc extension (extension=odbc)');
+		}
+
 		return true;
 	}
 
@@ -55,7 +60,7 @@ if (!function_exists('mssql_connect')) {
 		);
 		$resourceId = end($mmwsql['list'])['id'];
 		if ($resourceId === false) {
-			throw new Exception($query);
+			throw new Exception(odbc_errormsg() . PHP_EOL . $query);
 		}
 		return $resourceId;
 	}
