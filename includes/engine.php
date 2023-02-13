@@ -243,7 +243,7 @@ if (isset($_POST['id_vote'], $_POST['answer'])) {
 
 
 /////// Start Auto Func //////
-if ($mmw['auto_func']['switch'] > 0) {
+if ($mmw['auto_func']['switch']) {
 	if (is_dir($mmw['auto_func']['dir']) && $dh = opendir($mmw['auto_func']['dir'])) {
 		while (($file = readdir($dh)) !== false) {
 			switch (substr($file, -3)) {

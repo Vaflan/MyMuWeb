@@ -6,9 +6,9 @@
 
 $topCount = intval($_POST['top_rank']);
 
-if (!$mmw['gm_show']) {
-	$no_gm_in_top = "AND c.CtlCode NOT IN (8, 32)";
-}
+$no_gm_in_top = !empty($mmw['gm_show'])
+	? "AND c.CtlCode NOT IN (8, 32)"
+	: '';
 ?>
 
 <br>

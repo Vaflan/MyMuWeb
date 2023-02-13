@@ -596,8 +596,9 @@ function popunder()
 /////// Start MP3 Player //////
 function mp3_player()
 {
+	/** @noinspection PhpUnusedLocalVariableInspection */
 	global $media_color, $text_color, $mmw;
-	if ($mmw['mp3_player'] > 0) {
+	if ($mmw['mp3_player']) {
 		require __DIR__ . '/../media/player.php';
 	}
 }

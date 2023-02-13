@@ -4,8 +4,8 @@
  * @var array $mmw
  */
 
-$no_gm_in_top = (!$mmw['gm_show'])
-	? "WHERE c.CtlCode NOT IN(8, 32)"
+$no_gm_in_top = !empty($mmw['gm_show'])
+	? "WHERE c.CtlCode NOT IN (8, 32)"
 	: '';
 
 $result = mssql_query("SELECT

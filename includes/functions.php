@@ -229,9 +229,16 @@ function current_module()
 	}
 
 	if ($currentModule === 'user') {
-		echo !isset($_GET['u'])
-			? ' &gt; <a href="?op=user&u=acc">' . mmw_lang_account_panel . '</a>'
-			: ' &gt; <a href="?op=user&u=' . $_GET['u'] . '">' . ucfirst($_GET['u']) . '</a>';
+		if (isset($_GET['u'])) {
+			$currentUserModule = $_GET['u'];
+			$userLabel = defined('mmw_lang_' . $currentUserModule)
+				? constant('mmw_lang_' . $currentUserModule)
+				: ucfirst($currentUserModule);
+
+			echo ' &gt; <a href="?op=user&u=' . $currentUserModule . '">' . $userLabel . '</a>';
+		} else {
+			echo ' &gt; <a href="?op=user&u=acc">' . mmw_lang_account_panel . '</a>';
+		}
 	}
 }
 

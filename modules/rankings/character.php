@@ -4,23 +4,26 @@
  * @var array $mmw
  */
 
+$query_race = array(
+	'all' => "c.Class>-1",
+	'dw' => "c.Class>=0 AND c.Class<=15",
+	'dk' => "c.Class>=16 AND c.Class<=31",
+	'elf' => "c.Class>=32 AND c.Class<=47",
+	'mg' => "c.Class>=48 AND c.Class<=63",
+	'dl' => "c.Class>=64 AND c.Class<=79",
+	'sum' => "c.Class>=80 AND c.Class<=95",
+	'rf' => "c.Class>=96 AND c.Class<=112",
+);
+
 $topCount = intval($_POST['top_rank']);
-$race = isset($_POST['sort'])
-	? clean_var(stripslashes($_POST['sort']))
+
+$race = isset($query_race[$_POST['sort']])
+	? $_POST['sort']
 	: 'all';
 
-if (!$mmw['gm_show']) {
-	$no_gm_in_top = "AND c.CtlCode NOT IN (8, 32)";
-}
-
-$query_race['all'] = "c.Class>-1";
-$query_race['dw'] = "c.Class>=0 AND c.Class<=15";
-$query_race['dk'] = "c.Class>=16 AND c.Class<=31";
-$query_race['elf'] = "c.Class>=32 AND c.Class<=47";
-$query_race['mg'] = "c.Class>=48 AND c.Class<=63";
-$query_race['dl'] = "c.Class>=64 AND c.Class<=79";
-$query_race['sum'] = "c.Class>=80 AND c.Class<=95";
-$query_race['rf'] = "c.Class>=96 AND c.Class<=112";
+$no_gm_in_top = !empty($mmw['gm_show'])
+	? "AND c.CtlCode NOT IN (8, 32)"
+	: '';
 ?>
 
 <br>

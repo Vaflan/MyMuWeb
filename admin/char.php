@@ -128,6 +128,9 @@ if (isset($_GET['chr'])) {
 				<td align="right">Class</td>
 				<td>
 					<select name="class" size="1">
+						<option value=<?php echo $get_character_done[16]; ?>>
+							undefined: [<?php echo intval($get_character_done[16]); ?>]
+						</option>
 						<option value=0 <?php echo $class[0]; ?>>DW</option>
 						<option value=1 <?php echo $class[1]; ?>>SM</option>
 						<option value=2 <?php echo $class[2]; ?>>GrM</option>
@@ -144,6 +147,8 @@ if (isset($_GET['chr'])) {
 						<option value=80 <?php echo $class[80]; ?>>Sum</option>
 						<option value=81 <?php echo $class[81]; ?>>Bsum</option>
 						<option value=82 <?php echo $class[82]; ?>>Dim</option>
+						<option value=96 <?php echo $class[96]; ?>>RF</option>
+						<option value=97 <?php echo $class[97]; ?>>FM</option>
 					</select>
 				</td>
 			</tr>

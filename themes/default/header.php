@@ -243,8 +243,10 @@
 								<td class="block-left"></td>
 								<td style="padding: 5px;">
 									<div class="block-title" style="text-align: left;">
-										<a href="<?php echo $mmw['serverwebsite']; ?>"><?php echo mmw_lang_home_page; ?></a>
-										&gt;
+										<?php if (isset($_GET['op'])) : ?>
 										<a href="?op=info"><?php echo $mmw['servername']; ?></a>
+										<?php else: ?>
+										<a href="<?php echo $mmw['serverwebsite']; ?>"><?php echo mmw_lang_home_page; ?></a>
+										<?php endif; ?>
 										<?php current_module(); ?>
 									</div>

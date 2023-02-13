@@ -125,6 +125,31 @@ HTML;
 			$selectFromTo .= '<option value="ch' . $row[0] . '">' . $row[0] . '</option>';
 		}
 
+		$extendedCurrencies = '';
+		if ($mmw['enable_credits']) {
+			/** @noinspection SqlResolve */
+			$credits = mssql_fetch_row(mssql_query("SELECT credits FROM dbo.MEMB_CREDITS WHERE memb___id='{$_SESSION['user']}'"))[0];
+			$extendedCurrencies .= <<<HTML
+			<tr>
+				<td>Credits</td>
+				<td>{$credits}</td>
+				<td>~</td>
+			</tr>
+HTML;
+		}
+		try {
+			$csPoints = mssql_fetch_row(mssql_query("SELECT cspoints FROM dbo.MEMB_INFO WHERE memb___id='{$_SESSION['user']}'"))[0];
+			$extendedCurrencies .= <<<HTML
+			<tr>
+				<td>W coin</td>
+				<td>{$csPoints}</td>
+				<td>~</td>
+			</tr>
+HTML;
+		} catch (Exception $ignored) {
+			// Do nothing
+		}
+
 		echo <<<HTML
 		<table class="sort-table" style="margin:0 auto;border:0;padding:0;width:300px">
 			<thead>
@@ -145,6 +170,7 @@ HTML;
 				<td>{$maxCharacterWarehouseZenCount}</td>
 			</tr>
 			{$charactersInfo}
+			{$extendedCurrencies}
 		</table>
 
 		{$rowbr}
