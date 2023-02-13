@@ -128,7 +128,7 @@ HTML;
 		$extendedCurrencies = '';
 		if ($mmw['enable_credits']) {
 			/** @noinspection SqlResolve */
-			$credits = mssql_fetch_row(mssql_query("SELECT credits FROM dbo.MEMB_CREDITS WHERE memb___id='{$_SESSION['user']}'"))[0];
+			$credits = mssql_fetch_row(mssql_query("SELECT credits FROM dbo.MEMB_CREDITS WHERE memb___id='{$_SESSION['user']}'"))[0] ?: 0;
 			$extendedCurrencies .= <<<HTML
 			<tr>
 				<td>Credits</td>
@@ -138,7 +138,7 @@ HTML;
 HTML;
 		}
 		try {
-			$csPoints = mssql_fetch_row(mssql_query("SELECT cspoints FROM dbo.MEMB_INFO WHERE memb___id='{$_SESSION['user']}'"))[0];
+			$csPoints = mssql_fetch_row(mssql_query("SELECT cspoints FROM dbo.MEMB_INFO WHERE memb___id='{$_SESSION['user']}'"))[0] ?: 0;
 			$extendedCurrencies .= <<<HTML
 			<tr>
 				<td>W coin</td>
