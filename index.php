@@ -1,4 +1,4 @@
-<?PHP
+<?php
 ob_start();
 session_start();
 header("Cache-control: private");
@@ -11,6 +11,7 @@ require_once("includes/sql_check.php");
 require_once("includes/xss_check.php");
 require_once("includes/mmw-func.php");
 require_once("includes/engine.php");
+mmw("includes/security.mmw");
 
 // To Look After All
 if($mmw[look_after_all] == 'yes') {

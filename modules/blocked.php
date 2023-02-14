@@ -26,17 +26,19 @@ for($i=0;$i < $row_num;++$i) {
 
 	if($row[2] > 0) {$to = date("d M Y, H:i",$row[1]+$row[2]);}
 	else {$to = mmw_lang_never;}
-
-	if($row[3] != '' && $row[3] != '0') {$by_who = "<a href='?op=profile&profile=$row[3]'>$row[3]</a>";}
+    $by_profile = mssql_fetch_row( mssql_query("SELECT Name FROM Character WHERE AccountID='".$row[3]."'") );
+	if($row[3] != '' && $row[3] != '0') {$by_who = "<a href='?op=profile&profile=$by_profile[0]'>$by_profile[0]</a>";}
 	else {$by_who = "Unknow";}
 
+    $profile = mssql_fetch_row( mssql_query("SELECT Name FROM Character WHERE AccountID='".$row[0]."'") );
+$a1 = substr($row[0], 1, 2);$a2 = substr($row[0], 4, 1);$a3 = substr($row[0], 6, 1);$a4 = substr($row[0], 8, 1);
 echo 	"<tbody><tr>
             <td>$rank</td>
-            <td><a href='?op=profile&profile=$row[0]'>$row[0]</a></td>
+            <td><a href='?op=profile&profile=".$profile[0]."'>*".$a1."*".$a3."*".$a4."*".$a5."*</a></td>
             <td>$date</td>
             <td>$to</td>
             <td>$by_who</td>
-            <td><a href='?op=checkacc&w=block&n=$row[0]'>".mmw_lang_show_now."</a></td>
+            <td><a href='?op=checkacc&w=block&n=".$profile[0]."'>".mmw_lang_show_now."</a></td>
             </tr></tbody>";
 }
 ?>

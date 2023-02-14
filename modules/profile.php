@@ -2,8 +2,9 @@
 // Profile for MMW
 // By Vaflan
 
-$account_get = clean_var($_GET[profile]);
-$profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,mmw_status from memb_info where memb___id='$account_get'");
+$name_get = clean_var($_GET[profile]);
+$account_get = mssql_fetch_row( mssql_query("SELECT AccountID FROM Character WHERE Name='".$name_get."'") );
+$profile_sql = mssql_query("Select country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,mmw_status from memb_info where memb___id='$account_get[0]'");
 $profile_info = mssql_fetch_row($profile_sql);
 if(mssql_num_rows($profile_sql) < 1) {echo "$die_start Profile Dosn't Exist $die_end";}
 elseif($profile_info[4] == 0 || $mmw[status_rules][$_SESSION[mmw_status]][gm_option] == 1) {
@@ -15,11 +16,7 @@ elseif($profile_info[4] == 0 || $mmw[status_rules][$_SESSION[mmw_status]][gm_opt
  if(empty($profile_info[3]) || $profile_info[3] == ' ') {$profile_info[3] = default_img('no_avatar.jpg');}
 ?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'> 
-	<tr>
-          <td width="120"><?echo mmw_lang_account;?>:</td>
-          <td><?echo $account_get;?></td>
-	</tr>
+<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0' width='300'>
 	<tr>
           <td><?echo mmw_lang_full_name;?>:</td>
           <td><?echo $profile_info[9];?></td>
@@ -77,7 +74,7 @@ elseif($profile_info[4] == 0 || $mmw[status_rules][$_SESSION[mmw_status]][gm_opt
           <td><?echo mmw_lang_class;?></td>
 	</tr></thead>
 <?php
- $result = mssql_query("Select Name,Class,cLevel,Reset from Character where AccountID='$account_get' order by reset desc, clevel desc");
+ $result = mssql_query("Select Name,Class,cLevel,Reset from Character where AccountID='$account_get[0]' order by reset desc, clevel desc");
  $row_num = mssql_num_rows($result);
 
  if($row_num<=0) {

@@ -8,7 +8,7 @@ if(mssql_num_rows($char_results) < 1) {echo "$die_start Character Dosn't Exist $
 elseif($info[16] == 0 && $mmw['info_gm_and_blocked'] == 0 || $mmw['info_gm_and_blocked'] > 0) {
  $profile_sql = mssql_query("Select hide_profile from memb_info where memb___id='$info[7]'");
  $profile_row = mssql_fetch_row($profile_sql);
- if($profile_row[0] == '0'){$profile = "<a href=?op=profile&profile=$info[7]><b>".mmw_lang_view_profile."</b></a><br/>";}
+ if($profile_row[0] == '0'){$profile = "<a href=?op=profile&profile=$info[0]><b>".mmw_lang_view_profile."</b></a><br/>";}
 
  $status_sql = mssql_query("select connectstat,CONNECTTM from MEMB_STAT where memb___id='$info[7]'");
  $status_row = mssql_fetch_row($status_sql);

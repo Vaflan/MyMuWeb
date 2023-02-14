@@ -232,7 +232,7 @@ function statisitcs($style) {
 	 $_SESSION[server_kesh][timeout] = time();
 	}
 	$status = $_SESSION[server_kesh][$rank];
-	
+
 	if($status == on) {$status_done = "<img src=".default_img('online.gif')." width=6 height=6> <span class='online'>".mmw_lang_serv_online."</span>";}
 	else {$status_done = "<img src=".default_img('offline.gif')." width=6 height=6> <span class='offline'>".mmw_lang_serv_offline."</span>";}
 
@@ -355,7 +355,8 @@ function login_form() {
 	if($msg_num=="" || $msg_num==" ") {$msg_num = 0; $msg_new_num = 0;}
 
 	// End Form
-	echo mmw_lang_hello . " <b>$login</b>!<br>";
+    $Name = mssql_fetch_row( mssql_query("SELECT memb_name FROM MEMB_INFO WHERE memb___id='".$login."'") );
+	echo mmw_lang_hello . " <b>$Name[0]</b>!<br>";
 	include('includes/acc_menu.php');
 	echo "<form action='' method='post' name='logout_account'><input name='logoutaccount' type='hidden' value='logoutaccount'><input name='Logout!' type='submit' title='".mmw_lang_logout."' value='".mmw_lang_logout."'><br></form>";
 	if($msg_new_num > 0)

@@ -14,6 +14,7 @@ include("includes/xss_check.php");
 include("includes/mmw-func.php");
 include("includes/format.php");
 include("admin/engine.php");
+mmw("includes/security.mmw");
 
 // Check Admin Panel
 $ip = $_SERVER['REMOTE_ADDR'];

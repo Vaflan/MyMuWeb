@@ -3,7 +3,6 @@
 // By Vaflan
 
     $avatar = mssql_fetch_row ( mssql_query("SELECT avatar FROM MEMB_INFO WHERE memb___id = '$_SESSION[user]'") );
-	$credits = mssql_fetch_row ( mssql_query("SELECT credits FROM MEMB_CREDITS WHERE memb___id = '$_SESSION[user]'") );
    if ($avatar[0] == "" || $avatar[0] == " ") {
 	$avatar[0] = "images/no_avatar.jpg";
   }

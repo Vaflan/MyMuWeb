@@ -5,8 +5,9 @@
 
 $search = clean_var(stripslashes($_POST['search']));
 
-$result = @mssql_query("SELECT Name,Class,reset,cLevel,strength,dexterity,vitality,energy,accountid from Character where name like '%$search%'");
-$row_num = @mssql_num_rows($result);
+if (!empty($search)) {$result = mssql_query("SELECT TOP 30 Name,Class,reset,cLevel,strength,dexterity,vitality,energy,accountid from Character where name like '%$search%'");} else {
+$result = mssql_query("SELECT TOP 30 Name,Class,reset,cLevel,strength,dexterity,vitality,energy,accountid from Character where name like '$search'");}
+$row_num = mssql_num_rows($result);
 ?>
 <br><?echo mmw_lang_search_character_results;?></br><br>&nbsp;</br>
             <table class="sort-table" border="0" cellpadding="0" cellspacing="0">                

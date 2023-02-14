@@ -12,12 +12,12 @@ $mmw[database] = 'MuOnline';			// DataBase SQL
 
 
 // Admin Panel
-$mmw['admin_panel_ip'] = 'no';            // Admin/GM ip-adress from http://myip.ru to enter on admin panel (127.0.0.1 is enable, on local you can enter)
+$mmw['admin_panel_ip'] = '192.168.1.102'; // Admin/GM ip-adress from http://myip.ru to enter on admin panel (127.0.0.1 is enable, on local you can enter)
 $mmw['admin_panel_ip_2'] = 'no';          // 2 Admin/GM ip-adress to enter on admin panel
 $mmw['admin_panel_ip_3'] = 'no';          // 3 Admin/GM ip-adress to enter on admin panel
 
 // MyMuWeb Config
-$mmw[md5] = 'no';					// Server MD5 yes or no
+$mmw[md5] = 'yes';					// Server MD5 yes or no
 $mmw[language] = 'English';				// Default Language in Web
 $mmw[webtitle] = 'Name MuOnline Server';		// Web Title
 $mmw[servername] = 'Name MuOnline';			// Server Name
@@ -125,7 +125,7 @@ $mmw[joinserver_port] = '55970';			// Join Server port for GM Message
 
 
 // Admin Panel SecurityCode & MMW status (5 - GameMaster, 10 - Administrator)
-$mmw[admin_securitycode] = '4321';			// Admin Panel Security Code (Max 10 simbyl)
+$mmw[admin_securitycode] = '***';			// Admin Panel Security Code (Max 10 simbyl)
 $mmw[status_rules] = array(				// array(name,admin_panel,gm_option,gm_block,gm_msg,hex_wh,comment_delete,forum_add,forum_delete,forum_status,image_delete,chat_delete),
  10 => array('name'=>'Administrator','admin_panel'=>1,'gm_option'=>1,'gm_block'=>1,'gm_msg'=>1,'hex_wh'=>1,'comment_delete'=>1,'forum_add'=>1,'forum_delete'=>1,'forum_status'=>1,'image_delete'=>1,'chat_delete'=>1),
  5 => array('name'=>'Game Master','gm_option'=>1,'gm_block'=>1,'gm_msg'=>1,'hex_wh'=>1,'comment_delete'=>1,'forum_add'=>1,'forum_delete'=>1,'forum_status'=>1,'image_delete'=>1,'chat_delete'=>1),

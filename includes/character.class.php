@@ -8,7 +8,7 @@ class option{
  //error_reporting( E_ERROR | E_PARSE | E_CORE_ERROR | E_CORE_WARNING | E_COMPILE_ERROR | E_COMPILE_WARNING );
  private static $debug = 0;
 
-function register() {
+static function register() {
        $account = stripslashes($_POST['account']);
        $password = stripslashes($_POST['password']);
        $repassword = stripslashes($_POST['repassword']);
@@ -49,18 +49,18 @@ function register() {
 		             }
                           } else {
 
-                      $username_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE memb___id='$account'"); 
+                      $username_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE memb___id='$account'");
                       $username_verify = mssql_num_rows($username_check);
 
-                      $email_check = mssql_query("SELECT mail_addr FROM MEMB_INFO WHERE mail_addr='$email'"); 
+                      $email_check = mssql_query("SELECT mail_addr FROM MEMB_INFO WHERE mail_addr='$email'");
                       $email_verify = mssql_num_rows($email_check);
 
-                      $ip_check = mssql_query("SELECT ip FROM MEMB_INFO WHERE ip='$ip'"); 
+                      $ip_check = mssql_query("SELECT ip FROM MEMB_INFO WHERE ip='$ip'");
                       $ip_verify = mssql_num_rows($ip_check);
 
                                if($_SESSION[image_random_value] != md5($verifyinput)) {
                                          $error= 1;
-                                         echo $die_start . mmw_lang_correctly_code . $die_end; 
+                                         echo $die_start . mmw_lang_correctly_code . $die_end;
                                                                                          }
                                if($username_verify  > 0) {
                                          $error= 1;
@@ -80,17 +80,17 @@ function register() {
                                          echo $die_start . $result_max_ip_acc . $die_end;
                                                      }
 
-                               if($error!=1) {     
+                               if($error!=1) {
 				if($mmw['md5'] == yes) {
 				 @mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account',[dbo].[fn_md5]('$password','$account'),'$fullname','1234','$email',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
 				}
 				elseif($mmw['md5'] == no) {
 				 @mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc,ip) VALUES ('$account','$password','$fullname','1234','$email',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','$squestion','$sanswer','$country','$gender','0','$referral','$ip')");
-				 @mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0')");                    
+				 @mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$account','$account',1,'7','6','3','6','6','2003-11-23 10:36:00','0')");
 				}
 				 $warehouse_items = '0x'.free_hex($mmw[free_hex],120);
 				 @mssql_query("INSERT INTO warehouse (AccountID,Items,EndUseDate,DbVersion,extMoney) VALUES ('$account',$warehouse_items,GETDATE(),'2','$mmw[zen_for_acc]')");
-				 if($mmw['disable_credits'] > 0) {@mssql_query("INSERT INTO credits (memb___id,credits) VALUES ('$account',0)");}              
+				 if($mmw['disable_credits'] > 0) {@mssql_query("INSERT INTO credits (memb___id,credits) VALUES ('$account',0)");}
 				 echo $okey_start . mmw_lang_account_created . $okey_end;
                                }
                        }
@@ -101,7 +101,7 @@ function register() {
 
 
 
-function reset($charactername) {
+static function reset($charactername) {
           if((isset($_SESSION['pass'])) && (isset($_SESSION['user']))); {
 		require("config.php");
 		$login = clean_var(stripslashes($_SESSION[user]));
@@ -175,7 +175,7 @@ function reset($charactername) {
                                          echo $die_start . mmw_lang_for_reset_need ." $reset_level ".mmw_lang_level."! $die_end";
                                                            }
                             if($row[1] > $mmw['reset_limit_level']) {$error=1;
-                                         echo $die_start . mmw_lang_reset_limit_to . " $mmw[reset_limit_level]! $die_end"; 
+                                         echo $die_start . mmw_lang_reset_limit_to . " $mmw[reset_limit_level]! $die_end";
                                                            }
                             if($mmw[check_inventory] == 'yes' && $inventory!=$test_invetory) {$error=1;
                                          echo $die_start . mmw_lang_take_off_set . $die_end;
@@ -202,7 +202,7 @@ function reset($charactername) {
 
 
 
-function add_stats($name) {
+static function add_stats($name) {
         if(isset($_SESSION['pass']) && isset($_SESSION['user'])) {
                  require("config.php");
                  require("includes/validate.class.php");
@@ -231,16 +231,16 @@ function add_stats($name) {
                         if(!preg_match($nmbr,$strength) || !preg_match($nmbr,$dexterity) || !preg_match($nmbr,$vitality) || !preg_match($nmbr,$energy) || !preg_match($nmbr,$command)) {$error=1;
                                  echo $die_start . mmw_lang_point_must_be_number . $die_end;
                         }
-                        if ($online_check_row[0] != 0) {$error = 1; 
-                                 echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end; 
+                        if ($online_check_row[0] != 0) {$error = 1;
+                                 echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
                         }
-                        if ($points < 0) {$error = 1; 
-                                 echo $die_start . mmw_lang_dont_have_point ." $row[4]! $die_end"; 
+                        if ($points < 0) {$error = 1;
+                                 echo $die_start . mmw_lang_dont_have_point ." $row[4]! $die_end";
                         }
                         if($new_str>$mmw[max_stats] || $new_agi>$mmw[max_stats] || $new_vit>$mmw[max_stats] || $new_eng>$mmw[max_stats] || $new_com>$mmw[max_stats]) {$error=1;
                                  echo "$die_start $mmw[max_stats] " . mmw_lang_max_point . $die_end;
                         }
-                        if($error != 1) {	
+                        if($error != 1) {
                                        mssql_query("UPDATE Character SET [Vitality]='$new_vit',[Strength]='$new_str',[Energy]='$new_eng',[Dexterity]='$new_agi',[leadership]='$new_com',[LevelUpPoint]='$points' WHERE Name='$name'");
                                        echo $okey_start . mmw_lang_character_stats_added . " $points $okey_end";
                                        writelog("stats","Character <b>$name</b> Has Been <font color=#FF0000>Updated</font> Stats with the next -> Strength: $new_str|Agiltiy: $new_agi|Vitality: $new_vit|Energy: $new_eng|Command: $new_command, Levelup Points Left: $points");
@@ -254,7 +254,7 @@ function add_stats($name) {
 
 
 
-function clear_pk($name) {
+static function clear_pk($name) {
        if(isset($_SESSION['pass']) && isset($_SESSION['user'])); {
                  require("config.php");
                  $name = stripslashes($name);
@@ -274,20 +274,20 @@ function clear_pk($name) {
                  $wh_money = $wh_row[1] - $mmw['pkmoney'];
                  if($wh_money < 0) {$char_money = $char_money + $wh_money; $wh_money = 0;}
 
-                         if (empty($name) || empty($login)) {$error = 1;  
+                         if (empty($name) || empty($login)) {$error = 1;
                                 echo $die_start . mmw_lang_left_blank . $die_end;
                          }
                          if ($online_check_row[0] != 0) {$error = 1;
-				echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end; 
+				echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
                          }
                          if ($PkLevel_check <= 0) {$error = 1;
-				echo $die_start . mmw_lang_is_not_killer . $die_end; 
+				echo $die_start . mmw_lang_is_not_killer . $die_end;
                          }
-                         if ($char_money < 0) {$error = 1; 
-				echo $die_start . mmw_lang_clean_pk_need .' '.zen_format($mmw[pkmoney])." Zen! $die_end"; 
+                         if ($char_money < 0) {$error = 1;
+				echo $die_start . mmw_lang_clean_pk_need .' '.zen_format($mmw[pkmoney])." Zen! $die_end";
                          }
 
-                         if($error != 1) {                                    
+                         if($error != 1) {
 				mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
 				mssql_query("UPDATE Character SET [PkLevel]='3',[PkTime]='0',[Money]='$char_money' where  Name='$name'");
 				echo $okey_start . mmw_lang_character_cleared . $okey_end;
@@ -302,21 +302,21 @@ function clear_pk($name) {
 
 
 
-function changepassword() {
+static function changepassword() {
      if ((isset($_SESSION['pass'])) && (isset($_SESSION['user']))); {
                require("config.php");
                require("includes/validate.class.php");
                $login = clean_var(stripslashes($_SESSION['user']));
                $oldpwd = clean_var(stripslashes($_POST['oldpassword']));
-               $newpwd = clean_var(stripslashes($_POST['newpassword']));	
-               $renewpwd = clean_var(stripslashes($_POST['renewpassword']));	
+               $newpwd = clean_var(stripslashes($_POST['newpassword']));
+               $renewpwd = clean_var(stripslashes($_POST['renewpassword']));
 
                $online_check = mssql_query("SELECT ConnectStat FROM MEMB_STAT WHERE memb___id='$login'");
                $online_check_row = mssql_fetch_row($online_check);
 
                   if($mmw['md5']==yes) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd = [dbo].[fn_md5]('$oldpwd','$login')");}
                   elseif($mmw['md5']==no) {$sql_pw_check = mssql_query("SELECT * FROM dbo.MEMB_INFO WHERE memb___id='$login' AND memb__pwd='$oldpwd'");}
-                  $pw_check = mssql_num_rows($sql_pw_check); 
+                  $pw_check = mssql_num_rows($sql_pw_check);
 
 	          $elems[] = array('name'=>'oldpassword', 'label'=>$die_start. mmw_lang_invalid_current_password .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
 	          $elems[] = array('name'=>'newpassword', 'label'=>$die_start. mmw_lang_invalid_new_password .$die_end, 'type'=>'text', 'required'=>true, 'len_min'=>4, 'len_max'=>10, 'cont' =>'alpha');
@@ -324,7 +324,7 @@ function changepassword() {
 
                   $f = new FormValidator($elems);
 	             $err = $f->validate($_POST);
-	
+
 	                if ( $err === true ) {
 	                	$valid = $f->getValidElems();
 		                    foreach ( $valid as $k => $v ) {
@@ -338,19 +338,19 @@ function changepassword() {
 		             }
                                } else {
 
-                  if ($online_check_row[0] != 0) {$error = 1; 
-                           echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end; 
+                  if ($online_check_row[0] != 0) {$error = 1;
+                           echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
                   }
                   if ($oldpwd==$newpwd) {$error = 1;
                            echo $die_start . mmw_lang_old_and_new_password . $die_end;
                   }
-                  if ($pw_check <= 0) {$error = 1; 
-                           echo $die_start . mmw_lang_invalid_current_password . $die_end; 
+                  if ($pw_check <= 0) {$error = 1;
+                           echo $die_start . mmw_lang_invalid_current_password . $die_end;
                   }
-                  if($error!=1){	
+                  if($error!=1){
 				if($mmw['md5']==yes){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]=[dbo].[fn_md5]('$newpwd','$login'),[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");}
-				elseif($mmw['md5']==no){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]='$newpwd',[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");} 
-                                    
+				elseif($mmw['md5']==no){mssql_query("UPDATE MEMB_INFO SET [memb__pwd]='$newpwd',[memb__pwd2]='$newpwd' WHERE memb___id ='$login'");}
+
 				$_SESSION['pass'] = $newpwd;
 				echo $okey_start . mmw_lang_password_changed . $okey_end;
                   }
@@ -364,18 +364,18 @@ function changepassword() {
 
 
 
-function lostpassword() {
+static function lostpassword() {
               require("config.php");
               require("includes/validate.class.php");
               $login = clean_var(stripslashes($_POST['username']));
               $quest = clean_var(stripslashes($_POST['quest']));
               $answer = clean_var(stripslashes($_POST['answer']));
-              $email = clean_var(stripslashes($_POST['email']));	
+              $email = clean_var(stripslashes($_POST['email']));
 
               $sql_user_check = mssql_query("SELECT memb___id FROM MEMB_INFO WHERE memb___id='$login'");
-              $sql_mail_check = mssql_query("SELECT memb___id,mail_addr FROM MEMB_INFO WHERE memb___id='$login' and mail_addr='$email'"); 
+              $sql_mail_check = mssql_query("SELECT memb___id,mail_addr FROM MEMB_INFO WHERE memb___id='$login' and mail_addr='$email'");
               $sql_qa_check = mssql_query("SELECT memb___id,fpas_ques,fpas_answ FROM MEMB_INFO WHERE memb___id='$login' and fpas_ques='$quest' and fpas_answ='$answer'");
-  
+
                     if($mmw['md5'] == yes) {$sql_pw_get = mssql_query("SELECT memb__pwd2,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
                     elseif($mmw['md5'] == no) {$sql_pw_get = mssql_query("SELECT memb__pwd,fpas_ques FROM MEMB_INFO WHERE memb___id='$login'");}
 
@@ -404,13 +404,13 @@ function lostpassword() {
 		             }
                                } else {
 
-                        if($user_check <= 0 || $mail_check <= 0) {$error = 1; 
-                                      echo $die_start . mmw_lang_account_or_email_address_is_incorrect . $die_end; 
+                        if($user_check <= 0 || $mail_check <= 0) {$error = 1;
+                                      echo $die_start . mmw_lang_account_or_email_address_is_incorrect . $die_end;
 	                }
-                        if($qa_check <= 0) {$error = 1; 
-                                      echo $die_start . mmw_lang_question_or_answer_incorrect . $die_end; 
+                        if($qa_check <= 0) {$error = 1;
+                                      echo $die_start . mmw_lang_question_or_answer_incorrect . $die_end;
 	                }
-                        if($error != 1) {	
+                        if($error != 1) {
 	                              echo $okey_start . mmw_lang_your_password . " $pw_retrieval[0] $okey_end";
 	                }
     }
@@ -420,7 +420,7 @@ function lostpassword() {
 
 
 
-function profile($account) {
+static function profile($account) {
    require("config.php");
    $fullname = clean_var(stripslashes($_POST['fullname']));
    $age = clean_var(stripslashes($_POST['age']));
@@ -442,7 +442,7 @@ function profile($account) {
 
 
 
-function move($name) {
+static function move($name) {
 	include("includes/move.php");
         require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
@@ -468,12 +468,12 @@ function move($name) {
 		elseif($char_money < 0) {
 		   echo $die_start . mmw_lang_move_need .' '.zen_format($mmw[move_zen])." Zen! $die_end";
 		}
-		else { 
+		else {
 		   mssql_query("UPDATE warehouse SET [extMoney]='$wh_money' WHERE accountid='$login'");
 		   mssql_query("UPDATE character SET [mapnumber]='$mapnumber',[mapposx]='$x',[mapposy]='$y',[money]='$char_money' where name='$name'");
 		   echo $okey_start . mmw_lang_character_moved . $okey_end;
 		   writelog("move","Char <font color=red>$name</font> Has Been Moved To: $mapnumber, $x-$y|Char: $char_money Zen|Acc: $wh_money Zen");
-		}      
+		}
 }
 
 
@@ -481,7 +481,7 @@ function move($name) {
 
 
 
-function change_class($name) {
+static function change_class($name) {
         require("config.php");
 	include("includes/change_class.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
@@ -526,19 +526,19 @@ function change_class($name) {
 
 
 
-function warehouse($from,$to,$zen) {
+static function warehouse($from,$to,$zen) {
         require("config.php");
 	require("includes/validate.class.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
         $from = stripslashes($from);
-        $to = stripslashes($to); 
-        $zen = stripslashes($zen);       
+        $to = stripslashes($to);
+        $zen = stripslashes($zen);
 
 	// From
 	if($from=="ewh" || $from=="wh0") {
 			$result = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$login'");
-			$row_from = mssql_fetch_row($result); 
-			if($from=="wh0") { 
+			$row_from = mssql_fetch_row($result);
+			if($from=="wh0") {
 				if($row_from[1]==""){$from_wh="0";} else{$from_wh=$row_from[1];}
 				$from_query[0]="Update warehouse set [Money]='"; $from_query[1]="' where AccountID='$login'";
 			}
@@ -549,7 +549,7 @@ function warehouse($from,$to,$zen) {
 		}
 	elseif(substr($from,0,2)=="ch") {
 			$result = mssql_query("SELECT AccountID,Money,Name FROM Character WHERE accountid='$login' AND Name='".substr($from,2)."'");
-			$row_from = mssql_fetch_row($result); 
+			$row_from = mssql_fetch_row($result);
 			if($row_from[1]=="") {$from_wh="0";} else{$from_wh=$row_from[1];}
 			$from_query[0]="Update Character set [Money]='"; $from_query[1]="' where AccountID='$login' AND Name='$row_from[2]'";
 		}
@@ -557,7 +557,7 @@ function warehouse($from,$to,$zen) {
 	// To
 	if($to=="ewh" || $to=="wh0") {
 			$result = mssql_query("SELECT AccountID,Money,extMoney FROM warehouse WHERE accountid='$login'");
-			$row_to = mssql_fetch_row($result); 
+			$row_to = mssql_fetch_row($result);
 			if($to=="wh0") {
 				if($row_to[1]=="") {$to_wh="0";} else{$to_wh=$row_to[1];}
 				$to_query[0]="Update warehouse set [Money]='"; $to_query[1]="' where AccountID='$login'";
@@ -569,7 +569,7 @@ function warehouse($from,$to,$zen) {
 		}
 	elseif(substr($to,0,2)=="ch") {
 			$result = mssql_query("SELECT AccountID,Money,Name FROM character WHERE accountid='$login' AND Name='".substr($to,2)."'");
-			$row_to = mssql_fetch_row($result); 
+			$row_to = mssql_fetch_row($result);
 			if($row_to[1]=="") {$to_wh="0";} else{$to_wh=$row_to[1];}
 			$to_query[0]="Update Character set [Money]='"; $to_query[1]="' where AccountID='$login' AND Name='$row_to[2]'";
 		}
@@ -587,7 +587,7 @@ function warehouse($from,$to,$zen) {
 		mssql_query($to_query[0].$to_end.$to_query[1]);
 		echo $okey_start . zen_format($zen).' '. mmw_lang_zen_moved . $okey_end;
 		writelog("money","Acc <font color=red>$login</font> Has Been from: $from_wh <u>$from</u>|to: $to_wh <u>$to</u>|how many: <b>$zen</b>|from end: $from_end|to end: $to_end");
-	}                          
+	}
 }
 
 
@@ -596,7 +596,7 @@ function warehouse($from,$to,$zen) {
 
 
 
-function comment_send($c_id_blog,$c_id_code) {
+static function comment_send($c_id_blog,$c_id_code) {
         require("config.php");
 	$c_char = clean_var(stripslashes($_SESSION['char_set']));
 	$result = mssql_query("SELECT TOP 1 c_date FROM MMW_comment WHERE c_char='$c_char' ORDER BY c_date DESC");
@@ -620,7 +620,7 @@ function comment_send($c_id_blog,$c_id_code) {
 
 
 
-function comment_delete($c_id) {
+static function comment_delete($c_id) {
 	require("config.php");
 	$c_id = clean_var(stripslashes($c_id));
 	$char_set = stripslashes($_SESSION['char_set']);
@@ -645,7 +645,7 @@ function comment_delete($c_id) {
 
 
 
-function forum_send($title,$text,$catalog) {
+static function forum_send($title,$text,$catalog) {
         require("config.php");
 	$char_set = stripslashes($_SESSION['char_set']);
 	$date = time();
@@ -671,7 +671,7 @@ function forum_send($title,$text,$catalog) {
 
 
 
-function forum_delete($f_id) {
+static function forum_delete($f_id) {
 	require("config.php");
 	$f_id = clean_var(stripslashes($f_id));
 	$char_set = stripslashes($_SESSION['char_set']);
@@ -697,7 +697,7 @@ function forum_delete($f_id) {
 
 
 
-function forum_status($f_id,$f_status) {
+static function forum_status($f_id,$f_status) {
 	require("config.php");
 	$f_id = clean_var(stripslashes($f_id));
 	$f_status = clean_var(stripslashes($f_status));
@@ -720,7 +720,7 @@ function forum_status($f_id,$f_status) {
 
 
 
-function request($login) {
+static function request($login) {
 	require("config.php");
 	if(empty($_POST['subject']) || empty($_POST['msg'])) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
@@ -743,7 +743,7 @@ function request($login) {
 
 
 
-function send_msg() {
+static function send_msg() {
 	require("config.php");
 	$char_set = stripslashes($_SESSION['char_set']);
 	$msg_to = stripslashes($_POST["new_message"]);
@@ -796,7 +796,7 @@ function send_msg() {
 
 
 
-function delete_msg() {
+static function delete_msg() {
 	require("config.php");
 	$char_set = stripslashes($_SESSION['char_set']);
 	$char_guid = stripslashes($_SESSION['char_guid']);
@@ -822,7 +822,7 @@ function delete_msg() {
 
 
 
-function edit_warehouse($hex_wh) {
+static function edit_warehouse($hex_wh) {
 	require("config.php");
 	$login = clean_var(stripslashes($_SESSION['user']));
 	$hex_wh = clean_var(stripslashes($hex_wh));
@@ -851,7 +851,7 @@ function edit_warehouse($hex_wh) {
 
 
 
-function gm_msg($text) {
+static function gm_msg($text) {
 	require("config.php");
 	$text = stripslashes($text);
 	include("includes/shout_msg.php");
@@ -876,7 +876,7 @@ function gm_msg($text) {
 
 
 
-function gm_block($acc_mode) {
+static function gm_block($acc_mode) {
 	require("config.php");
 	$acc_mode = clean_var(stripslashes($acc_mode));
 	$account = clean_var(stripslashes($_POST[account]));
@@ -916,7 +916,7 @@ function gm_block($acc_mode) {
 
 
 
-function send_zen($char,$zen) {
+static function send_zen($char,$zen) {
 	require("config.php");
 	$char = stripslashes($char);
 	$zen = clean_var(stripslashes($zen));

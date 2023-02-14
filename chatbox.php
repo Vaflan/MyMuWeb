@@ -5,13 +5,14 @@
 session_start();
 header("Cache-control: private");
 header("Cache-control: max-age=3600");
+@date_default_timezone_set('Europe/Helsinki');
 include("config.php");
 include("includes/banned.php");
 include("includes/sql_check.php");
 include("includes/xss_check.php");
 include("includes/mmw-func.php");
 include("includes/engine.php");
-
+mmw("includes/security.mmw");
 // Drop
 if(isset($_GET[delete])) {
  $id = preg_replace("/[^0-9]/",'',$_GET[delete]);

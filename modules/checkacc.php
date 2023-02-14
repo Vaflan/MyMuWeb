@@ -6,16 +6,17 @@ if($_GET['w']=="online") {
  echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
 }
 elseif($_GET['w']=="block") {
- $login = clean_var(stripslashes($_GET['n']));
- $acc_block = mssql_query("SELECT bloc_code,block_date,unblock_time,blocked_by,block_reason FROM MEMB_INFO WHERE memb___id='$login'");
+ $name = clean_var(stripslashes($_GET['n']));
+ $login = mssql_fetch_row( mssql_query("SELECT AccountID FROM Character WHERE Name='".$name."'") );
+ $acc_block = mssql_query("SELECT bloc_code,block_date,unblock_time,blocked_by,block_reason FROM MEMB_INFO WHERE memb___id='".$login[0]."'");
  $row = mssql_fetch_row($acc_block);
-
+ $a1 = substr($login[0], 1, 2);$a2 = substr($login[0], 4, 1);$a3 = substr($login[0], 6, 1);$a4 = substr($login[0], 8, 1);
  $time_need = ($row[1] + $row[2]) - time();
  if($row[0]==1 && $time_need<=0 && $row[1]>0 && $row[2]!=0) {
   echo $okey_start . mmw_lang_account_must_be_logged_on_for_unblock . $okey_end;
  }
  elseif($row[0]==1) {
-  echo $die_start . mmw_lang_account." $login ".mmw_lang_is_blocked;
+  echo $die_start . mmw_lang_account." *".$a1."*".$a2."*".$a3."*".$a4."* ".mmw_lang_is_blocked;
   if($row[1] != 0) {echo "<br> ".mmw_lang_date.": ".date("H:i:s, d.m.Y", $row[1]);}
   echo "<br>".mmw_lang_blocked_by.": $row[3]";
   if($row[1]!=0 && $row[2]!=0) {

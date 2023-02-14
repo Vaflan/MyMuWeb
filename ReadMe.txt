@@ -7,28 +7,33 @@
 
 
 *********************************************************************
-Update AppServer, Opne File: C:\WINDOWS\php.ini
-You need 576 cols - ;extension=php_mssql.dll - delete simbel ';'.
-And 942 cols - mssql.secure_connection = Off - 'Îff' change to 'În'.
+link appache 2.5.8 http://mymuweb.ru/forum/21-732-1
+
+Open ..\WINDOWS\php.ini and edit:
+598 " ;extension=php_mssql.dll " - delete " ; " 
+649 " sql.safe_mode = Off " change to " În " 
+1045 " mssql.secure_connection = Off " change to " În "
 *********************************************************************
-Update MSSQL, Copy File 'WZ_MD5_MOD.dll'
-To: Microsoft SQL 'Server\MSSQL\Binn\'
+link mssql 2000 http://mymuweb.ru/forum/21-679-1
+if you use md5 on,Update MSSQL, Copy File 'WZ_MD5_MOD.dll'
+To: ..\Program File\Microsoft SQL Server\MSSQL\Binn\'
 *********************************************************************
-Change config.php, Open 'config.php'
-Change: 'IP Address', 'Login', 'Password', 'DataBase'
+Configure website, Open 'config.php'
+First Change: 'SQL PASS'
 *********************************************************************
 Export DataBase, Open Browser:
 http://127.0.0.1/install.php
 *********************************************************************
 
-
+After install delete install.php and WZ_MD5_MOD.dll, ReadMe.txt and ChangeLog.txt it's optional.
+Good luck ;)
 !-------------------------------------------------------------------!
 To Create Admin Need:
 Register in web, and in MEMB_INFO table with your name, 
 change 'mmw_stats' Colums - '0' to '10'. (0: Member, 5: GM, 10: Admin)
 Admin Username = Your Login in Reg WebSite
 Admin Password = Your Password in Reg WebSite
-Admin SecurityCode = '4321'
+Admin SecurityCode = '***'
 
 How to add Functions?
 add functions.php to 'includes/func/' folder.

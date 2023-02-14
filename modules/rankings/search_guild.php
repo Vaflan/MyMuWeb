@@ -4,8 +4,9 @@
 // Ver. 1.7
 
 $search = clean_var(stripslashes($_POST['search']));
-$result = @mssql_query("SELECT * from guild where G_Name like '%$search%' order by G_score desc");
-$row_num = @mssql_num_rows($result);
+if (!empty($search)) {$result = mssql_query("SELECT TOP 30 * from guild where G_Name like '%$search%' order by G_score desc");} else {
+$result = mssql_query("SELECT TOP 30 * from guild where G_Name like '$search' order by G_score desc"); }
+$row_num = mssql_num_rows($result);
 ?>
 <br><?echo mmw_lang_search_guild_results;?></br><br>&nbsp;</br>
            <table class="sort-table" cellspacing="0" cellpadding="0" border="0">
