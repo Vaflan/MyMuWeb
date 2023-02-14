@@ -4,14 +4,14 @@ session_start();
 header("Cache-control: private");
 header("Cache-control: max-age=3600");
 @date_default_timezone_set('Europe/Helsinki');
-$_SESSION[TimeStart] = gettimeofday();
+$_SESSION['TimeStart'] = gettimeofday();
 require_once("config.php");
 require_once("includes/banned.php");
 require_once("includes/sql_check.php");
 require_once("includes/xss_check.php");
 require_once("includes/mmw-func.php");
 require_once("includes/engine.php");
-mmw("includes/security.mmw");
+require_once("includes/security.php");
 
 // To Look After All
 if($mmw[look_after_all] == 'yes') {

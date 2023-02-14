@@ -6,7 +6,6 @@
 	</table>
 
 	<div style="text-align:center;">
-	 <?echo $rowbr; mp3_player(); echo $rowbr;?>
 	 <script type="text/javascript">google_ad_client="pub-4674738152966972"; google_ad_slot="4128955460"; google_ad_width=468; google_ad_height=60;</script>
 	 <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 	</div>

@@ -59,7 +59,7 @@ elseif($pg=='3') {
  echo "<div style='display:none;' id='install_log' align='center'><textarea style='width: 300px; height: 120px;'>";
 
  //// CREAT TABLES
- $load_db_mmw = implode('', @file('includes/db_mmw.sql'));
+ $load_db_mmw = implode('', @file('install/db_mmw.sql'));
 
  //// DECODE DATABASE
  $decode_database = "ALTER DATABASE $mmw[database] COLLATE SQL_Latin1_General_CP1251_CI_AS";
@@ -175,11 +175,12 @@ elseif($pg=='5') {
   echo "$sql_die_start <small>Install Page 5</small> <br> <b>No Selected!</b> <br> If you need Admin, go Back <br> <a href='install.php?pg=4'>Back</a> $sql_die_end";
  }
  elseif($login!='register') {
+ 	$answer = rand(10000000,10000000000);
 	if($mmw['md5'] == yes && isset($password)) {
-		mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login',[dbo].[fn_md5]('$password','$login'),'Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','WhoYouAre','admin','0','male','0','0')");
+		mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login',[dbo].[fn_md5]('$password','$login'),'Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','IdiNahui','$answer','0','male','0','0')");
 	}
 	elseif($mmw['md5'] == no && isset($password)) {
-		mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login','$password','Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','WhoYouAre','admin','0','male','0','0')");
+		mssql_query("INSERT INTO MEMB_INFO (memb___id,memb__pwd,memb_name,sno__numb,mail_addr,appl_days,modi_days,out__days,true_days,mail_chek,bloc_code,ctl1_code,memb__pwd2,fpas_ques,fpas_answ,country,gender,hide_profile,ref_acc) VALUES ('$login','$password','Admin','1234','admin@mmw.net',GETDATE(),GETDATE(),'2008-12-20','2008-12-20','1','0','0','$password','IdiNahui','$answer','0','male','0','0')");
 		mssql_query("INSERT INTO VI_CURR_INFO (ends_days,chek_code,used_time,memb___id,memb_name,memb_guid,sno__numb,Bill_Section,Bill_value,Bill_Hour,Surplus_Point,Surplus_Minute,Increase_Days) VALUES ('2005','1',1234,'$login','$login',1,'7','6','3','6','6','2003-11-23 10:36:00','0' )");                    
 	}
   mssql_query("UPDATE MEMB_INFO SET [mmw_status]='10' WHERE memb___id='$login'");

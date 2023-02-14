@@ -12,7 +12,7 @@ include("includes/sql_check.php");
 include("includes/xss_check.php");
 include("includes/mmw-func.php");
 include("includes/engine.php");
-mmw("includes/security.mmw");
+include("includes/security.php");
 // Drop
 if(isset($_GET[delete])) {
  $id = preg_replace("/[^0-9]/",'',$_GET[delete]);

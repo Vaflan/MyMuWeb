@@ -12,19 +12,47 @@
  ErrorDocument 404 /error.php?go=404
  ErrorDocument 500 /error.php?go=500
 
- # Max File Upload / Session Security
- php_value upload_max_filesize 100M
- php_value post_max_size 100M
+ # PHP Value
+ php_value upload_max_filesize 5M
+ php_value post_max_size 5M
+ php_flag short_open_tag on
  php_flag register_globals off
+ php_flag register_long_arrays off
+ php_flag magic_quotes_gpc off
  php_flag session.use_trans_sid off
  php_flag session.use_cookies on
-
+ php_value error_reporting E_NONE
  php_flag display_startup_errors off
  php_flag display_errors off
  php_flag html_errors off
+
+# REQUEST LIMIT
+ LimitRequestBody 2000000
 
  # Config Security
  <FilesMatch "config.php"> 
 	Order deny,allow 
 	deny from all 
  </FilesMatch>
+
+ # .htaccess Security
+ <files .htaccess>
+    order allow,deny
+    deny from all
+ </files>
+
+RewriteEngine On
+RewriteBase /
+RewriteCond %{QUERY_STRING} ^(%2d|-)[^=]+$ [NC]
+RewriteRule ^.htaccess$ - [F]
+RewriteRule ^.*$ - [NC,L]
+RewriteCond %{REQUEST_METHOD} ^(HEAD|GET) [NC]
+RewriteCond %{HTTP:Range} ([0-9]*-[0-9]*)(\s*,\s*[0-9]*-[0-9]*)+
+RewriteRule ^(.*)$ index.php [F,L]
+RewriteRule .* - [F]
+
+<IfModule mod_rewrite.c>
+SetEnvIfNoCase ^User-Agent$ .*(craftbot|download|extract|stripper|sucker|ninja|clshttp|webspider|leacher|collector|grabber|webpictures) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(libwww-perl|aesop_com_spiderman) HTTP_SAFE_BADBOT
+Deny from env=HTTP_SAFE_BADBOT
+</ifModule>
