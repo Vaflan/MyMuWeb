@@ -2,10 +2,10 @@
 // Updated for MyMuWeb 0.8
 // Module by Vaflan
 
-if($_GET[w]=="online") {
+if($_GET['w']=="online") {
  echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
 }
-elseif($_GET[w]=="block") {
+elseif($_GET['w']=="block") {
  $login = clean_var(stripslashes($_GET['n']));
  $acc_block = mssql_query("SELECT bloc_code,block_date,unblock_time,blocked_by,block_reason FROM MEMB_INFO WHERE memb___id='$login'");
  $row = mssql_fetch_row($acc_block);

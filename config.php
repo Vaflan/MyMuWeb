@@ -5,11 +5,16 @@
 
 
 // MSSQL settings
-$mmw[sqlhost] = 'IP Address';			// Ip SQL Server
-$mmw[sqluser] = 'Login';			// Login SQL
-$mmw[sqlpass] = 'Password';			// Pass SQL
-$mmw[database] = 'DataBase';			// DataBase SQL
+$mmw[sqlhost] = '127.0.0.1';			// Ip SQL Server
+$mmw[sqluser] = 'sa';			        // Login SQL
+$mmw[sqlpass] = 'SQL PASS';			// Pass SQL
+$mmw[database] = 'MuOnline';			// DataBase SQL
 
+
+// Admin Panel
+$mmw['admin_panel_ip'] = 'no';            // Admin/GM ip-adress from http://myip.ru to enter on admin panel (127.0.0.1 is enable, on local you can enter)
+$mmw['admin_panel_ip_2'] = 'no';          // 2 Admin/GM ip-adress to enter on admin panel
+$mmw['admin_panel_ip_3'] = 'no';          // 3 Admin/GM ip-adress to enter on admin panel
 
 // MyMuWeb Config
 $mmw[md5] = 'no';					// Server MD5 yes or no
@@ -42,14 +47,16 @@ $mmw[max_private_message] = '50';			// Max Private Message
 $mmw[max_length_private_message] = '300';		// How many Simbol in Private Message
 $mmw[votes_check] = 'acc';				// ip(Only Different IP) or acc(Only Different Account)
 $mmw[mp3_player] = 'no';				// no(Not Show) or yes(Show) Mp3 Player
-$mmw[popunder] = 'yes';					// no(Not Show) or yes(Show) PopUnder in MyMuWeb
+$mmw[popunder] = 'no';					// no(Not Show) or yes(Show) PopUnder in MyMuWeb
 $mmw[popunder_check] = 'yes';				// If 'yes' and Account Logined, PoUnder OFF.
 $mmw[auto_func] = 'yes';				// no(Turn Off) or yes(Turn On) Auto Func.
 $mmw[auto_func_dir] = 'includes/func/';			// Directory for auto functions includes.
 $mmw[show_all_error] = 'yes';				// Turn On or Off all Error's
 $mmw[check_admin_panel] = 'yes';			// Check admin panel, Who where be.
 $mmw[look_after_all] = 'yes';				// To look after all, Who where be.
-
+$mmw[disable_credits] = 'false';				// Register and add new acc to MEMB_CREDITS Table
+$mmw[all_characters_class] = '7';				// If 7 - in Best List is RF, if 6 RF empty
+$mmw[info_gm_and_blocked] = 'true';			// Show info about GM and Blocked Char
 
 // Switch Character Options
 $mmw[reset] = 'yes';					// yes(All Can Reset) no(Options Off).
@@ -74,7 +81,7 @@ $mmw[chat_timeout] = '10';				// TimeOut Send Message sec
 
 
 // Statistics
-$mmw[statistics_char] = '0,1,2,16,17,18,32,33,34,48,50,64,66,80,81,82';		// List of Character
+$mmw[statistics_char] = '0,1,2,16,17,18,32,33,34,48,50,64,66,80,81,82,96,98';		// List of Character
 $mmw[statistics_maps] = '0,1,2,3,4,6,7,8,10,30,31,33,34,41,42,51,56,57';	// List of Locations (Maps)
 
 
@@ -85,6 +92,7 @@ $mmw[reset_level_elf] = '400';				// Level For Reset Elf,ME,HE
 $mmw[reset_level_mg] = '400';				// Level For Reset MG,DM
 $mmw[reset_level_dl] = '400';				// Level For Reset DL,LE
 $mmw[reset_level_sum] = '400';				// Level For Reset Sum,Bsum,Dim
+$mmw[reset_level_rf] = '400';				// Level For Reset RF,FM
 $mmw[reset_limit_level] = '999';			// Max Reset (Limit)
 $mmw[reset_limit_price] = '0';				// Limited Price For Reset or 0
 $mmw[reset_money] = '10000000';				// Zen for Reset (Min 1kk)
@@ -95,6 +103,7 @@ $mmw[reset_points_elf] = '100';				// Reset Points Elf,ME,HE
 $mmw[reset_points_mg] = '100';				// Reset Points MG,DM
 $mmw[reset_points_dl] = '100';				// Reset Points DL,LE
 $mmw[reset_points_sum] = '100';				// Reset Points Sum,Bsum,Dim
+$mmw[reset_points_rf] = '100';				// Reset Points RF,FM
 $mmw[reset_mode] = 'keep';				// reset(Points = 25) or keep(Default)
 $mmw[reset_command] = 'no';				// If reset mode = keep, can keep command on DL
 $mmw[level_up_mode] = 'normal';				// extra(ResetPoints*Reset) or normal(Points+ResetPoints)

@@ -46,7 +46,7 @@ function clean_var($var) {
  //$newvar = str_replace("%","&#37;",$newvar);
  $newvar = str_replace("'","&#39;",$newvar);
  $newvar = str_replace(",","&#44;",$newvar);
- $newvar = str_replace(".","&#46;",$newvar);
+ //$newvar = str_replace(".","&#46;",$newvar);
  //$newvar = str_replace(":","&#58;",$newvar);
  $newvar = str_replace("`","&#96;",$newvar);
  return $newvar;

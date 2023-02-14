@@ -5,12 +5,12 @@ header("Cache-control: private");
 header("Cache-control: max-age=3600");
 @date_default_timezone_set('Europe/Helsinki');
 $_SESSION[TimeStart] = gettimeofday();
-require("config.php");
-include("includes/banned.php");
-include("includes/sql_check.php");
-include("includes/xss_check.php");
-include("includes/mmw-func.php");
-include("includes/engine.php");
+require_once("config.php");
+require_once("includes/banned.php");
+require_once("includes/sql_check.php");
+require_once("includes/xss_check.php");
+require_once("includes/mmw-func.php");
+require_once("includes/engine.php");
 
 // To Look After All
 if($mmw[look_after_all] == 'yes') {
@@ -19,7 +19,7 @@ if($mmw[look_after_all] == 'yes') {
 
 // Check For Installed
 if(is_file("includes/installed.php")) {
- include("includes/installed.php");
+ require_once("includes/installed.php");
 }
 else {
  header('Location: install.php');
@@ -27,28 +27,51 @@ else {
 
 // Start Header
 if(is_file("$mmw[theme_dir]/header.php")) {
- include("$mmw[theme_dir]/header.php");
+ require_once("$mmw[theme_dir]/header.php");
 }
 else {
  die("$sql_die_start ErroR Theme!<br>Cant find <b>$mmw[theme_dir]/header.php</b>! $sql_die_end");
 }
 
 // Start Body
-if(isset($_GET[news])) {
- include("modules/news_full.php");
+if(isset($_GET['op'])) {
+switch($_GET['op']) {
+  case 'news': $op='news'; break;
+  case 'user': $op='user'; break;
+  case 'character': $op='character'; break;
+  case 'register': $op='register'; break;
+  case 'downloads': $op='downloads'; break;
+  case 'info': $op='information'; break;
+  case 'castlesiege': $op='castlesiege'; break;
+  case 'statistics': $op='statistics'; break;
+  case 'rankings': $op='rankings'; break;
+  case 'login': $op='login'; break;
+  case 'forum': $op='forum'; break;
+  case 'alliance'; $op='alliance'; break;
+  case 'blocked'; $op='blocked'; break;
+  case 'gallery'; $op='gallery'; break;
+  case 'profile'; $op='profile'; break;
+  case 'chat'; $op='chat'; break;
+  case 'checkacc': $op='checkacc'; break;
+  case 'guild'; $op='guild'; break;
+  case 'lostpass'; $op='lostpass'; break;
+  case 'search'; $op='search'; break;
+  default: $op=''.$mmw["home_page"].'';
 }
-elseif(isset($_GET[forum])) {
- include("modules/forum_full.php");
+if(is_file("modules/$op.php")) {
+ require_once("modules/$op.php");
 }
-elseif(isset($_GET[op])) {
- $op = preg_replace("/[^a-zA-Z0-9_-]/",'',$_GET[op]);
- if(is_file("modules/$op.php")) {include("modules/$op.php");}
- elseif(is_file("modules/$op.mmw")) {mmw("modules/$op.mmw");}
- else {echo "$die_start Request is False!<br><a href=' http://geoiptool.com/en/?ip=$_SERVER[REMOTE_ADDR]'>Now we have your IP Address!</a> $die_end";}
+elseif(is_file("modules/$op.mmw")) {
+mmw("modules/$op.mmw");}
+}
+elseif(isset($_GET['news'])) {
+ require_once("modules/news_full.php");
+}
+elseif(isset($_GET['forum'])) {
+ require_once("modules/forum_full.php");
 }
 else {
- if(is_file("modules/$mmw[home_page].php")) {include("modules/$mmw[home_page].php");}
- elseif(is_file("modules/$mmw[home_page].mmw")) {mmw("modules/$mmw[home_page].mmw");}
+ require_once("modules/news.php");
 }
 
 // Start Pop Under

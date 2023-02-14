@@ -26,6 +26,7 @@ if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$sel
                         <?if(substr_count($mmw[statistics_char],'48')>0){?><option value="mg"<?echo $select_sort['mg'];?>><?echo mmw_lang_only;?> MG's-DM's</option><?}?>
                         <?if(substr_count($mmw[statistics_char],'64')>0){?><option value="dl"<?echo $select_sort['dl'];?>><?echo mmw_lang_only;?> DL's-LE's</option><?}?>
                         <?if(substr_count($mmw[statistics_char],'80,81')>0){?><option value="sum"<?echo $select_sort['sum'];?>><?echo mmw_lang_only;?> Sum's-Dim's</option><?}?>
+                        <?if(substr_count($mmw[statistics_char],'96,98')>0){?><option value="rf"<?echo $select_sort['rf'];?>><?echo mmw_lang_only;?> RF's-FM's</option><?}?>
                         <option value="online"<?echo $select_sort['online'];?>><?echo mmw_lang_online_characters;?></option>
                         <option value="3d_online"<?echo $select_sort['3d_online'];?>>3D <?echo mmw_lang_online_characters;?></option>
                       </select> 

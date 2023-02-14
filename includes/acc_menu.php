@@ -2,8 +2,14 @@
 // MyMuWeb Menu
 // By Vaflan
 
-echo $rowbr;
+    $avatar = mssql_fetch_row ( mssql_query("SELECT avatar FROM MEMB_INFO WHERE memb___id = '$_SESSION[user]'") );
+	$credits = mssql_fetch_row ( mssql_query("SELECT credits FROM MEMB_CREDITS WHERE memb___id = '$_SESSION[user]'") );
+   if ($avatar[0] == "" || $avatar[0] == " ") {
+	$avatar[0] = "images/no_avatar.jpg";
+  }
 
+echo $rowbr;
+ echo "<center><img src='".$avatar[0]."' border='0' width='110px' height='150px' alt='".mmw_lang_no_avatar."'></center>";
 if(isset($_SESSION['char_set'])) {
 
  echo "$setchar<br>";

@@ -12,20 +12,21 @@ function time_format($date,$format) {
   $day = $date_row[0];
   $month = $date_row[1];
   $year = $date_row[2];
-  $time = $date_row[4];
+  if(empty($date_row[4])) {$time = $date_row[3];}
+  else {$time = $date_row[4];}
 
   if($month=='ÿíâ' || $month=='ÑÐ½Ð²' || $month=='ï­¢') {$month="Jan";}
-  elseif($month=='ôåâ' || $month=='Ñ„ÐµÐ²' || $month=='ä¥¢') {$month="Feb";}
-  elseif($month=='ìàð' || $month=='Ð¼Ð°Ñ€' || $month=='¬ à') {$month="Mar";}
-  elseif($month=='àïð' || $month=='Ð°Ð¿Ñ€' || $month==' ¯à') {$month="Apr";}
-  elseif($month=='ìàé' || $month=='Ð¼Ð°Ð¹' || $month=='¬ ©') {$month="May";}
-  elseif($month=='èþí' || $month=='Ð¸ÑŽÐ½' || $month=='¨î­') {$month="Jun";}
-  elseif($month=='èþë' || $month=='Ð¸ÑŽÐ»' || $month=='¨î«') {$month="Jul";}
-  elseif($month=='àâã' || $month=='Ð°Ð²Ð³' || $month==' ¢£') {$month="Aug";}
-  elseif($month=='ñåí' || $month=='ÑÐµÐ½' || $month=='á¥­') {$month="Sep";}
-  elseif($month=='îêò' || $month=='Ð¾ÐºÑ‚' || $month=='®ªâ') {$month="Oct";}
-  elseif($month=='íîÿ' || $month=='Ð½Ð¾Ñ' || $month=='­®ï') {$month="Nov";}
-  else {$month="Dec";}
+  if($month=='ôåâ' || $month=='Ñ„ÐµÐ²' || $month=='ä¥¢') {$month="Feb";}
+  if($month=='ìàð' || $month=='Ð¼Ð°Ñ€' || $month=='¬ à') {$month="Mar";}
+  if($month=='àïð' || $month=='Ð°Ð¿Ñ€' || $month==' ¯à') {$month="Apr";}
+  if($month=='ìàé' || $month=='Ð¼Ð°Ð¹' || $month=='¬ ©') {$month="May";}
+  if($month=='èþí' || $month=='Ð¸ÑŽÐ½' || $month=='¨î­') {$month="Jun";}
+  if($month=='èþë' || $month=='Ð¸ÑŽÐ»' || $month=='¨î«') {$month="Jul";}
+  if($month=='àâã' || $month=='Ð°Ð²Ð³' || $month==' ¢£') {$month="Aug";}
+  if($month=='ñåí' || $month=='ÑÐµÐ½' || $month=='á¥­') {$month="Sep";}
+  if($month=='îêò' || $month=='Ð¾ÐºÑ‚' || $month=='®ªâ') {$month="Oct";}
+  if($month=='íîÿ' || $month=='Ð½Ð¾Ñ' || $month=='­®ï') {$month="Nov";}
+  if($month=='äåê' || $month=='Ð´ÐµÐº') {$month="Dec";}
  }
  else {
   $day = $date_row[1];
@@ -160,7 +161,7 @@ function bugsend($bug) {
  $bug = str_replace('"',"&quot;",$bug);
  //$bug = str_replace("/","&#47;",$bug);
  $bug = str_replace("?","&#63;",$bug);
- $bug = str_replace("—","&mdash;",$bug);
+ //$bug = str_replace("—","&mdash;",$bug);
  $bug = str_replace("'","&apos;",$bug);
  $bug = str_replace("!","&#33;",$bug);
  $bug = str_replace("$","&#36;",$bug);
@@ -524,6 +525,8 @@ function char_class($class,$style=NULL) {
  elseif($class == 80){$class_row1 = array('off'=>'Sum','full'=>'Summoner');}
  elseif($class == 81){$class_row1 = array('off'=>'Bsum','full'=>'Bloody Summoner');}
  elseif($class == 82 || $class == 83){$class_row1 = array('off'=>'Dim','full'=>'Dimension Master');}
+ elseif($class == 96){$class_row1 = array('off'=>'RF','full'=>'Rage Fighter');}
+ elseif($class == 97 || $class == 98){$class_row1 = array('off'=>'FM','full'=>'First Master');}
  else{$class_row1 = array('off'=>'Unknow','full'=>'Unknow');}
 
  if($class >= 0 && $class <= 15){$class_row2 = array('img'=>'char/dw.gif','photo'=>'0x00FFFFFFFFFF000000F80000F0FFFFFF');}
@@ -532,6 +535,7 @@ function char_class($class,$style=NULL) {
  elseif($class >= 48 && $class <= 63){$class_row2 = array('img'=>'char/mg.gif','photo'=>'0x60FFFFFFFFFF000000F80000F0FFFFFF');}
  elseif($class >= 64 && $class <= 79){$class_row2 = array('img'=>'char/dl.gif','photo'=>'0x80FFFFFFFFFF000000F80000F0FFFFFF');}
  elseif($class >= 80 && $class <= 95){$class_row2 = array('img'=>'char/sm.gif','photo'=>'0xA0FFFFFFFFFF000000F80000F0FFFFFF');}
+ elseif($class >= 96 && $class <= 112){$class_row2 = array('img'=>'char/rf.gif','photo'=>'0xC0FFFFFFFFFF000000F80000F0FFFFFF');}
  else{$class_row2 = array('img'=>'Unknow','photo'=>'0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');}
 
  return $class_row1[$style].$class_row2[$style];
@@ -545,45 +549,12 @@ function char_class($class,$style=NULL) {
 
 
 /////// Start Win to UTF Formats ///////
-function win_to_utf($s) {
- $s = str_replace('¸','å',$s);
- for($i=0, $m=strlen($s); $i<$m; $i++) {
-	$c=ord($s[$i]);
-	if($c<=127) {$t.=chr($c); continue;}
-	if($c>=192 && $c<=207) {$t.=chr(208).chr($c-48); continue;}
-	if($c>=208 && $c<=239) {$t.=chr(208).chr($c-48); continue;}
-	if($c>=240 && $c<=255) {$t.=chr(209).chr($c-112); continue;}
-	if($c==184) {$t.=chr(209).chr(209); continue;};
-	if($c==168) {$t.=chr(208).chr(129); continue;}; 
- }
- return $t;
+function win_to_utf($str=NULL) {
+ $str = iconv("cp1251", "UTF-8", $str);
+ return str_replace("Ð°", "a", $str);
 }
-/////// END Win to UTF Formats ///////
-
-
-
-
-
-
-
-/////// Start UTF to Win Formats ///////
-function utf_to_win($str) {
- $str_array = array(win_to_utf('a')=>'à',win_to_utf('á')=>'á',win_to_utf('â')=>'â',win_to_utf('ã')=>'ã',
- win_to_utf('ä')=>'ä',win_to_utf('å')=>'å',win_to_utf('¸')=>'¸',win_to_utf('æ')=>'æ',win_to_utf('ç')=>'ç',
- win_to_utf('è')=>'è',win_to_utf('é')=>'é',win_to_utf('ê')=>'ê',win_to_utf('ë')=>'ë',win_to_utf('ì')=>'ì',
- win_to_utf('í')=>'í',win_to_utf('î')=>'î',win_to_utf('ï')=>'ï',win_to_utf('ð')=>'ð',win_to_utf('ñ')=>'ñ',
- win_to_utf('ò')=>'ò',win_to_utf('ó')=>'ó',win_to_utf('ô')=>'ô',win_to_utf('õ')=>'õ',win_to_utf('ö')=>'ö',
- win_to_utf('÷')=>'÷',win_to_utf('ø')=>'ø',win_to_utf('ù')=>'ù',win_to_utf('ú')=>'ú',win_to_utf('û')=>'û',
- win_to_utf('ü')=>'ü',win_to_utf('ý')=>'ý',win_to_utf('þ')=>'þ',win_to_utf('ÿ')=>'ÿ',
- win_to_utf('À')=>'À',win_to_utf('Á')=>'Á',win_to_utf('Â')=>'Â',win_to_utf('Ã')=>'Ã',win_to_utf('Ä')=>'Ä',
- win_to_utf('Å')=>'Å',win_to_utf('¨')=>'¨',win_to_utf('Æ')=>'Æ',win_to_utf('Ç')=>'Ç',win_to_utf('È')=>'È',
- win_to_utf('É')=>'É',win_to_utf('Ê')=>'Ê',win_to_utf('Ë')=>'Ë',win_to_utf('Ì')=>'Ì',win_to_utf('Í')=>'Í',
- win_to_utf('Î')=>'Î',win_to_utf('Ï')=>'Ï',win_to_utf('Ð')=>'Ð',win_to_utf('Ñ')=>'Ñ',win_to_utf('Ò')=>'Ò',
- win_to_utf('Ó')=>'Ó',win_to_utf('Ô')=>'Ô',win_to_utf('Õ')=>'Õ',win_to_utf('Ö')=>'Ö',win_to_utf('×')=>'×',
- win_to_utf('Ø')=>'Ø',win_to_utf('Ù')=>'Ù',win_to_utf('Ú')=>'Ú',win_to_utf('Û')=>'Û',win_to_utf('Ü')=>'Ü',
- win_to_utf('Ý')=>'Ý',win_to_utf('Þ')=>'Þ',win_to_utf('ß')=>'ß');
- $str = strtr($str,$str_array);
- return $str;
+function utf_to_win($str=NULL) {
+ return iconv("UTF-8", "cp1251//IGNORE", $str);
 }
 /////// END UTF to Win Formats ///////
 ?>

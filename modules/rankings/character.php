@@ -17,6 +17,7 @@ $query_race[elf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from 
 $query_race[mg] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='48' and class<='63' $no_gm_in_top order by reset desc, clevel desc";
 $query_race[dl] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='64' and class<='79' $no_gm_in_top order by reset desc, clevel desc";
 $query_race[sum] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='80' and class<='95' $no_gm_in_top order by reset desc, clevel desc";
+$query_race[rf] = "Select TOP $top_rank Name,Class,cLevel,Reset,AccountID from Character where class>='96' and class<='112' $no_gm_in_top order by reset desc, clevel desc";
 
 $result = @mssql_query($query_race[$race]);
 $row_num = @mssql_num_rows($result);

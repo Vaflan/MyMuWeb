@@ -199,6 +199,18 @@ function statisitcs($style) {
  $users_connected = mssql_fetch_row( mssql_query("SELECT count(*) FROM MEMB_STAT WHERE ConnectStat = '1'") );
  $serv_result = mssql_query("SELECT Name,experience,drops,gsport,ip,version,type,maxplayer from MMW_servers order by display_order asc");
 
+ if($style == 'cscw') {
+	$cs_row = mssql_fetch_row( mssql_query("SELECT CASTLE_OCCUPY,owner_guild FROM MuCastle_DATA") );
+	$cw_row = mssql_fetch_row( mssql_query("SELECT CRYWOLF_OCCUFY FROM MuCrywolf_DATA") );
+	if(empty($cs_row[0])) {$cs_row[0] = '<span style="color: red">Not captured</span>';} else {$cs_row[0] = '<span style="color: green">Captured</span>';}
+	if(empty($cs_row[1])) {$cs_row[1] = '<a href="?op=castlesiege">No Guild</a>';} else {$cs_row[1] = '<a href="?op=guild&guild='.$cs_row[1].'">'.$cs_row[1].'</a>';}
+	if(empty($cw_row[0])) {$cw_row[0] = '<span style="color: red">Captured</span>';} else {$cw_row[0] = '<span style="color: green">Protected</span>';}
+	echo "\nCastle Siege: $cs_row[0]<br>"
+	 ."\nOwner Guild: $cs_row[1]<br>"
+	 ."\nCry Wolf: $cw_row[0]<br>";
+	return true;
+ }
+
  if($style == 'fullblink') {
 	echo '<script type="text/javascript" src="scripts/textfader.js">//script_by_vaflan</script>';
 	echo '<script type="text/javascript">function throbFade() { fade(2, Math.floor(throbStep / 2), (throbStep % 2) ? false : true); setTimeout("throbFade();", (throbStep % 2) ? 100 : 4000); if(++throbStep > fader[2].message.length * 2 - 1) throbStep = 0;}';
@@ -208,8 +220,14 @@ function statisitcs($style) {
  for($i=0; $i<mssql_num_rows($serv_result); ++$i) {
 	$rank = $i + 1;
 	$row = mssql_fetch_row($serv_result);
-	if($_SESSION[server_kesh][timeout] + $mmw[server_timeout] < time() || empty($_SESSION[server_kesh][$rank])) {
-	 if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.5)) {fclose($check); $_SESSION[server_kesh][$rank] = on;}
+
+        if(empty($_SESSION[server_kesh][$rank])) {
+	 if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.05)) {fclose($check); $_SESSION[server_kesh][$rank] = on;}
+	 else {$_SESSION[server_kesh][$rank] = off;}
+	 $_SESSION[server_kesh][timeout] = time();
+	}
+	elseif($_SESSION[server_kesh][timeout] + $mmw[server_timeout] < time()) {
+	 if($check=@fsockopen($row[4],$row[3],$ERROR_NO,$ERROR_STR,(float)0.05)) {fclose($check); $_SESSION[server_kesh][$rank] = on;}
 	 else {$_SESSION[server_kesh][$rank] = off;}
 	 $_SESSION[server_kesh][timeout] = time();
 	}
@@ -237,6 +255,7 @@ function statisitcs($style) {
 	   echo "</td><td class=\"maincr\"></td></tr><tr><td class=\"mainbl\"></td><td class=\"mainbc\"></td><td class=\"mainbr\"></td></tr></table></td></tr></table>";
 	}
  }
+ if($style == 'main') {return true;}
 
  if($style == 'blink' || $style == 'fullblink') {
 	echo "\n fader[2].message[0] = \"".mmw_lang_total_accounts.": $total_accounts[0]<br>".mmw_lang_total_characters.": $total_characters[0]<br>".mmw_lang_total_banneds.": $total_banneds[0]<br>".mmw_lang_total_actives.": $actives_acc[0]<br>".mmw_lang_total_guilds.": $total_guilds[0]<br>".mmw_lang_total_users_online.": $users_connected[0]\";";
@@ -245,7 +264,7 @@ function statisitcs($style) {
  elseif($style == 'default') {
 	echo "\n ".mmw_lang_total_users_online.": $users_connected[0]<br>".mmw_lang_total_accounts.": $total_accounts[0]<br>".mmw_lang_total_characters.": $total_characters[0]<br>".mmw_lang_total_banneds.": $total_banneds[0]<br>".mmw_lang_total_actives.": $actives_acc[0]<br>".mmw_lang_total_guilds.": $total_guilds[0]<br>";
  }
-
+ return true;
 }
 /////// End Statisitcs ///////
 
@@ -578,7 +597,8 @@ function top_list($what=NULL,$top=NULL) {
 	echo "<td width='100%'><b>".mmw_lang_very_strong.": $strong</b>";
 
 	if($mmw['gm']=='no'){$no_gm_in_top = "AND ctlcode!='32' AND ctlcode!='8'";}
-        for($i=0;$i<'6';$i++) {
+	if(!isset($mmw['all_characters_class'])) {$mmw['all_characters_class'] = 7;}
+        for($i=0;$i<$mmw['all_characters_class'];$i++) {
 	 $class = $i * 16;
 	 $strongs_result = mssql_query("SELECT TOP 1 Name FROM Character WHERE class>='$class' AND class<='".($class+15)."' $no_gm_in_top ORDER BY strength DESC, dexterity DESC, vitality DESC, energy DESC, Leadership DESC");
 	 $strongs_row = mssql_fetch_row($strongs_result);

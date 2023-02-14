@@ -2,24 +2,24 @@
 if(isset($_POST[hex_wh])){require("includes/character.class.php");option::edit_warehouse($_POST[hex_wh]); echo $rowbr;}
 if(isset($_POST[gm_msg])){require("includes/character.class.php");option::gm_msg($_POST[gm_msg]); echo $rowbr;}
 if(isset($_POST[gm_block])){require("includes/character.class.php");option::gm_block($_POST[acc_mode]); echo $rowbr;}
-?>
+ if($_SESSION[mmw_status] < 1) { Die("HACKER DETECTED!");}
 
-  <table class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
+  echo'<table class="sort-table" border="0" cellspacing="0" cellpadding="0" align="center">
     <tr>
       <td width="100" align="right">Your Level:</td>
-      <td><b><?echo $_SESSION['mmw_status'];?> (<?echo $mmw[status_rules][$_SESSION[mmw_status]][name];?>)</b></td>
+      <td><b>'.$_SESSION["mmw_status"].' ('.$mmw[status_rules][$_SESSION[mmw_status]][name].')</b></td>
     </tr>
     <tr>
       <td align="right">Security Code:</td>
-      <td><b><?echo $mmw[admin_securitycode];?></b></td>
+      <td><b>'.$mmw[admin_securitycode].'</b></td>
     </tr>
     <tr>
       <td align="right">Admin Area:</td>
       <td><a target="_blank" href="admin.php">Enter</a></td>
     </tr>
-  </table>
+  </table>';
 
-<?
+
 echo $rowbr;
 
 if($mmw[status_rules][$_SESSION[mmw_status]][hex_wh] == 1) {
@@ -99,6 +99,10 @@ function select_block() {
 	<tr>
           <td align="right"><?echo mmw_lang_account;?>:</td>
           <td><input name='account' type='text' value='' size='12' maxlength='10'></td>
+	</tr>
+	<tr>
+          <td align="right"><?echo mmw_lang_character;?>:</td>
+          <td><input name='character' type='text' value='' size='12' maxlength='10'></td>
 	</tr>
 	<tr>
 	  <td align="right">Block Time:</td>

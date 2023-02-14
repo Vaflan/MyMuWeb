@@ -84,6 +84,9 @@ else {
   if($row[4]+$mmw[forum_of_new] > time() && $row[7]>=$mmw[forum_topic_hot]) {$topic_img = 'f_hot_new.gif';}
   if($row[6] == 1) {$topic_img = 'f_closed_nonew.gif';}
 
+  if(empty($row[7])) {$row[7] = 0;}
+  if(empty($row[8])) {$row[8] = 0;}
+
   $option = '';
   if($mmw[status_rules][$_SESSION[mmw_status]][forum_delete]==1 || $_SESSION['char_set'] == $row[1])
    {$option.=" <form action='' method='post' name='delete_$row[0]'><input name='f_id_delete' type='hidden' value='$row[0]'><img src='".default_img('delete.png')."' border='0' onclick='delete_$row[0].submit()' title='".mmw_lang_delete."'></form> ";}

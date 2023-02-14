@@ -40,6 +40,7 @@ if($info[1] >= 32 && $info[1] <= 47) {$reset_level = $mmw[reset_level_elf];}
 if($info[1] >= 48 && $info[1] <= 63) {$reset_level = $mmw[reset_level_mg];}
 if($info[1] >= 64 && $info[1] <= 79) {$reset_level = $mmw[reset_level_dl];}
 if($info[1] >= 80 && $info[1] <= 95) {$reset_level = $mmw[reset_level_sum];}
+if($info[1] >= 96 && $info[1] <= 112) {$reset_level = $mmw[reset_level_rf];}
 
 if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
 
