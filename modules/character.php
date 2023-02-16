@@ -51,7 +51,7 @@ if (!mssql_num_rows($characterResult)) {
 
 	$profile_link = '';
 	if (empty($account_row[0])) {
-		$profile_link = '<a href="?op=profile&profile=' . $info[7] . '"><b>' . mmw_lang_view_profile . '</b></a><br>';
+		$profile_link = '<a href="?op=profile&character=' . $characterName . '"><b>' . mmw_lang_view_profile . '</b></a><br>';
 	}
 
 	$login_status = ($account_row[1] && $account_row[3] === $info[0])

@@ -7,7 +7,13 @@
  * @var string $die_end
  */
 
-$account_get = clean_var($_GET['profile']);
+if (isset($_GET['character'])) {
+	$character = clean_var($_GET['character']);
+	$account_get = mssql_fetch_row(mssql_query("SELECT accountid FROM dbo.Character WHERE Name='{$character}'"))[0];
+} else {
+	$account_get = clean_var($_GET['profile']);
+}
+
 $profile_sql = mssql_query("SELECT country,gender,age,avatar,hide_profile,y,msn,icq,skype,memb_name,appl_days,mmw_status FROM dbo.MEMB_INFO WHERE memb___id='{$account_get}'");
 $profile_info = mssql_fetch_row($profile_sql);
 if (empty($profile_info)) {
@@ -38,8 +44,8 @@ if (empty($profile_info)) {
 	<table class="sort-table" style="margin:0 auto;border:0;padding:0;width:300px">
 		<tbody>
 			<tr>
-				<td style="width:120px"><?php echo mmw_lang_account; ?>:</td>
-				<td><?php echo $account_get; ?></td>
+				<td style="width:120px"><?php echo isset($_GET['character']) ? mmw_lang_character : mmw_lang_account; ?>:</td>
+				<td><?php echo isset($_GET['character']) ? $character : $account_get; ?></td>
 			</tr>
 			<tr>
 				<td><?php echo mmw_lang_full_name; ?>:</td>

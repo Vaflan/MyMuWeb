@@ -115,7 +115,7 @@ HTML;
 					while ($row = mssql_fetch_row($result)) {
 						echo <<<HTML
 <div>
-	<a href="javascript:void(0)" onclick="parent.window.location='?op=character&character=$row[0]'" class="level{$row[1]}">
+	<a href="javascript:void(0)" onclick="parent.window.location='./?op=character&character=$row[0]'" class="level{$row[1]}">
 		{$row[0]} [{$row[3]}/{$row[2]}]
 	</a>
 </div>

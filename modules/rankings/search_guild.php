@@ -6,7 +6,8 @@
 
 $search = clean_var(stripslashes($_POST['search']));
 
-$result = mssql_query("SELECT g.G_Name,
+$result = mssql_query("SELECT TOP 30
+	g.G_Name,
 	g.G_Mark,
 	g.G_Score,
 	g.G_Master,

@@ -102,6 +102,16 @@ function login_form()
 {
 	global $mmw, $rowbr;
 	if (isset($_SESSION['user'])) {
+		/* Select Account information */
+		$accountQuery = mssql_query("SELECT memb_name AS name, avatar FROM dbo.MEMB_INFO WHERE memb___id='{$_SESSION['user']}'");
+		$accountInfo = mssql_fetch_assoc($accountQuery);
+		if (empty($accountInfo['name'])) {
+			$accountInfo['name'] = $_SESSION['user'];
+		}
+		if (empty($accountInfo['avatar'])) {
+			$accountInfo['avatar'] = default_img('no_avatar.jpg');
+		}
+
 		/* Select Char */
 		$characterQuery = mssql_query("SELECT name FROM dbo.Character WHERE AccountID='{$_SESSION['user']}'");
 		$setCharacter = '';

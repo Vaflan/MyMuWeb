@@ -52,7 +52,7 @@ if (isset($_POST['id_delete'])) {
 }
 
 // Add Image
-if ($_GET['w'] === 'add' && !empty($_SESSION['character'])) {
+if (isset($_GET['w']) && $_GET['w'] === 'add' && !empty($_SESSION['character'])) {
 	if (isset($_FILES['image'])) {
 		if (is_file($dir . $mmw['rand_id'] . '.php')) {
 			echo $die_start . mmw_lang_image_exists . $die_end;
@@ -117,7 +117,7 @@ if ($_GET['w'] === 'add' && !empty($_SESSION['character'])) {
 		</table>
 	</form>
 	<?php
-} elseif ($_GET['w'] === 'add') {
+} elseif (isset($_GET['w']) && $_GET['w'] === 'add') {
 	echo $die_start . mmw_lang_guest_must_be_logged_on . $die_end;
 } elseif (!empty($_GET['w'])) {
 	$file_name = preg_replace('/[^\w_-]/', '', $_GET['w']);
@@ -136,17 +136,17 @@ if ($_GET['w'] === 'add' && !empty($_SESSION['character'])) {
 			$edit .= ' <form action="" method="post" name="delete_' . $file_name . '"><input name="id_delete" type="hidden" value="' . $file_name . '"><img src="' . default_img('delete.png') . '" border="0" onclick="document.delete_' . $file_name . '.submit()" title="' . mmw_lang_delete . '"></form> ';
 		}
 		?>
-        <div style="text-align: right">
-            [ <?php echo $upload_acc_check; ?> ]
-        </div>
-		<div style="text-align: center;">
-			<a href="<?php echo $url; ?>"><big><b><?php echo $name; ?></b></big></a> <?php echo $edit; ?>
+		<div style="text-align: right">
+			[ <?php echo $upload_acc_check; ?> ]
+		</div>
+		<div style="text-align: center; font-weight: bold;">
+			<a href="<?php echo $url; ?>"><big><?php echo $name; ?></big></a> <?php echo $edit; ?>
 		</div>
 		<table class="aBlock" style="margin:0 auto;">
 			<tr>
 				<td style="padding:2px;text-align:center">
-					<a href="<?php echo $url; ?>" title="<?php echo mmw_lang_image_size . ": $width x $height"; ?>">
-						<img src="<?php echo $smallUrl; ?>" border="0">
+					<a href="<?php echo $url; ?>" target="_blank" title="<?php echo mmw_lang_image_size . ": $width x $height"; ?>">
+						<img src="<?php echo $smallUrl; ?>" border="0" alt="<?php echo $name; ?>">
 					</a>
 				</td>
 			</tr>

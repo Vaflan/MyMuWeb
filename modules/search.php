@@ -1,9 +1,11 @@
 <?php
 $searchType = array(
 	'char' => mmw_lang_character,
-	'acc' => mmw_lang_account,
 	'guild' => mmw_lang_guild,
 );
+if ($mmw['search_account']) {
+	$searchType['acc'] = mmw_lang_account;
+}
 ?>
 
 <table class="sort-table" style="margin:0 auto;border:0;padding:0">

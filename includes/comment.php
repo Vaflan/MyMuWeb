@@ -18,7 +18,9 @@ if (isset($_POST['c_message'])) {
 	$row = mssql_fetch_row($result);
 	$date = time();
 
-	if (empty($_POST['c_message'])) {
+	if (isset($_SESSION['last_comment']) && $_SESSION['last_comment'] === $_POST['c_message']) {
+		// Do nothing
+	} elseif (empty($_POST['c_message'])) {
 		echo $die_start . mmw_lang_left_blank . $die_end;
 	} elseif (empty($_SESSION['character'])) {
 		echo $die_start . mmw_lang_cant_add_no_char . $die_end;
@@ -26,6 +28,7 @@ if (isset($_POST['c_message'])) {
 		$needTime = $timeout - $date;
 		echo $die_start . mmw_lang_cant_sent_comment_need_wait . " $needTime sec. $die_end";
 	} else {
+		$_SESSION['last_comment'] = $_POST['c_message'];
 		$bug_send = bugsend(stripslashes($_POST['c_message']));
 		mssql_query("INSERT INTO dbo.MMW_comment(c_id_blog,c_id_code,c_char,c_text,c_date) VALUES ('{$c_id_blog}','{$c_id_code}','{$_SESSION['character']}','{$bug_send}','{$date}')");
 		echo $okey_start . mmw_lang_comment_sent . $okey_end;

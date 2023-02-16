@@ -50,6 +50,7 @@ $mmw['inner_mail'] = true;                                  // FALSE(Not Show) o
 $mmw['private_message']['num'] = 50;                        // Max Private Message
 $mmw['private_message']['length'] = 300;                    // How many Simbol in Private Message
 $mmw['votes_check'] = 'acc';                                // ip(Only Different IP) or acc(Only Different Account)
+$mmw['search_account'] = false;                             // FALSE(Not Show) or TRUE(Show) Search by account in search module
 $mmw['mp3_player'] = true;                                  // FALSE(Not Show) or TRUE(Show) Mp3 Player
 $mmw['popunder'] = true;                                    // FALSE(Not Show) or TRUE(Show) PopUnder in MyMuWeb
 $mmw['popunder_check'] = true;                              // If TRUE and Account Logined, PopUnder OFF.

@@ -6,7 +6,7 @@
 
 $search = clean_var(stripslashes($_POST['search']));
 
-$result = mssql_query("SELECT
+$result = mssql_query("SELECT TOP 30
 	c.Name,
 	c.Class,
 	c.{$mmw['reset_column']},

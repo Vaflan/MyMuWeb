@@ -182,12 +182,12 @@ if ($mmw['status_rules'][$_SESSION['mmw_status']]['gm_block']) {
 	}
 	?>
 	<script>
-        function select_block() {
-            var select = document.form_gm_block_acc.block_mode.value;
-            document.getElementById('block0').style.display = 'none';
-            document.getElementById('block1').style.display = 'none';
-            document.getElementById('block' + select).style.display = '';
-        }
+		function select_block() {
+			var select = document.form_gm_block_acc.block_mode.value;
+			document.getElementById('block0').style.display = 'none';
+			document.getElementById('block1').style.display = 'none';
+			document.getElementById('block' + select).style.display = '';
+		}
 	</script>
 
 	<form name="form_gm_block_acc" method="post" action="">

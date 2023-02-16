@@ -14,7 +14,9 @@ $language = array(
 
 
 echo <<<HTML
-		{$language['hello']} <b>{$_SESSION['user']}</b>!<br>
+		{$language['hello']} <b>{$accountInfo['name']}</b>!<br>
+		{$rowbr}
+		<img src="{$accountInfo['avatar']}" width="110" alt="Avatar"><br>
 		{$rowbr}
 HTML;
 
