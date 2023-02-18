@@ -297,23 +297,48 @@ function bbcode($text)
 
 
 /////// Start Smile Formats ///////
-function smile($smile)
+function emojiList($smallList = false)
 {
-	$smile = str_replace(' &gt;( ', ' <img src=images/smile/angry.gif alt=angry border=0> ', $smile);
-	$smile = str_replace(' :D ', ' <img src=images/smile/biggrin.gif alt=biggrin border=0> ', $smile);
-	$smile = str_replace(' B) ', ' <img src=images/smile/cool.gif alt=cool border=0> ', $smile);
-	$smile = str_replace(' ;( ', ' <img src=images/smile/cry.gif alt=cry border=0> ', $smile);
-	$smile = str_replace(' &lt;_&lt; ', ' <img src=images/smile/dry.gif alt=dry border=0> ', $smile);
-	$smile = str_replace(' ^_^ ', ' <img src=images/smile/happy.gif alt=happy border=0> ', $smile);
-	$smile = str_replace(' :( ', ' <img src=images/smile/sad.gif alt=sad border=0> ', $smile);
-	$smile = str_replace(' :) ', ' <img src=images/smile/smile.gif alt=smile border=0> ', $smile);
-	$smile = str_replace(' :o ', ' <img src=images/smile/surprised.gif alt=surprised border=0> ', $smile);
-	$smile = str_replace(' :p ', ' <img src=images/smile/tongue.gif alt=tongue border=0> ', $smile);
-	$smile = str_replace(' &#37;) ', ' <img src=images/smile/wacko.gif alt=wacko border=0> ', $smile);
-	$smile = str_replace(' ;) ', ' <img src=images/smile/wink.gif alt=wink border=0> ', $smile);
-	$smile = str_replace(' (hello) ', ' <img src=images/smile/hello.gif alt=hello border=0> ', $smile);
-	$smile = str_replace(' (boo) ', ' <img src=images/smile/bo.gif alt=bo border=0> ', $smile);
-	return $smile;
+	static $smiles = array(
+		' >( ' => ' <img src=images/smile/angry.gif alt=angry border=0> ',
+		' :D ' => ' <img src=images/smile/biggrin.gif alt=biggrin border=0> ',
+		' B) ' => ' <img src=images/smile/cool.gif alt=cool border=0> ',
+		' ;( ' => ' <img src=images/smile/cry.gif alt=cry border=0> ',
+		' <_< ' => ' <img src=images/smile/dry.gif alt=dry border=0> ',
+		' ^_^ ' => ' <img src=images/smile/happy.gif alt=happy border=0> ',
+		' :( ' => ' <img src=images/smile/sad.gif alt=sad border=0> ',
+		' :) ' => ' <img src=images/smile/smile.gif alt=smile border=0> ',
+		' :o ' => ' <img src=images/smile/surprised.gif alt=surprised border=0> ',
+		' :p ' => ' <img src=images/smile/tongue.gif alt=tongue border=0> ',
+		' %) ' => ' <img src=images/smile/wacko.gif alt=wacko border=0> ',
+		' ;) ' => ' <img src=images/smile/wink.gif alt=wink border=0> ',
+		' (hello) ' => ' <img src=images/smile/hello.gif alt=hello border=0> ',
+		' (boo) ' => ' <img src=images/smile/boo.gif alt=boo border=0> ',
+		' (bb) ' => ' <img src=images/smile/bb.gif alt=bodybuilding border=0> ',
+	);
+	return $smallList
+		? array_slice($smiles, 0, 12)
+		: $smiles;
+}
+function smile($content = '')
+{
+	$smiles = emojiList();
+
+	// Special Characters in HTML
+	$content = str_replace(
+		array(
+			' &gt;( ',
+			' &lt;_&lt; ',
+			' &#37;) ',
+		),
+		array(
+			$smiles[' >( '],
+			$smiles[' <_< '],
+			$smiles[' %) '],
+		),
+		$content
+	);
+	return str_replace(array_keys($smiles), array_values($smiles), $content);
 }
 
 /////// END Smile Formats ///////
@@ -577,173 +602,69 @@ function country($country, $getList = false)
 
 
 /////// Start Map Formats ///////
-function map($map)
+function map($map, $getList = false)
 {
-	switch ($map) {
-		case 0:
-			$map = 'Lorencia';
-			break;
-		case 1:
-			$map = 'Dungeon';
-			break;
-		case 2:
-			$map = 'Devias';
-			break;
-		case 3:
-			$map = 'Noria';
-			break;
-		case 4:
-			$map = 'LostTower';
-			break;
-		case 5:
-			$map = 'PlaceOfExil';
-			break;
-		case 6:
-			$map = 'Stadium';
-			break;
-		case 7:
-			$map = 'Atlans';
-			break;
-		case 8:
-			$map = 'Tarkan';
-			break;
-		case 9:
-			$map = 'Devil Square';
-			break;
-		case 10:
-			$map = 'Icarus';
-			break;
-		case 11:
-			$map = 'Blood Castle 1';
-			break;
-		case 12:
-			$map = 'Blood Castle 2';
-			break;
-		case 13:
-			$map = 'Blood Castle 3';
-			break;
-		case 14:
-			$map = 'Blood Castle 4';
-			break;
-		case 15:
-			$map = 'Blood Castle 5';
-			break;
-		case 16:
-			$map = 'Blood Castle 6';
-			break;
-		case 17:
-			$map = 'Blood Castle 7';
-			break;
-		case 18:
-			$map = 'Chaos Castle 1';
-			break;
-		case 19:
-			$map = 'Chaos Castle 2';
-			break;
-		case 20:
-			$map = 'Chaos Castle 3';
-			break;
-		case 21:
-			$map = 'Chaos Castle 4';
-			break;
-		case 22:
-			$map = 'Chaos Castle 5';
-			break;
-		case 23:
-			$map = 'Chaos Castle 6';
-			break;
-		case 24:
-			$map = 'Kalima 1';
-			break;
-		case 25:
-			$map = 'Kalima 2';
-			break;
-		case 26:
-			$map = 'Kalima 3';
-			break;
-		case 27:
-			$map = 'Kalima 4';
-			break;
-		case 28:
-			$map = 'Kalima 5';
-			break;
-		case 29:
-			$map = 'Kalima 6';
-			break;
-		case 30:
-			$map = 'Valley Of Loren';
-			break;
-		case 31:
-			$map = 'Lands Of Trials';
-			break;
-		case 32:
-			$map = 'Devil Square';
-			break;
-		case 33:
-			$map = 'Aida';
-			break;
-		case 34:
-			$map = 'CryWolf';
-			break;
-		case 36:
-			$map = 'Kalima 7';
-			break;
-		case 37:
-			$map = 'Kantru 1';
-			break;
-		case 38:
-			$map = 'Kantru 2';
-			break;
-		case 39:
-			$map = 'Kantru 3';
-			break;
-		case 40:
-			$map = 'Silent';
-			break;
-		case 41:
-			$map = 'Refuge';
-			break;
-		case 42:
-			$map = 'Barracks';
-			break;
-		case 45:
-			$map = 'Illusion 1';
-			break;
-		case 46:
-			$map = 'Illusion 2';
-			break;
-		case 47:
-			$map = 'Illusion 3';
-			break;
-		case 48:
-			$map = 'Illusion 4';
-			break;
-		case 49:
-			$map = 'Illusion 5';
-			break;
-		case 50:
-			$map = 'Illusion 6';
-			break;
-		case 51:
-			$map = 'Elbeland';
-			break;
-		case 52:
-			$map = 'Blood Castle 8';
-			break;
-		case 53:
-			$map = 'Chaos Castle 7';
-			break;
-		case 56:
-			$map = 'Swamp Of Calmness';
-			break;
-		case 57:
-			$map = 'Raklion';
-			break;
-		default:
-			$map = 'unknown';
-			break;
+	$locations = [
+		0 => 'Lorencia',
+		1 => 'Dungeon',
+		2 => 'Devias',
+		3 => 'Noria',
+		4 => 'LostTower',
+		5 => 'PlaceOfExil',
+		6 => 'Stadium',
+		7 => 'Atlans',
+		8 => 'Tarkan',
+		9 => 'Devil Square',
+		10 => 'Icarus',
+		11 => 'Blood Castle 1',
+		12 => 'Blood Castle 2',
+		13 => 'Blood Castle 3',
+		14 => 'Blood Castle 4',
+		15 => 'Blood Castle 5',
+		16 => 'Blood Castle 6',
+		17 => 'Blood Castle 7',
+		18 => 'Chaos Castle 1',
+		19 => 'Chaos Castle 2',
+		20 => 'Chaos Castle 3',
+		21 => 'Chaos Castle 4',
+		22 => 'Chaos Castle 5',
+		23 => 'Chaos Castle 6',
+		24 => 'Kalima 1',
+		25 => 'Kalima 2',
+		26 => 'Kalima 3',
+		27 => 'Kalima 4',
+		28 => 'Kalima 5',
+		29 => 'Kalima 6',
+		30 => 'Valley Of Loren',
+		31 => 'Lands Of Trials',
+		32 => 'Devil Square',
+		33 => 'Aida',
+		34 => 'CryWolf',
+		36 => 'Kalima 7',
+		37 => 'Kantru 1',
+		38 => 'Kantru 2',
+		39 => 'Kantru 3',
+		40 => 'Silent',
+		41 => 'Refuge',
+		42 => 'Barracks',
+		45 => 'Illusion 1',
+		46 => 'Illusion 2',
+		47 => 'Illusion 3',
+		48 => 'Illusion 4',
+		49 => 'Illusion 5',
+		50 => 'Illusion 6',
+		51 => 'Elbeland',
+		52 => 'Blood Castle 8',
+		53 => 'Chaos Castle 7',
+		56 => 'Swamp Of Calmness',
+		57 => 'Raklion',
+	];
+	if ($getList) {
+		return $locations;
 	}
-	return $map;
+	return isset($locations[$map])
+		? $locations[$map]
+		: 'unknown';
 }
 
 /////// END Map Formats ///////
@@ -754,28 +675,20 @@ function pkstatus($pkStatus)
 {
 	switch ($pkStatus) {
 		case 1:
-			$pkStatus = 'Hero';
-			break;
+			return 'Hero';
 		case 2:
-			$pkStatus = 'Commoner';
-			break;
+			return 'Commoner';
 		case 3:
-			$pkStatus = 'Normal';
-			break;
+			return 'Normal';
 		case 4:
-			$pkStatus = 'Outlaw Warning';
-			break;
+			return 'Outlaw Warning';
 		case 5:
-			$pkStatus = '1 Outlaw';
-			break;
+			return '1 Outlaw';
 		case 6:
-			$pkStatus = '2 Outlaw';
-			break;
+			return '2 Outlaw';
 		default:
-			$pkStatus = 'unknown';
-			break;
+			return 'unknown';
 	}
-	return $pkStatus;
 }
 
 /////// END PK Status Formats ///////
@@ -786,22 +699,16 @@ function guild_status($num)
 {
 	switch ($num) {
 		case 0:
-			$num = mmw_lang_guild_member;
-			break;
+			return mmw_lang_guild_member;
 		case 32:
-			$num = mmw_lang_battle_master;
-			break;
+			return mmw_lang_battle_master;
 		case 64:
-			$num = mmw_lang_assistant_guild_master;
-			break;
+			return mmw_lang_assistant_guild_master;
 		case 128:
-			$num = mmw_lang_guild_master;
-			break;
+			return mmw_lang_guild_master;
 		default:
-			$num = 'unknown';
-			break;
+			return 'unknown';
 	}
-	return $num;
 }
 
 /////// END Guild Status Formats ///////
@@ -812,20 +719,16 @@ function ctlCode($num)
 {
 	switch ($num) {
 		case 0:
-			$result = 'Member';
-			break;
+			return 'Normal';
 		case 1:
-			$result = 'Blocked';
-			break;
+			return 'Blocked';
 		case 8:
+			return 'GM Invisible';
 		case 32:
-			$result = 'Game Master';
-			break;
+			return 'Game Master';
 		default:
-			$result = 'unknown';
-			break;
+			return 'unknown';
 	}
-	return $result;
 }
 
 /////// END CtlCode Formats ///////
@@ -850,75 +753,168 @@ function gender($gender)
 /////// Start Class Formats ///////
 function char_class($class, $style = 'off')
 {
-	if ($class == 0) {
-		$class_row = array('off' => 'DW', 'full' => 'Dark Wizard');
-	} elseif ($class == 1) {
-		$class_row = array('off' => 'SM', 'full' => 'Soul Master');
-	} elseif ($class == 2 || $class == 3) {
-		$class_row = array('off' => 'GrM', 'full' => 'Grand Master');
-	} elseif ($class == 16) {
-		$class_row = array('off' => 'DK', 'full' => 'Dark Knight');
-	} elseif ($class == 17) {
-		$class_row = array('off' => 'BK', 'full' => 'Blade Knight');
-	} elseif ($class == 18 || $class == 19) {
-		$class_row = array('off' => 'BM', 'full' => 'Blade Master');
-	} elseif ($class == 32) {
-		$class_row = array('off' => 'Elf', 'full' => 'Fairy Elf');
-	} elseif ($class == 33) {
-		$class_row = array('off' => 'ME', 'full' => 'Muse Elf');
-	} elseif ($class == 34 || $class == 35) {
-		$class_row = array('off' => 'HE', 'full' => 'High Elf');
-	} elseif ($class == 48) {
-		$class_row = array('off' => 'MG', 'full' => 'Magic Gladiator');
-	} elseif ($class == 49 || $class == 50) {
-		$class_row = array('off' => 'DM', 'full' => 'Duel Master');
-	} elseif ($class == 64) {
-		$class_row = array('off' => 'DL', 'full' => 'Dark Lord');
-	} elseif ($class == 65 || $class == 66) {
-		$class_row = array('off' => 'LE', 'full' => 'Lord Emperor');
-	} elseif ($class == 80) {
-		$class_row = array('off' => 'Sum', 'full' => 'Summoner');
-	} elseif ($class == 81) {
-		$class_row = array('off' => 'BSum', 'full' => 'Bloody Summoner');
-	} elseif ($class == 82 || $class == 83) {
-		$class_row = array('off' => 'Dim', 'full' => 'Dimension Master');
-	} elseif ($class == 96) {
-		$class_row = array('off' => 'RF', 'full' => 'Rage Fighter');
-	} elseif ($class == 97 || $class == 98) {
-		$class_row = array('off' => 'FM', 'full' => 'Fist Master');
-	} else {
-		$class_row = array('off' => 'unknown', 'full' => 'unknown');
-	}
+	static $groupedClasses = array(
+		0 => array('group' => 'dw', 'img' => 'char/dw.gif', 'photo' => '0x00FFFFFFFFFF000000F80000F0FFFFFF'),
+		1 => array('group' => 'dk', 'img' => 'char/dk.gif', 'photo' => '0x20FFFFFFFFFF000000F80000F0FFFFFF'),
+		2 => array('group' => 'fe', 'img' => 'char/ef.gif', 'photo' => '0x40FFFFFFFFFF000000F80000F0FFFFFF'),
+		3 => array('group' => 'mg', 'img' => 'char/mg.gif', 'photo' => '0x60FFFFFFFFFF000000F80000F0FFFFFF'),
+		4 => array('group' => 'dl', 'img' => 'char/dl.gif', 'photo' => '0x80FFFFFFFFFF000000F80000F0FFFFFF'),
+		5 => array('group' => 'sm', 'img' => 'char/sm.gif', 'photo' => '0xA0FFFFFFFFFF000000F80000F0FFFFFF'),
+		6 => array('group' => 'rf', 'img' => 'char/rf.gif', 'photo' => '0xC0FFFFFFFFFF000000F80000F0FFFFFF'),
+		7 => array('group' => 'gl', 'img' => 'char/.gif', 'photo' => '0xE0FFFFFFFFFF000000F80000F0FFFFFF'),
+		8 => array('group' => 'rw', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+		9 => array('group' => 'sl', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+		10 => array('group' => 'gc', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+	);
 
-	switch (intval($class / 16)) {
-		case 0:
-			$group_row = array('img' => 'char/dw.gif', 'photo' => '0x00FFFFFFFFFF000000F80000F0FFFFFF');
+	$class = intval($class);
+	$group = intval($class / 16);
+
+	switch (true) {
+		case ($class === 0):
+			$result = array('off' => 'DW', 'full' => 'Dark Wizard', 'level' => 1);
 			break;
-		case 1:
-			$group_row = array('img' => 'char/dk.gif', 'photo' => '0x20FFFFFFFFFF000000F80000F0FFFFFF');
+		case ($class === 1):
+			$result = array('off' => 'SM', 'full' => 'Soul Master', 'level' => 2);
 			break;
-		case 2:
-			$group_row = array('img' => 'char/ef.gif', 'photo' => '0x40FFFFFFFFFF000000F80000F0FFFFFF');
+		case ($class === 2 || $class === 3):
+			$result = array('off' => 'GrM', 'full' => 'Grand Master', 'level' => 3);
 			break;
-		case 3:
-			$group_row = array('img' => 'char/mg.gif', 'photo' => '0x60FFFFFFFFFF000000F80000F0FFFFFF');
+		case ($class === 6 || $class === 7):
+			$result = array('off' => 'SW', 'full' => 'Soul Wizard', 'level' => 4);
 			break;
-		case 4:
-			$group_row = array('img' => 'char/dl.gif', 'photo' => '0x80FFFFFFFFFF000000F80000F0FFFFFF');
+
+		case ($class === 16):
+			$result = array('off' => 'DK', 'full' => 'Dark Knight', 'level' => 1);
 			break;
-		case 5:
-			$group_row = array('img' => 'char/sm.gif', 'photo' => '0xA0FFFFFFFFFF000000F80000F0FFFFFF');
+		case ($class === 17):
+			$result = array('off' => 'BK', 'full' => 'Blade Knight', 'level' => 2);
 			break;
-		case 6:
-			$group_row = array('img' => 'char/rf.gif', 'photo' => '0xC0FFFFFFFFFF000000F80000F0FFFFFF');
+		case ($class === 18 || $class === 19):
+			$result = array('off' => 'BM', 'full' => 'Blade Master', 'level' => 3);
 			break;
+		case ($class === 22 || $class === 23):
+			$result = array('off' => 'DrK', 'full' => 'Dragon Knight', 'level' => 4);
+			break;
+
+		case ($class === 32):
+			$result = array('off' => 'Elf', 'full' => 'Fairy Elf', 'level' => 1);
+			break;
+		case ($class === 33):
+			$result = array('off' => 'ME', 'full' => 'Muse Elf', 'level' => 2);
+			break;
+		case ($class === 34 || $class === 35):
+			$result = array('off' => 'HE', 'full' => 'High Elf', 'level' => 3);
+			break;
+		case ($class === 38 || $class === 39):
+			$result = array('off' => 'NE', 'full' => 'Noble Elven', 'level' => 4);
+			break;
+
+		case ($class === 48):
+			$result = array('off' => 'MG', 'full' => 'Magic Gladiator', 'level' => 1);
+			break;
+		case ($class === 50 || $class === 51):
+			$result = array('off' => 'DM', 'full' => 'Duel Master', 'level' => 3);
+			break;
+		case ($class === 54 || $class === 55):
+			$result = array('off' => 'MK', 'full' => 'Magic Knight', 'level' => 4);
+			break;
+
+		case ($class === 64):
+			$result = array('off' => 'DL', 'full' => 'Dark Lord', 'level' => 1);
+			break;
+		case ($class === 66 || $class === 67):
+			$result = array('off' => 'LE', 'full' => 'Lord Emperor', 'level' => 3);
+			break;
+		case ($class === 70 || $class === 71):
+			$result = array('off' => 'ER', 'full' => 'Empire Roar', 'level' => 4);
+			break;
+
+		case ($class === 80):
+			$result = array('off' => 'Sum', 'full' => 'Summoner', 'level' => 1);
+			break;
+		case ($class === 81):
+			$result = array('off' => 'BSum', 'full' => 'Bloody Summoner', 'level' => 2);
+			break;
+		case ($class === 82 || $class === 83):
+			$result = array('off' => 'Dim', 'full' => 'Dimension Master', 'level' => 3);
+			break;
+		case ($class === 86 || $class === 87):
+			$result = array('off' => 'DS', 'full' => 'Dimension Summoner', 'level' => 4);
+			break;
+
+		case ($class === 96):
+			$result = array('off' => 'RF', 'full' => 'Rage Fighter', 'level' => 1);
+			break;
+		case ($class === 98 || $class === 99):
+			$result = array('off' => 'FM', 'full' => 'Fist Master', 'level' => 3);
+			break;
+		case ($class === 102 || $class === 103):
+			$result = array('off' => 'FM', 'full' => 'Fists Blazer', 'level' => 4);
+			break;
+
+		case ($class === 112):
+			$result = array('off' => 'GL', 'full' => 'Grow Lancer', 'level' => 1);
+			break;
+		case ($class === 114 || $class === 115):
+			$result = array('off' => 'ML', 'full' => 'Mirage Lancer', 'level' => 3);
+			break;
+		case ($class === 118 || $class === 119):
+			$result = array('off' => 'ShL', 'full' => 'Shining Lancer', 'level' => 4);
+			break;
+
+		case ($class === 128):
+			$result = array('off' => 'RW', 'full' => 'Rune Wizard', 'level' => 1);
+			break;
+		case ($class === 129):
+			$result = array('off' => 'RSM', 'full' => 'Rune Spell Master', 'level' => 2);
+			break;
+		case ($class === 130 || $class === 131):
+			$result = array('off' => 'GRM', 'full' => 'Grand Rune Master', 'level' => 3);
+			break;
+		case ($class === 134 || $class === 135):
+			$result = array('off' => 'MRW', 'full' => 'Majestic Rune Wizard', 'level' => 4);
+			break;
+
+		case ($class === 144):
+			$result = array('off' => 'SL', 'full' => 'Slayer', 'level' => 1);
+			break;
+		case ($class === 145):
+			$result = array('off' => 'RS', 'full' => 'Royal Slayer', 'level' => 2);
+			break;
+		case ($class === 146 || $class === 147):
+			$result = array('off' => 'MS', 'full' => 'Master Slayer', 'level' => 3);
+			break;
+		case ($class === 150 || $class === 151):
+			$result = array('off' => 'ST', 'full' => 'Slaughterer', 'level' => 4);
+			break;
+
+		case ($class === 160):
+			$result = array('off' => 'GC', 'full' => 'Gun Crusher', 'level' => 1);
+			break;
+		case ($class === 161):
+			$result = array('off' => 'GB', 'full' => 'Gun Breaker', 'level' => 2);
+			break;
+		case ($class === 162 || $class === 163):
+			$result = array('off' => 'MGB', 'full' => 'Master Gun Breaker', 'level' => 3);
+			break;
+		case ($class === 166 || $class === 167):
+			$result = array('off' => 'HGC', 'full' => 'High Gun Crusher', 'level' => 4);
+			break;
+
 		default:
-			$group_row = array('img' => 'unknown', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
-			break;
+			$result = array('off' => '??', 'full' => 'Unknown', 'level' => 0);
 	}
+	$result += isset($groupedClasses[$group])
+		? $groupedClasses[$group]
+		: array('img' => 'unknown', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
 
-	return (isset($class_row[$style]) ? $class_row[$style] : '')
-		. (isset($group_row[$style]) ? $group_row[$style] : '');
+	if ($style === null) {
+		return $result;
+	}
+	return isset($result[$style])
+		? $result[$style]
+		: '';
 }
 
 /////// END Class Formats ///////

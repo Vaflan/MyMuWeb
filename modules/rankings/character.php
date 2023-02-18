@@ -6,13 +6,17 @@
 
 $query_race = array(
 	'all' => "c.Class>-1",
-	'dw' => "c.Class>=0 AND c.Class<=15",
-	'dk' => "c.Class>=16 AND c.Class<=31",
-	'elf' => "c.Class>=32 AND c.Class<=47",
-	'mg' => "c.Class>=48 AND c.Class<=63",
-	'dl' => "c.Class>=64 AND c.Class<=79",
-	'sum' => "c.Class>=80 AND c.Class<=95",
-	'rf' => "c.Class>=96 AND c.Class<=112",
+	'dw' => "c.Class>=0 AND c.Class<16",
+	'dk' => "c.Class>=16 AND c.Class<32",
+	'elf' => "c.Class>=32 AND c.Class<48",
+	'mg' => "c.Class>=48 AND c.Class<64",
+	'dl' => "c.Class>=64 AND c.Class<80",
+	'sum' => "c.Class>=80 AND c.Class<96",
+	'rf' => "c.Class>=96 AND c.Class<112",
+	'gl' => "c.Class>=112 AND c.Class<128",
+	'rw' => "c.Class>=128 AND c.Class<144",
+	'sl' => "c.Class>=144 AND c.Class<160",
+	'gc' => "c.Class>=160 AND c.Class<176",
 );
 
 $topCount = intval($_POST['top_rank']);

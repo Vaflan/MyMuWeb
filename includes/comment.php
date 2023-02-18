@@ -164,53 +164,17 @@ if (empty($_SESSION['user'])) {
 			<div style="float:right;width:86px;padding:2px;">
 				<script>
 					function smile(icon) {
-						document.add_comment.c_message.value = document.add_comment.c_message.value + icon;
+						document.add_comment.c_message.value += icon;
 					}
 				</script>
 				<table cellpadding="3" class="smiles" style="border:0;float:right;">
 					<tr>
+						<?php $index = 0; foreach(emojiList(true) as $key => $img) : ?>
 						<td>
-							<a href="javascript:smile(' >( ');"><img src="images/smile/angry.gif" title="angry"></a>
+							<a href="javascript:smile('<?php echo $key; ?>');"><?php echo $img; ?></a>
 						</td>
-						<td>
-							<a href="javascript:smile(' :D ');"><img src="images/smile/biggrin.gif" title="biggrin"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' B) ');"><img src="images/smile/cool.gif" title="cool"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="javascript:smile(' ;( ');"><img src="images/smile/cry.gif" title="cry"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' <_< ');"><img src="images/smile/dry.gif" title="dry"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' ^_^ ');"><img src="images/smile/happy.gif" title="happy"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="javascript:smile(' :( ');"><img src="images/smile/sad.gif" title="sad"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' :) ');"><img src="images/smile/smile.gif" title="smile"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' :o ');"><img src="images/smile/surprised.gif" title="surprised"></a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<a href="javascript:smile(' :p ');"><img src="images/smile/tongue.gif" title="tongue"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' %) ');"><img src="images/smile/wacko.gif" title="wacko"></a>
-						</td>
-						<td>
-							<a href="javascript:smile(' ;) ');"><img src="images/smile/wink.gif" title="wink"></a>
-						</td>
+						<?php if($index % 3 === 2) : ?></tr><tr><?php endif; ?>
+						<?php $index++; endforeach; ?>
 					</tr>
 				</table>
 			</div>

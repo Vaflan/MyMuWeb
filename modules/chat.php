@@ -15,7 +15,7 @@ if (isset($_POST['send']) && $_POST['send'] === 'send' && !empty($_SESSION['char
 
 	if ($timeout > $date) {
 		echo '<script>alert(\'' . mmw_lang_antiflood . ' ' . ($timeout - $date) . ' sec.\');</script>';
-	} elseif (isset($_SESSION['chat_message']) && $_SESSION['chat_message'] !== $message) {
+	} elseif (!isset($_SESSION['chat_message']) || $_SESSION['chat_message'] !== $message) {
 		mssql_query("INSERT INTO dbo.MMW_chatbox (f_char,f_message,f_date) VALUES ('{$_SESSION['character']}','{$message}','{$date}')");
 		$_SESSION['chat_message'] = $message;
 		$_SESSION['chat_date'] = $date;
@@ -37,7 +37,7 @@ if (isset($_POST['send']) && $_POST['send'] === 'send' && !empty($_SESSION['char
 		if (text.value === '<?php echo mmw_lang_message;?>') {
 			text.value = '';
 		}
-		text.value = text.value + icon;
+		text.value += icon;
 	}
 </script>
 
@@ -62,48 +62,12 @@ if (isset($_POST['send']) && $_POST['send'] === 'send' && !empty($_SESSION['char
 		<div style="position:absolute;padding:4px;display:none;z-index:1;" id="smilebox">
 			<table cellpadding="3" id="tooltip">
 				<tr>
+				<?php $index = 0; foreach(emojiList() as $key => $img) : ?>
 					<td>
-						<a href="javascript:smile(' >( ');"><img src="images/smile/angry.gif" title="angry"></a>
+						<a href="javascript:smile('<?php echo $key; ?>');"><?php echo $img; ?></a>
 					</td>
-					<td>
-						<a href="javascript:smile(' :D ');"><img src="images/smile/biggrin.gif" title="biggrin"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' B) ');"><img src="images/smile/cool.gif" title="cool"></a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<a href="javascript:smile(' ;( ');"><img src="images/smile/cry.gif" title="cry"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' <_< ');"><img src="images/smile/dry.gif" title="dry"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' ^_^ ');"><img src="images/smile/happy.gif" title="happy"></a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<a href="javascript:smile(' :( ');"><img src="images/smile/sad.gif" title="sad"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' :) ');"><img src="images/smile/smile.gif" title="smile"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' :o ');"><img src="images/smile/surprised.gif" title="surprised"></a>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<a href="javascript:smile(' :p ');"><img src="images/smile/tongue.gif" title="tongue"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' %) ');"><img src="images/smile/wacko.gif" title="wacko"></a>
-					</td>
-					<td>
-						<a href="javascript:smile(' ;) ');"><img src="images/smile/wink.gif" title="wink"></a>
-					</td>
+				<?php if($index % 3 === 2) : ?></tr><tr><?php endif; ?>
+				<?php $index++; endforeach; ?>
 				</tr>
 			</table>
 		</div>

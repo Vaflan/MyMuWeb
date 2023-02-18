@@ -22,27 +22,11 @@ if ($mmw['gens']) {
 	$topRank['gens'] = 'Durpian vs Vanert';
 }
 
-$classes = explode(',', $mmw['statistics_char']);
-if (in_array(0, $classes)) {
-	$topRank['dw'] = mmw_lang_only . ' DW\'s-GrM\'s';
-}
-if (in_array(16, $classes)) {
-	$topRank['dk'] = mmw_lang_only . ' DK\'s-BM\'s';
-}
-if (in_array(32, $classes)) {
-	$topRank['elf'] = mmw_lang_only . ' ELF\'s-HE\'s';
-}
-if (in_array(48, $classes)) {
-	$topRank['mg'] = mmw_lang_only . ' MG\'s-DM\'s';
-}
-if (in_array(64, $classes)) {
-	$topRank['dl'] = mmw_lang_only . ' DL\'s-LE\'s';
-}
-if (in_array(80, $classes)) {
-	$topRank['sum'] = mmw_lang_only . ' Sum\'s-Dim\'s';
-}
-if (in_array(96, $classes)) {
-	$topRank['rf'] = mmw_lang_only . ' RF\'s-FM\'s';
+for ($classGroup=0; $classGroup<$mmw['characters_class']; $classGroup++) {
+	$classLevel = $classGroup * 16;
+	$class = char_class($classLevel, null);
+	$higClass = char_class($classLevel + 6);
+	$topRank[$class['group']] = mmw_lang_only . " {$class['off']}'s-{$higClass}'s";
 }
 ?>
 

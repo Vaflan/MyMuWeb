@@ -117,7 +117,7 @@ $mmw['chat_timeout'] = 3;                                   // TimeOut Send Mess
 
 // Statistics
 $mmw['gens'] = true;                                        // Show Gens Sort in Rankings
-$mmw['characters_class'] = 7;                               // Maximal is 11 classes
+$mmw['characters_class'] = 11;                              // Maximal is 11 classes
 $mmw['statistics_char'] = '0,1,2,16,17,18,32,33,34,48,50,64,66,80,81,82,96,98'; // List of Character
 $mmw['statistics_maps'] = '0,1,2,3,4,6,7,8,10,30,31,33,34,41,42,51,56,57';      // List of Locations (Maps)
 

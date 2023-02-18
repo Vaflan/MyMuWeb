@@ -12,22 +12,12 @@ class Character
 	 */
 	static function characterClassToSimpleClass($classNumber)
 	{
-		$simpleClasses = array(
-			0 => 'dw',
-			1 => 'dk',
-			2 => 'fe',
-			3 => 'mg',
-			4 => 'dl',
-			5 => 'sm',
-			6 => 'rf'
-		);
+		$simpleClasses = char_class($classNumber, 'group');
 
-		$simpleClass = intval($classNumber / 16);
-
-		if (!isset($simpleClasses[$simpleClass])) {
+		if (empty($simpleClasses)) {
 			throw new RuntimeException('Character class not defined');
 		}
-		return $simpleClasses[$simpleClass];
+		return $simpleClasses;
 	}
 
 	/**

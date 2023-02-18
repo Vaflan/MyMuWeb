@@ -129,36 +129,35 @@ if (isset($_GET['chr'])) {
 				<td>
 					<select name="class" size="1">
 						<option value=<?php echo $get_character_done[16]; ?>>
-							undefined: [<?php echo intval($get_character_done[16]); ?>]
+							undefined: [<?php echo $get_character_done[16]; ?>]
 						</option>
-						<option value=0 <?php echo $class[0]; ?>>DW</option>
-						<option value=1 <?php echo $class[1]; ?>>SM</option>
-						<option value=2 <?php echo $class[2]; ?>>GrM</option>
-						<option value=16 <?php echo $class[16]; ?>>DK</option>
-						<option value=17 <?php echo $class[17]; ?>>BK</option>
-						<option value=18 <?php echo $class[18]; ?>>BM</option>
-						<option value=32 <?php echo $class[32]; ?>>ELF</option>
-						<option value=33 <?php echo $class[33]; ?>>ME</option>
-						<option value=34 <?php echo $class[34]; ?>>HE</option>
-						<option value=48 <?php echo $class[48]; ?>>MG</option>
-						<option value=49 <?php echo $class[49]; ?>>DM</option>
-						<option value=64 <?php echo $class[64]; ?>>DL</option>
-						<option value=65 <?php echo $class[65]; ?>>LE</option>
-						<option value=80 <?php echo $class[80]; ?>>Sum</option>
-						<option value=81 <?php echo $class[81]; ?>>Bsum</option>
-						<option value=82 <?php echo $class[82]; ?>>Dim</option>
-						<option value=96 <?php echo $class[96]; ?>>RF</option>
-						<option value=97 <?php echo $class[97]; ?>>FM</option>
+						<?php for ($classGroup=0; $classGroup<$mmw['characters_class']; $classGroup++) : ?>
+							<?php $classLevel = $classGroup * 16; ?>
+							<option value=<?php echo $classLevel; ?> <?php echo $class[$classLevel]; ?>>
+								<?php echo char_class($classLevel) . ' [' . $classLevel . ']'; ?>
+							</option>
+							<?php if (char_class($classLevel + 1, 'level')) : ?>
+							<option value=<?php echo $classLevel + 1; ?> <?php echo $class[$classLevel + 1]; ?>>
+								<?php echo char_class($classLevel + 1) . ' [' . ($classLevel + 1) . ']'; ?>
+							</option>
+							<?php endif; ?>
+							<option value=<?php echo $classLevel + 3; ?> <?php echo $class[$classLevel + 3]; ?>>
+								<?php echo char_class($classLevel + 3) . ' [' . ($classLevel + 3) . ']'; ?>
+							</option>
+							<option value=<?php echo $classLevel + 7; ?> <?php echo $class[$classLevel + 7]; ?>>
+								<?php echo char_class($classLevel + 7) . ' [' . ($classLevel + 7) . ']'; ?>
+							</option>
+						<?php endfor; ?>
 					</select>
 				</td>
 			</tr>
 			<tr>
 				<td align="right">Mode</td>
 				<td><select name="gm" size="1">
-						<option value=0 <?php echo $mode[0]; ?>>Normal</option>
-						<option value=1 <?php echo $mode[1]; ?>>Blocked</option>
-						<option value=8 <?php echo $mode[8]; ?>>GM Invisible</option>
-						<option value=32 <?php echo $mode[32]; ?>>Game Master</option>
+						<option value=0 <?php echo $mode[0]; ?>><?php echo ctlCode(0); ?></option>
+						<option value=1 <?php echo $mode[1]; ?>><?php echo ctlCode(1); ?></option>
+						<option value=8 <?php echo $mode[8]; ?>><?php echo ctlCode(8); ?></option>
+						<option value=32 <?php echo $mode[32]; ?>><?php echo ctlCode(32); ?></option>
 					</select></td>
 			</tr>
 			<tr>
