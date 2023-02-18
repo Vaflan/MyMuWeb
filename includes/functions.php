@@ -287,7 +287,7 @@ function bbcode($text)
 		'/\[font\=(.*?)\](.*?)\[\/font\]/is' => '<span style="font:$1">$2</span>',
 		'/\[size\=(.*?)\](.*?)\[\/size\]/is' => '<span style="font-size:$1 pt;">$2</span>',
 		'/\[url\=(.*?)\](.*?)\[\/url\]/is' => '<a target="_blank" href="$1">$2</a>',
-		'/\[video\].*youtube.com\/watch\?v=(.*?)\[\/video\]/is' => '<iframe width="416" height="234" src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>',
+		'/\[video\].*youtube.com\/watch[^=]+=(.*?)\[\/video\]/is' => '<iframe width="416" height="234" src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>',
 	);
 	$text = preg_replace(array_keys($bbCode), array_values($bbCode), $text);
 	return $text;
