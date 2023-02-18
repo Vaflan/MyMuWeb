@@ -25,7 +25,7 @@ if ($mmw['gens']) {
 for ($classGroup=0; $classGroup<$mmw['characters_class']; $classGroup++) {
 	$classLevel = $classGroup * 16;
 	$class = char_class($classLevel, null);
-	$higClass = char_class($classLevel + 6);
+	$higClass = char_class($classLevel + 7);
 	$topRank[$class['group']] = mmw_lang_only . " {$class['off']}'s-{$higClass}'s";
 }
 ?>

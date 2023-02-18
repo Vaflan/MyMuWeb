@@ -611,7 +611,7 @@ function map($map, $getList = false)
 		3 => 'Noria',
 		4 => 'LostTower',
 		5 => 'PlaceOfExil',
-		6 => 'Stadium',
+		6 => 'Arena',
 		7 => 'Atlans',
 		8 => 'Tarkan',
 		9 => 'Devil Square',
@@ -639,25 +639,81 @@ function map($map, $getList = false)
 		31 => 'Lands Of Trials',
 		32 => 'Devil Square',
 		33 => 'Aida',
-		34 => 'CryWolf',
+		34 => 'Crywolf Fortress',
 		36 => 'Kalima 7',
-		37 => 'Kantru 1',
-		38 => 'Kantru 2',
-		39 => 'Kantru 3',
+		37 => 'Kanturu',
+		38 => 'Kanturu 2',
+		39 => 'Kanturu 3',
 		40 => 'Silent',
 		41 => 'Refuge',
 		42 => 'Barracks',
-		45 => 'Illusion 1',
-		46 => 'Illusion 2',
-		47 => 'Illusion 3',
-		48 => 'Illusion 4',
-		49 => 'Illusion 5',
-		50 => 'Illusion 6',
+		45 => 'Ilusion Temple 1',
+		46 => 'Ilusion Temple 2',
+		47 => 'Ilusion Temple 3',
+		48 => 'Ilusion Temple 4',
+		49 => 'Ilusion Temple 5',
+		50 => 'Ilusion Temple 6',
 		51 => 'Elbeland',
 		52 => 'Blood Castle 8',
 		53 => 'Chaos Castle 7',
-		56 => 'Swamp Of Calmness',
+		56 => 'Swamp of Calmness',
 		57 => 'Raklion',
+		58 => 'Raklion Boss',
+		62 => 'Santa\'s Village',
+		63 => 'Vulcanus',
+		64 => 'Duel Arena',
+		65 => 'Doppelganger',
+		66 => 'Doppelganger',
+		67 => 'Doppelganger',
+		68 => 'Doppelganger',
+		69 => 'Imperial Guardian',
+		70 => 'Imperial Guardian',
+		71 => 'Imperial Guardian',
+		72 => 'Imperial Guardian',
+		79 => 'Loren Market',
+		80 => 'Karutan 1',
+		81 => 'Karutan 2',
+		82 => 'Doppelganger',
+		91 => 'Acheron',
+		92 => 'Acheron',
+		95 => 'Debenter',
+		96 => 'Debenter',
+		97 => 'Chaos Castle',
+		98 => 'Ilusion Temple 7',
+		99 => 'Ilusion Temple 8',
+		100 => 'Uruk Mountain',
+		101 => 'Uruk Mountain',
+		102 => 'Tormented Square',
+		103 => 'Tormented Square',
+		104 => 'Tormented Square',
+		105 => 'Tormented Square',
+		106 => 'Tormented Square',
+		110 => 'Nars',
+		112 => 'Ferea',
+		113 => 'Nixie Lake',
+		114 => 'Quest Zone',
+		115 => 'Labyrinth',
+		116 => 'Deep Dungeon',
+		117 => 'Deep Dungeon',
+		118 => 'Deep Dungeon',
+		119 => 'Deep Dungeon',
+		120 => 'Deep Dungeon',
+		121 => 'Quest Zone',
+		122 => 'Swamp of Darkness',
+		123 => 'Kubera Mine',
+		124 => 'Kubera Mine',
+		125 => 'Kubera Mine',
+		126 => 'Kubera Mine',
+		127 => 'Kubera Mine',
+		128 => 'Atlans Abyss',
+		129 => 'Atlans Abyss 2',
+		130 => 'Atlans Abyss 3',
+		131 => 'Scorched Canyon',
+		132 => 'Crimson Flame Icarus',
+		133 => 'Temple of Arnil',
+		134 => 'Aida Gray',
+		135 => 'Old Kethotum',
+		136 => 'Burning Kethotum',
 	];
 	if ($getList) {
 		return $locations;
@@ -674,18 +730,19 @@ function map($map, $getList = false)
 function pkstatus($pkStatus)
 {
 	switch ($pkStatus) {
-		case 1:
-			return 'Hero';
-		case 2:
-			return 'Commoner';
-		case 3:
+		case 0:
 			return 'Normal';
+		case 1:
+		case 2:
+			return 'Hero';
+		case 3:
+			return 'Commoner';
 		case 4:
-			return 'Outlaw Warning';
+			return 'Warning';
 		case 5:
-			return '1 Outlaw';
+			return 'Murder';
 		case 6:
-			return '2 Outlaw';
+			return 'Outlaw';
 		default:
 			return 'unknown';
 	}
@@ -754,17 +811,19 @@ function gender($gender)
 function char_class($class, $style = 'off')
 {
 	static $groupedClasses = array(
-		0 => array('group' => 'dw', 'img' => 'char/dw.gif', 'photo' => '0x00FFFFFFFFFF000000F80000F0FFFFFF'),
-		1 => array('group' => 'dk', 'img' => 'char/dk.gif', 'photo' => '0x20FFFFFFFFFF000000F80000F0FFFFFF'),
-		2 => array('group' => 'fe', 'img' => 'char/ef.gif', 'photo' => '0x40FFFFFFFFFF000000F80000F0FFFFFF'),
-		3 => array('group' => 'mg', 'img' => 'char/mg.gif', 'photo' => '0x60FFFFFFFFFF000000F80000F0FFFFFF'),
-		4 => array('group' => 'dl', 'img' => 'char/dl.gif', 'photo' => '0x80FFFFFFFFFF000000F80000F0FFFFFF'),
-		5 => array('group' => 'sm', 'img' => 'char/sm.gif', 'photo' => '0xA0FFFFFFFFFF000000F80000F0FFFFFF'),
-		6 => array('group' => 'rf', 'img' => 'char/rf.gif', 'photo' => '0xC0FFFFFFFFFF000000F80000F0FFFFFF'),
+		0 => array('group' => 'dw', 'img' => 'char/DW.gif', 'photo' => '0x00FFFFFFFFFF000000F80000F0FFFFFF'),
+		1 => array('group' => 'dk', 'img' => 'char/DK.gif', 'photo' => '0x20FFFFFFFFFF000000F80000F0FFFFFF'),
+		2 => array('group' => 'fe', 'img' => 'char/EF.gif', 'photo' => '0x40FFFFFFFFFF000000F80000F0FFFFFF'),
+		3 => array('group' => 'mg', 'img' => 'char/MG.gif', 'photo' => '0x60FFFFFFFFFF000000F80000F0FFFFFF'),
+		4 => array('group' => 'dl', 'img' => 'char/DL.gif', 'photo' => '0x80FFFFFFFFFF000000F80000F0FFFFFF'),
+		5 => array('group' => 'sm', 'img' => 'char/SM.gif', 'photo' => '0xA0FFFFFFFFFF000000F80000F0FFFFFF'),
+		6 => array('group' => 'rf', 'img' => 'char/RF.gif', 'photo' => '0xC0FFFFFFFFFF000000F80000F0FFFFFF'),
 		7 => array('group' => 'gl', 'img' => 'char/.gif', 'photo' => '0xE0FFFFFFFFFF000000F80000F0FFFFFF'),
 		8 => array('group' => 'rw', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 		9 => array('group' => 'sl', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 		10 => array('group' => 'gc', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+		11 => array('group' => 'lw', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+		12 => array('group' => 'lm', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 	);
 
 	$class = intval($class);
@@ -780,7 +839,7 @@ function char_class($class, $style = 'off')
 		case ($class === 2 || $class === 3):
 			$result = array('off' => 'GrM', 'full' => 'Grand Master', 'level' => 3);
 			break;
-		case ($class === 6 || $class === 7):
+		case ($class === 7):
 			$result = array('off' => 'SW', 'full' => 'Soul Wizard', 'level' => 4);
 			break;
 
@@ -793,12 +852,12 @@ function char_class($class, $style = 'off')
 		case ($class === 18 || $class === 19):
 			$result = array('off' => 'BM', 'full' => 'Blade Master', 'level' => 3);
 			break;
-		case ($class === 22 || $class === 23):
+		case ($class === 23):
 			$result = array('off' => 'DrK', 'full' => 'Dragon Knight', 'level' => 4);
 			break;
 
 		case ($class === 32):
-			$result = array('off' => 'Elf', 'full' => 'Fairy Elf', 'level' => 1);
+			$result = array('off' => 'FE', 'full' => 'Fairy Elf', 'level' => 1);
 			break;
 		case ($class === 33):
 			$result = array('off' => 'ME', 'full' => 'Muse Elf', 'level' => 2);
@@ -806,14 +865,14 @@ function char_class($class, $style = 'off')
 		case ($class === 34 || $class === 35):
 			$result = array('off' => 'HE', 'full' => 'High Elf', 'level' => 3);
 			break;
-		case ($class === 38 || $class === 39):
+		case ($class === 39):
 			$result = array('off' => 'NE', 'full' => 'Noble Elven', 'level' => 4);
 			break;
 
 		case ($class === 48):
 			$result = array('off' => 'MG', 'full' => 'Magic Gladiator', 'level' => 1);
 			break;
-		case ($class === 50 || $class === 51):
+		case ($class === 49 || $class === 50):
 			$result = array('off' => 'DM', 'full' => 'Duel Master', 'level' => 3);
 			break;
 		case ($class === 54 || $class === 55):
@@ -823,7 +882,7 @@ function char_class($class, $style = 'off')
 		case ($class === 64):
 			$result = array('off' => 'DL', 'full' => 'Dark Lord', 'level' => 1);
 			break;
-		case ($class === 66 || $class === 67):
+		case ($class === 65 || $class === 66):
 			$result = array('off' => 'LE', 'full' => 'Lord Emperor', 'level' => 3);
 			break;
 		case ($class === 70 || $class === 71):
@@ -837,16 +896,16 @@ function char_class($class, $style = 'off')
 			$result = array('off' => 'BSum', 'full' => 'Bloody Summoner', 'level' => 2);
 			break;
 		case ($class === 82 || $class === 83):
-			$result = array('off' => 'Dim', 'full' => 'Dimension Master', 'level' => 3);
+			$result = array('off' => 'DiM', 'full' => 'Dimension Master', 'level' => 3);
 			break;
-		case ($class === 86 || $class === 87):
+		case ($class === 87):
 			$result = array('off' => 'DS', 'full' => 'Dimension Summoner', 'level' => 4);
 			break;
 
 		case ($class === 96):
 			$result = array('off' => 'RF', 'full' => 'Rage Fighter', 'level' => 1);
 			break;
-		case ($class === 98 || $class === 99):
+		case ($class === 97 || $class === 98):
 			$result = array('off' => 'FM', 'full' => 'Fist Master', 'level' => 3);
 			break;
 		case ($class === 102 || $class === 103):
@@ -872,7 +931,7 @@ function char_class($class, $style = 'off')
 		case ($class === 130 || $class === 131):
 			$result = array('off' => 'GRM', 'full' => 'Grand Rune Master', 'level' => 3);
 			break;
-		case ($class === 134 || $class === 135):
+		case ($class === 135):
 			$result = array('off' => 'MRW', 'full' => 'Majestic Rune Wizard', 'level' => 4);
 			break;
 
@@ -885,8 +944,8 @@ function char_class($class, $style = 'off')
 		case ($class === 146 || $class === 147):
 			$result = array('off' => 'MS', 'full' => 'Master Slayer', 'level' => 3);
 			break;
-		case ($class === 150 || $class === 151):
-			$result = array('off' => 'ST', 'full' => 'Slaughterer', 'level' => 4);
+		case ($class === 151):
+			$result = array('off' => 'St', 'full' => 'Slaughterer', 'level' => 4);
 			break;
 
 		case ($class === 160):
@@ -898,8 +957,34 @@ function char_class($class, $style = 'off')
 		case ($class === 162 || $class === 163):
 			$result = array('off' => 'MGB', 'full' => 'Master Gun Breaker', 'level' => 3);
 			break;
-		case ($class === 166 || $class === 167):
+		case ($class === 167):
 			$result = array('off' => 'HGC', 'full' => 'High Gun Crusher', 'level' => 4);
+			break;
+
+		case ($class === 176):
+			$result = array('off' => 'LiW', 'full' => 'Light Wizard', 'level' => 1);
+			break;
+		case ($class === 177):
+			$result = array('off' => 'LiM', 'full' => 'Light Master', 'level' => 2);
+			break;
+		case ($class === 178 || $class === 179):
+			$result = array('off' => 'ShW', 'full' => 'Shining Wizard', 'level' => 3);
+			break;
+		case ($class === 183):
+			$result = array('off' => 'LuW', 'full' => 'Luminous Wizard', 'level' => 4);
+			break;
+
+		case ($class === 192):
+			$result = array('off' => 'Lem', 'full' => 'Lemuria Mage', 'level' => 1);
+			break;
+		case ($class === 193):
+			$result = array('off' => 'Wam', 'full' => 'Warmage', 'level' => 2);
+			break;
+		case ($class === 194 || $class === 195):
+			$result = array('off' => 'Arm', 'full' => 'Archmage', 'level' => 3);
+			break;
+		case ($class === 199):
+			$result = array('off' => 'MyM', 'full' => 'Mystic Mage', 'level' => 4);
 			break;
 
 		default:
@@ -907,7 +992,7 @@ function char_class($class, $style = 'off')
 	}
 	$result += isset($groupedClasses[$group])
 		? $groupedClasses[$group]
-		: array('img' => 'unknown', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
+		: array('img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF');
 
 	if ($style === null) {
 		return $result;

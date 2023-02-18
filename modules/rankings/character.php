@@ -17,6 +17,8 @@ $query_race = array(
 	'rw' => "c.Class>=128 AND c.Class<144",
 	'sl' => "c.Class>=144 AND c.Class<160",
 	'gc' => "c.Class>=160 AND c.Class<176",
+	'lw' => "c.Class>=176 AND c.Class<192",
+	'lm' => "c.Class>=192 AND c.Class<208",
 );
 
 $topCount = intval($_POST['top_rank']);

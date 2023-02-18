@@ -16,6 +16,7 @@ $mmw['sql']['database'] = 'MuOnline';                       // DataBase SQL
 
 // MyMuWeb Config
 $mmw['md5'] = false;                                        // Server MD5 - TRUE or FALSE
+$mmw['show_all_error'] = false;                             // Turn On or Off all Error's
 $mmw['language'] = 'English';                               // Default Language in Web
 $mmw['webtitle'] = 'Name MuOnline Server';                  // Web Title
 $mmw['servername'] = 'Name MuOnline';                       // Server Name
@@ -56,7 +57,6 @@ $mmw['popunder'] = true;                                    // FALSE(Not Show) o
 $mmw['popunder_check'] = true;                              // If TRUE and Account Logined, PopUnder OFF.
 $mmw['auto_func']['switch'] = true;                         // FALSE(Turn Off) or TRUE(Turn On) Auto Func.
 $mmw['auto_func']['dir'] = 'includes/func/';                // Directory for auto functions includes.
-$mmw['show_all_error'] = true;                              // Turn On or Off all Error's
 $mmw['check_admin_panel'] = true;                           // Check admin panel, Who where be.
 $mmw['look_after_all'] = false;                             // To look after all, Who where be.
 $mmw['external_columns'] = [                                // Register with external columns (Some custom server emulator)
@@ -117,30 +117,42 @@ $mmw['chat_timeout'] = 3;                                   // TimeOut Send Mess
 
 // Statistics
 $mmw['gens'] = true;                                        // Show Gens Sort in Rankings
-$mmw['characters_class'] = 11;                              // Maximal is 11 classes
+$mmw['characters_class'] = 13;                              // Maximal is 13 classes
 $mmw['statistics_char'] = '0,1,2,16,17,18,32,33,34,48,50,64,66,80,81,82,96,98'; // List of Character
 $mmw['statistics_maps'] = '0,1,2,3,4,6,7,8,10,30,31,33,34,41,42,51,56,57';      // List of Locations (Maps)
 
 // Reset System
 $mmw['reset_column'] = 'ResetCount';                        // Column name in database
-$mmw['reset_level']['dw'] = 400;                            // Level For Reset DW,SM,GrM
-$mmw['reset_level']['dk'] = 400;                            // Level For Reset DK,BK,BM
-$mmw['reset_level']['fe'] = 400;                            // Level For Reset Elf,ME,HE
-$mmw['reset_level']['mg'] = 400;                            // Level For Reset MG,DM
-$mmw['reset_level']['dl'] = 400;                            // Level For Reset DL,LE
-$mmw['reset_level']['sm'] = 400;                            // Level For Reset Sum,Bsum,Dim
-$mmw['reset_level']['rf'] = 400;                            // Level For Reset RF,FM
+$mmw['reset_level']['dw'] = 400;                            // Level For Reset DW group
+$mmw['reset_level']['dk'] = 400;                            // Level For Reset DK group
+$mmw['reset_level']['fe'] = 400;                            // Level For Reset Elf group
+$mmw['reset_level']['mg'] = 400;                            // Level For Reset MG group
+$mmw['reset_level']['dl'] = 400;                            // Level For Reset DL group
+$mmw['reset_level']['sm'] = 400;                            // Level For Reset Sum group
+$mmw['reset_level']['rf'] = 400;                            // Level For Reset RF group
+$mmw['reset_level']['gl'] = 400;                            // Level For Reset GL group
+$mmw['reset_level']['rw'] = 400;                            // Level For Reset RW group
+$mmw['reset_level']['sl'] = 400;                            // Level For Reset SL group
+$mmw['reset_level']['gc'] = 400;                            // Level For Reset GC group
+$mmw['reset_level']['lw'] = 400;                            // Level For Reset LW group
+$mmw['reset_level']['lm'] = 400;                            // Level For Reset LM group
 $mmw['reset_limit_level'] = 999;                            // Max Reset (Limit)
 $mmw['reset_limit_price'] = 0;                              // Limited Price For Reset or 0
 $mmw['reset_money'] = 10000000;                             // Zen for Reset (Min 1kk)
 $mmw['reset_money_system'] = true;                          // TRUE(Zen*Reset) or FALSE(Default)
-$mmw['reset_points']['dw'] = 100;                           // Reset Points DW,SM,GrM
-$mmw['reset_points']['dk'] = 100;                           // Reset Points DK,BK,BM
-$mmw['reset_points']['fe'] = 100;                           // Reset Points Elf,ME,HE
-$mmw['reset_points']['mg'] = 100;                           // Reset Points MG,DM
-$mmw['reset_points']['dl'] = 100;                           // Reset Points DL,LE
-$mmw['reset_points']['sm'] = 100;                           // Reset Points Sum,Bsum,Dim
-$mmw['reset_points']['rf'] = 100;                           // Reset Points RF,FM
+$mmw['reset_points']['dw'] = 100;                           // Reset Points DW group
+$mmw['reset_points']['dk'] = 100;                           // Reset Points DK group
+$mmw['reset_points']['fe'] = 100;                           // Reset Points Elf group
+$mmw['reset_points']['mg'] = 100;                           // Reset Points MG group
+$mmw['reset_points']['dl'] = 100;                           // Reset Points DL group
+$mmw['reset_points']['sm'] = 100;                           // Reset Points Sum group
+$mmw['reset_points']['rf'] = 100;                           // Reset Points RF group
+$mmw['reset_points']['gl'] = 100;                           // Reset Points GL group
+$mmw['reset_points']['rw'] = 100;                           // Reset Points RW group
+$mmw['reset_points']['sl'] = 100;                           // Reset Points SL group
+$mmw['reset_points']['gc'] = 100;                           // Reset Points GC group
+$mmw['reset_points']['lw'] = 100;                           // Reset Points LW group
+$mmw['reset_points']['lm'] = 100;                           // Reset Points LM group
 $mmw['reset_points_drop'] = true;                           // TRUE(Points = 25) or FALSE(Default)
 $mmw['reset_command_drop'] = true;                          // TRUE(Command = 25) or FALSE(Default)
 $mmw['reset_points_mode'] = true;                           // TRUE(ResetPoints*Reset) or FALSE(Default Points+ResetPoints)
@@ -148,17 +160,17 @@ $mmw['reset_check_inventory'] = false;                      // FALSE(NO Check) o
 $mmw['reset_clean_inventory'] = false;                      // FALSE(NO Clean) or TRUE(Clean)
 $mmw['reset_clean_skills'] = false;                         // FALSE(NO Clean) or TRUE(Clean)
 $mmw['cs_memb_reset_discount'] = true;                      // TRUE(Reset Zen - CastleSiege Reset Zen Discount) or FALSE(Default)
-$mmw['cs_memb_reset_must_have_zen'] = '100000000';          // Max Zen Need in CastleSiege Bank % For Reset Members Castle Siege
-$mmw['cs_memb_reset_max_percent'] = '10';                   // How many % For Max Zen in CastleSiege Bank (Can't 0)
+$mmw['cs_memb_reset_must_have_zen'] = 100000000;            // Max Zen Need in CastleSiege Bank % For Reset Members Castle Siege
+$mmw['cs_memb_reset_max_percent'] = 10;                     // How many % For Max Zen in CastleSiege Bank (Can't 0)
 
 // Castle Siege and JoinServer
 $mmw['server_timeout'] = 60;                                // cache Server TimeOut (sec)
 $mmw['castle_siege']['switch'] = true;                      // TRUE(Is set in Web) FALSE(Turned off in Web)
 $mmw['castle_siege']['data'] = 'includes/MuCastleData.dat'; // Default Server File MuCastleData.dat
 $mmw['castle_siege']['ip'] = '127.0.0.1';                   // Castle Siege IP
-$mmw['castle_siege']['port'] = '55901';                     // Castle Siege port
+$mmw['castle_siege']['port'] = 55901;                       // Castle Siege port
 $mmw['joinserver']['ip'] = '127.0.0.1';                     // Join Server port for GM Message
-$mmw['joinserver']['port'] = '55970';                       // Join Server port for GM Message
+$mmw['joinserver']['port'] = 55970;                         // Join Server port for GM Message
 
 
 // Admin Panel SecurityCode & MMW status (5 - GameMaster, 10 - Administrator)

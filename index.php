@@ -91,7 +91,7 @@ if (is_file($mmw['theme_dir'] . '/footer.php')) {
 
 if (!empty($_ENV['mmw_cache'])) {
 	$data = json_encode($_ENV['mmw_cache']);
-	if ($_ENV['mmw_cache_raw'] !== $data) {
+	if ($_ENV['mmw_cache_raw'] !== $data && is_writable(__DIR__ . '/includes/mmw_cache.dat')) {
 		file_put_contents(__DIR__ . '/includes/mmw_cache.dat', $data);
 	}
 }
