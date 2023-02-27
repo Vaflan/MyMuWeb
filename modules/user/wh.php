@@ -201,6 +201,14 @@ HTML;
 		</form>
 HTML;
 
+		if (isset($mmw['user_warehouse_addon'])) {
+			if (is_callable($mmw['user_warehouse_addon'])) {
+				$mmw['user_warehouse_addon']($_SESSION['user']);
+			} else {
+				echo $mmw['user_warehouse_addon'];
+			}
+		}
+
 	} else {
 		echo $die_start . mmw_lang_check_vault_keeper_in_game . $die_end;
 	}

@@ -324,4 +324,12 @@ HTML;
 	</table>
 
 	<?php
+
+	if (isset($mmw['user_character_addon'])) {
+		if (is_callable($mmw['user_character_addon'])) {
+			$mmw['user_character_addon']($_SESSION['character']);
+		} else {
+			echo $mmw['user_character_addon'];
+		}
+	}
 }
