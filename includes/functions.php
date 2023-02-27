@@ -810,6 +810,12 @@ function gender($gender)
 /////// Start Class Formats ///////
 function char_class($class, $style = 'off')
 {
+	/**
+	 * ### Season 6:
+	 * level1: 0
+	 * level2: +1 [skip: MG/DL/RF]
+	 * level3: +2 [include: DM/LE/FM]
+	 */
 	static $groupedClasses = array(
 		0 => array('group' => 'dw', 'img' => 'char/DW.gif', 'photo' => '0x00FFFFFFFFFF000000F80000F0FFFFFF'),
 		1 => array('group' => 'dk', 'img' => 'char/DK.gif', 'photo' => '0x20FFFFFFFFFF000000F80000F0FFFFFF'),
@@ -824,6 +830,7 @@ function char_class($class, $style = 'off')
 		10 => array('group' => 'gc', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 		11 => array('group' => 'lw', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 		12 => array('group' => 'lm', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
+		13 => array('group' => 'ik', 'img' => 'char/.gif', 'photo' => '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'),
 	);
 
 	$class = intval($class);
@@ -909,7 +916,7 @@ function char_class($class, $style = 'off')
 			$result = array('off' => 'FM', 'full' => 'Fist Master', 'level' => 3);
 			break;
 		case ($class === 102 || $class === 103):
-			$result = array('off' => 'FM', 'full' => 'Fists Blazer', 'level' => 4);
+			$result = array('off' => 'FB', 'full' => 'Fists Blazer', 'level' => 4);
 			break;
 
 		case ($class === 112):
@@ -985,6 +992,16 @@ function char_class($class, $style = 'off')
 			break;
 		case ($class === 199):
 			$result = array('off' => 'MyM', 'full' => 'Mystic Mage', 'level' => 4);
+			break;
+
+		case ($class === 208):
+			$result = array('off' => 'IK', 'full' => 'Illusion Knight', 'level' => 1);
+			break;
+		case ($class === 210 || $class === 211):
+			$result = array('off' => 'MK', 'full' => 'Mirage Knight', 'level' => 3);
+			break;
+		case ($class === 213 || $class === 214):
+			$result = array('off' => 'IM', 'full' => 'Illusion Master', 'level' => 4);
 			break;
 
 		default:

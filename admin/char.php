@@ -136,14 +136,14 @@ if (isset($_GET['chr'])) {
 							<option value=<?php echo $classLevel; ?> <?php echo $class[$classLevel]; ?>>
 								<?php echo char_class($classLevel) . ' [' . $classLevel . ']'; ?>
 							</option>
-							<?php if (char_class($classLevel + 1, 'level')) : ?>
+							<?php if (char_class($classLevel + 1, 'level') === 2) : ?>
 							<option value=<?php echo $classLevel + 1; ?> <?php echo $class[$classLevel + 1]; ?>>
 								<?php echo char_class($classLevel + 1) . ' [' . ($classLevel + 1) . ']'; ?>
 							</option>
 							<?php endif; ?>
-							<?php if (char_class($classLevel + 3, 'level')) : ?>
-							<option value=<?php echo $classLevel + 3; ?> <?php echo $class[$classLevel + 3]; ?>>
-								<?php echo char_class($classLevel + 3) . ' [' . ($classLevel + 3) . ']'; ?>
+							<?php if (char_class($classLevel + 2, 'level') === 3) : ?>
+							<option value=<?php echo $classLevel + 2; ?> <?php echo $class[$classLevel + 2]; ?>>
+								<?php echo char_class($classLevel + 2) . ' [' . ($classLevel + 2) . ']'; ?>
 							</option>
 							<?php endif; ?>
 							<option value=<?php echo $classLevel + 7; ?> <?php echo $class[$classLevel + 7]; ?>>

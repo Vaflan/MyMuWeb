@@ -225,17 +225,15 @@ function last_in_forum($top = null)
 	if (empty($top)) {
 		$top = $mmw['last_in_forum'];
 	}
-	$style = '$4. <a href="$1" title="$3">$2</a><br>';
-	$result = mssql_query("SELECT TOP {$top} f_id,f_title,f_text FROM dbo.MMW_forum ORDER BY f_date DESC");
+	$result = mssql_query("SELECT TOP {$top} f_id, f_title, f_text FROM dbo.MMW_forum ORDER BY f_date DESC");
 	$forum_post = mssql_num_rows($result);
 	if (empty($forum_post)) {
 		echo mmw_lang_no_topics_in_forum;
 	} else {
 		$index = 1;
 		while ($row = mssql_fetch_row($result)) {
-			$row[2] = htmlentities(bbcode($row[2]));
-			$text = '[url=?forum=' . $row[0] . '][title=' . $row[1] . '][alt=' . $row[2] . '][numb=' . $index . ']';
-			echo preg_replace('/\[url=(.*?)]\[title=(.*?)]\[alt=(.*?)]\[numb=(.*?)]/is', $style, $text) . PHP_EOL;
+			$row[2] = htmlentities($row[2]);
+			echo "{$index}. <a href=\"?forum={$row[0]}\" title=\"{$row[2]}\">{$row[1]}</a><br>" . PHP_EOL;
 			$index++;
 		}
 	}

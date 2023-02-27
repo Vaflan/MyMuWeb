@@ -1,5 +1,13 @@
 <?php
-/** MyMuWeb Account menu */
+/** MyMuWeb Account menu
+ * @var $mmw array
+ * @var $accountInfo array
+ * @var $setCharacter string
+ * @var $rowbr string
+ * @var $msg_full string
+ * @var $msg_new_num int
+ * @var $msg_num int
+ */
 
 $language = array(
 	'hello' => mmw_lang_hello,

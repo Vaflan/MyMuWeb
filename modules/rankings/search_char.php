@@ -11,9 +11,11 @@ $result = mssql_query("SELECT TOP 30
 	c.Class,
 	c.{$mmw['reset_column']},
 	c.cLevel,
-	ms.ConnectStat
+	ms.ConnectStat,
+	ac.GameIDC
 		FROM dbo.Character AS c
 		LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = c.AccountID
+		LEFT JOIN dbo.AccountCharacter AS ac ON ac.Id = c.AccountID
 		WHERE c.Name LIKE '%{$search}%'");
 $row_num = mssql_num_rows($result);
 ?>
@@ -41,7 +43,7 @@ $row_num = mssql_num_rows($result);
 		$rank = 1;
 		while ($row = mssql_fetch_row($result)) {
 			$class = char_class($row[1]);
-			$status = ($row[4])
+			$status = ($row[4] && $row[0] === $row[5])
 				? '<img src=' . default_img('online.gif') . ' width=6 height=6>'
 				: '<img src=' . default_img('offline.gif') . ' width=6 height=6>';
 

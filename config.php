@@ -101,6 +101,8 @@ $mmw['change_class_list'] = array(
     array(80, 1000000000),
     array(81, 10000000000),
     array(82, 10000000000),
+    array(96, 3000000000),
+    array(98, 300000000000),
 );
 
 // News
