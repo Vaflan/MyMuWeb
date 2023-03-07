@@ -215,7 +215,7 @@ if (isset($_SESSION['user'])) {
 	if (empty($_SESSION['character'])) {
 		$row = mssql_fetch_row(mssql_query("SELECT GameIDC FROM dbo.AccountCharacter WHERE Id='{$_SESSION['user']}'"));
 		if (empty($row[0])) {
-			$row = mssql_query("SELECT name FROM dbo.Character WHERE AccountID='{$_SESSION['user']}'");
+			$row = mssql_fetch_row(mssql_query("SELECT name FROM dbo.Character WHERE AccountID='{$_SESSION['user']}'"));
 		}
 		$_SESSION['character'] = $row[0];
 	}
