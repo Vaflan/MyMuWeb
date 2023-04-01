@@ -12,6 +12,7 @@ $mmw['sql']['host'] = '127.0.0.1';                          // Ip SQL Server
 $mmw['sql']['user'] = 'USER';                               // Login SQL
 $mmw['sql']['pass'] = 'PASSWORD';                           // Pass SQL
 $mmw['sql']['database'] = 'MuOnline';                       // DataBase SQL
+// Example: $mmw['sql']['driver'] = 'dblib:host=%host%;dbname=%dbnm%';
 
 
 // MyMuWeb Config

@@ -57,7 +57,8 @@ if (isset($_POST['c_id_delete'])) {
 }
 
 
-$result = mssql_query("SELECT mc.c_id,
+$result = mssql_query("SELECT
+	mc.c_id,
 	mc.c_char,
 	mc.c_text,
 	mc.c_date,

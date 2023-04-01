@@ -4,7 +4,7 @@
     Created: 2009-03-17
     Repository: https://github.com/Vaflan/MyMuWeb
     Author: Ruslans Jermakovics <Vaflan>
-    Contact: https://github.com/Vaflan
+    Contact: http://mymuweb.ru
 
 
 ## Instruction
@@ -13,10 +13,11 @@ The first step, you need PHP settings:
 * On Windows system ~ C:\WINDOWS\php.ini (extensions with .dll)
 * On Linux system ~ /etc/php/phpX.X/php.ini
 
-
-    extension = gd2
-    extension = odbc
-    error_reporting = E_ALL & ~E_NOTICE
+      extension = gd2
+      extension = pdo
+      extension = odbc
+      extension = pdo_odbc
+      error_reporting = E_ALL & ~E_NOTICE
 
 *********************************************************************
 The second step, add library if database uses MD5
@@ -42,3 +43,4 @@ The third step is to change socks
 
 
 ### Thanks for using MyMuWeb by Vaflan!
+Special thanks to the **x-Mu** Community: https://x-mu.net/?board=84.0

@@ -8,6 +8,7 @@
  * @var string $die_start
  * @var string $die_end
  * @var string $rowbr
+ * @var int $flash_body_size
  */
 
 $dir = 'media/gallery/';
@@ -104,7 +105,7 @@ if (isset($_GET['w']) && $_GET['w'] === 'add' && !empty($_SESSION['character']))
 			<tr>
 				<td align="right"><?php echo mmw_lang_image_comment; ?>:</td>
 				<td>
-					<input name="comment" type="text" size="30" maxlength="30" value="<?php echo $_POST['comment']; ?>">
+					<input name="comment" type="text" size="30" maxlength="255" value="<?php echo $_POST['comment']; ?>">
 				</td>
 			</tr>
 			<tr>
@@ -180,7 +181,7 @@ if (!isset($_GET['w']) && $dh = opendir($dir)) {
 			$smallUrl = $dir . 'small_' . $file_name . '.' . $format;
 
 			if (!is_file($smallUrl)) {
-				img_resize($url, 300, 300, $dir, 'small_' . $file_name . '.' . $format);
+				img_resize($url, $flash_body_size, $flash_body_size, $dir, 'small_' . $file_name . '.' . $format);
 			}
 			$image_size = getimagesize($smallUrl);
 
@@ -210,7 +211,7 @@ if (!isset($_GET['w']) && $dh = opendir($dir)) {
 			<tr>
 				<td style="padding:2px;width:160px;text-align:center">
 					<a href="?op=gallery&w=' . $file_name . '" title="' . mmw_lang_image_size . ': ' . $width . ' x ' . $height . '">
-						<img src="' . $smallUrl . '" border="0" height="' . $sizeH . '" width="' . $sizeW . '">
+						<img src="' . $smallUrl . '" height="' . $sizeH . '" width="' . $sizeW . '" alt="' . $name . '" border="0">
 					</a>
 				</td>
 				<td style="padding:4px;" valign="top">

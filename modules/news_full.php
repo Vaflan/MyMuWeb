@@ -15,19 +15,23 @@ $language = array(
 	'total_comment' => mmw_lang_total_comment,
 );
 
+if (!isset($mmw['news_row_end'])) {
+	$mmw['news_row_end'] = '';
+}
+
 while ($row = mssql_fetch_row($get_news)) {
+	$content = '';
 	$date = date('H:i:s d.m.Y', $row[3]);
+
 	if (!empty($row[4])) {
-		$news_row_1 = $mmw['news_row_1'] . $row[4] . $mmw['news_row_end'];
+		$content .= $mmw['news_row_1'] . bbcode($row[4]) . $mmw['news_row_end'];
 	}
 	if (!empty($row[5])) {
-		$news_row_2 = $mmw['news_row_2'] . $row[5] . $mmw['news_row_end'];
+		$content .= $mmw['news_row_2'] . bbcode($row[5]) . $mmw['news_row_end'];
 	}
 	if (!empty($row[6])) {
-		$news_row_3 = $mmw['news_row_3'] . $row[6] . $mmw['news_row_end'];
+		$content .= $mmw['news_row_3'] . bbcode($row[6]) . $mmw['news_row_end'];
 	}
-
-	$content = bbcode($news_row_1 . $news_row_2 . $news_row_3);
 
 	echo <<<HTML
 <div class="eBlock" style="width:100%;border:0;padding:0">

@@ -266,6 +266,12 @@ function default_img($src)
 /////// Start BBCode Formats ///////
 function bbcode($text)
 {
+	global $flash_body_size;
+	if (empty($flash_body_size)) {
+		$flash_body_size = 426;
+	}
+	$aspectRatioHeight = round($flash_body_size * 9 / 16);
+
 	$bbCode = array(
 		'/\[br\]/is' => '<br>',
 		'/\[hr\]/is' => '<hr>',
@@ -287,10 +293,9 @@ function bbcode($text)
 		'/\[font\=(.*?)\](.*?)\[\/font\]/is' => '<span style="font:$1">$2</span>',
 		'/\[size\=(.*?)\](.*?)\[\/size\]/is' => '<span style="font-size:$1 pt;">$2</span>',
 		'/\[url\=(.*?)\](.*?)\[\/url\]/is' => '<a target="_blank" href="$1">$2</a>',
-		'/\[video\].*youtube.com\/watch[^=]+=(.*?)\[\/video\]/is' => '<iframe width="416" height="234" src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>',
+		'/\[video\].*youtube.com\/watch[^=]+=(.*?)\[\/video\]/is' => '<iframe width="' . $flash_body_size . '" height="' . $aspectRatioHeight . '" src="https://www.youtube.com/embed/$1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>',
 	);
-	$text = preg_replace(array_keys($bbCode), array_values($bbCode), $text);
-	return $text;
+	return preg_replace(array_keys($bbCode), array_values($bbCode), $text);
 }
 
 /////// END BBCode Formats ///////

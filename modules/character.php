@@ -112,7 +112,7 @@ HTML;
 					<?php endif; ?>
 					<tr>
 						<td style="text-align:right"><?php echo mmw_lang_status; ?>:</td>
-						<td><?php echo ctlCode($info[16]); ?></td>
+						<td><?php echo ctlCode($info[15]); ?></td>
 					</tr>
 					<tr>
 						<td style="text-align:right"><?php echo mmw_lang_class; ?>:</td>

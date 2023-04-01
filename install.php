@@ -48,10 +48,17 @@ $page = intval($_GET['page']);
 	?>
 	<form name="set_md5" method="post" action="?page=3">
 		<label>
+			Change database COLLATE
+			<select name="collate" title="Set COLLATE" style="margin:0;padding:0;">
+				<option value="false">No</option>
+				<option value="true">Yes</option>
+			</select>
+		</label><br>
+		<label>
 			In "config.php" Now MD5:
 			<select name="md5" title="Set MD5 Option" style="margin:0;padding:0;">
-				<option value="true"<?php echo $md5Selector[true]; ?>>Yes</option>
 				<option value="false"<?php echo $md5Selector[false]; ?>>No</option>
+				<option value="true"<?php echo $md5Selector[true]; ?>>Yes</option>
 			</select>
 		</label><br>
 		<b style="color:red;"><?php echo $md5Info[0]; ?></b><br>
@@ -68,15 +75,14 @@ $page = intval($_GET['page']);
 	if (($_POST['md5'] === 'true' && !$mmw['md5']) || ($_POST['md5'] === 'false' && $mmw['md5'])) {
 		$configFile = 'config.php';
 		$configData = file_get_contents($configFile);
-		$configData = preg_replace('/\$mmw\[\'md5\'] = (true|false);/', "\$mmw['md5'] = {$_POST['md5']}22;", $configData);
+		$configData = preg_replace('/\$mmw\[\'md5\'] = (true|false);/', "\$mmw['md5'] = {$_POST['md5']};", $configData);
 		file_put_contents($configFile, $configData);
 		$mmw['md5'] = $_POST['md5'];
 	}
 	@file_put_contents('includes/installed.php', "<?php\n// MyMuWeb Installed Date\n\$mmw['installed'] = '" . time() . "';\n");
 	?>
-	<b>Tables and columns install end!</b> [<a href="#"
-											   onclick="document.getElementById('install_log').style.display=''">Show</a>]
-	<br>
+	<b>Tables and columns install end!</b>
+	[<a href="#" onclick="document.getElementById('install_log').style.display=''">Show</a>]<br>
 	On the next page you can choose the site administrator<br>
 	<div class="buttonFlow">
 		<button onclick="window.location.href='?page=4'">Next &#8594;</button>
@@ -89,12 +95,14 @@ $page = intval($_GET['page']);
 	<?php
 	$queryList = array();
 
-	// DECODE DATABASE
-	$queryList['decode_database'] = array(
-		"ALTER DATABASE {$mmw['sql']['database']} SET SINGLE_USER WITH ROLLBACK IMMEDIATE",
-		"ALTER DATABASE {$mmw['sql']['database']} COLLATE SQL_Latin1_General_CP1_CI_AS",
-		"ALTER DATABASE {$mmw['sql']['database']} SET MULTI_USER"
-	);
+	if ($_POST['collate'] === 'true') {
+		// DECODE DATABASE
+		$queryList['decode_database'] = array(
+			"ALTER DATABASE {$mmw['sql']['database']} SET SINGLE_USER WITH ROLLBACK IMMEDIATE",
+			"ALTER DATABASE {$mmw['sql']['database']} COLLATE SQL_Latin1_General_CP1_CI_AS",
+			"ALTER DATABASE {$mmw['sql']['database']} SET MULTI_USER"
+		);
+	}
 
 	// CREAT TABLES
 	$queryList['load_db_mmw'] = @file_get_contents('includes/db_mmw.sql');
@@ -126,7 +134,7 @@ $page = intval($_GET['page']);
 		"ALTER TABLE MEMB_INFO ADD mmw_coin int not null default 0",
 		"ALTER TABLE warehouse ADD extMoney bigint null default 0",
 		"ALTER TABLE Character ADD {$mmw['reset_column']} int not null default 0",
-		"ALTER TABLE Character ADD leadership int not null default 0",
+		"ALTER TABLE Character ADD Leadership int not null default 0",
 		"ALTER TABLE Guild ADD G_Union int not null default 0",
 		"ALTER TABLE GuildMember ADD G_Status tinyint not null default 0",
 	);

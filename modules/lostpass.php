@@ -10,7 +10,9 @@
  * @var string $okey_end
  */
 
-$step = intval($_GET['step']);
+$step = isset($_GET['step'])
+	? intval($_GET['step'])
+	: 0;
 
 
 if ($step === 1) {

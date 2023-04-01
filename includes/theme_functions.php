@@ -76,7 +76,10 @@ HTML;
 function menu($style = null)
 {
 	global $mmw;
-	require __DIR__ . '/menu.php';
+	if (!isset($mmw['menu'])) {
+		require_once __DIR__ . '/menu.php';
+	}
+
 	if (empty($style)) {
 		$style = '<a href="$1">$2</a><br>';
 	}
