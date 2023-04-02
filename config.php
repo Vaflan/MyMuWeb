@@ -72,38 +72,38 @@ $mmw['add_points'] = true;                                  // TRUE(All Can Add 
 $mmw['clear_pk'] = true;                                    // TRUE(All Can Clear PK) FALSE(Options Off).
 $mmw['move'] = true;                                        // TRUE(All Can Move) FALSE(Options Off).
 $mmw['move_list'] = array(
-    //array('NUMBER_LOCATION','X','Y'),
-    array('0', '125', '125'),
-    array('1', '232', '126'),
-    array('2', '211', '40'),
-    array('3', '175', '112'),
-    array('4', '209', '71'),
-    array('6', '64', '116'),
-    array('7', '24', '19'),
-    array('8', '187', '58'),
-    array('10', '15', '13')
+	//array('NUMBER_LOCATION','X','Y'),
+	array('0', '125', '125'),
+	array('1', '232', '126'),
+	array('2', '211', '40'),
+	array('3', '175', '112'),
+	array('4', '209', '71'),
+	array('6', '64', '116'),
+	array('7', '24', '19'),
+	array('8', '187', '58'),
+	array('10', '15', '13')
 );
 $mmw['change_class'] = true;                                // TRUE(All Can Change Class) FALSE(Options Off).
 $mmw['change_class_list'] = array(
-    //array('NUMBER_CLASS','PRICE'),
-    array(0, 1000000000),
-    array(1, 10000000000),
-    array(2, 100000000000),
-    array(16, 1000000000),
-    array(17, 10000000000),
-    array(18, 100000000000),
-    array(32, 1000000000),
-    array(33, 10000000000),
-    array(34, 100000000000),
-    array(48, 3000000000),
-    array(49, 300000000000),
-    array(64, 3000000000),
-    array(65, 300000000000),
-    array(80, 1000000000),
-    array(81, 10000000000),
-    array(82, 10000000000),
-    array(96, 3000000000),
-    array(98, 300000000000),
+	//array('NUMBER_CLASS','PRICE'),
+	array(0, 1000000000),
+	array(1, 10000000000),
+	array(2, 100000000000),
+	array(16, 1000000000),
+	array(17, 10000000000),
+	array(18, 100000000000),
+	array(32, 1000000000),
+	array(33, 10000000000),
+	array(34, 100000000000),
+	array(48, 3000000000),
+	array(49, 300000000000),
+	array(64, 3000000000),
+	array(65, 300000000000),
+	array(80, 1000000000),
+	array(81, 10000000000),
+	array(82, 10000000000),
+	array(96, 3000000000),
+	array(98, 300000000000),
 );
 
 // News
@@ -186,12 +186,10 @@ $mmw['status_rules'] = array(
 );
 
 
-// Config of site made off. Thank You!
-// Engine MyMuWeb. Don't Edit Please!
-// All this engine by Vaflan!
-if (!$mmw['show_all_error']) {
-	error_reporting(0);
-}
+// The site config is over. Thank you!
+// Engine MyMuWeb. Please don't edit!
+// This whole engine is assembled by Vaflan!
+error_reporting($mmw['show_all_error'] ? E_ALL : false);
 require_once __DIR__ . '/includes/mmw_sql.php';
 @include_once __DIR__ . '/includes/installed.php';
 $mmw['rand_id'] = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 8);
@@ -200,7 +198,7 @@ $mmw['warning']['red'] = '<u style="color:red;">&#47;&#33;&#92;</u>&nbsp;';
 $mmw['warning']['green'] = '<u style="color:green;">&#47;&#33;&#92;</u>&nbsp;';
 $mmw['die']['start'] = '<table style="border:0;padding:24px;width:350px;height:200px;margin:0 auto;background:url(images/sql_die.png);font-family:Arial,Helvetica,sans-serif;"><tr><td style="text-align:left;vertical-align:top;position:relative;"><b>SYSTEM RESPONSE</b><br>';
 $mmw['die']['end'] = '</td></tr></table>';
-if ($mmw['sql']['pass'] === 'Password' || $mmw['sql']['user'] === 'Login' || $mmw['sql']['database'] === 'DataBase' || $mmw['sql']['host'] === 'IP Address') {
+if ($mmw['sql']['pass'] === 'PASSWORD' || $mmw['sql']['user'] === 'USER') {
 	die($mmw['die']['start'] . 'Please Check config.php!' . $mmw['die']['end']);
 }
 if (!function_exists('mssql_connect')) {

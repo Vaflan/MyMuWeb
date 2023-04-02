@@ -3,7 +3,7 @@ ob_start();
 session_start();
 header('Connection: Keep-Alive');
 header('Cache-Control: Private');
-define('TIME_START', serialize(gettimeofday()), false);
+define('TIME_START', serialize(@gettimeofday()), false);
 
 /**
  * @var array $mmw
@@ -15,16 +15,6 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/includes/sql_check.php';
 require_once __DIR__ . '/includes/xss_check.php';
 require_once __DIR__ . '/includes/engine.php';
-
-// To Look After All
-if ($mmw['look_after_all']) {
-	writelog('look_after_all', '<b>' . urlencode('//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) . '</b>');
-}
-
-// Check For Installed
-if (!is_file(__DIR__ . '/includes/installed.php')) {
-	jump('install.php');
-}
 
 // Start Header
 if (is_file($mmw['theme_dir'] . '/header.php')) {

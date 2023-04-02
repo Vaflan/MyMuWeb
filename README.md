@@ -9,7 +9,7 @@
 
 ## Instruction
 *********************************************************************
-The first step, you need PHP settings:
+First step, you need to set up a php environment:
 * On Windows system ~ C:\WINDOWS\php.ini (extensions with .dll)
 * On Linux system ~ /etc/php/phpX.X/php.ini
 
