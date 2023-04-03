@@ -10,6 +10,7 @@
 ## Instruction
 *********************************************************************
 First step, you need to set up a php environment:
+* Minimum PHP version should be 5.3 (extreme 5.2)
 * On Windows system ~ C:\WINDOWS\php.ini (extensions with .dll)
 * On Linux system ~ /etc/php/phpX.X/php.ini
 

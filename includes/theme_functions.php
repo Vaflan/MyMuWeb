@@ -312,12 +312,12 @@ function statisitcs($style = 'default')
 	if ($style === 'cscw') {
 		$dataCSCW = mssql_fetch_assoc(
 			mssql_query("SELECT CASTLE_OCCUPY, OWNER_GUILD FROM dbo.MuCastle_DATA")
-		) ?: [];
+		) ?: array();
 		try {
 			$dataCW = mssql_fetch_assoc(
 				mssql_query("SELECT CRYWOLF_OCCUFY FROM dbo.MuCrywolf_DATA")
 			);
-			$dataCSCW += $dataCW ?: [];
+			$dataCSCW += $dataCW ?: array();
 		} catch (Exception $ignored) {
 			// Do nothing
 		}
@@ -424,9 +424,6 @@ HTML;
 			return true;
 		case 'blink':
 		case 'fullblink':
-			if ($style === 'fullblink') {
-				echo '<script src="scripts/textfader.js"></script>';
-			}
 			$data = array(
 				mmw_lang_total_accounts . ': ' . $total_accounts . '<br>'
 				. mmw_lang_total_characters . ': ' . $total_characters . '<br>'
@@ -446,8 +443,14 @@ HTML;
 
 			$_ENV['fader'] = isset($_ENV['fader']) ? ++$_ENV['fader'] : 1;
 			$json = json_encode($data);
+			if ($style === 'blink') {
+				echo 'fader[2].message = ' . $json . ';';
+				return true;
+			}
+
 			echo <<<HTML
 <div id="statistics"></div>
+<script src="scripts/textfader.js"></script>
 <script>
 var throbStep = 0;
 function throbFade(index) {

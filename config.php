@@ -60,9 +60,9 @@ $mmw['auto_func']['switch'] = true;                         // FALSE(Turn Off) o
 $mmw['auto_func']['dir'] = 'includes/func/';                // Directory for auto functions includes.
 $mmw['check_admin_panel'] = true;                           // Check admin panel, Who where be.
 $mmw['look_after_all'] = false;                             // To look after all, Who where be.
-$mmw['external_columns'] = [                                // Register with external columns (Some custom server emulator)
+$mmw['external_columns'] = array(                           // Register with external columns (Some custom server emulator)
 	//'AccountLevel' => '0',
-];
+);
 $mmw['enable_credits'] = false;                             // Register and add new account to MEMB_CREDITS Table
 $mmw['info_gm_and_blocked'] = true;                         // Show info about GM and Blocked Char
 
