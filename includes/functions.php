@@ -609,7 +609,7 @@ function country($country, $getList = false)
 /////// Start Map Formats ///////
 function map($map, $getList = false)
 {
-	$locations = [
+	$locations = array(
 		0 => 'Lorencia',
 		1 => 'Dungeon',
 		2 => 'Devias',
@@ -719,7 +719,7 @@ function map($map, $getList = false)
 		134 => 'Aida Gray',
 		135 => 'Old Kethotum',
 		136 => 'Burning Kethotum',
-	];
+	);
 	if ($getList) {
 		return $locations;
 	}
