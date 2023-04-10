@@ -25,7 +25,7 @@ Second step, add the library if the database uses MD5.
 * Copy "WZ_MD5_MOD.dll" from project to Microsoft SQL "Server\MSSQL\Binn\"
 *********************************************************************
 The third step is to change socks.
-* Change `config.php` and replace 'IP Address', 'Login', 'Password', 'DataBase'
+* Customize the file `config.php` and variable $mmw['sql'] replace '127.0.0.1', 'USER', 'PASSWORD'
 * If you will be installing from a non-local ip, you set CUSTOM_IP_ADDRESS in install.php
 * Open install http://localhost/install.php
 *********************************************************************

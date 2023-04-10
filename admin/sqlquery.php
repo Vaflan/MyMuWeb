@@ -6,7 +6,7 @@
 $exampleQuery = "UPDATE table SET [column]=? WHERE [column]=?\n\nSELECT * FROM table WHERE [column]=?\n\nSELECT CAST(Items AS varbinary(1920)) FROM warehouse WHERE AccountID='?'";
 
 if (isset($_POST['sql_query_true'])) {
-	$sqlQuery = str_replace(array('\"', '\''), array('"', ''), $_POST['sql_query']);
+	$sqlQuery = str_replace(array('\"', '\'', '&#39;'), array('"', '', '\''), $_POST['sql_query']);
 	if ($sqlQueryResult = mssql_query($sqlQuery)) {
 		$queryResult = $mmw['warning']['green'] . 'Query done!';
 		writelog('a_sql_query', 'Query: <b>' . $sqlQuery . '</b> Has Been <span style="color:red">Injection</span>');

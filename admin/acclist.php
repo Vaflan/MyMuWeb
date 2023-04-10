@@ -45,10 +45,13 @@ if (isset($_POST['delete_acc'])) {
 			mi.bloc_code,
 			mi.appl_days,
 			ms.ConnectStat,
-			ms.ConnectTM
-		FROM dbo.MEMB_INFO AS mi
-		LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
-		ORDER BY appl_days");
+			ms.ConnectTM,
+			c.count
+			FROM dbo.MEMB_INFO AS mi
+				LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
+				LEFT JOIN (SELECT COUNT(*) AS count, AccountID FROM dbo.Character GROUP BY AccountID) AS c ON c.AccountID = mi.memb___id
+				ORDER BY appl_days
+		");
 		while ($row = mssql_fetch_row($result)) {
 			$mode = $row[1];
 			if ($row[1] == 0) {
@@ -75,8 +78,6 @@ if (isset($_POST['delete_acc'])) {
 			if ($row[3] === null) {
 				$status = '<img src="../images/death.gif" alt="death">';
 			}
-
-			$char_numb = mssql_num_rows(mssql_query("SELECT Name FROM dbo.Character WHERE AccountID='{$row[0]}'"));
 			?>
 			<tr>
 				<td align="center"><?php echo $rank++; ?>.</td>
@@ -84,7 +85,7 @@ if (isset($_POST['delete_acc'])) {
 				<td><?php echo $mode; ?></td>
 				<td><?php echo time_format($row[2]); ?></td>
 				<td><?php echo $row[4] ? time_format($row[4]) : '---'; ?></td>
-				<td><?php echo $char_numb; ?></td>
+				<td><?php echo intval($row[5]); ?></td>
 				<td align="center"><?php echo $status; ?></td>
 				<td align="center">
 					<form action="" method="post">
