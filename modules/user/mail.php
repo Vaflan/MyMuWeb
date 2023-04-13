@@ -42,7 +42,7 @@ if (isset($_POST['new_message'])) {
 	} elseif (empty($toGUID)) {
 		echo $die_start . mmw_lang_character_does_not_exist . $die_end;
 	} elseif ($toCharacterResult) {
-		$date = date('m/d/y H:i:s');
+		$date = date('Ymd\TH:i:s');
 		$context = '0x' . bin2hex($context);
 
 		$characterClass = current(mssql_fetch_row(mssql_query("SELECT Class FROM dbo.Character WHERE Name='{$_SESSION['character']}'")));

@@ -344,7 +344,7 @@ function statisitcs($style = 'default')
 		? ' WHERE CtlCode < 8'
 		: '';
 
-	$activeDate = date('m/d/Y', strtotime('-1 month'));
+	$activeDate = date('Ymd', strtotime('-1 month'));
 	$query = mssql_query("SELECT
 		count(*) AS total,
 		(SELECT count(*) AS total FROM dbo.MEMB_INFO WHERE bloc_code=1) AS total_blocked,
