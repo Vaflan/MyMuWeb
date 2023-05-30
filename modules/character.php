@@ -1,111 +1,191 @@
-<?PHP
-$character_get = clean_var(stripslashes($_GET[character]));
+<?php
+/**
+ * @var array $mmw
+ * @var string $die_start
+ * @var string $die_end
+ * @var string $okey_start
+ * @var string $okey_end
+ * @var string $rowbr
+ */
 
-if(isset($_POST["zen"])) {require("includes/character.class.php");option::send_zen($_POST["zen_to_char"],$_POST["zen"]); echo $rowbr;}
+$characterName = clean_var($_GET['character']);
 
-$char_results = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,reset,LevelUpPoint,pkcount,pklevel,money,leadership,CtlCode FROM Character WHERE Name='$character_get'"); 
-$info = mssql_fetch_row($char_results);
+$characterResult = mssql_query("SELECT Name,class,strength,dexterity,vitality,energy,money,accountid,mapnumber,clevel,{$mmw['reset_column']},LevelUpPoint,pkcount,pklevel,leadership,CtlCode FROM dbo.Character WHERE Name='{$characterName}'");
+$info = mssql_fetch_row($characterResult);
+if (!mssql_num_rows($characterResult)) {
+	echo $die_start . 'Character does not exist' . $die_end;
+} elseif (empty($mmw['info_gm_and_blocked']) && !empty($info[15])) {
+	echo $die_start . 'You cannot see blocked information! <br> Supported by MyMuWeb' . $die_end;
+} else {
+	if (isset($_POST['send_zen'])) {
+		$zen = intval($_POST['zen']);
+		$zenWithFee = $zen + $mmw['service_send_zen'];
 
-$profile_sql = mssql_query("Select hide_profile from memb_info where memb___id='$info[7]'");
-$profile_row = mssql_fetch_row($profile_sql);
-if($profile_row[0] == '0'){$profile = "<a href=?op=profile&profile=$info[7]><b>".mmw_lang_view_profile."</b></a><br/>";}
+		$result = mssql_query("SELECT extMoney FROM dbo.warehouse WHERE AccountID='{$_SESSION['user']}'");
+		$from = mssql_fetch_row($result);
 
-$status_sql = mssql_query("select connectstat,CONNECTTM from MEMB_STAT where memb___id='$info[7]'");
-$status_row = mssql_fetch_row($status_sql);
-$statusdc_reults = mssql_query("Select GameIDC from AccountCharacter where Id='$info[7]'");
-$statusdc = mssql_fetch_row($statusdc_reults);
-if($statusdc[0]==$info[0] && $status_row[0]==1){$login_status='<span class="online">'.mmw_lang_acc_online.'</span>';}
-else{$login_status='<span class="offline">'.mmw_lang_acc_offline.'</span>';}
+		if (!preg_match('/^\d+$/', $_POST['zen'])) {
+			echo $die_start . mmw_lang_zen_must_be_number . $die_end;
+		} elseif ($info[7] === $_SESSION['user']) {
+			echo $die_start . mmw_lang_zen_cant_move . $die_end;
+		} elseif ($zen < $mmw['min_send_zen']) {
+			echo $die_start . zen_format($mmw['min_send_zen']) . ' ' . mmw_lang_minimum_zen_can_send . ' ' . $from[0] . $die_end;
+		} elseif ($from[0] - $zenWithFee < 0) {
+			echo $die_start . mmw_lang_no_zen_for_send_zen . ' ' . zen_format($mmw['service_send_zen']) . '!' . $die_end;
+		} else {
+			mssql_query("UPDATE dbo.warehouse SET [extMoney]=[extMoney]-{$zenWithFee} WHERE AccountID='{$_SESSION['user']}'");
+			mssql_query("UPDATE dbo.warehouse SET [extMoney]=[extMoney]+{$zen} WHERE AccountID='{$info[7]}'");
+			guard_mmw_mess($characterName, 'It was sent to you in Extra Ware House: ' . zen_format($zen) . ', From: ' . $_SESSION['character'] . '.');
+			writelog('send_zen', 'Char: <b>' . $_SESSION['character'] . '</b> Has Been <span style="color:red">Send Zen</span>: ' . $zen . ', To: ' . $characterName . ' (Start:' . $from[0] . ',Merge:' . $zenWithFee . ')');
+			echo $okey_start . $zen . ' ' . mmw_lang_zen_sent . $okey_end;
+		}
+		echo $rowbr;
+	}
 
-$guildm_results = mssql_query("Select G_name from GuildMember where name='$info[0]'");
-$guildm = mssql_fetch_row($guildm_results);
-if($guildm[0]==NULL || $guildm[0]==" "){$guild_end = mmw_lang_no_guild;}
-else {
-$guild_results = mssql_query("Select G_name,g_mark from Guild where g_name='$guildm[0]'");
-$guild_row = mssql_fetch_row($guild_results);
-$logo = urlencode(bin2hex($guild_row[1]));
-$guild_end = "<img src='decode.php?decode=$logo' height='10' width='10' class='helpLink' title='<img src=decode.php?decode=$logo height=60 width=60>'> <a href='?op=guild&guild=$guildm[0]'>$guildm[0]</a>";
-}
+	$account_result = mssql_query("SELECT mi.hide_profile,ms.ConnectStat,ms.ConnectTM,ac.GameIDC
+		FROM dbo.MEMB_INFO AS mi
+		LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
+		LEFT JOIN dbo.AccountCharacter AS ac ON ac.Id = mi.memb___id
+		WHERE mi.memb___id='{$info[7]}'");
+	$account_row = mssql_fetch_row($account_result);
 
-if($info[12]==NULL || $info[12]==" "){$info[12] = mmw_lang_no_kills;}
+	$profile_link = '';
+	if (empty($account_row[0])) {
+		$profile_link = '<a href="?op=profile&character=' . $characterName . '"><b>' . mmw_lang_view_profile . '</b></a><br>';
+	}
 
-if(isset($_SESSION['char_set']) && $_SESSION['char_set']!=' ' && isset($_SESSION['user'])) {$send_zen = "<form action='' method='post' name='send_zen'><input name='zen_to_char' type='hidden' value='$character_get'> <input name='zen' type='text' size='8' maxlength='10'> <input type='submit' name='Submit' value='".mmw_lang_send."'><br>".mmw_lang_service_fee.': '.zen_format($mmw[service_send_zen]).' Zen</form>';}
-elseif(isset($_SESSION['pass']) && isset($_SESSION['user'])) {$send_zen = mmw_lang_cant_add_no_char;}
-else {$send_zen = mmw_lang_guest_must_be_logged_on;}
-?>
+	$login_status = ($account_row[1] && $account_row[3] === $info[0])
+		? '<span class="online">' . mmw_lang_acc_online . '</span>'
+		: '<span class="offline">' . mmw_lang_acc_offline . '</span>';
 
-      <table border="0" cellpadding="0" cellspacing="0" align="center">
-       <tr>
-	<td valign="top">
-	<table class="sort-table" cellpadding="0" cellspacing="0">
-          <tr>
-            <td align="right"><?echo mmw_lang_character;?>:</td>
-            <td><span class="level<?echo $info[16];?>"><?echo $info[0];?></span></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_status;?>:</td>
-            <td><?echo ctlcode($info[16]);?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_class;?>:</td>
-            <td><?echo char_class($info[1],full);?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_guild;?>:</td>
-            <td><?echo $guild_end;?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_level;?>:</td>
-            <td><?echo $info[9];?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_reset;?>:</td>
-            <td><?echo $info[10];?></td>
-          </tr>
-          <tr>
-            <td align="right">Strength:</td>
-            <td><?echo point_format($info[2]);?></td>
-          </tr>
-          <tr>
-            <td align="right">Agility:</td>
-            <td><?echo point_format($info[3]);?></td>
-          </tr>
-          <tr>
-            <td align="right">Vitality:</td>
-            <td><?echo point_format($info[4]);?></td>
-          </tr>
-          <tr>
-            <td align="right">Energy:</td>
-            <td><?echo point_format($info[5]);?></td>
-          </tr>
-          <?if($info[15]>0){?><tr>
-            <td align="right">Command:</td>
-            <td><?echo point_format($info[15]);?></td>
-          </tr><?}?>
-          <tr>
-            <td align="right"><?echo mmw_lang_kills;?>:</td>
-            <td><?echo $info[12];?> (<?echo pkstatus($info[13]);?>)</td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_map_name;?>:</td>
-            <td><?echo map($info[8]);?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_last_login;?>:</td>
-            <td><?echo time_format($status_row[1],"d M Y, H:i");?></td>
-          </tr>
-          <tr>
-            <td align="right"><?echo mmw_lang_login_status;?>:</td>
-            <td><?echo $login_status;?></td>
-          </tr>
+	$guild_result = mssql_query("SELECT gm.G_Name,g.G_Mark
+		FROM dbo.GuildMember AS gm
+		JOIN dbo.Guild AS g ON g.G_Name = gm.G_Name
+		WHERE gm.Name='{$info[0]}'");
+	$guild_row = mssql_fetch_row($guild_result);
+	if (empty($guild_row[0])) {
+		$guildData = mmw_lang_no_guild;
+	} else {
+		$guildMark = urlencode(bin2hex($guild_row[1]));
+		$guildData = <<<HTML
+<img src="images/mark.php?decode={$guildMark}" alt="Guild mark" height="10" width="10" class="helpLink" title="<img src=images/mark.php?decode={$guildMark} height=60 width=60>">
+<a href="?op=guild&guild={$guild_row[0]}">{$guild_row[0]}</a>
+HTML;
+	}
+
+	if (empty($info[12])) {
+		$info[12] = mmw_lang_no_kills;
+	}
+
+	$send_zen = mmw_lang_guest_must_be_logged_on;
+	if (!empty($_SESSION['character'])) {
+		$language = array(
+			'send' => mmw_lang_send,
+			'service_fee' => mmw_lang_service_fee
+		);
+		$serviceFee = zen_format($mmw['service_send_zen']);
+		$send_zen = <<<HTML
+<form action="" method="post">
+	<input name="zen" type="text" size="8" maxlength="10">
+	<input type="submit" name="send_zen" value="{$language['send']}"><br>
+	{$language['service_fee']}: {$serviceFee} Zen
+</form>
+HTML;
+	} elseif (isset($_SESSION['user'])) {
+		$send_zen = mmw_lang_cant_add_no_char;
+	}
+	?>
+
+	<table style="border:0;padding:0;margin:0 auto;">
+		<tr>
+			<td style="vertical-align:top">
+				<table class="sort-table" style="border:0;padding:0;margin:0 auto;">
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_character; ?>:</td>
+						<td><span class="level<?php echo $info[15]; ?>"><?php echo $info[0]; ?></span></td>
+					</tr>
+					<?php if ($mmw['status_rules'][$_SESSION['mmw_status']]['gm_option']) : ?>
+						<tr>
+							<td style="text-align:right"><?php echo mmw_lang_account; ?>:</td>
+							<td><?php echo $info[7]; ?></td>
+						</tr>
+					<?php endif; ?>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_status; ?>:</td>
+						<td><?php echo ctlCode($info[15]); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_class; ?>:</td>
+						<td><?php echo char_class($info[1], 'full'); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_guild; ?>:</td>
+						<td><?php echo $guildData; ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_level; ?>:</td>
+						<td><?php echo $info[9]; ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_reset; ?>:</td>
+						<td><?php echo $info[10]; ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right">Strength:</td>
+						<td><?php echo point_format($info[2]); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right">Agility:</td>
+						<td><?php echo point_format($info[3]); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right">Vitality:</td>
+						<td><?php echo point_format($info[4]); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right">Energy:</td>
+						<td><?php echo point_format($info[5]); ?></td>
+					</tr>
+					<?php if (!empty($info[14])) : ?>
+						<tr>
+							<td style="text-align:right">Command:</td>
+							<td><?php echo point_format($info[14]); ?></td>
+						</tr>
+					<?php endif; ?>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_kills; ?>:</td>
+						<td><?php echo $info[12]; ?> (<?php echo pkstatus($info[13]); ?>)</td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_map_name; ?>:</td>
+						<td><?php echo map($info[8]); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_last_login; ?>:</td>
+						<td><?php echo time_format($account_row[2], 'd M Y, H:i'); ?></td>
+					</tr>
+					<tr>
+						<td style="text-align:right"><?php echo mmw_lang_login_status; ?>:</td>
+						<td><?php echo $login_status; ?></td>
+					</tr>
+				</table>
+			</td>
+			<td style="vertical-align:top;text-align:center;padding-left:2px;">
+				<img src="<?php echo default_img(char_class($info[1], 'img')); ?>"
+					 alt="<?php echo char_class($info[1], 'full'); ?>">
+				<br><br>
+				<a href="?op=user&u=mail&to=<?php echo $info[0]; ?>"><b><?php echo mmw_lang_send_message; ?></b></a><br>
+				<?php echo $profile_link; ?>
+				<div class="div-menu-out" onclick="expandit('menu_1')"
+					 onmouseover="tclass=this.className;this.className='div-menu-over';"
+					 onmouseout="this.className=tclass;">
+					<?php echo mmw_lang_send_zen; ?>
+				</div>
+				<div id="menu_1" style="display:none;padding-bottom:4px;">
+					<?php echo $send_zen; ?>
+				</div>
+			</td>
+		</tr>
 	</table>
-	</td>
-	<td valign="top" align="center" style="padding-left:2px;">
-		<?echo "<img src='".default_img(char_class($info[1],img))."' title='".char_class($info[1],full)."'>";?><br><br>
-		<a href='?op=user&u=mail&to=<?echo $info[0];?>'><b><?echo mmw_lang_send_message;?></b></a><br/>
-		<?echo $profile;?>
-		<div class="div-menu-out" onclick="expandit('menu_1')" onmouseover="tclass=this.className;this.className='div-menu-over';" onmouseout="this.className=tclass;"><?echo mmw_lang_send_zen;?></div>
-		<div id="menu_1" style="display:none;padding-bottom:4px;"><?echo $send_zen;?><div>
-	</td>
-       </tr>
-      </table>
+	<?php
+}

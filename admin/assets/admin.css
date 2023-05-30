@@ -1,0 +1,150 @@
+/* Global */
+body {
+	background: #DDD;
+	font-size: 12px;
+	line-height: 15px;
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+table, td {
+	font-size: 12px;
+	line-height: 15px;
+	color: #000;
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+a:link {
+	font-size: 13px;
+	color: #000;
+	text-decoration: none;
+}
+
+a:visited {
+	font-size: 13px;
+	color: #000;
+	text-decoration: none;
+}
+
+a:active {
+	font-size: 13px;
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	font-size: 13px;
+	color: #F00;
+	text-decoration: none;
+}
+
+.online {
+	font-size: 12px;
+	color: #0f0;
+}
+
+.offline {
+	font-size: 12px;
+	color: #f00;
+}
+
+input, select {
+	color: #000;
+	padding: 0;
+	vertical-align: center;
+	font-size: 9px;
+	font-weight: bold;
+	font-family: Tahoma, Verdana, Arial, serif;
+}
+
+textarea {
+	color: #000;
+	padding: 2px;
+	vertical-align: center;
+	font-size: 12px;
+	font-family: Tahoma, Verdana, Arial, serif;
+}
+
+select.selections {
+	font-family: Tahoma, Verdana, Arial, serif;
+	font-size: 12px;
+	line-height: 14px;
+	color: #f2e5cd;
+	text-decoration: none;
+	background-color: #494949;
+}
+
+form, img {
+	display: inline;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+fieldset {
+	border: 1px solid #121212;
+	background: #DDD;
+}
+
+legend {
+	color: #f00;
+	background: #fff;
+	font: 11px Tahoma, Verdana, Arial, serif;
+	text-align: left;
+}
+
+.sort-table td {
+	border: 1px solid ThreeDShadow;
+	background: Window;
+	color: WindowText;
+	padding: 2px 5px;
+	font-size: 12px;
+}
+
+.sort-table thead td, .sort-table thead th {
+	border: 1px solid;
+	background: #FA5;
+	padding: 2px 5px;
+	border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+}
+
+.login-header {
+	height: 50px;
+}
+
+.login-stats {
+	height: 50px;
+	border: 0;
+	padding: 0;
+}
+
+.content {
+	width: 600px;
+	margin: 0 auto;
+	padding: 4px;
+}
+
+.sized {
+	margin: 0 auto;
+	max-width: 600px;
+	width: 600px;
+	overflow: auto;
+	overflow-y: hidden;
+}
+
+.news-table {
+	border: 1px solid #898989;
+	margin: 2px auto;
+	width: 90%;
+}
+
+.news-body {
+	border-top: 1px solid #BBB;
+}
+
+.copyright {
+	text-align: center;
+	margin-top: 15px;
+	font-size: 10px;
+	color: #101010;
+}

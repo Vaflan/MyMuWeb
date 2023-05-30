@@ -1,16 +1,12 @@
 <!-- 
 * MyMuWeb ADS/Banners Body
-* By Vaflan
-* Use All HTML Teg. 
+* Use HTML here.
 -->
 
-
 <center>
-<a href="http://top.mymuweb.ru/">Top.MyMuWeb.Ru</a><br>
-<a href="http://www.mymuweb.ru/">MyMuWeb Support</a><br>
-<a href="http://www.red-angel.ru/">RedAngel MuOnline</a><br>
-<a href="http://www.podriv.ru/">Podriv Project</a><br>
+    <a href="http://mmw.clan.su/" target="_blank">MyMuWeb Support</a><br>
+    <a href="http://x-mu.net/" target="_blank">X-MU Community</a><br>
+    <a href="https://muonlinefanz.com/" target="_blank">Mu Online Fanz</a><br>
+    <a href="http://www.podriv.net/" target="_blank">Podriv Project</a><br>
+    <a href="http://tfu.lv/" target="_blank">TFU.LV</a><br>
 </center>
-
-
-<div id="main" style="position: absolute; left: 520px; top: 32px;"><?statisitcs('main');?></div>

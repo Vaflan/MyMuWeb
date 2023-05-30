@@ -1,38 +1,61 @@
-<?PHP
-// Updated for MyMuWeb 0.8
-// Module by Vaflan
+<?php
+/**
+ * @var string $die_start
+ * @var string $die_end
+ * @var string $okey_start
+ * @var string $okey_end
+ */
 
-if($_GET[w]=="online") {
- echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
+if ($_GET['w'] === 'online') {
+	echo $die_start . mmw_lang_account_is_online_must_be_logged_off . $die_end;
+} elseif ($_GET['w'] === 'block') {
+	if (isset($_GET['character'])) {
+		$character = clean_var($_GET['character']);
+		$account = mssql_fetch_row(mssql_query("SELECT accountid FROM dbo.Character WHERE Name='{$character}'"))[0];
+	} else {
+		$account = clean_var(stripslashes($_GET['n']));
+	}
+
+	$accountBlockResult = mssql_query("SELECT bloc_code,block_date,unblock_time,blocked_by,block_reason FROM dbo.MEMB_INFO WHERE memb___id='{$account}'");
+	$row = mssql_fetch_row($accountBlockResult);
+
+	if ($row[0] == 1 && !empty($row[1]) && !empty($row[2]) && time() > ($row[1] + $row[2])) {
+		echo $okey_start . mmw_lang_account_must_be_logged_on_for_unblock . $okey_end;
+	} elseif ($row[0] == 1) {
+		if (isset($_GET['character'])) {
+			echo $die_start . mmw_lang_character . ' ' . $character . ' ' . mmw_lang_is_blocked;
+		} else {
+			echo $die_start . mmw_lang_account . ' ' . $account . ' ' . mmw_lang_is_blocked;
+		}
+
+		if (!empty($row[1])) {
+			echo '<br> ' . mmw_lang_date . ': ' . date('H:i:s, d.m.Y', $row[1]);
+		}
+
+		if (!empty($row[1]) && !empty($row[2])) {
+			if ($row[2] < 60) {
+				$need_wait = $row[2] . ' s.';
+			} elseif ($row[2] < 3600) {
+				$need_wait = ceil($row[2] / 60) . ' m.';
+			} elseif ($row[2] < 86400) {
+				$need_wait = ceil($row[2] / 3600) . ' h.';
+			} else {
+				$need_wait = ceil($row[2] / 86400) . ' d.';
+			}
+
+			echo '<br>' . mmw_lang_unblocked . ': ' . date('H:i:s, d.m.Y', $row[1] + $row[2]);
+			echo '<br>' . mmw_lang_need_wait . ': ' . $need_wait;
+		}
+
+		if (!empty($row[3])) {
+			echo '<br>' . mmw_lang_blocked_by . ': ' . $row[3];
+		}
+
+		if (!empty($row[4])) {
+			echo '<br>' . mmw_lang_reason . ': ' . $row[4];
+		}
+		echo $die_end;
+	} else {
+		echo $die_start . mmw_lang_account_not_blocked_or_cant_find . $die_end;
+	}
 }
-elseif($_GET[w]=="block") {
- $login = clean_var(stripslashes($_GET['n']));
- $acc_block = mssql_query("SELECT bloc_code,block_date,unblock_time,blocked_by,block_reason FROM MEMB_INFO WHERE memb___id='$login'");
- $row = mssql_fetch_row($acc_block);
-
- $time_need = ($row[1] + $row[2]) - time();
- if($row[0]==1 && $time_need<=0 && $row[1]>0 && $row[2]!=0) {
-  echo $okey_start . mmw_lang_account_must_be_logged_on_for_unblock . $okey_end;
- }
- elseif($row[0]==1) {
-  echo $die_start . mmw_lang_account." $login ".mmw_lang_is_blocked;
-  if($row[1] != 0) {echo "<br> ".mmw_lang_date.": ".date("H:i:s, d.m.Y", $row[1]);}
-  echo "<br>".mmw_lang_blocked_by.": $row[3]";
-  if($row[1]!=0 && $row[2]!=0) {
-
-	if($time_need<60) {$need_wait = $time_need . ' s.';}
-	elseif($time_need<3600) {$need_wait = ceil($time_need / 60) . ' m.';}
-	elseif($time_need<86400) {$need_wait = ceil($time_need / 3600) . ' h.';}
-	else {$need_wait = ceil($time_need / 86400) . ' d.';}
-
-	echo "<br>".mmw_lang_unblocked.": " . date("H:i:s, d.m.Y", $row[1] + $row[2]);
-	echo "<br>".mmw_lang_need_wait.": $need_wait";
-  }
-  if(!empty($row[4]) && $row[4]!=' ') {echo "<br>".mmw_lang_reason.": $row[4]";}
-  echo $die_end;
- }
- else {
-  echo $die_start . mmw_lang_account_not_blocked_or_cant_find . $die_end;
- }
-}
-?>
