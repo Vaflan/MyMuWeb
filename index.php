@@ -14,7 +14,11 @@ include("includes/engine.php");
 
 // To Look After All
 if($mmw[look_after_all] == 'yes') {
- writelog("look_after_all","<b>".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
+ // SECURITY FIX: the request URI was url-decoded and written into a .php file
+ // under logs/ with no escaping, so "?x=%3C?php+system(...);?%3E" planted
+ // executable PHP that the log viewer (or a crafted include) would run.
+ // Escape it: the log is read back as HTML, and this keeps it inert as code.
+ writelog("look_after_all","<b>".htmlspecialchars(urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"]))."</b>");
 }
 
 // Check For Installed

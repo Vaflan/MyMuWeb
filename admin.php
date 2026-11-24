@@ -16,7 +16,8 @@ include("admin/engine.php");
 
 // Check Admin Panel
 if($mmw[check_admin_panel] == 'yes') {
- writelog("a_check_admin_panel","Admin Panel: <b>".urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"])."</b>");
+ // SECURITY FIX: same log-poisoning sink as index.php - escape before writing.
+ writelog("a_check_admin_panel","Admin Panel: <b>".htmlspecialchars(urldecode('http://'.$_SERVER["SERVER_ADDR"].$_SERVER["REQUEST_URI"]))."</b>");
 }
 
 if(is_file("themes/$mmw[theme]/admin.css")) {$css = "themes/$mmw[theme]/admin.css";}

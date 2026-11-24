@@ -3,6 +3,11 @@
 // For MyMuWeb
 
 function writelog($logfile,$text) {
+ // SECURITY FIX: see includes/engine.php - keep PHP open tags out of the .php
+ // log files and keep the file name inside logs/.
+ $text = str_ireplace('<?', '&lt;?', $text);
+ $logfile = preg_replace("/[^a-zA-Z0-9_-]/", '', $logfile);
+ if($logfile == '') { return; }
  $text .= ", All Those On <i>".date('d.m.Y H:i:s')."</i> By <u>$_SERVER[REMOTE_ADDR]</u> \n";
  $fp = fopen("logs/$logfile.php","a");
  fputs($fp, $text);

@@ -107,6 +107,15 @@ function mp3_player() {
 
 /////// Start Write Logs ///////
 function writelog($logfile,$text) {
+        // SECURITY FIX: log files are written as .php inside the web root and
+        // several callers pass request data (request URI, news titles, poll
+        // questions, character and account names). Neutralise PHP open tags so
+        // nothing written here can ever be executed, while keeping the
+        // intentional HTML formatting the log viewer relies on.
+        $text = str_ireplace('<?', '&lt;?', $text);
+        // Also keep the file name inside logs/ no matter who calls us.
+        $logfile = preg_replace("/[^a-zA-Z0-9_-]/", '', $logfile);
+        if($logfile == '') { return; }
         $text .= ", All Those On <i>".date('d.m.Y H:i:s')."</i> By <u>$_SERVER[REMOTE_ADDR]</u> \n";
         $fp = fopen("logs/$logfile.php","a");
         fputs($fp, $text);
