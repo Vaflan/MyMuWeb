@@ -817,6 +817,12 @@ function edit_warehouse($hex_wh) {
 
       if(empty($hex_wh) || empty($login)) {echo $die_start . mmw_lang_left_blank . $die_end;}
        elseif($mmw[status_rules][$_SESSION[mmw_status]][hex_wh]!=1) {echo "$die_start You Can't Use HEX WareHouse! $die_end";}
+        // SECURITY FIX: $hex_wh is interpolated UNQUOTED as "0x$hex_wh" below, so
+        // quote escaping does nothing for it and clean_var() leaves ";" and
+        // spaces intact. A GM could post
+        //   1; UPDATE MEMB_INFO SET mmw_status=10 WHERE memb___id='x'--
+        // and run a stacked query. Only hex digits are legitimate here.
+        elseif(!preg_match("/^[a-fA-F0-9]+$/", $hex_wh)) {echo "$die_start Invalid HEX data! $die_end";}
         elseif(!preg_match("/^\d*$/", $money) || !preg_match("/^\d*$/", $extmoney)) {echo "$die_start Money must be a positive number! $die_end";}
          else {
 		$query = "UPDATE warehouse SET [Items]=0x$hex_wh,[Money]=$money,[extMoney]=$extmoney WHERE AccountID='$login'";
@@ -904,6 +910,13 @@ function send_zen($char,$zen) {
 	$zen = clean_var(stripslashes($zen));
 	$char_set = stripslashes($_SESSION['char_set']);
 	$login = clean_var(stripslashes($_SESSION['user']));
+
+	// SECURITY FIX: modules/character.php calls this on any POST to ?op=character,
+	// with no login check, so the queries below used to execute for anonymous
+	// visitors (the old empty()/login validation only ran at line ~930, after
+	// the SELECT on the attacker-supplied character name). Require a session
+	// before touching the database at all.
+	if(empty($login) || empty($char)) {echo $die_start . mmw_lang_left_blank . $die_end; return;}
 
 	$result = mssql_query("SELECT extMoney FROM warehouse WHERE accountid='$login'");
 	$from = mssql_fetch_row($result);
