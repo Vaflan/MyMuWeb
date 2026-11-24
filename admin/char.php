@@ -270,22 +270,34 @@ if (isset($_GET['chr'])) {
 			$search_type = $_POST['search_type'];
 
 			$queryBuildWhere = !empty($_POST['search_type'])
-				? "LIKE '%{$search}%'"
-				: "= '{$search}'";
-			$result = mssql_query("SELECT Name,Class,cLevel,{$mmw['reset_column']},strength,dexterity,vitality,energy,accountid,CtlCode FROM dbo.Character WHERE Name {$queryBuildWhere}");
+				? "c.Name LIKE '%{$search}%'"
+				: "c.Name = '{$search}'";
+			$result = mssql_query("SELECT
+				c.Name,
+				c.Class,
+				c.cLevel,
+				c.{$mmw['reset_column']},
+				c.Strength,
+				c.Dexterity,
+				c.Vitality,
+				c.Energy,
+				c.AccountID,
+				c.CtlCode,
+				ms.ConnectStat
+				FROM dbo.Character as c
+				LEFT JOIN dbo.MEMB_STAT as ms ON ms.memb___id = c.AccountID
+					WHERE {$queryBuildWhere}
+			");
 
 			$rank = 1;
 			while ($row = mssql_fetch_row($result)) {
-				$status_result = mssql_query("SELECT ConnectStat FROM dbo.MEMB_STAT WHERE memb___id='{$row[8]}'");
-				$status = mssql_fetch_row($status_result);
-
-				if ($status[0] == 0) {
+				if ($row[10] == 0) {
 					$status = '<img src="../images/offline.gif" alt="offline">';
 				}
-				if ($status[0] == 1) {
+				if ($row[10] == 1) {
 					$status = '<img src="../images/online.gif" alt="online">';
 				}
-				if ($status[0] === null) {
+				if ($row[10] === null) {
 					$status = '<img src="../images/death.gif" alt="death">';
 				}
 

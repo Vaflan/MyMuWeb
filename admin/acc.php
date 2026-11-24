@@ -368,13 +368,13 @@ if (isset($_GET['acc'])) {
 			$search = clean_var(stripslashes($_POST['search_account']));
 
 			$queryBuildWhere = !empty($_POST['search_type'])
-				? "LIKE '%{$search}%'"
-				: "= '{$search}'";
+				? "mi.memb___id LIKE '%{$search}%'"
+				: "mi.memb___id = '{$search}'";
 			$result = mssql_query("SELECT
 				mi.memb___id,mi.memb__pwd,mi.bloc_code,mi.country,mi.gender,ms.ConnectStat
 				FROM dbo.MEMB_INFO AS mi
 				LEFT JOIN dbo.MEMB_STAT AS ms ON ms.memb___id = mi.memb___id
-					WHERE mi.memb___id {$queryBuildWhere}");
+					WHERE {$queryBuildWhere}");
 
 			$rank = 1;
 			while ($row = mssql_fetch_row($result)) {

@@ -618,7 +618,7 @@ function country($country, $getList = false)
 /////// Start Map Formats ///////
 function map($map, $getList = false)
 {
-	$locations = [
+	$locations = array(
 		0 => 'Lorencia',
 		1 => 'Dungeon',
 		2 => 'Devias',
@@ -728,7 +728,7 @@ function map($map, $getList = false)
 		134 => 'Aida Gray',
 		135 => 'Old Kethotum',
 		136 => 'Burning Kethotum',
-	];
+	);
 	if ($getList) {
 		return $locations;
 	}
@@ -1054,7 +1054,7 @@ function utf_to_win($str = null)
 /////// Start Guard MMW Message Info ///////
 function guard_mmw_mess($to, $text)
 {
-	$date = date('m/d/y H:i:s');
+	$date = date('Ymd\TH:i:s');
 	$msg_to_sql = mssql_query("SELECT GUID, MemoCount FROM dbo.T_FriendMain WHERE Name='{$to}'");
 	$msg_to_row = mssql_fetch_row($msg_to_sql);
 	$mail_total_sql = mssql_query("SELECT bRead FROM dbo.T_FriendMail WHERE GUID='{$msg_to_row[0]}'");

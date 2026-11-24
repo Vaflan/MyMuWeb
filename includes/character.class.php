@@ -37,9 +37,9 @@ class Character
 	{
 		global $mmw, $okey_start, $okey_end, $die_start, $die_end;
 
-		$characterResult = mssql_query("SELECT Money,class,LevelUpPoint,Clevel,{$mmw['reset_column']},CAST(Inventory AS varbinary(1728)) FROM dbo.Character WHERE Name='{$characterName}'");
+		$characterResult = mssql_query("SELECT Money,class,LevelUpPoint,Clevel,{$mmw['reset_column']},Inventory FROM dbo.Character WHERE Name='{$characterName}'");
 		$characterInfo = mssql_fetch_row($characterResult);
-		$characterInventory = strtoupper(substr(bin2hex($characterInfo[5]), 2, $mmw['item_byte_size'] * 12));
+		$characterInventory = strtoupper(substr(bin2hex($characterInfo[5]), 0, $mmw['item_byte_size'] * 12));
 		$characterMoney = $characterInfo[0];
 		$warehouseMoney = self::getAccountExtraMoney();
 		$totalMoney = $characterMoney + $warehouseMoney;
@@ -227,7 +227,7 @@ class Character
 
 		$characterResult = mssql_query("SELECT Money,CAST(Inventory AS varbinary(1728)) FROM dbo.Character WHERE Name='{$characterName}'");
 		$characterInfo = mssql_fetch_row($characterResult);
-		$characterInventory = strtoupper(substr(bin2hex($characterInfo[1]), 2, $mmw['item_byte_size'] * 12));
+		$characterInventory = strtoupper(substr(bin2hex($characterInfo[1]), 0, $mmw['item_byte_size'] * 12));
 		$characterMoney = $characterInfo[0];
 		$warehouseMoney = self::getAccountExtraMoney();
 		$totalMoney = $characterMoney + $warehouseMoney;

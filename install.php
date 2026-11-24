@@ -16,7 +16,7 @@ $page = intval($_GET['page']);
 <body>
 <?php echo $mmw['die']['start']; ?>
 
-<?php if (!in_array($_SERVER['REMOTE_ADDR'], [CUSTOM_IP_ADDRESS, '127.0.0.1', $_SERVER['SERVER_ADDR']])) : ?>
+<?php if (!in_array($_SERVER['REMOTE_ADDR'], array(CUSTOM_IP_ADDRESS, '127.0.0.1', $_SERVER['SERVER_ADDR']))) : ?>
 	<!-- Access deny -->
 	Install only For IP: 127.0.0.1 or LocalHost<br>
 	<a href="//127.0.0.1/install.php">Go To Normal Install</a>

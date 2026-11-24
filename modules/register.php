@@ -85,7 +85,7 @@ if (isset($_POST['registration'])) {
 				? "[dbo].[fn_md5]('{$password}', '{$account}')"
 				: "'{$password}'";
 
-			$externalColumns = ['', ''];
+			$externalColumns = array('', '');
 			foreach ($mmw['external_columns'] as $column => $field) {
 				$externalColumns[0] .= ", $column";
 				$externalColumns[1] .= ", '$field'";
@@ -139,8 +139,8 @@ if ($_GET['terms'] === 'agree') {
 	echo <<<HTML
 	<script>
 		function check_register_form() {
-			var errors = [];
-			var list = [
+			let errors = [];
+			let list = [
 				{key: 'account', message: 'Please enter Account.'},
 				{key: 'password', message: 'Please enter Password.'},
 				{key: 'repassword', message: 'Please enter Repeat password.'},
