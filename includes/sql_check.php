@@ -60,10 +60,15 @@ function clean_var($var) {
 // Onter Anti-SQL Injection from MuWeb.org
 
 function xw_sanitycheck($str){ 
-    if(strpos(str_replace("''","","$str"),"'")!=false)
-        return str_replace("'", "''",$str); 
-    else 
-        return $str; 
+    // SECURITY FIX: this used to be
+    //   if(strpos(str_replace("''","","$str"),"'")!=false) return str_replace("'","''",$str);
+    //   else return $str;
+    // strpos() returns 0 when the first character is a quote, and 0 != false is
+    // false, so every value that *started* with "'" was returned completely
+    // unescaped. That turned every string context in the application into a SQL
+    // injection point. Input reaching this function is raw request data, so it
+    // must always be escaped - there is nothing here to preserve.
+    return str_replace("'", "''", $str); 
 } 
 
 function secure($str){ 
