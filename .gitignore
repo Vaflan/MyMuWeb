@@ -1,0 +1,17 @@
+# Files created at runtime by MyMuWeb — do not commit
+#
+# includes/installed.php is the install marker: committing it would make a
+# fresh checkout look "already installed" to index.php.
+includes/installed.php
+
+# Logs are written as .php inside the web root by writelog().
+logs/*.php
+
+# User-submitted admin requests.
+admin/request.htm
+
+# Database backups created by admin/backup.mmw.
+includes/backup/
+
+*.log
+*.bak
