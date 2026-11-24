@@ -20,7 +20,13 @@
  php_flag session.use_cookies on
 
  # Config Security
+ # SECURITY FIX: add the Apache 2.4 authorisation syntax. With only the 2.2
+ # directives below and no mod_access_compat, config.php is downloadable and
+ # leaks the MSSQL host, login and password.
  <FilesMatch "config.php"> 
   Order deny,allow
   Deny from all
+  <IfModule mod_authz_core.c>
+   Require all denied
+  </IfModule>
  </FilesMatch>
