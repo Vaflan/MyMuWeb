@@ -116,6 +116,10 @@ $mmw[joinserver_port] = '55970';			// Join Server port for GM Message
 
 
 // Admin Panel SecurityCode & MMW status (5 - GameMaster, 10 - Administrator)
+// SECURITY: this value is a single shared secret for the whole installation and
+// the engine's documented default is '4321'. Change it before exposing the site,
+// and change it again after removing install.php. Anyone who learns it plus any
+// account's password can open admin.php.
 $mmw[admin_securitycode] = '4321';			// Admin Panel Security Code (Max 10 simbyl)
 $mmw[status_rules] = array(				// array(name,admin_panel,gm_option,gm_block,gm_msg,hex_wh,comment_delete,forum_add,forum_delete,forum_status,image_delete,chat_delete),
  10 => array('name'=>'Administrator','admin_panel'=>1,'gm_option'=>1,'gm_block'=>1,'gm_msg'=>1,'hex_wh'=>1,'comment_delete'=>1,'forum_add'=>1,'forum_delete'=>1,'forum_status'=>1,'image_delete'=>1,'chat_delete'=>1),

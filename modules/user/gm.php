@@ -9,6 +9,11 @@ if(isset($_POST[gm_block])){require("includes/character.class.php");option::gm_b
       <td width="100" align="right">Your Level:</td>
       <td><b><?echo $_SESSION['mmw_status'];?> (<?echo $mmw[status_rules][$_SESSION[mmw_status]][name];?>)</b></td>
     </tr>
+<?// SECURITY FIX: this panel is reachable by every logged-in member
+   // (?op=user&u=gm) and used to print the global admin security code to
+   // whoever opened it, i.e. the admin panel's third factor was public.
+   // Show it only to accounts that actually hold the admin_panel right.
+   if($mmw[status_rules][$_SESSION[mmw_status]][admin_panel]==1) {?>
     <tr>
       <td align="right">Security Code:</td>
       <td><b><?echo $mmw[admin_securitycode];?></b></td>
@@ -17,6 +22,7 @@ if(isset($_POST[gm_block])){require("includes/character.class.php");option::gm_b
       <td align="right">Admin Area:</td>
       <td><a target="_blank" href="admin.php">Enter</a></td>
     </tr>
+<?}?>
   </table>
 
 <?
