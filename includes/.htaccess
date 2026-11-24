@@ -7,3 +7,9 @@
  ErrorDocument 500 /error.php?go=500
 
  Deny from all
+
+ # SECURITY FIX: Apache 2.2 syntax only; add the 2.4 equivalent so this
+ # directory stays protected on modern Apache.
+ <IfModule mod_authz_core.c>
+	Require all denied
+ </IfModule>

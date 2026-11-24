@@ -7,3 +7,10 @@
  ErrorDocument 500 /error.php?go=500
 
  Deny from all
+
+ # SECURITY FIX: Apache 2.2 syntax only. Logs are written as .php files, so
+ # where this directory is readable a poisoned log would be executable over
+ # HTTP; add the 2.4 equivalent.
+ <IfModule mod_authz_core.c>
+	Require all denied
+ </IfModule>

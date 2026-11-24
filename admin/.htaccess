@@ -7,3 +7,11 @@
  ErrorDocument 500 /error.php?go=500
 
  Deny from all
+
+ # SECURITY FIX: "Deny from all" is Apache 2.2 syntax. On Apache 2.4 without
+ # mod_access_compat it is ignored (or errors) and this directory becomes
+ # directly web-readable - admin modules would then rely only on their own
+ # session checks. Keep both syntaxes so either server denies.
+ <IfModule mod_authz_core.c>
+	Require all denied
+ </IfModule>
