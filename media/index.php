@@ -3,8 +3,13 @@
 // System By Vaflan.
 // For MyMuWeb.
 
+// SECURITY FIX: only the forward slash was stripped, so on Windows a value
+// like ?f=..\..\config.php escaped media/ and let is_file()/filesize()
+// disclose the existence and size of arbitrary files. Drop every directory
+// component instead, and require a bare file name.
 $file = stripslashes($_GET['f']);
-$file = str_replace("/","",$file);
+$file = basename(str_replace('\\', '/', $file));
+if($file == '.' || $file == '..') { $file = ''; }
 ?>
 <html>
 <title>Info About File</title>
@@ -17,10 +22,10 @@ $file = str_replace("/","",$file);
 
 <big><b>
 <?
-if(is_file($file)) {
+if($file != '' && is_file($file)) {
 	$format = substr($file, -3);
 	$size = filesize($file) . " Bytes";
-	echo "Name: $file (Format: $format, Size: $size)";
+	echo "Name: ".htmlspecialchars($file)." (Format: ".htmlspecialchars($format).", Size: $size)";
  }
 
 else {

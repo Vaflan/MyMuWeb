@@ -13,6 +13,11 @@ function writelog($logfile,$text) {
 function clearlog($logfile) {
  //$fp = fopen("logs/$logfile.php","w");
  //fwrite ($fp, "");
+ // SECURITY FIX: $logfile came from $_POST["log_name"] unsanitised, so
+ // a traversal sequence there deleted files outside logs/ (index.php, config, ...).
+ // Restrict it to a plain log name inside logs/.
+ $logfile = preg_replace("/[^a-zA-Z0-9_-]/",'',$logfile);
+ if($logfile == '') { return; }
  unlink("logs/$logfile.php");
 }
 
