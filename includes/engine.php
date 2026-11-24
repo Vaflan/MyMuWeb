@@ -4,10 +4,17 @@
 
 /////// Start Language ///////
 $mmw[set_lang] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_POST[set_lang]);
-if(is_file("lang/$mmw[set_lang].php") || is_file("lang/$_COOKIE[set_lang].php")) {
-	if(!empty($mmw[set_lang])) {setcookie("set_lang", $mmw[set_lang]); $_COOKIE[set_lang] = $mmw[set_lang];}
-	include("lang/$_COOKIE[set_lang].php");
-	$_SESSION[set_lang] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_COOKIE[set_lang]);
+// SECURITY FIX: the cookie was used raw in is_file() and include(), so a
+// crafted "set_lang" cookie traversed out of lang/ and included any .php on
+// disk (e.g. ../logs/look_after_all, which the site writes itself from the
+// request URI). That was an unauthenticated path to remote code execution.
+// Sanitise the cookie exactly like the POST value, and only ever include from
+// the resulting variable - never from $_COOKIE directly.
+$mmw[set_lang_cookie] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_COOKIE[set_lang]);
+if(is_file("lang/$mmw[set_lang].php") || is_file("lang/$mmw[set_lang_cookie].php")) {
+	if(!empty($mmw[set_lang])) {setcookie("set_lang", $mmw[set_lang]); $_COOKIE[set_lang] = $mmw[set_lang]; $mmw[set_lang_cookie] = $mmw[set_lang];}
+	if($mmw[set_lang_cookie] != '') {include("lang/$mmw[set_lang_cookie].php");}
+	$_SESSION[set_lang] = $mmw[set_lang_cookie];
 }
 elseif(is_file("lang/$mmw[language].php")) {
 	include("lang/$mmw[language].php");

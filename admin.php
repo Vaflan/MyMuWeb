@@ -69,8 +69,13 @@ else {$css = "images/admin.css";}
       <td align="center">
 	<br>
 <?
-if(is_file("admin/$_GET[op].php")) {include("admin/$_GET[op].php");}
-elseif(is_file("admin/$_GET[op].mmw")) {mmw("admin/$_GET[op].mmw");}
+// SECURITY FIX: $_GET[op] was used raw in is_file() and include(), so an
+// authenticated admin (or anyone able to forge one request, there is no CSRF
+// protection) could include any .php on disk by traversing out of admin/.
+// Whitelist the name the same way index.php already does for public modules.
+$admin_op = preg_replace("/[^a-zA-Z0-9_-]/",'',$_GET[op]);
+if($admin_op != '' && is_file("admin/$admin_op.php")) {include("admin/$admin_op.php");}
+elseif($admin_op != '' && is_file("admin/$admin_op.mmw")) {mmw("admin/$admin_op.mmw");}
 else {include("admin/home.php");}
 ?>
       </td>
