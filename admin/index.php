@@ -25,6 +25,10 @@ if (isset($_POST['admin_login'])) {
 
 		$row = mssql_fetch_assoc(mssql_query("SELECT memb___id, mmw_status FROM dbo.MEMB_INFO WHERE memb___id='{$account}' AND memb__pwd={$passwordValue}"));
 		if ($row['memb___id'] === $account && $mmw['status_rules'][$row['mmw_status']]['admin_panel']) {
+			// SECURITY FIX: regenerate the session id when privileges change, so
+			// a session id planted before login (session fixation) cannot become
+			// an authenticated admin session.
+			session_regenerate_id(true);
 			$_SESSION['admin'] = array(
 				'account' => $account,
 				'password' => $password,
@@ -60,6 +64,9 @@ if (isset($_SESSION['admin']['account'], $_SESSION['admin']['level'])) {
 
 // Logout
 if (isset($_REQUEST['logout'])) {
+	// SECURITY FIX: session_destroy() alone leaves the in-memory $_SESSION array
+	// populated, so the rest of this request still ran as a logged-in admin.
+	$_SESSION = array();
 	session_destroy();
 	die("<script>alert('You Have Logged Out From Your Admin Control Panel, Press Ok To Go To The Main WebSite!'); window.location='{$mmw['serverwebsite']}';</script>");
 }
@@ -128,10 +135,16 @@ $css = is_file('../themes/' . $mmw['theme'] . '/admin.css')
 			<tr>
 				<td style="text-align:center;padding-top:10px">
 					<?php
-					if (isset($_GET['op']) && is_file($_GET['op'] . '.php')) {
-						include_once $_GET['op'] . '.php';
-					} elseif (isset($_GET['op']) && is_file($_GET['op'] . '.mmw')) {
-						mmw($_GET['op'] . '.mmw');
+					// SECURITY FIX: $_GET['op'] was concatenated straight into
+					// is_file() and include_once(), so ?op=../config or
+					// ?op=../logs/<name> included an arbitrary .php file with the
+					// admin session's privileges. Whitelist the name the same way
+					// index.php already does for the public modules.
+					$adminOp = preg_replace('/[^\w-]/', '', isset($_GET['op']) ? $_GET['op'] : '');
+					if ($adminOp !== '' && is_file($adminOp . '.php')) {
+						include_once $adminOp . '.php';
+					} elseif ($adminOp !== '' && is_file($adminOp . '.mmw')) {
+						mmw($adminOp . '.mmw');
 					} else {
 						include_once 'home.php';
 					}
