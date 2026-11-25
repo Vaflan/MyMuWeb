@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // BackUp Web System v1.0 by Vaflan
 // Only for MyMuWeb MSSQL 2000 Year
 $backup = '%database%_%year%-%month%-%day%.bak';
@@ -21,18 +21,33 @@ if (isset($_POST['backup']) && $_POST['backup'] === 'new') {
 	}
 }
 if (isset($_POST['restore'])) {
-	$query = "USE master; RESTORE DATABASE MuOnline FROM DISK='{$dir}{$_POST['restore']}'; USE {$mmw['sql']['database']};";
-	if (@mssql_query($query)) {
-		echo $mmw['warning']['green'] . 'BackUp ' . $_POST['restore'] . ' DataBase successFully restored!';
-		writelog('a_backup', 'BackUp Has Been <b style="color:#F00">Restored</b> ' . $dir . $_POST['restore'] . ' DataBase');
+	// SECURITY FIX: the posted name was concatenated into both a file path and a
+	// quoted string inside RESTORE DATABASE, so a traversal sequence reached
+	// arbitrary paths and a quote broke out of the literal. Accept a plain .bak
+	// file name only.
+	$restoreFile = basename($_POST['restore']);
+	if (preg_match('/^[\w\-]+\.bak$/i', $restoreFile)) {
+		$query = "USE master; RESTORE DATABASE MuOnline FROM DISK='{$dir}{$restoreFile}'; USE {$mmw['sql']['database']};";
+		if (@mssql_query($query)) {
+			echo $mmw['warning']['green'] . 'BackUp ' . $restoreFile . ' DataBase successFully restored!';
+			writelog('a_backup', 'BackUp Has Been <b style="color:#F00">Restored</b> ' . $dir . $restoreFile . ' DataBase');
+		} else {
+			echo $mmw['warning']['red'] . 'Restore BackUp ' . $restoreFile . ' DataBase has been error!';
+		}
 	} else {
-		echo $mmw['warning']['red'] . 'Restore BackUp ' . $_POST['restore'] . ' DataBase has been error!';
+		echo $mmw['warning']['red'] . 'Invalid backup file name!';
 	}
 }
 if (isset($_POST['delete'])) {
-	unlink($dir . $_POST['delete']);
-	echo $mmw['warning']['green'] . 'BackUp ' . $_POST['delete'] . ' DataBase successFully deleted!';
-	writelog('a_backup', 'BackUp Has Been <b style="color:#F00">Deleted</b> ' . $dir . $_POST['delete'] . ' DataBase');
+	// SECURITY FIX: same traversal problem on the delete path.
+	$deleteFile = basename($_POST['delete']);
+	if (preg_match('/^[\w\-]+\.bak$/i', $deleteFile)) {
+		unlink($dir . $deleteFile);
+		echo $mmw['warning']['green'] . 'BackUp ' . $deleteFile . ' DataBase successFully deleted!';
+		writelog('a_backup', 'BackUp Has Been <b style="color:#F00">Deleted</b> ' . $dir . $deleteFile . ' DataBase');
+	} else {
+		echo $mmw['warning']['red'] . 'Invalid backup file name!';
+	}
 }
 ?>
 <fieldset class="content">

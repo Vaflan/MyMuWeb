@@ -7,3 +7,11 @@
  ErrorDocument 500 /error.php?go=500
 
  Deny from all
+
+ # SECURITY FIX: "Deny from all" is Apache 2.2 syntax and is ignored by Apache
+ # 2.4 unless mod_access_compat is loaded. Logs are written as .php files, so
+ # where this directory stays readable a poisoned log is executable over HTTP.
+ # Carry both forms so either server version denies.
+ <IfModule mod_authz_core.c>
+	Require all denied
+ </IfModule>

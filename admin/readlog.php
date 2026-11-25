@@ -15,12 +15,21 @@ if (empty($_SESSION['admin']['level'])) {
 	die('<u style="color:red">/!\</u> Access Denied!');
 }
 
-$file = __DIR__ . '/../logs/' . $_GET['log'];
-echo is_file($file . '.htm')
-	? @file_get_contents($file . '.htm')
-	:  is_file($file . '.php')
-		? @file_get_contents($file . '.php')
-		: '<u style="color:red">/!\</u> Empty!';
+// SECURITY FIX: $_GET['log'] was concatenated into the path, so a traversal
+// sequence read arbitrary .htm/.php files from the server.
+// The nested ternary that used to be here also does not parse on PHP 8
+// ("unparenthesized a ? b : c ? d : e"), which made this page a fatal error
+// on any modern PHP; it is now written as plain branches.
+$logName = preg_replace('/[^\w-]/', '', isset($_GET['log']) ? $_GET['log'] : '');
+$file = __DIR__ . '/../logs/' . $logName;
+
+if ($logName !== '' && is_file($file . '.htm')) {
+	echo file_get_contents($file . '.htm');
+} elseif ($logName !== '' && is_file($file . '.php')) {
+	echo file_get_contents($file . '.php');
+} else {
+	echo '<u style="color:red">/!\</u> Empty!';
+}
 ?>
 </pre>
 </body>

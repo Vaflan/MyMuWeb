@@ -2,9 +2,15 @@
 // Anti-SQL Injection from MuWeb.org
 function xw_sanitycheck($str)
 {
-	return (strpos($str, "'") != false)
-		? str_replace("'", '&#39;', $str)
-		: $str;
+	// SECURITY FIX: this used to be
+	//   return (strpos($str, "'") != false) ? str_replace("'", '&#39;', $str) : $str;
+	// strpos() returns 0 when the first character is a quote, and 0 != false is
+	// false, so any value beginning with "'" was returned completely unescaped.
+	// secure() feeds this function from $_GET, $_REQUEST, $_POST and $_COOKIE,
+	// so every quoted string context in the application was injectable.
+	// The data arriving here is raw request data and has not been escaped yet,
+	// so it must always be escaped.
+	return str_replace("'", '&#39;', $str);
 }
 
 function secure($str)

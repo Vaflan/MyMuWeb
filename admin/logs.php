@@ -2,9 +2,13 @@
 	die('<u style="color:red">/!\</u> Access Denied!');
 }
 
-if (isset($_POST['log_name'])) {
-	unlink(__DIR__ . '/../logs/' . $_POST['log_name']);
-	echo $mmw['warning']['green'] . 'Log ' . $logfile . ' SuccessFully Deleted!';
+// SECURITY FIX: $_POST['log_name'] was concatenated into the path, so a
+// traversal sequence deleted files outside logs/ (index.php, config.php,
+// includes/installed.php...). Only accept a plain log file name.
+$logName = isset($_POST['log_name']) ? basename($_POST['log_name']) : '';
+if ($logName !== '' && preg_match('/^[\w\-]+\.(php|htm)$/', $logName)) {
+	unlink(__DIR__ . '/../logs/' . $logName);
+	echo $mmw['warning']['green'] . 'Log ' . $logName . ' SuccessFully Deleted!';
 }
 
 $logList = array(

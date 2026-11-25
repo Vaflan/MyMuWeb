@@ -24,6 +24,15 @@ function clean_var($var)
 function writelog($logFile, $text)
 {
 	$dir = __DIR__ . '/../logs/';
+	// SECURITY FIX: logs are written as .php files inside the web root and
+	// callers pass request-derived text (request URI, account and character
+	// names, news titles). Neutralise PHP open tags so nothing written here can
+	// ever execute, and keep the file name inside logs/.
+	$text = str_ireplace('<?', '&lt;?', $text);
+	$logFile = preg_replace('/[^\w\-]/', '', $logFile);
+	if ($logFile === '') {
+		return;
+	}
 	$row = $text . ', All Those On <i>' . date('d.m.Y H:i:s') . '</i> By <u>' . $_SERVER['REMOTE_ADDR'] . '</u>' . PHP_EOL;
 
 	$fp = fopen($dir . $logFile . '.php', 'a');
