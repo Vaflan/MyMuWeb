@@ -1,146 +1,165 @@
-<?PHP if($_SESSION['a_admin_level'] < 1) {die("Security Admin Panel is Turn On"); exit();}
+<?php if (empty($_SESSION['admin']['level'])) {
+	die('<u style="color:red">/!\</u> Access Denied!');
+}
 
 // Download List
-if(isset($_POST["new_link"])) {
- $link_name = $_POST['link_name'];
- $link_address = $_POST['link_address'];
- $link_description = $_POST['link_description'];
- $link_size = $_POST['link_size'];
- if(empty($link_name) || empty($link_address) || empty($link_description) || empty($link_size)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
- else {
-  mssql_query("INSERT INTO MMW_links(l_name,l_address,l_description,l_size,l_date,l_id) VALUES ('$link_name','$link_address','$link_description','$link_size','".time()."','$mmw[rand_id]')");
-  echo "$warning_green Link SuccessFully Added!";
-  writelog("a_link","Link $_POST[link_name] Has Been <font color=#FF0000>Added</font>");
- }
+if (isset($_POST['new_link'])) {
+	$link_name = $_POST['link_name'];
+	$link_address = $_POST['link_address'];
+	$link_description = $_POST['link_description'];
+	$link_size = $_POST['link_size'];
+	$link_time = time();
+	if (empty($link_name) || empty($link_address) || empty($link_description) || empty($link_size)) {
+		echo $mmw['warning']['red'] . 'Error: Some Fields Were Left Blank!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} else {
+		mssql_query("INSERT INTO dbo.MMW_links(l_name,l_address,l_description,l_size,l_date,l_id) VALUES ('{$link_name}','{$link_address}','{$link_description}','{$link_size}','{$link_time}','{$mmw['rand_id']}')");
+		echo $mmw['warning']['green'] . 'Link SuccessFully Added!';
+		writelog('a_link', 'Link ' . $_POST['link_name'] . ' Has Been <b style="color:#F00">Added</b>');
+	}
 }
-if(isset($_POST["edit_link_done"])) {
- $link_name = $_POST['link_name'];
- $link_address = $_POST['link_address'];
- $link_description = $_POST['link_description'];
- $link_size = $_POST['link_size'];
- $link_id = $_POST['link_id'];
- if(empty($link_name) || empty($link_address) || empty($link_description) || empty($link_size) || empty($link_id)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
- else {
-  mssql_query("Update MMW_links set [l_name]='$link_name',[l_address]='$link_address',[l_description]='$link_description',[l_size]='$link_size',[l_date]='".time()."' where l_id='$link_id'");
-  echo "$warning_green Link SuccessFully Edited!";
-  writelog("a_link","Link $_POST[link_name] Has Been <font color=#FF0000>Edited</font>");
- }
+if (isset($_POST['edit_link_done'])) {
+	$link_name = $_POST['link_name'];
+	$link_address = $_POST['link_address'];
+	$link_description = $_POST['link_description'];
+	$link_size = $_POST['link_size'];
+	$link_id = $_POST['link_id'];
+	$link_time = time();
+	if (empty($link_name) || empty($link_address) || empty($link_description) || empty($link_size) || empty($link_id)) {
+		echo $mmw['warning']['red'] . 'Error: Some Fields Were Left Blank!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} else {
+		mssql_query("UPDATE dbo.MMW_links SET [l_name]='{$link_name}',[l_address]='{$link_address}',[l_description]='{$link_description}',[l_size]='{$link_size}',[l_date]='{$link_time}' WHERE l_id='{$link_id}'");
+		echo $mmw['warning']['green'] . 'Link SuccessFully Edited!';
+		writelog('a_link', 'Link ' . $_POST['link_name'] . ' Has Been <b style="color:#F00">Edited</b>');
+	}
 }
-if(isset($_POST["delete_link"])) {
- $link_id = $_POST["delete_link"];
- if(empty($link_id)) {echo "$warning_red Error: Some Fields Were Left Blank!<br><a href='javascript:history.go(-1)'>Go Back.</a>";}
- else {
-  mssql_query("DELETE FROM MMW_links WHERE l_id='$link_id'");
-  echo "$warning_green Link SuccessFully Deleted!";
-  writelog("a_link","Link $link_name Has Been <font color=#FF0000>Deleted</font>");
- }
+if (isset($_POST['delete_link'])) {
+	if (empty($_POST['delete_link'])) {
+		echo $mmw['warning']['red'] . 'Error: Some Fields Were Left Blank!<br><a href="javascript:history.go(-1)">Go Back.</a>';
+	} else {
+		mssql_query("DELETE FROM dbo.MMW_links WHERE l_id='{$_POST['delete_link']}'");
+		echo $mmw['warning']['green'] . 'Link SuccessFully Deleted!';
+		writelog('a_link', 'Link ' . $link_name . ' Has Been <b style="color:#F00">Deleted</b>');
+	}
 }
 ?>
-<table width="600" border="0" align="center" cellpadding="0" cellspacing="4">
-	<tr>
-		<td align="center">
-		<fieldset>
+<fieldset class="content">
 
-<?
-if(isset($_POST["edit_link"])) {
- $link_id = clean_var(stripslashes($_POST['edit_link']));
- $get_edit_link = mssql_query("Select l_name,l_address,l_description,l_size from MMW_links where l_id='$link_id'");
- $get_edit_link_ = mssql_fetch_row($get_edit_link);
-?>
+	<?php
+	if (isset($_POST['edit_link'])) {
+		$linkId = clean_var(stripslashes($_POST['edit_link']));
+		$query = mssql_query("SELECT l_name,l_address,l_description,l_size FROM dbo.MMW_links WHERE l_id='{$linkId}'");
+		$get_edit_link_ = mssql_fetch_row($query);
+		?>
 		<legend>Edit Link</legend>
-			<form action="" method="post" name="new_link_form" id="new_link_form">
+		<form action="" method="post" name="new_link_form">
 			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
-			  <tr>
-			    <td width="42%" align="right">Link Name</td>
-			    <td><input name="link_name" type="text" id="link_name" size="20" maxlength="100" value="<?echo $get_edit_link_[0];?>"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Link Address</td>
-			    <td><input name="link_address" type="text" id="link_address" size="20" maxlength="100" value="<?echo $get_edit_link_[1];?>"> <input name="edit_link_done" type="hidden" id="edit_link_done" value="edit_link_done"> <input name="link_id" type="hidden" id="link_id" value="<?echo $link_id;?>"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Link Size</td>
-			    <td><input name="link_size" type="text" id="link_size" size="20" maxlength="100" value="<?echo $get_edit_link_[3];?>"></td>
-			  </tr>
-			  <tr>
-			    <td align="right">Description</td>
-			    <td><textarea name="link_description" id="link_description"><?echo $get_edit_link_[2];?></textarea></td>
-			  </tr>
-			  <tr> 
-			    <td colspan="2" align="center"><input type="submit" name="Submit" value="Edit Link"> <input type="reset" name="Reset" value="Reset"></td> 
-			  </tr> 
-			</table> 
-			</form> 
-<?}else{?>
-		<legend>New Link</legend> 
-			<form action="" method="post" name="new_link_form" id="new_link_form"> 
+				<tr>
+					<td width="42%" align="right">Link Name</td>
+					<td>
+						<input name="link_name" type="text" size="20" maxlength="100" value="<?php echo $get_edit_link_[0]; ?>">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Link Address</td>
+					<td>
+						<input name="link_address" type="text" size="20" maxlength="100" value="<?php echo $get_edit_link_[1]; ?>">
+						<input name="edit_link_done" type="hidden" value="edit_link_done">
+						<input name="link_id" type="hidden" value="<?php echo $linkId; ?>">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Link Size</td>
+					<td>
+						<input name="link_size" type="text" size="20" maxlength="100" value="<?php echo $get_edit_link_[3]; ?>">
+					</td>
+				</tr>
+				<tr>
+					<td align="right">Description</td>
+					<td>
+						<textarea name="link_description"><?php echo $get_edit_link_[2]; ?></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="submit" value="Edit Link">
+						<input type="reset" value="Reset">
+					</td>
+				</tr>
+			</table>
+		</form>
+	<?php } else {
+		?>
+		<legend>New Link</legend>
+		<form action="" method="post" name="new_link_form">
 			<table width="100%" border="0" cellpadding="0" cellspacing="4" align="center">
-			  <tr>
-			    <td width="42%" align="right">Link Name</td>
-			    <td><input name="link_name" type="text" id="link_name" size="20" maxlength="100"></td> 
-			  </tr> 
-			  <tr> 
-			    <td align="right">Link Address</td>
-			    <td><input name="link_address" type="text" id="link_address" size="20" maxlength="100"> <input name="new_link" type="hidden" id="new_link" value="new_link"></td> 
-			  </tr> 
-			  <tr> 
-			    <td align="right">Link Size</td>
-			    <td><input name="link_size" type="text" id="link_size" size="20" maxlength="100"></td> 
-			  </tr> 
-			  <tr> 
-			    <td align="right">Description</td>
-			    <td><textarea name="link_description" id="link_description">Link Description</textarea></td> 
-			  </tr> 
-			  <tr> 
-			    <td colspan="2" align="center"><input type="submit" name="Submit" value="Add Link"> <input type="reset" name="Reset" value="Reset"></td> 
-			  </tr> 
-			</table> 
-			</form> 
-<?}?>
-		</fieldset>
-		</td>
-	</tr> 
-	<tr> 
-		<td align="center">
-		<fieldset>
-		<legend>Links List</legend>
+				<tr>
+					<td width="42%" align="right">Link Name</td>
+					<td><input name="link_name" type="text" size="20" maxlength="100"></td>
+				</tr>
+				<tr>
+					<td align="right">Link Address</td>
+					<td><input name="link_address" type="text" size="20" maxlength="100">
+						<input name="new_link" type="hidden" value="new_link"></td>
+				</tr>
+				<tr>
+					<td align="right">Link Size</td>
+					<td><input name="link_size" type="text" size="20" maxlength="100"></td>
+				</tr>
+				<tr>
+					<td align="right">Description</td>
+					<td><textarea name="link_description">Link Description</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<input type="submit" value="Add Link">
+						<input type="reset" value="Reset">
+					</td>
+				</tr>
+			</table>
+		</form>
+	<?php } ?>
+</fieldset>
+<fieldset class="content">
+	<legend>Links List</legend>
 
-<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
- <thead><tr>
-  <td align="center">#</td>
-  <td align="left">Name</td>
-  <td align="left">Address</td>
-  <td align="left">Description</td>
-  <td align="left">Date</td>
-  <td align="center">Edit</td>
-  <td align="center">Delete</td>
- </tr></thead>
-<?
-$result = mssql_query("SELECT l_name,l_address,l_description,l_id,l_date from MMW_links order by l_date desc");
-for($i=0;$i < mssql_num_rows($result);++$i) {
- $row = mssql_fetch_row($result);
- $rank = $i+1;
- $table_edit = "<form action='' method='post'><input type='submit' value='Edit'><input name='edit_link' type='hidden' value='$row[3]'></form>";
+	<table border="0" cellpadding="0" cellspacing="1" width="100%" align="center" class="sort-table">
+		<thead>
+		<tr>
+			<td align="center">#</td>
+			<td>Name</td>
+			<td>Address</td>
+			<td>Description</td>
+			<td>Date</td>
+			<td align="center">Edit</td>
+			<td align="center">Delete</td>
+		</tr>
+		</thead>
+		<?php
+		$rank = 1;
+		$result = mssql_query("SELECT l_name,l_address,l_description,l_id,l_date FROM dbo.MMW_links ORDER BY l_date DESC");
+		while ($row = mssql_fetch_row($result)) {
+			?>
+			<tr>
+				<td align="center"><?php echo $rank++; ?>.</td>
+				<td><?php echo substr($row[0], 0, 8); ?>...</td>
+				<td><?php echo substr($row[1], 0, 14); ?>...</td>
+				<td><?php echo substr($row[2], 0, 14); ?>...</td>
+				<td><?php echo date('Y-m-d H:i:s', $row[4]); ?></td>
+				<td align="center">
+					<form action="" method="post">
+						<input type="hidden" name="edit_link" value="<?php echo $row[3]; ?>">
+						<input type="submit" value="Edit">
+					</form>
+				</td>
+				<td align="center">
+					<form action="" method="post">
+						<input type="hidden" name="delete_link" value="<?php echo $row[3]; ?>">
+						<input type="submit" value="Delete">
+					</form>
+				</td>
+			</tr>
+		<?php } ?>
+	</table>
 
- $table_delete = "<form action='' method='post'><input type='submit' value='Delete'><input name='delete_link' type='hidden' value='$row[3]'></form>";
-
- $row[0] = substr($row[0],0,8);
- $row[1] = substr($row[1],0,14);
- $row[2] = substr($row[2],0,14);
-?>
- <tr>
-  <td align='center'><?echo $rank;?>.</td>
-  <td align='left'><?echo $row[0];?>...</td>
-  <td align='left'><?echo $row[1];?>...</td>
-  <td align='left'><?echo $row[2];?>...</td>
-  <td align='left'><?echo date("Y-m-d H:i:s",$row[4]);?></td>
-  <td align='center'><?echo $table_edit;?></td>
-  <td align='center'><?echo $table_delete;?></td>
- </tr>
-<?}?>
-</table>
-
-		</fieldset>
-		</td>
-	</tr> 
-</table> 
+</fieldset>

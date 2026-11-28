@@ -94,6 +94,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_online
 drop table [dbo].[MMW_online]
 
 CREATE TABLE [dbo].[MMW_online] (
+	[online_id] [varchar] (50) NULL,
 	[online_ip] [varchar] (50) NULL,
 	[online_date] [int] NULL,
 	[online_url] [text] NULL,
@@ -107,6 +108,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_server
 drop table [dbo].[MMW_servers]
 
 CREATE TABLE [dbo].[MMW_servers] (
+	[id] [int] IDENTITY (1, 1) NOT NULL,
 	[name] [varchar] (50) NULL,
 	[version] [varchar] (10) NULL,
 	[experience] [varchar] (10) NULL,
@@ -124,7 +126,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_votema
 drop table [dbo].[MMW_votemain]
 
 CREATE TABLE [dbo].[MMW_votemain] (
-	[ID] [int] IDENTITY (1, 1) NOT NULL,
+	[id] [int] IDENTITY (1, 1) NOT NULL,
 	[question] [varchar] (100) NULL,
 	[answer1] [varchar] (50) NULL,
 	[answer2] [varchar] (50) NULL,
@@ -141,7 +143,7 @@ if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[MMW_votero
 drop table [dbo].[MMW_voterow]
 
 CREATE TABLE [dbo].[MMW_voterow] (
-	[ID_vote] [int] NULL,
+	[id_vote] [int] NULL,
 	[who] [varchar] (15) NULL,
 	[answer] [int] NULL 
 ) ON [PRIMARY]

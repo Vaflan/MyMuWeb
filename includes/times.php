@@ -1,62 +1,90 @@
-<?
-$servertime = date("F d, Y H:i:s", time()+1);
-$hour = date("H");
-$min = date("i");
-$duotime = $hour.$min;
+<?php
+$hour = date('H');
+$minutes = date('i');
+$dayOutOfTime = $hour . $minutes;
 
-if($min>30) {$bcht = $hour+1; $bct = "'".$bcht."','30'";}
-else {$bct = "'".$hour."','30'";}
+$bct = ($minutes >= 30)
+	? $hour + 1
+	: $hour;
 
-if($duotime<145) {$cct = "1";} elseif($duotime<345) {$cct = "3";}
-elseif($duotime<545) {$cct = "5";} elseif($duotime<745) {$cct = "7";}
-elseif($duotime<945) {$cct = "9";} elseif($duotime<1145) {$cct = "11";}
-elseif($duotime<1345) {$cct = "13";} elseif($duotime<1545) {$cct = "15";}
-elseif($duotime<1745) {$cct = "17";} elseif($duotime<1945) {$cct = "19";}
-elseif($duotime<2145) {$cct = "21";} else {$cct = "23";}
+if ($dayOutOfTime < 145) {
+	$cct = 1;
+} elseif ($dayOutOfTime < 345) {
+	$cct = 3;
+} elseif ($dayOutOfTime < 545) {
+	$cct = 5;
+} elseif ($dayOutOfTime < 745) {
+	$cct = 7;
+} elseif ($dayOutOfTime < 945) {
+	$cct = 9;
+} elseif ($dayOutOfTime < 1145) {
+	$cct = 11;
+} elseif ($dayOutOfTime < 1345) {
+	$cct = 13;
+} elseif ($dayOutOfTime < 1545) {
+	$cct = 15;
+} elseif ($dayOutOfTime < 1745) {
+	$cct = 17;
+} elseif ($dayOutOfTime < 1945) {
+	$cct = 19;
+} elseif ($dayOutOfTime < 2145) {
+	$cct = 21;
+} else {
+	$cct = 23;
+}
 
-if($duotime<100) {$dst = "1";} elseif($duotime<300) {$dst = "3";}
-elseif($duotime<500) {$dst = "5";} elseif($duotime<700) {$dst = "7";}
-elseif($duotime<900) {$dst = "9";} elseif($duotime<1100) {$dst = "11";}
-elseif($duotime<1300) {$dst = "13";} elseif($duotime<1500) {$dst = "15";}
-elseif($duotime<1700) {$dst = "17";} elseif($duotime<1900) {$dst = "19";}
-elseif($duotime<2100) {$dst = "21";} else {$dst = "23";}
-
-if($duotime<100) {$get = "1";} elseif($duotime<400) {$get = "4";}
-elseif($duotime<700) {$get = "7";} elseif($duotime<1000) {$get = "10";}
-elseif($duotime<1300) {$get = "13";} elseif($duotime<1600) {$get = "16";}
-elseif($duotime<1900) {$get = "19";} elseif($duotime<2200) {$get = "22";}
+if ($dayOutOfTime < 100) {
+	$dst = 1;
+} elseif ($dayOutOfTime < 300) {
+	$dst = 3;
+} elseif ($dayOutOfTime < 500) {
+	$dst = 5;
+} elseif ($dayOutOfTime < 700) {
+	$dst = 7;
+} elseif ($dayOutOfTime < 900) {
+	$dst = 9;
+} elseif ($dayOutOfTime < 1100) {
+	$dst = 11;
+} elseif ($dayOutOfTime < 1300) {
+	$dst = 13;
+} elseif ($dayOutOfTime < 1500) {
+	$dst = 15;
+} elseif ($dayOutOfTime < 1700) {
+	$dst = 17;
+} elseif ($dayOutOfTime < 1900) {
+	$dst = 19;
+} elseif ($dayOutOfTime < 2100) {
+	$dst = 21;
+} else {
+	$dst = 23;
+}
 ?>
 
-<script type="text/javascript" src="scripts/timejs.js">//script_by_vaflan</script>
+<span class="helpLink" id="time" title="<?php echo mmw_lang_server_time; ?>">
+	<?php echo date('d.m.Y H:i:s'); ?>
+</span><br>
+Devil Square: <span id="dstime">Error: Turn on JavaScript</span><br>
+Blood Castle: <span id="bctime">Error: Turn on JavaScript</span><br>
+Chaos Castle: <span id="cctime">Error: Turn on JavaScript</span><br>
 
-<span class="helpLink" id="time" title="<?echo mmw_lang_server_time;?>"><?echo date("d.m.Y H:i:s");?></span><br>
-Devil Square: <span id="dstime">Error: Turn On JavaScript</span><br>
-Blood Castle: <span id="bctime">Error: Turn On JavaScript</span><br>
-Chaos Castle: <span id="cctime">Error: Turn On JavaScript</span><br>
+<script src="scripts/timejs.js"></script>
+<script>
+	var serverDate = new Date('<?php echo date('F d, Y H:i:s', time() + 1);?>');
 
-<script type="text/javascript">
-var currenttime = '<?echo $servertime;?>' //PHP method of getting server date "F d, Y H:i:s"
-var serverdate=new Date(currenttime)
+	function padLength(what) {
+		return (what.toString().length === 1) ? '0' + what : what;
+	}
 
-function padlength(what){
-var output=(what.toString().length==1)? "0"+what : what
-return output
-}
+	function displayTime() {
+		serverDate.setSeconds(serverDate.getSeconds() + 1);
+		months = serverDate.getMonth() + 1;
+		var dateString = padLength(serverDate.getDate()) + '.' + padLength(months) + '.' + serverDate.getFullYear();
+		var timeString = padLength(serverDate.getHours()) + ':' + padLength(serverDate.getMinutes()) + ':' + padLength(serverDate.getSeconds());
+		document.getElementById('time').innerHTML = dateString + ' ' + timeString;
+	}
+	setInterval('displayTime()', 1000);
 
-function displaytime(){
-serverdate.setSeconds(serverdate.getSeconds()+1);
-month = serverdate.getMonth() + 1; if(month<10) {month = "0"+month}
-var datestring=padlength(serverdate.getDate())+"."+month+"."+serverdate.getFullYear()
-var timestring=padlength(serverdate.getHours())+":"+padlength(serverdate.getMinutes())+":"+padlength(serverdate.getSeconds())
-document.getElementById("time").innerHTML=datestring+" "+timestring
-}
-
-window.onload=function(){
-setInterval("displaytime()", 1000)
-}
-
-dstime('<?echo $dst;?>','00');
-bctime(<?echo $bct;?>);
-cctime('<?echo $cct;?>','45');
-//script_by_vaflan
+	dstime('<?php echo $dst;?>', '00');
+	bctime('<?php echo $bct;?>', '30');
+	cctime('<?php echo $cct;?>', '45');
 </script>

@@ -1,53 +1,74 @@
-<?PHP
-if(isset($_GET['sort'])){$_POST['sort']=$_GET['sort']; $_POST['top_rank']='100';}
-if($_POST[top_rank] != ''){$select_top[$_POST[top_rank]]=" selected";} else{$select_top[100]=" selected";}
-if($_POST[top_rank] != 'all'){$select_sort[$_POST[sort]]=" selected";} else{$select_sort['all']=" selected";}
+<?php
+if (isset($_GET['sort'])) {
+	$_POST['sort'] = $_GET['sort'];
+}
+if (empty($_POST['sort'])) {
+	$_POST['sort'] = 'all';
+}
+if (empty($_POST['top_rank'])) {
+	$_POST['top_rank'] = 100;
+}
+
+$topCount = array(10, 25, 50, 100);
+
+$topRank = array(
+	'all' => mmw_lang_all_characters,
+	'pk' => mmw_lang_all_killers,
+	'guild' => mmw_lang_all_guilds,
+	'online' => mmw_lang_online_characters,
+);
+
+if ($mmw['gens']) {
+	$topRank['gens'] = 'Durpian vs Vanert';
+}
+
+for ($classGroup=0; $classGroup<$mmw['characters_class']; $classGroup++) {
+	$classLevel = $classGroup * 16;
+	$class = char_class($classLevel, null);
+	$higClass = char_class($classLevel + 7);
+	$topRank[$class['group']] = mmw_lang_only . " {$class['off']}'s-{$higClass}'s";
+}
 ?>
 
-<table class='sort-table' align='center' border='0' cellpadding='0' cellspacing='0'> 
+<table class="sort-table" style="margin:0 auto;border:0;padding:0">
 	<tr>
-          <td>
-          <form action="?op=rankings" method="post" name="rankings">
-		<?echo mmw_lang_top;?>:
-                      <select name="top_rank">
-                        <option value="10"<?echo $select_top[10];?>>10</option>
-                        <option value="25"<?echo $select_top[25];?>>25</option>
-                        <option value="50"<?echo $select_top[50];?>>50</option>
-                        <option value="100"<?echo $select_top[100];?>>100</option>
-                      </select> 
-		<?echo mmw_lang_select_sort;?>:
-                      <select name="sort">
-                        <option value="all"<?echo $select_sort['all'];?>><?echo mmw_lang_all_characters;?></option>
-                        <option value="pk"<?echo $select_sort['pk'];?>><?echo mmw_lang_all_killers;?></option>
-                        <option value="guild"<?echo $select_sort['guilds'];?>><?echo mmw_lang_all_guilds;?></option>
-                        <?if(substr_count($mmw[statistics_char],'0,1')>0){?><option value="dw"<?echo $select_sort['dw'];?>><?echo mmw_lang_only;?> DW's-GrM's</option><?}?>
-                        <?if(substr_count($mmw[statistics_char],'16,17')>0){?><option value="dk"<?echo $select_sort['dk'];?>><?echo mmw_lang_only;?> DK's-BM's</option><?}?>
-                        <?if(substr_count($mmw[statistics_char],'32,33')>0){?><option value="elf"<?echo $select_sort['elf'];?>><?echo mmw_lang_only;?> ELF's-HE's</option><?}?>
-                        <?if(substr_count($mmw[statistics_char],'48')>0){?><option value="mg"<?echo $select_sort['mg'];?>><?echo mmw_lang_only;?> MG's-DM's</option><?}?>
-                        <?if(substr_count($mmw[statistics_char],'64')>0){?><option value="dl"<?echo $select_sort['dl'];?>><?echo mmw_lang_only;?> DL's-LE's</option><?}?>
-                        <?if(substr_count($mmw[statistics_char],'80,81')>0){?><option value="sum"<?echo $select_sort['sum'];?>><?echo mmw_lang_only;?> Sum's-Dim's</option><?}?>
-                        <option value="online"<?echo $select_sort['online'];?>><?echo mmw_lang_online_characters;?></option>
-                        <option value="3d_online"<?echo $select_sort['3d_online'];?>>3D <?echo mmw_lang_online_characters;?></option>
-                      </select> 
-		<input type="submit" name="Submit" value="<?echo mmw_lang_show_now;?>">
-          </form>
-          </td>
+		<td>
+			<form action="?op=rankings" method="post" name="rankings">
+				<?php echo mmw_lang_top; ?>:
+				<select name="top_rank">
+					<?php
+					foreach ($topCount as $count) {
+						$selected = ($count === (int)$_POST['top_rank']) ? 'selected' : '';
+						echo '<option ' . $selected . '>' . $count . '</option>';
+					}
+					?>
+				</select>
+				<?php echo mmw_lang_select_sort; ?>:
+				<select name="sort">
+					<?php
+					foreach ($topRank as $value => $label) {
+						$selected = ($value === $_POST['sort']) ? 'selected' : '';
+						echo '<option value="' . $value . '" ' . $selected . '>' . $label . '</option>';
+					}
+					?>
+				</select>
+				<input type="submit" value="<?php echo mmw_lang_show_now; ?>">
+			</form>
+		</td>
 	</tr>
 </table>
 
-<?echo $rowbr;?>
+<?php echo $rowbr; ?>
 
-<center>
-<?
-$mmw[ranking_sort] = preg_replace("/[^a-zA-Z0-9_-]/",'',$_POST[sort]);
-if(is_file("modules/rankings/$mmw[ranking_sort].php")) {
- include("modules/rankings/$mmw[ranking_sort].php");
-}
-elseif(is_file("modules/rankings/$mmw[ranking_sort].mmw")) {
- mmw("modules/rankings/$mmw[ranking_sort].mmw");
-}
-else {
- include("modules/rankings/character.php");
-}
-?>
-</center>
+<div style="text-align:center">
+	<?php
+	$rankingModule = preg_replace('/[^\w_-]/', '', $_POST['sort']);
+	if (is_file('modules/rankings/' . $rankingModule . '.php')) {
+		require_once 'modules/rankings/' . $rankingModule . '.php';
+	} elseif (is_file('modules/rankings/' . $rankingModule . '.mmw')) {
+		mmw('modules/rankings/' . $rankingModule . '.mmw');
+	} else {
+		require_once 'modules/rankings/character.php';
+	}
+	?>
+</div>

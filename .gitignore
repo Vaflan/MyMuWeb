@@ -1,0 +1,10 @@
+# Intellij
+/.idea/
+
+# Instalation information
+/includes/installed.php
+/includes/mmw_cache.dat
+
+# Log files
+!/logs/
+/logs/*.php
